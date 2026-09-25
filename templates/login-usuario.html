@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazer login</title>
+</head>
+
+<body>
+
+    <section class="container-login">
+
+        <div class="container-header">
+            <h1>Entrar</h1>
+            <h4>PERFIL | ALUNO </h4>
+        </div>
+
+        <!-- Futura rota -> cadastro -->
+        <form action="/cadastrar/post" method="post">
+
+
+            <label for="cpf">CPF:</label><br>
+            <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..."><br>
+
+            <label for="senha">Senha:</label><br>
+            <input id="senha" name="senha" type="password" placeholder="Digite sua senha..."><br>
+
+
+            <button type="submit" class="botao">Entrar</button>
+
+        </form>
+
+        <div class="container-go-back">
+
+            <button type="submit" class="botao">Voltar</button>
+            <a href="/recuperar-senha" class="link-secundario">Recuperar senha</a>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>
