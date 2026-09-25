@@ -12,6 +12,10 @@ def index():
 def pag_login():
     return render_template("login-usuario.html")
 
+# CADASTRO USUARIO
+@app.route("/cadastro/usuario")
+def pag_cadastro():
+    return render_template("cadastro_usuario.html")
 
 
 
