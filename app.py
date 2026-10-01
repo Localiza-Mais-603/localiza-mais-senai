@@ -22,6 +22,11 @@ def pag_login_coordenacao():
 def pag_cadastro():
     return render_template("cadastro_usuario.html")
 
+# editar itens cadastrado
+@app.route("/editar-itens-cadastrado")
+def pag_editar_item_cadastrado():
+    return render_template("editar-item-cadastrado.html")
+
 
 
 
