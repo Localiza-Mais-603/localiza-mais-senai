@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
-
 from model.cadastro import cadastrar_usuario
 from model.cadastrar_itens import cadastrar_item
+
 
 app = Flask(__name__)
 
@@ -52,7 +52,6 @@ def pag_cadastrar_item():
     return render_template("cadastrar_itens.html")
 
 
-
 @app.route("/cadastrar/item/salvar", methods=["POST"])
 def salvar_item():
     produto = request.form["produto"]
@@ -64,11 +63,22 @@ def salvar_item():
 
     return redirect("/cadastrar/item")
 
+@app.route("/tela/inicial/usuario")
+def pag_inicial_usuario():
+    return render_template("tela_inicial_usuario.html")
+
+
+@app.route("/visualizar-perfil")
+def visualizar_perfil():
+    return render_template("visualizar_perfil.html")
 
 
 
 
 
+@app.route("/visualizar-itens")
+def visualizar_itens():
+    return render_template("visualizar_itens.html")
 
 
 if __name__ == "__main__":
