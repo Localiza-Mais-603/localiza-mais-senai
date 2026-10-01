@@ -23,7 +23,7 @@ def pag_cadastro():
     return render_template("cadastro_usuario.html")
 
 # editar itens cadastrado
-@app.route("/editar-itens-cadastrado")
+@app.route("/editar-item-cadastrado")
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
 
