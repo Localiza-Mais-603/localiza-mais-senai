@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request
-from model import cadastrar_usuario
+# from model import cadastrar_usuario
 
 app = Flask(__name__)
 
@@ -37,6 +37,11 @@ def cadastro():
 @app.route("/editar-item-cadastrado")
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
+
+#tela seleção de perfil
+@app.route("/selecionar-perfil")
+def selecionar_perfil():
+    return render_template("selecionar-perfil.html")
 
 
 
