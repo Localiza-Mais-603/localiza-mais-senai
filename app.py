@@ -64,12 +64,9 @@ def salvar_item():
 
     return redirect("/cadastrar/item")
 
-
-
-
-
-
-
+@app.route("/tela/inicial/corporativo")
+def tela_inicial_corporativo():
+    return render_template("tela-inicial-corporativo.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
