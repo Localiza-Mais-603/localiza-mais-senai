@@ -23,7 +23,7 @@ def pag_login_coordenacao():
 #CADASTRO USUARIO
 @app.route("/cadastro/usuario") 
 def pag_cadastro(): 
-    return render_template("cadastro_usuario.html") 
+    return render_template("cadastrar_usuario.html") 
 
 @app.route("/cadastro", methods=["POST"]) 
 def cadastro(): 
