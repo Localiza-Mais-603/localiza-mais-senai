@@ -8,33 +8,33 @@
 <body>
     <main class="container-principal">
         
-        <form action="">
-            <div>
-                <label for="produto">Produto:</label>
+        <form action="" class="formulario-editar-cadastro-item">
+            <div class="input-produto">
+                <label for="produto">Produto:</label></div><br>
                 <input type="text" id="produto" name="produto" required>
             </div>
 
-            <div>
-                <label for="local">Local (opcional):</label>
+            <div class="input-local">
+                <label for="local">Local (opcional):</label><br>
                 <input type="text" id="local" name="local">
             </div>
 
-            <div>
-                <label for="data">Data (opcional):</label>
+            <div class="input-data">
+                <label for="data">Data (opcional):</label><br>
                 <input type="date" id="data" name="data">
             </div>
 
-            <div>
-                <label for="descricao">Descrição:</label>
+            <div class="input-descricao">
+                <label for="descricao">Descrição:</label><br>
                 <textarea id="descricao" name="descricao" rows="4"></textarea>
             </div>
 
             <div class="botoes">
-                <button type="submit">Salvar alteração</button>
+                <button type="submit">Salvar alteração</button><br>
                 <button type="button">Cancelar</button>
                 <button type="button" class="btn-excluir">Excluir</button>
             </div>
-            
+
         </form>
         
     </main>
