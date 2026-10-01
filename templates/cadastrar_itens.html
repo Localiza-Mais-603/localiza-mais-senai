@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Itens - SENAI LOCALIZA+</title>
+</head>
+<body>
+
+    <main>
+        <h1>Cadastrar itens</h1>
+
+        <section>
+            <h2>SENAI | LOCALIZA+</h2>
+
+            <form action="/cadastrar/item/salvar" method="POST">
+                
+                <div>
+                    <label for="produto">Produto:</label>
+                    <input type="text" id="produto" name="produto" required>
+                </div>
+
+                <div>
+                    <label for="local">Local:</label>
+                    <input type="text" id="local" name="local" required>
+                </div>
+
+                <div>
+                    <label for="data">Data (opcional):</label>
+                    <input type="date" id="data" name="data">
+                </div>
+
+                <div>
+                    <label for="descricao">Descrição:</label>
+                    <textarea id="descricao" name="descricao" rows="4" required></textarea>
+                </div>
+
+                <button type="submit">Cadastrar item</button>
+
+            </form>
+        </section>
+
+        <a href="/">Voltar</a>
+    </main>
+
+</body>
+</html>
