@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, request
-from model import cadastrar_usuario, cadastrar_item
+from flask import Flask, render_template, request, redirect
 
+from model.cadastro import cadastrar_usuario
+from model.cadastrar_itens import cadastrar_item
 
 app = Flask(__name__)
 
