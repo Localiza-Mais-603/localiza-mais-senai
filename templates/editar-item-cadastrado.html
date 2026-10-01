@@ -7,31 +7,35 @@
 </head>
 <body>
     <main class="container-principal">
-        <div>
-            <form action="">produto</form>
-            <input type="text">
-        </div>
+        
+        <form action="">
+            <div>
+                <label for="produto">Produto:</label>
+                <input type="text" id="produto" name="produto" required>
+            </div>
 
-        <div>
-            <form action="">Local (opcional)</form>
-            <input type="text">
-        </div>
+            <div>
+                <label for="local">Local (opcional):</label>
+                <input type="text" id="local" name="local">
+            </div>
 
-        <div>
-            <form action="">Data (opcional):</form>
-            <input type="text">
-        </div>
+            <div>
+                <label for="data">Data (opcional):</label>
+                <input type="date" id="data" name="data">
+            </div>
 
-        <div>
-            <form action="">Descrição:</form>
-            <input type="text">
-        </div>
+            <div>
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" name="descricao" rows="4"></textarea>
+            </div>
 
-        <div>
-            <button>Salvar alteração</button>
-            <button>Cancelar</button>
-            <button>Excluir</button>
-        </div>
+            <div class="botoes">
+                <button type="submit">Salvar alteração</button>
+                <button type="button">Cancelar</button>
+                <button type="button" class="btn-excluir">Excluir</button>
+            </div>
+            
+        </form>
         
     </main>
 </body>
