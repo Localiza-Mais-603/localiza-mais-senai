@@ -33,6 +33,11 @@ def cadastro():
     cadastrar_usuario(cpf, nome, curso, email, senha) 
     return redirect("/cadastro/usuario")
 
+# editar itens cadastrado
+@app.route("/editar-item-cadastrado")
+def pag_editar_item_cadastrado():
+    return render_template("editar-item-cadastrado.html")
+
 
 
 
