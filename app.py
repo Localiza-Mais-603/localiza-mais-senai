@@ -38,6 +38,11 @@ def cadastro():
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
 
+#tela seleção de perfil
+@app.route("/selecionar-perfil")
+def selecionar_perfil():
+    return render_template("selecionar-perfil.html")
+
 
 
 
