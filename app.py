@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 
 app = Flask(__name__)
@@ -21,6 +21,10 @@ def pag_login_coordenacao():
 @app.route("/cadastro/usuario")
 def pag_cadastro():
     return render_template("cadastro_usuario.html")
+
+
+
+
 
 
 
