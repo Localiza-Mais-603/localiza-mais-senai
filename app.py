@@ -1,5 +1,7 @@
-from flask import Flask, render_template, redirect, request
-from model import cadastrar_usuario
+from flask import Flask, render_template, request, redirect
+
+from model.cadastro import cadastrar_usuario
+from model.cadastrar_itens import cadastrar_item
 
 app = Flask(__name__)
 
@@ -21,7 +23,7 @@ def pag_login_coordenacao():
 #CADASTRO USUARIO
 @app.route("/cadastro/usuario") 
 def pag_cadastro(): 
-    return render_template("cadastro_usuario.html") 
+    return render_template("cadastrar_usuario.html") 
 
 @app.route("/cadastro", methods=["POST"]) 
 def cadastro(): 
@@ -45,11 +47,22 @@ def selecionar_perfil():
 
 
 
+@app.route("/cadastrar/item")
+def pag_cadastrar_item():
+    return render_template("cadastrar_itens.html")
 
 
 
+@app.route("/cadastrar/item/salvar", methods=["POST"])
+def salvar_item():
+    produto = request.form["produto"]
+    local = request.form["local"]
+    data = request.form["data"]
+    descricao = request.form["descricao"]
 
+    cadastrar_item(produto, local, data, descricao)
 
+    return redirect("/cadastrar/item")
 
 
 
