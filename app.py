@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request
-
+from flask import Flask, render_template, redirect, request
+from model import cadastrar_usuario
 
 app = Flask(__name__)
 
@@ -17,14 +17,11 @@ def pag_login_aluno():
 def pag_login_coordenacao():
     return render_template("login-coor.html")
 
-# CADASTRO USUARIO
-@app.route("/cadastro/usuario")
-def pag_cadastro():
-    return render_template("cadastro_usuario.html")
 
-
-
-
+#CADASTRO USUARIO
+@app.route("/cadastro/usuario") 
+def pag_cadastro(): 
+    return render_template("cadastro_usuario.html") 
 
 
 
