@@ -23,6 +23,26 @@ def pag_login_coordenacao():
 def pag_cadastro(): 
     return render_template("cadastro_usuario.html") 
 
+@app.route("/cadastro", methods=["POST"]) 
+def cadastro(): 
+    cpf = request.form["CPF"] 
+    nome = request.form["nome_completo"] 
+    curso = request.form["curso"] 
+    email = request.form["email"] 
+    senha = request.form["senha"] 
+    cadastrar_usuario(cpf, nome, curso, email, senha) 
+    return redirect("/cadastro/usuario")
+
+# editar itens cadastrado
+@app.route("/editar-item-cadastrado")
+def pag_editar_item_cadastrado():
+    return render_template("editar-item-cadastrado.html")
+
+#tela seleção de perfil
+@app.route("/selecionar-perfil")
+def selecionar_perfil():
+    return render_template("selecionar-perfil.html")
+
 
 
 
