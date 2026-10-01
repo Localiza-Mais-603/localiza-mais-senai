@@ -46,6 +46,7 @@ def selecionar_perfil():
     return render_template("selecionar-perfil.html")
 
 
+
 @app.route("/cadastrar/item")
 def pag_cadastrar_item():
     return render_template("cadastrar_itens.html")
@@ -62,14 +63,6 @@ def salvar_item():
     cadastrar_item(produto, local, data, descricao)
 
     return redirect("/cadastrar/item")
-
-
-
-
-
-
-
-
 
 
 
