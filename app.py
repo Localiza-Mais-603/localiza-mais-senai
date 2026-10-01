@@ -1,5 +1,7 @@
 from flask import Flask, render_template, redirect, request
 from model import cadastrar_usuario
+from model import cadastrar_item
+
 
 app = Flask(__name__)
 
