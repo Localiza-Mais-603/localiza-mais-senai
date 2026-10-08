@@ -3,44 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Itens - SENAI LOCALIZA+</title>
+    
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="page-cadastro">
 
-    <main>
-        <h1>Cadastrar itens</h1>
+    <main class="main-container">
+        <h1 class="page-title">Cadastrar itens</h1>
 
-        <section>
-            <h2>SENAI | LOCALIZA+</h2>
+        <section class="card-form">
+            <h2 class="brand-title">SENAI | LOCALIZA+</h2>
 
-            <form action="/cadastrar/item/salvar" method="POST">
+            <form action="/cadastrar/item/salvar" method="POST" class="form">
                 
-                <div>
-                    <label for="item">Item:</label>
-                    <input type="text" id="item" name="item" required>
+                <div class="form-group">
+                    <label for="item" class="form-label">Item:</label>
+                    <input type="text" id="item" name="item" class="form-input" required>
                 </div>
 
-                <div>
-                    <label for="local">Local:</label>
-                    <input type="text" id="local" name="local" required>
+                <div class="form-group">
+                    <label for="local" class="form-label">Local:</label>
+                    <input type="text" id="local" name="local" class="form-input" required>
                 </div>
 
-                <div>
-                    <label for="data">Data (opcional):</label>
-                    <input type="date" id="data" name="data">
+                <div class="form-group">
+                    <label for="data" class="form-label">Data (opcional):</label>
+                    <input type="date" id="data" name="data" class="form-input">
                 </div>
 
-                <div>
-                    <label for="descricao">Descrição:</label>
-                    <textarea id="descricao" name="descricao" rows="4" required></textarea>
+                <div class="form-group">
+                    <label for="descricao" class="form-label">Descrição:</label>
+                    <textarea id="descricao" name="descricao" class="form-textarea" rows="4" required></textarea>
                 </div>
 
-                <button type="submit">Cadastrar item</button>
+                <button type="submit" class="btn btn-primary">Cadastrar item</button>
 
             </form>
         </section>
 
-        <a href="/">Voltar</a>
+        <a href="/" class="btn-back">Voltar</a>
     </main>
 
 </body>
