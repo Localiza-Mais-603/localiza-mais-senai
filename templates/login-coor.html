@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_coordenacao.css') }}">
     <title>Fazer login</title>
 </head>
 
@@ -13,36 +14,26 @@
 
         <div class="container-header">
             <h1>Entrar</h1>
-            <h4>PERFIL | SETOR DE APIOI </h4>
+            <h4>PERFIL | SETOR DE APOIO </h4>
         </div>
 
-        <!-- Futura rota -> cadastro -->
         <div class="container-form">
-            
-            <form action="/cadastrar/post" method="post">
-                <label for="cpf">CPF:</label><br>
-                <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..."><br>
+    
+    <form action="{{ url_for('pag_login_coordenacao') }}" method="post">
+        <label for="cpf">CPF:</label><br>
+        <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..."><br>
 
-                <label for="senha">Senha:</label><br>
-                <input id="senha" name="senha" type="password" placeholder="Digite sua senha..."><br>
+        <label for="senha">Senha:</label><br>
+        <input id="senha" name="senha" type="password" placeholder="Digite sua senha..."><br>
 
+        <button type="submit" class="botao">Entrar</button>
+    </form>
 
-                <button type="submit" class="botao">Entrar</button>
-            </form>
+    <a href="{{ url_for('index') }}">Voltar</a>
 
-            <button type="submit" class="botao">Voltar</button>
+    <p>Não possui uma conta? <a href="{{ url_for('cadastro_coor') }}" class="link-secundario">Cadastre-se</a></p>
 
-            <p>Não possui uma conta? <a href="/cadastrar" class="link-secundario">Cadastre-se</a>
-            </p>
-
-        </div>
-
-        <div class="container-go-back">
-            <p>Esqueceu sua senha? <a href="/recuperar-senha" class="link-secundario">Recuperar senha</a>
-            </p>
-        </div>
-
-
+</div>
     </section>
 
 </body>

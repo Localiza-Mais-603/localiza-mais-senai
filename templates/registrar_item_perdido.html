@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Itens</title>
+</head>
+
+<body>
+
+    <main>
+        <section class="card-principal">
+
+            <h1 class="titulo-principal">SENAI | LOCALIZA+</h1>
+
+            <h2 class="subtitulo">Registro de itens perdidos</h2>
+
+
+            <form action="/perda" method="post" class="formulario-perda">
+
+                <div class="campo-grupo">
+                    <label for="item" class="rotulo">Item perdido: *</label>
+                    <input type="text" id="item" name="item" class="entrada-texto" required>
+                </div>
+                
+                <div class="campo-grupo">
+                    <label for="local" class="rotulo">Local (opcional)</label>
+                    <input type="text" id="local" name="local" class="entrada-texto">
+                </div>
+                
+                <div class="campo-grupo">
+                    <label for="data" class="rotulo">Data (opcional)</label>
+                    <input type="date" id="data" name="data" class="entrada-texto">
+                </div>
+                
+                <div class="campo-grupo">
+                    <label for="foto" class="rotulo">Foto (opcional)</label>
+                    <input type="file" id="foto" name="foto" class="entrada-texto">
+                </div>
+                
+                <div class="campo-grupo">
+                    <label for="descricao" class="rotulo">Descrição *</label>
+                    <textarea id="descricao" name="descricao" class="entrada-area-texto" required></textarea>
+                </div>
+                
+                <div class="grupo-botoes">
+                    <button type="submit" class="botao-submit">Enviar</button>
+                    <button type="button" class="botao-cancelar">Cancelar</button>
+                </div>
+                
+
+            </form>
+
+            <a href="/" class="link-voltar">voltar à página principal</a>
+
+        </section>
+    </main>
+
+</body>
+</html>
