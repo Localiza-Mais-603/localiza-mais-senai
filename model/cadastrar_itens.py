@@ -1,28 +1,17 @@
 from database.conexao import conectar
 
-
-def cadastrar_item(id_item, id_coord, item, descricao, data, local, status):
-
+def cadastrar_item(item, descricao, local, data):
     conexao, cursor = conectar()
 
     sql = """
-        INSERT INTO cadastro_item
-        (id_item, id_coord, item, descricao, data, local, status)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO cadastro_item (item, descricao, local, data, status)
+        VALUES (%s, %s, %s, %s, %s)
     """
 
-    valores = (
-        id_item,
-        id_coord,
-        item,
-        descricao,
-        data,
-        local,
-        status
-    )
+    data_valor = data if data else None
 
-    cursor.execute(sql, valores)
-
+    # Passa 'Pendente' para preencher a coluna status que é obrigatória
+    cursor.execute(sql, (item, descricao, local, data_valor, 'Pendente'))
     conexao.commit()
 
     cursor.close()
