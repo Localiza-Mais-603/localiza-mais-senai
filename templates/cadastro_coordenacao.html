@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_coordenacao.css') }}">
     <title>Cadastro</title>
 </head>
 
@@ -14,7 +16,7 @@
 
             <p>PERFIL | SETOR DE APOIO</p>
 
-            <form action="/cadastro" method="post">
+            <form action="/cadastro-coor" method="post">
 
                 <label for="nome">Nome:</label>
                 <input type="text" id="nome" name="nome_completo" required>
@@ -34,7 +36,7 @@
 
             <p>
                 Já possui uma conta?
-                <a href="/login-coor">Logue.</a>
+                <a href="{{ url_for('pag_login_coordenacao') }}">Logue.</a>
             </p>
 
             <a href="/">Voltar</a>

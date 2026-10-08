@@ -14,3 +14,21 @@ def cadastrar_usuario(nome, cpf, email, curso, senha):
     cursor.close() 
     conexao.close()
 
+
+
+
+
+def cadastrar_coor(nome, cpf, email, senha):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    sql = """
+        INSERT INTO cadastro_coor (cpf_coor, nome, email, senha)
+        VALUES (%s, %s, %s, %s)
+    """
+
+    cursor.execute(sql, (cpf, nome, email, senha))
+    conexao.commit()
+
+    cursor.close()
+    conexao.close()
