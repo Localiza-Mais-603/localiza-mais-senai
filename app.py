@@ -88,6 +88,10 @@ def salvar_item():
 
     return redirect("/cadastrar/item")
 
+@app.route("/tela/inicial/corporativo")
+def tela_inicial_corporativo():
+    return render_template("tela-inicial-corporativo.html")
+    
 @app.route("/tela/inicial/usuario")
 def pag_inicial_usuario():
     return render_template("tela_inicial_usuario.html")
