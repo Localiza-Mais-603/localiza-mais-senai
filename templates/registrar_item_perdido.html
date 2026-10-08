@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário</title>
+    <title>Registrar Itens</title>
 </head>
 
 <body>
@@ -13,28 +13,41 @@
 
             <h1>SENAI | LOCALIZA+</h1>
 
-            <h2>Formulário de perda</h2>
+            <h2>Registro de itens perdidos</h2>
 
 
             <form action="/perda" method="post">
 
-                <label for="item">Item perdido: *</label>
-                <input type="text" id="item" name="item" required>
-
-                <label for="local">Local (opcional)</label>
-                <input type="text" id="local" name="local">
-
-                <label for="data">Data (opcional)</label>
-                <input type="date" id="data" name="data">
-
-                <label for="foto">Foto (opcional)</label>
-                <input type="file" id="foto" name="foto">
-
-                <label for="descricao">Descrição *</label>
-                <textarea id="descricao" name="descricao" required></textarea>
-
-                <button type="submit">Enviar</button>
-                <button type="button">Cancelar</button>
+                <div>
+                    <label for="item">Item perdido: *</label>
+                    <input type="text" id="item" name="item" required>
+                </div>
+                
+                <div>
+                    <label for="local">Local (opcional)</label>
+                    <input type="text" id="local" name="local">
+                </div>
+                
+                <div>
+                    <label for="data">Data (opcional)</label>
+                    <input type="date" id="data" name="data">
+                </div>
+                
+                <div>
+                    <label for="foto">Foto (opcional)</label>
+                    <input type="file" id="foto" name="foto">
+                </div>
+                
+                <div>
+                    <label for="descricao">Descrição *</label>
+                    <textarea id="descricao" name="descricao" required></textarea>
+                </div>
+                
+                <div>
+                    <button type="submit">Enviar</button>
+                    <button type="button">Cancelar</button>
+                </div>
+                
 
             </form>
 
