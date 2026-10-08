@@ -21,9 +21,6 @@ def pag_login_coordenacao():
         cpf = request.form["cpf"]
         senha = request.form["senha"]
 
-        # Aqui no futuro você pode colocar a lógica para validar se o CPF e senha estão corretos
-
-        # Redireciona para a rota 'selecionar_perfil'
         return redirect(url_for("selecionar_perfil"))
 
     return render_template("login-coor.html")
