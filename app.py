@@ -86,8 +86,9 @@ def pag_inicial_usuario():
 def visualizar_perfil():
     return render_template("visualizar_perfil.html")
 
-
-
+@app.route("/editar/perfil")
+def editar_perfil():
+    return render_template("editar-perfil.html")
 
 
 @app.route("/visualizar-itens")
