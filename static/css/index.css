@@ -1,84 +1,75 @@
-/* Importa as variáveis globais de vocês */
-@import url("variables.css");
-
-/* Reset padrão e sem frescura */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Corpo da página ocupando a tela cheia */
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: var(--branco);
+    background: #990000;
+    background: linear-gradient(90deg, rgba(153, 0, 0, 1) 0%, rgba(242, 0, 40, 1) 35%, rgba(153, 0, 0, 1) 100%);
+    overflow: hidden;
 }
 
-/* Container que centraliza tudo na tela */
 main {
-    width: 100%;
-    min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 20px;
-    
-    /* Um gradiente novo, mais limpo e sem aquelas faixas duras */
-    background: linear-gradient(135deg, var(--vermelho-principal), var(--vermelho-profundo));
-}
-
-/* Cartão central de boas-vindas */
-.card-inicial {
-    background-color: #ffffff; /* Fundo branco puro para dar contraste com o vermelho lá de trás */
-    width: 100%;
-    max-width: 380px;
-    padding: 40px 30px;
-    border-radius: 12px;
+    justify-content: center;
+    height: 100vh;
     text-align: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* Sombra suave para destacar o card */
 }
 
-/* Alinhamento do título principal */
-.card-inicial h1 {
-    font-size: 32px;
-    color: var(--vermelho-principal); /* Título em vermelho para destacar a marca */
+.principal {
+    background-color: rgb(255, 255, 255);
+    padding: 10vh;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.555),
+        0 1px 8px rgba(0, 0, 0, 0.253);
+}
+
+h1 {
+
+    margin-bottom: 24px;
+    font-size: 50px;
+    font-weight: 800;
+    color: #1A1A1A;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+
+
+}
+
+p {
+    font-size: 16px;
+    font-weight: 200;
+    color: #555555;
+    line-height: 1.5;
     margin-bottom: 10px;
 }
 
-/* Subtítulo ou descrição */
-.card-inicial p {
-    font-size: 14px;
-    color: #555555; /* Um cinza escuro mais suave que o preto puro */
-    margin-bottom: 30px;
+.slogan {
+    color: red;
+    font-style: italic;
+
 }
 
-/* Botão de entrar (Link estilizado) */
-.botao-entrar {
-    display: block;
-    width: 100%; /* Ocupa a largura interna do card */
-    padding: 14px;
-    background-color: var(--vermelho-principal);
-    color: var(--branco);
-    font-size: 15px;
-    font-weight: bold;
+.slogan2 {
+    color: red;
+}
+
+.btn-entrar {
+    display: inline-block;
     text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    background-color: #ff0000;
+    color: #ffffff;
+    padding: 15px 170px;
+    margin-top: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.2s;
 }
 
-/* Efeito simples de foco/hover */
-.botao-entrar:hover {
-    background-color: var(--vermelho-escuro);
-    transform: translateY(-1px); /* Levanta levemente o botão no clique */
-}
-
-/* Ajuste rápido para telas pequenas de celular */
-@media (max-width: 400px) {
-    .card-inicial {
-        padding: 30px 20px;
-    }
-    
-    .card-inicial h1 {
-        font-size: 28px;
-    }
+.btn-entrar:hover {
+    background-color: #ff0000;
 }
