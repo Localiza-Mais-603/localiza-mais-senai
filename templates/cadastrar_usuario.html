@@ -1,33 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de úsuario</title>
+    <title>Cadastro de usuário</title>
 </head>
 <body>
 
     <form action="/cadastro" method="post">
-    <h2>Cadastro de Usuário</h2>
+        <h2>Cadastro de Usuário</h2>
 
-    <label for="nome">Nome Completo:</label>
-    <input type="text" id="nome" name="nome_completo" required>
+        <label for="nome">Nome Completo:</label>
+        <input type="text" id="nome" name="nome_completo" required>
 
-    <label for="CPF">CPF:</label>
-    <input type="cpf" id="CPF" name="CPF" required>
+        <label for="CPF">CPF:</label>
+        <input type="text" id="CPF" name="CPF" required>
 
-    <label for="E-mail">E-mail:</label>
-    <input type="email" id="email" name="email" required>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
 
-    <label for="curso">Curso (opcional):</label>
-    <input type="text" id="curso" name="curso" required>
+        <label for="curso">Curso (opcional):</label>
+        <input type="text" id="curso" name="curso">
 
-    <label for="Senha">Senha:</label>
-    <input type="password" id="senha" name="senha" required>
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required>
 
-    <button type="submit">Cadastrar</button>
-</form>
+        <button type="submit">Cadastrar</button>
 
-    
+        <p>
+            Já possui uma conta?
+            <a href="/login-usuario">Logue.</a>
+        </p>
+
+        <a href="/">Voltar</a>
+    </form>
+
 </body>
 </html>

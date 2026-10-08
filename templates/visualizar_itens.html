@@ -1,43 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizar Itens</title>
-</head>
-<body>
-    <header>
-        <h1>LOCALIZA+</h1>
-        <a href=""><button>Voltar</button></a>
-    </header>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="/src/css/modoEscuro.css">
+    <script src="/src/js/Modo_Escuro.js"></script>
+    
 
-    <div>
+</head>
+
+<body>
+
+    <nav class="navbar transparente-header">
+        <div class="container-fluido">
+            <h1>LOCALIZA+</h1>
+        </div>
+        <div class="itens-central">
+            <button onclick={AlterarTema()}>Modo</button>
+            <a href=""><button class="botao-voltar">voltar</button></a>
+        </div>
+
+
+
+    </nav>
+
+
+    <div class="item-data">
         <label for="data">A partir de:</label>
         <input type="date" name="data" value="2026-09-25">
     </div>
-    
+
+    <div class="itens-card">
+        <a class="card" style="width: 18rem;" href=">
+            <div class="card-body">
+                <h5 class="card-title">Oculos perdido</h5>
+                <p class="card-text">Oculos redondo fino perdido na sala 9</p>
+            </div>
+        </a>
+        <a class="card" style="width: 18rem;" href="">
+            <div class="card-body">
+                <h5 class="card-title">Garrafa Perdida</h5>
+                <p class="card-text">Garrafa azul redonda</p>
+            </div>
+        </a>
+
+    </div>
 
 
-    <button>Filtrar</button>
 
-    <!-- Estrutura Popup -->
-    <div class="filtros">
-
-
-    <!-- Lista de Filtros -->
-
-
-    <div class="grupo-filtro">
+     <div class="grupo-filtro">
         <h2>Categorias</h2>
 
         <div>
-            <h3>Disponibilidade</h3>
+    <h3>Disponibilidade</h3>
             <label for="">
                 <input type="checkbox">Disponivel
             </label>
             <h3>Subcategorias</h3>
-            <label for="">
-                <input type="checkbox">Acessorios
+            <label for=""> 
+     <input type="checkbox">Acessorios
             </label>
             <label for="">
                 <input type="checkbox">Roupas
@@ -45,13 +70,19 @@
             <label for="">
                 <input type="checkbox">EPI
             </label>
-        </div>
-
-
-    </div>
-
-    </div>
+        </div> 
 
     
+        <button>
+            Filtrar
+        </button>
+
+
+     </div>
+
+    </div>
+
+
 </body>
+
 </html>

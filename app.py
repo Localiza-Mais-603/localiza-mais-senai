@@ -1,4 +1,6 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
+from model.cadastro import cadastrar_usuario
+from model.cadastrar_itens import cadastrar_item
 
 
 app = Flask(__name__)
@@ -9,24 +11,74 @@ def index():
 
 # login usuario
 @app.route("/login/usuario")
-def pag_login():
+def pag_login_aluno():
     return render_template("login-usuario.html")
 
-# CADASTRO USUARIO
-@app.route("/cadastro/usuario")
-def pag_cadastro():
-    return render_template("cadastro_usuario.html")
+# login coordenacao
+@app.route("/login/setor/de/apoio")
+def pag_login_coordenacao():
+    return render_template("login-coor.html")
+
+
+#CADASTRO USUARIO
+@app.route("/cadastro/usuario") 
+def pag_cadastro(): 
+    return render_template("cadastrar_usuario.html") 
+
+@app.route("/cadastro", methods=["POST"]) 
+def cadastro(): 
+    cpf = request.form["CPF"] 
+    nome = request.form["nome_completo"] 
+    curso = request.form["curso"] 
+    email = request.form["email"] 
+    senha = request.form["senha"] 
+    cadastrar_usuario(cpf, nome, curso, email, senha) 
+    return redirect("/cadastro/usuario")
+
+# editar itens cadastrado
+@app.route("/editar-item-cadastrado")
+def pag_editar_item_cadastrado():
+    return render_template("editar-item-cadastrado.html")
+
+#tela seleção de perfil
+@app.route("/selecionar-perfil")
+def selecionar_perfil():
+    return render_template("selecionar-perfil.html")
+
+
+
+@app.route("/cadastrar/item")
+def pag_cadastrar_item():
+    return render_template("cadastrar_itens.html")
+
+
+@app.route("/cadastrar/item/salvar", methods=["POST"])
+def salvar_item():
+    produto = request.form["produto"]
+    local = request.form["local"]
+    data = request.form["data"]
+    descricao = request.form["descricao"]
+
+    cadastrar_item(produto, local, data, descricao)
+
+    return redirect("/cadastrar/item")
+
+@app.route("/tela/inicial/usuario")
+def pag_inicial_usuario():
+    return render_template("tela_inicial_usuario.html")
+
+
+@app.route("/visualizar-perfil")
+def visualizar_perfil():
+    return render_template("visualizar_perfil.html")
 
 
 
 
 
-
-
-
-
-
-
+@app.route("/visualizar-itens")
+def visualizar_itens():
+    return render_template("visualizar_itens.html")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SENAI | LOCALIZA+</title>
+</head>
+
+<body>
+
+    <header>
+
+        <h1>SENAI | LOCALIZA+</h1>
+
+        <nav>
+
+
+            <a href="{{ url_for('visualizar_perfil') }}">
+                👤 Perfil
+            </a>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+
+    <hr>
+
+
+
+    <main>
+
+
+        <section>
+
+            <a href="{{ url_for('pag_cadastrar_item') }}">
+
+                <h2>
+                    Relatar Item
+                </h2>
+
+            </a>
+
+        </section>
+
+
+        <section>
+
+            <a href="{{ url_for('visualizar_itens') }}">
+
+                <h2>
+                    Visualizar disponíveis no A&P
+                </h2>
+
+            </a>
+
+        </section>
+
+    </main>
+
+
+</body>
+
+</html>
+
