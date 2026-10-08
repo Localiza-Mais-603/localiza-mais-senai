@@ -14,14 +14,17 @@ def index():
 def pag_login_aluno():
     return render_template("login-usuario.html")
 
-# login coordenacao
+@app.route("/tela-corporativa")
+def pag_tela_corporativa():
+    return render_template("tela-inicial-corporativo.html") 
+    
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
     if request.method == "POST":
         cpf = request.form["cpf"]
         senha = request.form["senha"]
 
-        return redirect(url_for("selecionar_perfil"))
+        return redirect(url_for("pag_tela_corporativa"))
 
     return render_template("login-coor.html")
 
