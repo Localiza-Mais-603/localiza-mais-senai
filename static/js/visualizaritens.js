@@ -1,3 +1,4 @@
+
 function AlterarTema(){
     document.body.classList.toggle("escuro")
 }
@@ -11,3 +12,8 @@ function abrirPopup() {
     function fecharPopup() {
       document.getElementById('meuPopup').style.display = 'none';
     }
+
+
+
+
+    

@@ -7,8 +7,8 @@
     <title>Visualizar Itens</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="/src/css/visualizaritens.css">
-    <script src="/src/js/visualizaritens.js"></script>
+    <link rel="stylesheet" href="/static/css/visualizaritens.css">
+    <script src="/static/js/visualizaritens.js"></script>
     
 
 </head>
@@ -35,26 +35,67 @@
     </div>
 
     <div class="itens-card">
-        <a class="card" style="width: 18rem;" href=">
+        <a class="card" style="width: 18rem;" href="">
             <div class="card-body">
-                <h5 class="card-title">Oculos perdido</h5>
-                <p class="card-text">Oculos redondo fino perdido na sala 9</p>
+                <h5 class="card-title">
+                    Oculos perdido
+                </h5>
+                <p class="card-text">
+                    Oculos redondo fino perdido na sala 9 
+                </p>
             </div>
         </a>
         <a class="card" style="width: 18rem;" href="">
             <div class="card-body">
-                <h5 class="card-title">Garrafa Perdida</h5>
-                <p class="card-text">Garrafa azul redonda</p>
+                <h5 class="card-title">
+                    Oculos perdido
+                </h5>
+                <p class="card-text">
+                    Oculos redondo fino perdido na sala 9 
+                </p>
             </div>
         </a>
-
-    </div>
-    
     </div>
 
     
 
+    <button class="btn-abrir" id="meuPopup" onclick={abrirPopup()}>
+                Filtros
+            </button>
+
+    <div class="grupo-filtro">
+        <div class="grupo-conteudo">
+            <h3>Categorias</h3>
+            <label for="">
+                <input type="checkbox">Disponível
+            </label>
+
+            <h3>Sub-Categorias</h3>
+            <label for="">
+                <input type="checkbox">Roupas
+            </label>
+
+            <label for="">
+                <input type="checkbox">EPI
+            </label>
+
+            <label for="">
+                <input type="checkbox">Acessórios
+            </label>
+            
+
+
+            
+        </div>
     </div>
+
+
+
+    
+
+    
+
+    
 
     
 
