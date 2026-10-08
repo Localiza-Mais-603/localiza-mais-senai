@@ -17,33 +17,23 @@
             <h4>PERFIL | SETOR DE APOIO </h4>
         </div>
 
-        <!-- Futura rota -> cadastro -->
         <div class="container-form">
-            
-            <form action="/cadastrar/post" method="post">
-                <label for="cpf">CPF:</label><br>
-                <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..."><br>
+    
+    <form action="{{ url_for('pag_login_coordenacao') }}" method="post">
+        <label for="cpf">CPF:</label><br>
+        <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..."><br>
 
-                <label for="senha">Senha:</label><br>
-                <input id="senha" name="senha" type="password" placeholder="Digite sua senha..."><br>
+        <label for="senha">Senha:</label><br>
+        <input id="senha" name="senha" type="password" placeholder="Digite sua senha..."><br>
 
+        <button type="submit" class="botao">Entrar</button>
+    </form>
 
-                <button type="submit" class="botao">Entrar</button>
-            </form>
+    <a href="{{ url_for('index') }}">Voltar</a>
 
-            <a href="/">Voltar</a>
+    <p>Não possui uma conta? <a href="{{ url_for('cadastro_coor') }}" class="link-secundario">Cadastre-se</a></p>
 
-            <p>Não possui uma conta? <a href="{{ url_for('cadastro_coor') }}" class="link-secundario">Cadastre-se</a>
-            </p>
-
-        </div>
-
-        <div class="container-go-back">
-            <p>Esqueceu sua senha? <a href="/recuperar-senha" class="link-secundario">Recuperar senha</a>
-            </p>
-        </div>
-
-
+</div>
     </section>
 
 </body>
