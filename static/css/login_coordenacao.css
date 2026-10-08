@@ -12,11 +12,11 @@
     --cinza-escuro: #A8A8A8;
     --preto: #2D2D2D;
 
-    /* Tom rosa/creme suave para o fundo do cartão (fiel à imagem) */
+    /* Tom rosa/creme suave para o fundo do cartão */
     --fundo-card: #FDECEA;
 }
 
-/* Reset básico utilizando fontes nativas do sistema (sem fontes do Google) */
+/* Reset básico de estilos globais com fonte nativa */
 * {
     margin: 0;
     padding: 0;
@@ -24,21 +24,24 @@
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-/* Oculta as tags <br> para não quebrarem o alinhamento da grelha CSS */
+/* Oculta as tags <br> para não desalinhar a grelha CSS */
 br {
     display: none;
 }
 
-/* Fundo da página com padrão de ondas 100% embutido em SVG (sem imagens externas) */
+/* Fundo da página 100% CSS manual (efeito de ondas/profundidade via gradientes radiais nativos) */
 body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--vermelho-profundo);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1200' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C300,250 150,550 450,750 C750,950 550,1200 800,1200 L800,0 Z' fill='%23E00000' opacity='0.8'/%3E%3Cpath d='M0,250 C350,150 200,750 800,850 L800,0 L0,0 Z' fill='%23FF0000' opacity='0.6'/%3E%3Cpath d='M150,1200 C450,950 350,600 800,450 L800,1200 Z' fill='%23C20000' opacity='0.7'/%3E%3C/svg%3E");
-    background-size: cover;
-    background-position: center;
+    background-image: 
+        radial-gradient(ellipse 130% 90% at 100% -10%, var(--vermelho-principal) 0%, transparent 55%),
+        radial-gradient(ellipse 110% 80% at 0% 110%, var(--vermelho-escuro) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 120% at 100% 80%, var(--vermelho-medio) 0%, transparent 65%),
+        linear-gradient(135deg, var(--vermelho-profundo) 0%, var(--vermelho-medio) 100%);
+    background-attachment: fixed;
     padding: 20px;
 }
 
@@ -51,14 +54,14 @@ body {
     border-radius: 20px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     
-    /* Grelha de 2 colunas para colocar os botões lado a lado */
+    /* Grelha de 2 colunas para alinhar os botões no rodapé */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
     align-items: center;
 }
 
-/* Permite que os elementos internos se organizem diretamente na grelha principal */
+/* Permite rearranjar os elementos internos diretamente na grelha do container principal */
 .container-form,
 .container-form form,
 .container-go-back {
@@ -89,7 +92,7 @@ body {
     text-transform: uppercase;
 }
 
-/* Destaque em vermelho para 'SETOR DE APOIO' (caso use <span> no HTML) */
+/* Destaque em vermelho para 'SETOR DE APOIO' */
 .container-header h4 span {
     color: var(--vermelho-escuro);
 }
@@ -103,7 +106,7 @@ body {
     margin-top: 8px;
 }
 
-/* Ordem de exibição dos elementos do formulário */
+/* Ordem de exibição dos campos */
 label[for="cpf"] { order: 2; }
 input#cpf { order: 3; }
 label[for="senha"] { order: 4; }
@@ -131,7 +134,7 @@ input#senha { order: 5; }
     box-shadow: 0 0 0 2px var(--vermelho-principal);
 }
 
-/* Textos e Links centrais */
+/* Textos e Links informativos */
 .container-form p {
     grid-column: 1 / -1;
     order: 6;
@@ -159,7 +162,6 @@ input#senha { order: 5; }
     font-weight: bold;
 }
 
-/* Destaca o link 'Recuperar senha' em vermelho */
 .container-go-back .link-secundario {
     color: var(--vermelho-escuro);
 }
@@ -169,52 +171,53 @@ input#senha { order: 5; }
 }
 
 /* ==========================================================================
-   FORMATAÇÃO COMPLETA E POSICIONAMENTO DOS BOTÕES (ENTRAR E VOLTAR)
+   FORMATAÇÃO DOS BOTÕES "ENTRAR" (<button>) E "VOLTAR" (<a>) LADO A LADO
    ========================================================================== */
 
-.botao {
-    order: 8; /* Posiciona os botões na última linha da grelha */
-    width: 100%;
+/* Estilo unificado para o botão 'Entrar' e o link 'Voltar' */
+.botao,
+.container-form > a:not(.link-secundario) {
+    order: 8;
     height: 42px;
-    
-    /* Cores e Forma */
     background-color: var(--vermelho-escuro);
     color: var(--branco);
     border: none;
     border-radius: 10px;
-    
-    /* Tipografia */
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 0.95rem;
     font-weight: bold;
     text-align: center;
-    line-height: 42px;
-    
-    /* Interatividade e Efeitos */
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     outline: none;
     box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
     transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
 }
 
-/* Posiciona o botão 'Entrar' na coluna da esquerda */
+/* Coluna esquerda: Botão Entrar */
 form .botao {
     grid-column: 1;
+    width: 100%;
 }
 
-/* Posiciona o botão 'Voltar' na coluna da direita */
-.container-form > .botao {
+/* Coluna direita: Link Voltar estilizado como botão */
+.container-form > a:not(.link-secundario) {
     grid-column: 2;
+    width: 100%;
 }
 
-/* Efeito Hover (ao passar o rato) */
-.botao:hover {
+/* Efeito Hover */
+.botao:hover,
+.container-form > a:not(.link-secundario):hover {
     background-color: var(--vermelho-profundo);
     box-shadow: 0 6px 14px rgba(172, 1, 1, 0.35);
 }
 
-/* Efeito Active (ao clicar) */
-.botao:active {
+/* Efeito ao Clicar */
+.botao:active,
+.container-form > a:not(.link-secundario):active {
     transform: scale(0.97);
 }
-
