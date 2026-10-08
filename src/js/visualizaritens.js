@@ -4,13 +4,10 @@ function AlterarTema(){
 
 
 
-function PopUp(){
-    document.getElementById('popup').style.display = 'flex'
-    
+function abrirPopup() {
+      document.getElementById('meuPopup').style.display = 'flex';
+    }
 
-}
-
-
-function FecharPopup(){
-    document.getElementById('')
-}
+    function fecharPopup() {
+      document.getElementById('meuPopup').style.display = 'none';
+    }
