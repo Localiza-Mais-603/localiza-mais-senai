@@ -4,18 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Localiza +</title>
+    <title>Localiza+ | Início</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 
 <body>
 
-     <main>
+    <main>
+        <div class="principal">
+
+            <h1>Localiza +</h1>
+
+            <p class="subtitulo">Perdeu? A gente <span class="slogan">localiza</span>.</p> <br>
         
-        <h1>Localiza +</h1>
+            <p>Menos desespero na busca, mais facilidade no <span class="slogan2">reencontro.</span></p> <br>
 
-        <a href="selecionar-perfil">Entrar</a>
+            <a href="/selecionar-perfil" class="btn-entrar">Entrar</a>
+        </div>
     </main>
-
 
 </body>
 

@@ -60,9 +60,34 @@ section {
     background-color: var(--fundo-card);
     width: 100%;
     max-width: 360px;
-    padding: 35px 28px 30px 28px;
-    border-radius: 20px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    background-color: #FFE7E5;
+    padding: 30px 24px 24px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+
+h1 {
+    font-size: 28px;
+    font-weight: normal;
+    color: var(--preto);
+    margin: 0;
+}
+
+
+section > p:first-of-type {
+    font-size: 12px;
+    color: var(--preto);
+    margin: 0 0 25px;
+}
+
+
+section > p:first-of-type::first-line {
+    color: var(--preto);
+}
+
+
+form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -110,8 +135,16 @@ form label {
     text-align: left;
 }
 
-form input {
-    display: block;
+
+
+label {
+    font-size: 11px;
+    color: var(--preto);
+    margin: 0 0 5px;
+}
+
+
+input {
     width: 100%;
     padding: 10px 14px;
     border: none;
@@ -127,6 +160,8 @@ form input:focus {
     box-shadow: 0 0 0 2px var(--vermelho-principal);
 }
 
+
+button {
 /* 1. FORMATO DO BOTÃO "CADASTRAR" (<button type="submit">) */
 form button,
 form button[type="submit"] {
@@ -145,6 +180,7 @@ form button[type="submit"] {
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
     transition: background-color 0.2s ease, transform 0.1s ease;
+}
 }
 
 form button:hover,

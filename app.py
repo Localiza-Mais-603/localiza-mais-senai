@@ -25,6 +25,11 @@ def pag_login_coordenacao():
 
     return render_template("login-coor.html")
 
+# Selecionar perfil
+@app.route("/selecionar/perfil")
+def pag_selecionar_perfil():
+    return redirect('selecionar-perfil.html')
+
 
 #CADASTRO USUARIO
 @app.route("/cadastro/usuario") 
