@@ -1,160 +1,194 @@
+:root {
+    /* Cores principais do CSS */
+    --vermelho-principal: #FF0000;
+    --vermelho-escuro: #E00000;
+    --vermelho-medio: #C20000;
+    --vermelho-profundo: #AC0101;
 
-@import url("variables.css");
+    /* Cores neutras */
+    --branco: #FFFFFF;
+    --cinza-claro: #E8E8E8;
+    --cinza-medio: #CFCFCF;
+    --cinza-escuro: #A8A8A8;
+    --preto: #2D2D2D;
 
+    /* Fundo do cartão e borda azul da imagem */
+    --fundo-card: #FDECEA;
+    --azul-borda: #3B82F6;
+}
+
+/* Reset de estilos globais */
 * {
-    box-sizing: border-box;
-}
-
-body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: var(--branco);
-    min-height: 100vh;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-/* Área principal */
-main {
-    width: 100%;
+/* Oculta quebras de linha puras caso existam no HTML */
+br {
+    display: none;
+}
+
+/* Fundo da página com padrão de ondas 100% embutido (sem imagens externas) */
+body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px 15px;
-    background:
-        linear-gradient(
-            120deg,
-            transparent 45%,
-            var(--vermelho-escuro) 45%,
-            var(--vermelho-escuro) 65%,
-            transparent 65%
-        ),
-        linear-gradient(
-            160deg,
-            var(--vermelho-principal),
-            var(--vermelho-escuro) 60%,
-            var(--vermelho-profundo)
-        );
+    background-color: var(--vermelho-profundo);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1200' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C300,250 150,550 450,750 C750,950 550,1200 800,1200 L800,0 Z' fill='%23E00000' opacity='0.8'/%3E%3Cpath d='M0,250 C350,150 200,750 800,850 L800,0 L0,0 Z' fill='%23FF0000' opacity='0.6'/%3E%3Cpath d='M150,1200 C450,950 350,600 800,450 L800,1200 Z' fill='%23C20000' opacity='0.7'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
 }
 
-/* Cartão de cadastro */
+main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Cartão Central (Section) */
 section {
+    background-color: var(--fundo-card);
     width: 100%;
     max-width: 360px;
-    background-color: #FFE7E5;
-    padding: 30px 24px 24px;
-    border-radius: 8px;
-    text-align: center;
-}
-
-/* Título */
-h1 {
-    font-size: 28px;
-    font-weight: normal;
-    color: var(--preto);
-    margin: 0;
-}
-
-/* Subtítulo */
-section > p:first-of-type {
-    font-size: 12px;
-    color: var(--preto);
-    margin: 0 0 25px;
-}
-
-/* Destaque do setor */
-section > p:first-of-type::first-line {
-    color: var(--preto);
-}
-
-/* Formulário */
-form {
+    padding: 35px 28px 30px 28px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+/* Título principais */
+section h1 {
+    font-size: 2.1rem;
+    color: var(--preto);
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+/* Subtítulo: PERFIL | SETOR DE APOIO */
+section > p:first-of-type {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.75rem;
+    color: var(--preto);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Formulário e Empilhamento Vertical dos Campos */
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--preto);
+    margin-top: 10px;
+    margin-bottom: 6px;
     text-align: left;
 }
 
-/* Textos dos campos */
-label {
-    font-size: 11px;
-    color: var(--preto);
-    margin: 0 0 5px;
-}
-
-/* Campos */
-input {
+form input {
+    display: block;
     width: 100%;
-    height: 34px;
+    padding: 10px 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     background-color: var(--branco);
-    padding: 8px 10px;
-    margin-bottom: 18px;
+    font-size: 0.9rem;
+    color: var(--preto);
     outline: none;
-    font-size: 13px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-input:focus {
+form input:focus {
     box-shadow: 0 0 0 2px var(--vermelho-principal);
 }
 
-/* Botão cadastrar */
-button {
+/* 1. FORMATO DO BOTÃO "CADASTRAR" (<button type="submit">) */
+form button,
+form button[type="submit"] {
+    display: block;
     width: 65%;
-    height: 36px;
-    margin: 42px auto 38px;
+    margin: 25px auto 10px auto;
+    padding: 10px 0;
     border: none;
-    border-radius: 7px;
-    background-color: var(--vermelho-principal);
+    border-radius: 12px;
+    background-color: var(--vermelho-escuro);
     color: var(--branco);
-    font-size: 12px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-align: center;
     cursor: pointer;
+    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-button:hover {
-    background-color: var(--vermelho-medio);
+form button:hover,
+form button[type="submit"]:hover {
+    background-color: var(--vermelho-profundo);
 }
 
-/* Texto para entrar na conta */
+form button:active,
+form button[type="submit"]:active {
+    transform: scale(0.97);
+}
+
+/* Texto: Já possui uma conta? Logue. */
 section > p:nth-of-type(2) {
-    font-size: 10px;
+    text-align: center;
+    font-size: 0.75rem;
     color: var(--preto);
-    margin-bottom: 10px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 14px;
 }
 
-/* Links */
-a {
+section > p:nth-of-type(2) a {
     color: var(--preto);
-    font-size: 10px;
     text-decoration: none;
+    font-weight: bold;
 }
 
-a:hover {
+section > p:nth-of-type(2) a:hover {
     text-decoration: underline;
 }
 
-/* Link voltar */
-section > a:last-child {
+/* 2. FORMATO DO BOTÃO "VOLTAR" (<a href="/">) */
+section > a {
     display: inline-block;
-    background-color: var(--vermelho-principal);
+    margin: 0 auto;
+    padding: 6px 32px;
+    border-radius: 20px;
+    background-color: var(--vermelho-escuro);
     color: var(--branco);
-    padding: 6px 18px;
-    border-radius: 8px;
-    font-size: 10px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-/* Ajuste para celular */
-@media (max-width: 480px) {
-    main {
-        padding: 20px 15px;
-    }
-
-    section {
-        max-width: 320px;
-        padding: 25px 22px;
-    }
-
-    h1 {
-        font-size: 25px;
-    }
+section > a:hover {
+    background-color: var(--vermelho-profundo);
 }
 
+section > a:active {
+    transform: scale(0.97);
+}

@@ -1,3 +1,220 @@
-@import url("variables.css");
+:root {
+    /* Cores principais do CSS */
+    --vermelho-principal: #FF0000;
+    --vermelho-escuro: #E00000;
+    --vermelho-medio: #C20000;
+    --vermelho-profundo: #AC0101;
 
+    /* Cores neutras */
+    --branco: #FFFFFF;
+    --cinza-claro: #E8E8E8;
+    --cinza-medio: #CFCFCF;
+    --cinza-escuro: #A8A8A8;
+    --preto: #2D2D2D;
+
+    /* Tom rosa/creme suave para o fundo do cartão (fiel à imagem) */
+    --fundo-card: #FDECEA;
+}
+
+/* Reset básico utilizando fontes nativas do sistema (sem fontes do Google) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Oculta as tags <br> para não quebrarem o alinhamento da grelha CSS */
+br {
+    display: none;
+}
+
+/* Fundo da página com padrão de ondas 100% embutido em SVG (sem imagens externas) */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--vermelho-profundo);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 1200' preserveAspectRatio='none'%3E%3Cpath d='M0,0 C300,250 150,550 450,750 C750,950 550,1200 800,1200 L800,0 Z' fill='%23E00000' opacity='0.8'/%3E%3Cpath d='M0,250 C350,150 200,750 800,850 L800,0 L0,0 Z' fill='%23FF0000' opacity='0.6'/%3E%3Cpath d='M150,1200 C450,950 350,600 800,450 L800,1200 Z' fill='%23C20000' opacity='0.7'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+}
+
+/* Cartão central de Login */
+.container-login {
+    background-color: var(--fundo-card);
+    width: 100%;
+    max-width: 350px;
+    padding: 40px 28px 30px 28px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    
+    /* Grelha de 2 colunas para colocar os botões lado a lado */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Permite que os elementos internos se organizem diretamente na grelha principal */
+.container-form,
+.container-form form,
+.container-go-back {
+    display: contents;
+}
+
+/* Cabeçalho */
+.container-header {
+    grid-column: 1 / -1;
+    order: 1;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.container-header h1 {
+    font-size: 2.3rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.container-header h4 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.75rem;
+    color: var(--preto);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Destaque em vermelho para 'SETOR DE APOIO' (caso use <span> no HTML) */
+.container-header h4 span {
+    color: var(--vermelho-escuro);
+}
+
+/* Rótulos dos campos (Labels) */
+.container-form label {
+    grid-column: 1 / -1;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--preto);
+    margin-top: 8px;
+}
+
+/* Ordem de exibição dos elementos do formulário */
+label[for="cpf"] { order: 2; }
+input#cpf { order: 3; }
+label[for="senha"] { order: 4; }
+input#senha { order: 5; }
+
+/* Campos de entrada (Inputs) */
+.container-form input {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--branco);
+    font-size: 0.9rem;
+    color: var(--preto);
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.container-form input::placeholder {
+    color: var(--cinza-escuro);
+}
+
+.container-form input:focus {
+    box-shadow: 0 0 0 2px var(--vermelho-principal);
+}
+
+/* Textos e Links centrais */
+.container-form p {
+    grid-column: 1 / -1;
+    order: 6;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-top: 35px;
+}
+
+.container-go-back p {
+    grid-column: 1 / -1;
+    order: 7;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-top: 6px;
+    margin-bottom: 25px;
+}
+
+.link-secundario {
+    text-decoration: none;
+    color: var(--preto);
+    font-weight: bold;
+}
+
+/* Destaca o link 'Recuperar senha' em vermelho */
+.container-go-back .link-secundario {
+    color: var(--vermelho-escuro);
+}
+
+.link-secundario:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   FORMATAÇÃO COMPLETA E POSICIONAMENTO DOS BOTÕES (ENTRAR E VOLTAR)
+   ========================================================================== */
+
+.botao {
+    order: 8; /* Posiciona os botões na última linha da grelha */
+    width: 100%;
+    height: 42px;
+    
+    /* Cores e Forma */
+    background-color: var(--vermelho-escuro);
+    color: var(--branco);
+    border: none;
+    border-radius: 10px;
+    
+    /* Tipografia */
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-align: center;
+    line-height: 42px;
+    
+    /* Interatividade e Efeitos */
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+/* Posiciona o botão 'Entrar' na coluna da esquerda */
+form .botao {
+    grid-column: 1;
+}
+
+/* Posiciona o botão 'Voltar' na coluna da direita */
+.container-form > .botao {
+    grid-column: 2;
+}
+
+/* Efeito Hover (ao passar o rato) */
+.botao:hover {
+    background-color: var(--vermelho-profundo);
+    box-shadow: 0 6px 14px rgba(172, 1, 1, 0.35);
+}
+
+/* Efeito Active (ao clicar) */
+.botao:active {
+    transform: scale(0.97);
+}
 
