@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from model.cadastro import cadastrar_usuario
+from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.cadastrar_itens import cadastrar_item
 
 
@@ -34,6 +34,20 @@ def cadastro():
     senha = request.form["senha"] 
     cadastrar_usuario(cpf, nome, curso, email, senha) 
     return redirect("/cadastro/usuario")
+
+@app.route('/cadastro-coor', methods=['GET', 'POST'])
+def cadastro_coor():
+    if request.method == 'POST':
+        nome = request.form['nome_completo']
+        cpf = request.form['cpf']
+        email = request.form['email']
+        senha = request.form['senha']
+
+        cadastrar_coor(nome, cpf, email, senha)
+
+        return redirect('/login/setor/de/apoio')
+
+    return render_template('cadastro_coordenacao.html')
 
 # editar itens cadastrado
 @app.route("/editar-item-cadastrado")
