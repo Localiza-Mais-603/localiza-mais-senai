@@ -19,6 +19,11 @@ def pag_login_aluno():
 def pag_login_coordenacao():
     return redirect('/login-coor')
 
+# Selecionar perfil
+@app.route("/selecionar/perfil")
+def pag_selecionar_perfil():
+    return redirect('selecionar-perfil.html')
+
 
 #CADASTRO USUARIO
 @app.route("/cadastro/usuario") 
