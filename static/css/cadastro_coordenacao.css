@@ -1,8 +1,14 @@
 
+@import url("variables.css");
+
+* {
+    box-sizing: border-box;
+}
 
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #ff302b;
+    background-color: var(--branco);
     min-height: 100vh;
 }
 
@@ -15,15 +21,26 @@ main {
     align-items: center;
     padding: 30px 15px;
     background:
-        linear-gradient(120deg, transparent 45%, #e51d20 45%, #e51d20 65%, transparent 65%),
-        linear-gradient(160deg, #ff6259, #ff302b 60%, #b91619);
+        linear-gradient(
+            120deg,
+            transparent 45%,
+            var(--vermelho-escuro) 45%,
+            var(--vermelho-escuro) 65%,
+            transparent 65%
+        ),
+        linear-gradient(
+            160deg,
+            var(--vermelho-principal),
+            var(--vermelho-escuro) 60%,
+            var(--vermelho-profundo)
+        );
 }
 
 /* Cartão de cadastro */
 section {
     width: 100%;
     max-width: 360px;
-    background-color: #ffe7e5;
+    background-color: #FFE7E5;
     padding: 30px 24px 24px;
     border-radius: 8px;
     text-align: center;
@@ -33,19 +50,20 @@ section {
 h1 {
     font-size: 28px;
     font-weight: normal;
-    color: #111;
-    margin-bottom: 0;
+    color: var(--preto);
+    margin: 0;
 }
 
 /* Subtítulo */
 section > p:first-of-type {
     font-size: 12px;
-    color: #111;
-    margin-bottom: 25px;
+    color: var(--preto);
+    margin: 0 0 25px;
 }
 
+/* Destaque do setor */
 section > p:first-of-type::first-line {
-    color: #111;
+    color: var(--preto);
 }
 
 /* Formulário */
@@ -58,7 +76,7 @@ form {
 /* Textos dos campos */
 label {
     font-size: 11px;
-    color: #222;
+    color: var(--preto);
     margin: 0 0 5px;
 }
 
@@ -68,7 +86,7 @@ input {
     height: 34px;
     border: none;
     border-radius: 8px;
-    background-color: #fff;
+    background-color: var(--branco);
     padding: 8px 10px;
     margin-bottom: 18px;
     outline: none;
@@ -76,7 +94,7 @@ input {
 }
 
 input:focus {
-    box-shadow: 0 0 0 2px #ff6259;
+    box-shadow: 0 0 0 2px var(--vermelho-principal);
 }
 
 /* Botão cadastrar */
@@ -86,25 +104,26 @@ button {
     margin: 42px auto 38px;
     border: none;
     border-radius: 7px;
-    background-color: #ff302b;
-    color: white;
+    background-color: var(--vermelho-principal);
+    color: var(--branco);
     font-size: 12px;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #d9211d;
+    background-color: var(--vermelho-medio);
 }
 
 /* Texto para entrar na conta */
 section > p:nth-of-type(2) {
     font-size: 10px;
-    color: #222;
+    color: var(--preto);
     margin-bottom: 10px;
 }
 
+/* Links */
 a {
-    color: #111;
+    color: var(--preto);
     font-size: 10px;
     text-decoration: none;
 }
@@ -116,8 +135,8 @@ a:hover {
 /* Link voltar */
 section > a:last-child {
     display: inline-block;
-    background-color: #ff302b;
-    color: white;
+    background-color: var(--vermelho-principal);
+    color: var(--branco);
     padding: 6px 18px;
     border-radius: 8px;
     font-size: 10px;
@@ -125,6 +144,10 @@ section > a:last-child {
 
 /* Ajuste para celular */
 @media (max-width: 480px) {
+    main {
+        padding: 20px 15px;
+    }
+
     section {
         max-width: 320px;
         padding: 25px 22px;
@@ -134,3 +157,4 @@ section > a:last-child {
         font-size: 25px;
     }
 }
+

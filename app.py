@@ -17,7 +17,7 @@ def pag_login_aluno():
 # login coordenacao
 @app.route("/login/setor/de/apoio")
 def pag_login_coordenacao():
-    return render_template("login-coor.html")
+    return redirect('/login-coor')
 
 
 #CADASTRO USUARIO
@@ -45,7 +45,7 @@ def cadastro_coor():
 
         cadastrar_coor(nome, cpf, email, senha)
 
-        return redirect('/login-coor')
+        return redirect('/login/setor/de/apoio')
 
     return render_template('cadastro_coordenacao.html')
 
