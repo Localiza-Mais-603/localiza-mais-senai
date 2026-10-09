@@ -3,68 +3,43 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tela_inicial_usuario.css') }}">
     <title>SENAI | LOCALIZA+</title>
 </head>
 
 <body>
 
     <header>
-
         <h1>SENAI | LOCALIZA+</h1>
 
         <nav>
-
-
-            <a href="{{ url_for('visualizar_perfil') }}">
-                👤 Perfil
-            </a>
-
+            <ul>
+                <li>
+                    <a href="{{ url_for('visualizar_perfil') }}">
+                        👤 Perfil
+                    </a>
+                </li>
             </ul>
-
         </nav>
-
     </header>
-
 
     <hr>
 
-
-
     <main>
-
-
         <section>
-
             <a href="{{ url_for('pag_cadastrar_item') }}">
-
-                <h2>
-                    Relatar Item
-                </h2>
-
+                <h2>Relatar Item</h2>
             </a>
-
         </section>
-
 
         <section>
-
             <a href="{{ url_for('visualizar_itens') }}">
-
-                <h2>
-                    Visualizar disponíveis no A&P
-                </h2>
-
+                <h2>Visualizar disponíveis no A&P</h2>
             </a>
-
         </section>
-
     </main>
-
 
 </body>
 
 </html>
-
