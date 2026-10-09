@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_usuario.css') }}">
     <title>Fazer login</title>
 </head>
 
@@ -32,7 +33,7 @@
 
         <div class="container-go-back">
 
-            <button type="submit" class="botao">Voltar</button>
+            <a href="{{ url_for('selecionar_perfil') }}">Voltar</a>
 
             <p>Não possui uma conta? <a href="{{ url_for('pag_cadastro') }}" class="link-secundario">Cadastre-se</a></p>
             

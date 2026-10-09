@@ -1,0 +1,279 @@
+:root {
+    /* Cores principais */
+    --vermelho-principal: #FF0000;
+    --vermelho-escuro: #E00000;
+    --vermelho-medio: #C20000;
+    --vermelho-profundo: #AC0101;
+
+    /* Cores neutras */
+    --branco: #FFFFFF;
+    --cinza-claro: #E8E8E8;
+    --cinza-medio: #CFCFCF;
+    --cinza-escuro: #A8A8A8;
+    --preto: #2D2D2D;
+
+    /* Tom rosa/creme suave para o fundo do cartão */
+    --fundo-card: #FDECEA;
+}
+
+/* Reset básico de estilos globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Oculta as tags <br> para evitar desalinhamento da grelha CSS */
+br {
+    display: none;
+}
+
+/* Fundo da página com gradiente em camadas */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--vermelho-profundo);
+    background-image: 
+        radial-gradient(ellipse 130% 90% at 100% -10%, var(--vermelho-principal) 0%, transparent 55%),
+        radial-gradient(ellipse 110% 80% at 0% 110%, var(--vermelho-escuro) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 120% at 100% 80%, var(--vermelho-medio) 0%, transparent 65%),
+        linear-gradient(135deg, var(--vermelho-profundo) 0%, var(--vermelho-medio) 100%);
+    background-attachment: fixed;
+    padding: 20px;
+}
+
+/* Cartão central de Login */
+.container-login {
+    background-color: var(--fundo-card);
+    width: 100%;
+    max-width: 360px;
+    padding: 35px 28px 30px 28px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    
+    /* Grid de 2 colunas */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+}
+
+/* Permite que os containers internos compartilhem do mesmo Grid */
+.container-form,
+.container-form form,
+.container-go-back {
+    display: contents;
+}
+
+/* Cabeçalho - Ordem 1 */
+.container-header {
+    grid-column: 1 / -1;
+    order: 1;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.container-header h1 {
+    font-size: 2.2rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.container-header h4 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.75rem;
+    color: var(--preto);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Campos do Formulário - Ordem 2 a 5 */
+.container-form label {
+    grid-column: 1 / -1;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--preto);
+    margin-top: 6px;
+}
+
+label[for="email"] { order: 2; }
+input#email { order: 3; }
+label[for="senha"] { order: 4; }
+input#senha { order: 5; }
+
+.container-form input {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--cinza-medio);
+    border-radius: 8px;
+    background-color: var(--branco);
+    font-size: 0.9rem;
+    color: var(--preto);
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.container-form input::placeholder {
+    color: var(--cinza-escuro);
+}
+
+.container-form input:focus {
+    border-color: var(--vermelho-principal);
+    box-shadow: 0 0 0 2px var(--vermelho-principal);
+}
+
+/* ==========================================================================
+   BOTÕES "ENTRAR" E "VOLTAR" (Lado a Lado) - Ordem 6
+   ========================================================================== */
+
+/* Coluna 1: Botão Entrar */
+form .botao {
+    grid-column: 1;
+    order: 6;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* Coluna 2: Link Voltar estilizado como botão */
+.container-go-back > a:not(.link-secundario) {
+    grid-column: 2;
+    order: 6;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* Estilação unificada para o botão "Entrar" e o link "Voltar" */
+.botao,
+.container-go-back > a:not(.link-secundario) {
+    height: 42px;
+    width: 100%;
+    background-color: var(--vermelho-escuro);
+    color: var(--branco);
+    border: none;
+    border-radius: 10px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.botao:hover,
+.container-go-back > a:not(.link-secundario):hover {
+    background-color: var(--vermelho-profundo);
+    box-shadow: 0 6px 14px rgba(172, 1, 1, 0.35);
+}
+
+.botao:active,
+.container-go-back > a:not(.link-secundario):active {
+    transform: scale(0.97);
+}
+
+/* ==========================================================================
+   LINKS DE NAVEGAÇÃO (Abaixo dos Botões) - Ordem 7 e 8
+   ========================================================================== */
+
+.container-go-back p {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--preto);
+    font-weight: bold;
+}
+
+/* Texto 1: Cadastre-se */
+.container-form .container-go-back:nth-of-type(1) p {
+    order: 7;
+    margin-top: 8px;
+}
+
+/* Texto 2: Recuperar senha */
+.container-form .container-go-back:nth-of-type(2) p {
+    order: 8;
+    margin-top: 4px;
+}
+
+.link-secundario {
+    text-decoration: none;
+    color: var(--vermelho-escuro);
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+.link-secundario:hover {
+    color: var(--vermelho-profundo);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   POPUP DE RECUPERAR SENHA (Estrutura Modal)
+   ========================================================================== */
+
+.container-go-back > div {
+    display: none; /* Altere para 'flex' via JS para exibir */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 320px;
+    background-color: var(--branco);
+    padding: 24px 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+}
+
+.container-go-back > div h2 {
+    font-size: 1.3rem;
+    color: var(--preto);
+}
+
+.container-go-back > div p {
+    font-size: 0.85rem;
+    color: var(--preto);
+    font-weight: normal;
+    margin: 0;
+}
+
+.container-go-back > div a {
+    width: 100%;
+    text-decoration: none;
+}
+
+.container-go-back > div button {
+    width: 100%;
+    height: 38px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--vermelho-escuro);
+    color: var(--branco);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.container-go-back > div button:hover {
+    background-color: var(--vermelho-profundo);
+}

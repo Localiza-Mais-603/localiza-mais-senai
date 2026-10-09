@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_usuario.css') }}">
     <title>Cadastro de usuário</title>
 </head>
 <body>
@@ -29,7 +30,7 @@
 
         <p>
             Já possui uma conta?
-            <a href="/login-usuario">Logue.</a>
+            <a href="{{ url_for('pag_login_aluno') }}">Logue.</a>
         </p>
 
         <a href="/">Voltar</a>
