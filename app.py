@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from model.cadastro import cadastrar_usuario, cadastrar_coor
-from model.cadastrar_itens import cadastrar_item
+from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
 from model.login import verificar_login_coor
 
 
@@ -126,8 +126,21 @@ def editar_perfil():
 def visualizar_itens():
     return render_template("visualizar_itens.html")
 
-@app.route("/registro/itens")
+@app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
+    if request.method == "POST":
+        item = request.form.get("item")
+        local = request.form.get('local')
+        data_encontrado = request.form.get("data_encontrado")
+        descricao = request.form.get("descricao")
+        email = "gostosinho@senai.com"
+        foto = request.form.get("foto")
+        endereco_foto= None
+        if foto:
+            endereco_foto = f"static\img_upload\{foto.filename}"
+            foto.save(endereco_foto)
+        
+
     return render_template("registrar_item_perdido.html")
 
 
