@@ -1,19 +1,38 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.cadastrar_itens import cadastrar_item
-from model.login import verificar_login_coor
+from model.login import verificar_login_coor, verificar_login_usuario
 
 
 app = Flask(__name__)
+
+app.secret_key = "chciclete"
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
 # login usuario
-@app.route("/login/usuario")
+@app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
-    return render_template("login-usuario.html")
+    erro = None
+    if request.method == "POST":
+        email = request.form["email"]
+        senha = request.form["senha"]
+
+        usuario = verificar_login_usuario(email, senha)
+
+        if usuario:
+          
+            session["usuario_email"] = usuario["email"] 
+            
+            return redirect(url_for("pag_inicial_usuario"))
+        else:
+            erro = "E-mail ou senha incorretos!"
+
+    return render_template("login-usuario.html", erro=erro)
+
+
 
 @app.route("/tela-corporativa")
 def pag_tela_corporativa():
@@ -27,17 +46,17 @@ def pag_login_coordenacao():
         cpf = request.form["cpf"]
         senha = request.form["senha"]
 
-        # Valida as credenciais no banco de dados
+       
         coordenador = verificar_login_coor(cpf, senha)
 
         if coordenador:
-            # Login válido: redireciona para a tela corporativa
+           
             return redirect(url_for("pag_tela_corporativa"))
         else:
-            # Credenciais inválidas: define mensagem de erro
+         
             erro = "CPF ou senha incorretos!"
 
-    # Renderiza o formulário (se for GET ou se a validação do POST falhar)
+  
     return render_template("login-coor.html", erro=erro)
 
 
