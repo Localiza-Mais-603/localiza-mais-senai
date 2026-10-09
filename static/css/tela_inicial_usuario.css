@@ -1,0 +1,117 @@
+/* Reset básico de estilos globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+body {
+    background-color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* Cabeçalho */
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 25px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    z-index: 10;
+}
+
+header h1 {
+    font-size: 1.3rem;
+    color: #ba1c1c;
+    font-weight: bold;
+}
+
+header nav ul {
+    list-style: none;
+}
+
+header nav a {
+    text-decoration: none;
+    color: #ba1c1c;
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border: 1px solid #ba1c1c;
+    border-radius: 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+header nav a:hover {
+    background-color: #ba1c1c;
+    color: #ffffff;
+}
+
+/* Linha divisória */
+hr {
+    display: none; /* Oculta a linha para manter o visual limpo */
+}
+
+/* Área principal (equivalente ao .card-container) */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+/* Estilização individual dos cards vermelhos */
+main section a {
+    background-color: #ff2d2d;
+    color: #ffffff;
+    text-decoration: none;
+    width: 135px;
+    height: 280px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(255, 45, 45, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+main section a h2 {
+    font-size: 1.15rem;
+    line-height: 1.35;
+    font-weight: normal;
+}
+
+/* Efeito escalonado (card esquerdo mais alto, card direito mais baixo) */
+main section:nth-child(1) a {
+    transform: translateY(-40px);
+}
+
+main section:nth-child(1) a:hover {
+    transform: translateY(-40px) scale(1.03);
+    box-shadow: 0 6px 16px rgba(255, 45, 45, 0.35);
+}
+
+main section:nth-child(2) a {
+    transform: translateY(40px);
+}
+
+main section:nth-child(2) a:hover {
+    transform: translateY(40px) scale(1.03);
+    box-shadow: 0 6px 16px rgba(255, 45, 45, 0.35);
+}
