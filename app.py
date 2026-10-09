@@ -126,6 +126,12 @@ def editar_perfil():
 def visualizar_itens():
     return render_template("visualizar_itens.html")
 
+@app.route("/registro/itens")
+def registrar_itens():
+    return render_template("registrar_item_perdido.html")
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
