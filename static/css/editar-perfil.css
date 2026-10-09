@@ -1,6 +1,6 @@
-/* ==========================================================================
-   Configurações Globais e Resetação
-   ========================================================================== */
+@import url(variables.css);
+
+
 * {
   margin: 0;
   padding: 0;
@@ -9,8 +9,8 @@
 }
 
 body {
-  background-color: #f4f6f9;
-  color: #333333;
+  background: linear-gradient(135deg, var(--vermelho-escuro) 0%, var(--vermelho-profundo) 100%);
+  color: var(--preto);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,24 +19,24 @@ body {
 }
 
 /* ==========================================================================
-   Container Principal (Card)
+   Container Principal (Card com fundo Vermelho Claro)
    ========================================================================== */
 .editar-perfil-main {
-  background-color: #ffffff;
+  background-color: var(--branco); /* Fundo do card em vermelho bem suave */
   width: 100%;
   max-width: 480px;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   position: relative;
 }
 
 /* ==========================================================================
-   Cabeçalho e Foto de Perfil
+   Cabeçalho
    ========================================================================== */
 .editar-perfil-header {
-  background: linear-gradient(--vermelho-medio);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--cinza-escuro) 0%, var(--cinza-claro) 100%);
+  color: var(--branco);
   padding: 30px 20px 25px 20px;
   text-align: center;
   position: relative;
@@ -48,11 +48,12 @@ body {
   top: 15px;
   left: 15px;
   background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  color: var(--branco);
   border: none;
   padding: 6px 14px;
   border-radius: 20px;
   font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -62,7 +63,7 @@ body {
 }
 
 .titulo-pagina {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 800;
   letter-spacing: 1px;
   margin-bottom: 4px;
@@ -81,8 +82,8 @@ body {
   height: 110px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border: 4px solid var(--branco);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   display: block;
   margin: 0 auto 12px auto;
 }
@@ -92,22 +93,22 @@ body {
   display: none;
 }
 
-/* Botão "Alterar Foto" Personalizado */
+/* Botão "Alterar Foto" */
 .btn-upload {
   display: inline-block;
-  background-color: #ffffff;
-  color: #0056b3;
+  background-color: var(--branco);
+  color: var(--vermelho-profundo);
   padding: 8px 18px;
   border-radius: 20px;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .btn-upload:hover {
-  background-color: #f0f0f0;
+  background-color: var(--cinza-claro);
   transform: translateY(-1px);
 }
 
@@ -128,7 +129,7 @@ body {
 .campo-label {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #495057;
+  color: var(--preto);
   margin-bottom: -10px;
   display: block;
 }
@@ -136,21 +137,22 @@ body {
 .campo-dados-novos {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #ced4da;
+  background-color: var(--branco);
+  border: 1px solid var(--cinza-medio);
   border-radius: 8px;
   font-size: 0.95rem;
-  color: #333;
+  color: var(--preto);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .campo-dados-novos:focus {
-  border-color: #0056b3;
-  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.15);
+  border-color: var(--vermelho-principal);
+  box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.15);
 }
 
 /* ==========================================================================
-   Ações e Botões de Comando
+   Ações e Botões
    ========================================================================== */
 .acoes-grupo {
   display: flex;
@@ -165,47 +167,47 @@ body {
   border: none;
   border-radius: 8px;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
 }
 
+/* Botão Salvar (Usa Vermelho Escuro/Médio para destacar) */
 .botao-salvar {
-  background-color: #0056b3;
-  color: #ffffff;
+  background-color: var(--vermelho-medio);
+  color: var(--branco);
 }
 
 .botao-salvar:hover {
-  background-color: #004085;
+  background-color: var(--vermelho-profundo);
 }
 
+/* Botão Cancelar em Vermelho Principal */
 .botao-cancelar {
-  background-color: #e9ecef;
-  color: #495057;
+  background-color: var(--vermelho-principal);
+  color: var(--branco);
 }
 
 .botao-cancelar:hover {
-  background-color: #dee2e6;
+  background-color: var(--vermelho-escuro);
 }
 
 /* Link Inferior de Navegação */
 .link-voltar {
   display: block;
   text-align: center;
-  color: #6c757d;
+  color: var(--cinza-escuro);
   font-size: 0.85rem;
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .link-voltar:hover {
-  color: #0056b3;
+  color: var(--vermelho-profundo);
   text-decoration: underline;
 }
 
-/* ==========================================================================
-   Ajuste Responsivo para Celulares Pequenos
-   ========================================================================== */
+/* Responsive */
 @media (max-width: 400px) {
   .editar-perfil-form {
     padding: 20px 16px;
