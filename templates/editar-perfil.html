@@ -1,32 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Perfil</title>
+    <link rel="stylesheet" href="/static/css/editar_perfil.css">
 </head>
-<body>
-    <main>
-        <header>
-             <button>voltar</button>
-             <h1>SENAI | LOCALIZA+</h1>
-             <h3>Altere seus dados</h3>
-             <img src="https://placehold.co/150" alt="foto perfil">
-        </header>
 
-        <section>
-            <div>
-                <p>Nome:</p>
-                <input id="nome-novo" type="text" placeholder="Nome">
-                <p>E-mail:</p>
-                <input id="email-novo" type="text" placeholder="E-mail">
-                <p>Curso:</p>
-                <input id="curso-novo " type="text" placeholder="Curso">
-            </div>
-            <button href="" >Salvar</button>
-            <button href="" >Cancelar</button>
-            <a href="tela_inicial_usuario.html">voltar a página principal</a>
+<body>
+    <main class="editar-perfil-main">
+        <section class="editar-perfil-header">
+            <button type="button" class="botao-voltar">voltar</button>
+
+            <h1 class="titulo-pagina">SENAI | LOCALIZA+</h1>
+            <h2 class="subtitulo-pagina">Altere seus dados</h2>
+
+            <img src="https://placehold.co/150" alt="Foto de perfil">
+
+            <label for="foto-input" class="btn-upload">Alterar Foto</label>
+            <input type="file" name="foto" id="foto-input" accept="image/*">
+        </section>
+
+        <section class="editar-perfil-form">
+            <form id="form-editar-perfil">
+                <div class="campos-grupo">
+                    <label for="nome-novo" class="campo-label">Nome:</label>
+                    <input class="campo-dados-novos" id="nome-novo" name="nome" type="text" placeholder="Nome">
+
+                    <label for="email-novo" class="campo-label">E-mail:</label>
+                    <input class="campo-dados-novos" id="email-novo" name="email" type="email" placeholder="E-mail">
+
+                    <label for="curso-novo" class="campo-label">Curso:</label>
+                    <input class="campo-dados-novos" id="curso-novo" name="curso" type="text" placeholder="Curso">
+                </div>
+
+                <div class="acoes-grupo">
+                    <button type="submit" class="botao-salvar">Salvar</button>
+                    <button type="button" class="botao-cancelar">Cancelar</button>
+                </div>
+
+                <a href="tela_inicial_usuario.html" class="link-voltar">Voltar à página principal</a>
+            </form>
         </section>
     </main>
 </body>
+
 </html>
