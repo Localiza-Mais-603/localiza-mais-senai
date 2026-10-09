@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.cadastrar_itens import cadastrar_item
 
@@ -14,10 +14,24 @@ def index():
 def pag_login_aluno():
     return render_template("login-usuario.html")
 
-# login coordenacao
-@app.route("/login/setor/de/apoio")
+@app.route("/tela-corporativa")
+def pag_tela_corporativa():
+    return render_template("tela-inicial-corporativo.html") 
+    
+@app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
+    if request.method == "POST":
+        cpf = request.form["cpf"]
+        senha = request.form["senha"]
+
+        return redirect(url_for("pag_tela_corporativa"))
+
     return render_template("login-coor.html")
+
+# Selecionar perfil
+@app.route("/selecionar/perfil")
+def pag_selecionar_perfil():
+    return redirect('selecionar-perfil.html')
 
 
 #CADASTRO USUARIO
@@ -77,6 +91,10 @@ def salvar_item():
 
     return redirect("/cadastrar/item")
 
+@app.route("/tela/inicial/corporativo")
+def tela_inicial_corporativo():
+    return render_template("tela-inicial-corporativo.html")
+    
 @app.route("/tela/inicial/usuario")
 def pag_inicial_usuario():
     return render_template("tela_inicial_usuario.html")
