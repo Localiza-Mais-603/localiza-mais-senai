@@ -24,7 +24,7 @@ def pag_login_aluno():
 
         if usuario:
           
-            session["usuario_email"] = usuario["email"] 
+            session["usuario"] = usuario 
             
             return redirect(url_for("pag_inicial_usuario"))
         else:
