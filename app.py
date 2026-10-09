@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.cadastrar_itens import cadastrar_item
+from model.login import verificar_login_coor
 
 
 app = Flask(__name__)
@@ -14,16 +15,36 @@ def index():
 def pag_login_aluno():
     return render_template("login-usuario.html")
 
-# login coordenacao
+@app.route("/tela-corporativa")
+def pag_tela_corporativa():
+    return render_template("tela-inicial-corporativo.html") 
+    
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
+    erro = None
+    
     if request.method == "POST":
         cpf = request.form["cpf"]
         senha = request.form["senha"]
 
-        return redirect(url_for("selecionar_perfil"))
+        # Valida as credenciais no banco de dados
+        coordenador = verificar_login_coor(cpf, senha)
 
-    return render_template("login-coor.html")
+        if coordenador:
+            # Login válido: redireciona para a tela corporativa
+            return redirect(url_for("pag_tela_corporativa"))
+        else:
+            # Credenciais inválidas: define mensagem de erro
+            erro = "CPF ou senha incorretos!"
+
+    # Renderiza o formulário (se for GET ou se a validação do POST falhar)
+    return render_template("login-coor.html", erro=erro)
+
+
+# Selecionar perfil
+@app.route("/selecionar/perfil")
+def pag_selecionar_perfil():
+    return redirect('selecionar-perfil.html')
 
 
 #CADASTRO USUARIO
@@ -83,6 +104,10 @@ def salvar_item():
 
     return redirect("/cadastrar/item")
 
+@app.route("/tela/inicial/corporativo")
+def tela_inicial_corporativo():
+    return render_template("tela-inicial-corporativo.html")
+    
 @app.route("/tela/inicial/usuario")
 def pag_inicial_usuario():
     return render_template("tela_inicial_usuario.html")
