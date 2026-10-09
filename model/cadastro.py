@@ -4,7 +4,7 @@ def cadastrar_usuario(nome, cpf, email, curso, senha):
     conexao, cursor = conectar()
 
     sql = """ INSERT INTO 
-    cadastro_usuario (cpf_usuario, nome, curso, email, senha) 
+    usuarios (cpf, nome, curso, email, senha) 
     VALUES (%s, %s, %s, %s, %s) """ 
     valores = (cpf, nome, curso, email, senha) 
     cursor.execute(sql, valores) 
@@ -20,7 +20,7 @@ def cadastrar_coor(nome, cpf, email, senha):
     conexao, cursor = conectar()
 
     sql = """
-        INSERT INTO cadastro_coor (cpf_coor, nome, email, senha)
+        INSERT INTO coordenador (cpf, nome, email, senha)
         VALUES (%s, %s, %s, %s)
     """
 
