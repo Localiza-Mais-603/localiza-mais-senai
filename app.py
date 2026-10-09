@@ -127,5 +127,10 @@ def visualizar_itens():
     return render_template("visualizar_itens.html")
 
 
+@app.route("/recuperar-senha")
+def pag_recuperar_senha():
+    return render_template('recuperar-senha.html')
+
+
 if __name__ == "__main__":
     app.run(debug=True)
