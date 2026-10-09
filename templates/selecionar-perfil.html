@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selecione o tipo de perfil</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/selecionar-perfil.css') }}">
 </head>
 
 <body>
-    <main>
-        <div class="card-setor-apoio">
+    <main class="card-container">
+        <div class="card">
             <a href="/login/setor/de/apoio" class="btn-entrar">Setor de Apoio</a>
         </div>
-        <div class="card-usuario">
+        <div class="card">
             <a href="/login/usuario" class="btn-entrar">Central do Usuário</a>
         </div>
     </main>
