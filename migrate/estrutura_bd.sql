@@ -28,7 +28,7 @@ CREATE TABLE item (
  id_item INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
  item VARCHAR(20) NOT NULL,
  local VARCHAR(20),
- data_encontrado DATE NOT NULL,
+ data_encontrado DATE,
  foto VARCHAR(200),
  descricao VARCHAR(200) NOT NULL,
  email VARCHAR(200),
