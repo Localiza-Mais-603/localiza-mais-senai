@@ -125,10 +125,6 @@ def pag_inicial_usuario():
 def visualizar_perfil():
     return render_template("visualizar_perfil.html")
 
-@app.route("/registro/itens")
-def registrar_itens():
-    return render_template("registrar_item_perdido.html")
-
 
 @app.route("/editar/perfil")
 def editar_perfil():
