@@ -42,6 +42,18 @@
     </div> 
 
     <div class="itens-card">
+        {% for item in itens %}
+        <a class="card" style="width: 18rem;" href="">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    {{ item.item }}
+                </h5>
+                <p class="card-text">
+                    {{ item.descricao }}
+                </p>
+            </div>
+        </a>
+        {% endfor %}
         <a class="card" style="width: 18rem;" href="" data-categoria="epi">
             <div class="card-corpo" >
                 <h5 class="card-titulo">
