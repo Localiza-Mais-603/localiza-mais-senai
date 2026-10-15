@@ -11,3 +11,14 @@ def verificar_login_coor(cpf, senha):
     conexao.close()
     
     return coordenador
+
+def verificar_login_usuario(email, senha):
+    conexao, cursor = conectar()
+    
+    sql = "SELECT * FROM usuarios WHERE email = %s AND senha = %s"
+    cursor.execute(sql, (email, senha))
+    usuario = cursor.fetchone()
+    
+    cursor.close()
+    conexao.close()
+    return usuario

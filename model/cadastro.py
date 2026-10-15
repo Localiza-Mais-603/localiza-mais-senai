@@ -1,6 +1,6 @@
 from database.conexao import conectar
 
-def cadastrar_usuario(nome, cpf, email, curso, senha):
+def cadastrar_usuario(cpf, nome, curso, email, senha):
     conexao, cursor = conectar()
 
     sql = """ INSERT INTO 
@@ -11,9 +11,6 @@ def cadastrar_usuario(nome, cpf, email, curso, senha):
     conexao.commit() 
     cursor.close() 
     conexao.close()
-
-
-
 
 
 def cadastrar_coor(nome, cpf, email, senha):

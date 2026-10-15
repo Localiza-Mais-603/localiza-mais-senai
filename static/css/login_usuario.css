@@ -54,7 +54,7 @@ body {
     border-radius: 20px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     
-    /* Grid de 2 colunas */
+    /* Grelha de 2 colunas */
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -62,7 +62,7 @@ body {
     position: relative;
 }
 
-/* Permite que os containers internos compartilhem do mesmo Grid */
+/* Permite que os contentores internos partilhem da mesma grelha */
 .container-form,
 .container-form form,
 .container-go-back {
@@ -74,7 +74,7 @@ body {
     grid-column: 1 / -1;
     order: 1;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .container-header h1 {
@@ -91,6 +91,15 @@ body {
     font-weight: bold;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+}
+
+/* Mensagem de Erro (caso exista) */
+.container-form > p {
+    grid-column: 1 / -1;
+    order: 1;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
 /* Campos do Formulário - Ordem 2 a 5 */
@@ -131,28 +140,30 @@ input#senha { order: 5; }
 }
 
 /* ==========================================================================
-   BOTÕES "ENTRAR" E "VOLTAR" (Lado a Lado) - Ordem 6
+   BOTÕES NA MESMA LINHA (Força a mesma linha grid-row: 6)
    ========================================================================== */
 
-/* Coluna 1: Botão Entrar */
-form .botao {
+/* Coluna 1: Link Voltar (Esquerda) */
+.container-login > a:not(.link-secundario) {
     grid-column: 1;
+    grid-row: 6;
     order: 6;
     margin-top: 15px;
     margin-bottom: 10px;
 }
 
-/* Coluna 2: Link Voltar estilizado como botão */
-.container-go-back > a:not(.link-secundario) {
+/* Coluna 2: Botão Entrar (Direita) */
+.container-form form .botao {
     grid-column: 2;
+    grid-row: 6;
     order: 6;
     margin-top: 15px;
     margin-bottom: 10px;
 }
 
-/* Estilação unificada para o botão "Entrar" e o link "Voltar" */
+/* Estilização unificada para o botão "Entrar" e o link "Voltar" */
 .botao,
-.container-go-back > a:not(.link-secundario) {
+.container-login > a:not(.link-secundario) {
     height: 42px;
     width: 100%;
     background-color: var(--vermelho-escuro);
@@ -174,37 +185,34 @@ form .botao {
 }
 
 .botao:hover,
-.container-go-back > a:not(.link-secundario):hover {
+.container-login > a:not(.link-secundario):hover {
     background-color: var(--vermelho-profundo);
     box-shadow: 0 6px 14px rgba(172, 1, 1, 0.35);
 }
 
 .botao:active,
-.container-go-back > a:not(.link-secundario):active {
+.container-login > a:not(.link-secundario):active {
     transform: scale(0.97);
 }
 
-/* ==========================================================================
-   LINKS DE NAVEGAÇÃO (Abaixo dos Botões) - Ordem 7 e 8
-   ========================================================================== */
-
-.container-go-back p {
+/* Links de navegação do rodapé */
+.container-login > p {
     grid-column: 1 / -1;
+    order: 7;
     text-align: center;
     font-size: 0.8rem;
     color: var(--preto);
     font-weight: bold;
-}
-
-/* Texto 1: Cadastre-se */
-.container-form .container-go-back:nth-of-type(1) p {
-    order: 7;
     margin-top: 8px;
 }
 
-/* Texto 2: Recuperar senha */
-.container-form .container-go-back:nth-of-type(2) p {
+.container-go-back p {
+    grid-column: 1 / -1;
     order: 8;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--preto);
+    font-weight: bold;
     margin-top: 4px;
 }
 
@@ -220,12 +228,9 @@ form .botao {
     text-decoration: underline;
 }
 
-/* ==========================================================================
-   POPUP DE RECUPERAR SENHA (Estrutura Modal)
-   ========================================================================== */
-
-.container-go-back > div {
-    display: none; /* Altere para 'flex' via JS para exibir */
+/* Janela Modal de Recuperação de Senha */
+.container-login > div:not([class]) {
+    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -243,24 +248,24 @@ form .botao {
     gap: 12px;
 }
 
-.container-go-back > div h2 {
+.container-login > div:not([class]) h2 {
     font-size: 1.3rem;
     color: var(--preto);
 }
 
-.container-go-back > div p {
+.container-login > div:not([class]) p {
     font-size: 0.85rem;
     color: var(--preto);
     font-weight: normal;
     margin: 0;
 }
 
-.container-go-back > div a {
+.container-login > div:not([class]) a {
     width: 100%;
     text-decoration: none;
 }
 
-.container-go-back > div button {
+.container-login > div:not([class]) button {
     width: 100%;
     height: 38px;
     border: none;
@@ -274,6 +279,6 @@ form .botao {
     transition: background-color 0.2s ease;
 }
 
-.container-go-back > div button:hover {
+.container-login > div:not([class]) button:hover {
     background-color: var(--vermelho-profundo);
 }
