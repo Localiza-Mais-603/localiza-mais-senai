@@ -3,7 +3,7 @@ from model.cadastro import cadastrar_usuario, cadastrar_coor
 
 from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
-
+from model.listar_itens import listar_todos
 import os
 from werkzeug.utils import secure_filename
 
@@ -132,7 +132,9 @@ def editar_perfil():
 
 @app.route("/visualizar-itens")
 def visualizar_itens():
-    return render_template("visualizar_itens.html")
+    itens = listar_todos()
+    return render_template("visualizar_itens.html",
+                           itens = itens)
 
 # ROTA ÚNICA DE SALVAR ITEM
 @app.route("/cadastrar/item/salvar", methods=["POST"])
