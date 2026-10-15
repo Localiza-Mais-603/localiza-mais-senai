@@ -1,0 +1,163 @@
+@import url(variables.css);
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, var(--vermelho-escuro) 0%, var(--vermelho-profundo) 100%);
+    color: var(--preto);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ==========================================================================
+   Container Principal (Card Centralizado)
+   ========================================================================== */
+.perfil-usuario {
+    background: linear-gradient(135deg, var(--cinza-escuro) 0%, var(--cinza-claro) 100%);
+    background-color: var(--branco);
+    width: 100%;
+    max-width: 480px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   Cabeçalho
+   ========================================================================== */
+.header-perfil-aluno {
+
+    color: var(--branco);
+    padding: 30px 20px 25px 20px;
+    text-align: center;
+    position: relative;
+}
+
+/* Botão Voltar (Topo Esquerdo) */
+.btn-voltar {
+    text-decoration: none;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--branco);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-voltar:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+.titulo-perfil {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+/* ==========================================================================
+   Seção de Boas-vindas e Foto
+   ========================================================================== */
+.boas-vindas {
+    padding: 20px 20px 10px 20px;
+    text-align: center;
+}
+
+.texto-recep {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--branco);
+    margin-bottom: 15px;
+}
+
+.boas-vindas img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--branco);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: block;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   Dados e Campos do Perfil
+   ========================================================================== */
+.dados-perfil {
+    padding: 15px 24px 25px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center; /* Centraliza os elementos filhos no eixo horizontal */
+}
+
+.card-dados {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.campos-dados {
+    width: 50%;
+    text-align: center;
+    padding: 12px 14px;
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-medio);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--preto);
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   Botão de Ação (Editar Dados) - Menor e Centralizado
+   ========================================================================== */
+.btn-editar {
+    display: inline-block;
+    width: auto;
+    min-width: 180px; /* Reduzido para ficar menor */
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem; /* Levemente menor para combinar com o tamanho compacto */
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--vermelho-medio);
+    color: var(--branco);
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-editar:hover {
+    background-color: var(--vermelho-profundo);
+}
+
+/* ==========================================================================
+   Responsivo
+   ========================================================================== */
+@media (max-width: 400px) {
+    .dados-perfil {
+        padding: 15px 16px 20px 16px;
+    }
+}
