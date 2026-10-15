@@ -1,0 +1,194 @@
+:root {
+    /* Cores principais */
+    --vermelho-principal: #FF0000;
+    --vermelho-escuro: #E00000;
+    --vermelho-medio: #C20000;
+    --vermelho-profundo: #AC0101;
+
+    /* Cores neutras */
+    --branco: #FFFFFF;
+    --cinza-claro: #E8E8E8;
+    --cinza-medio: #CFCFCF;
+    --cinza-escuro: #A8A8A8;
+    --preto: #2D2D2D;
+
+    /* Tom rosa/creme suave para o fundo do cartão */
+    --fundo-card: #FDECEA;
+}
+
+/* Reset básico de estilos globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Oculta as tags <br> para evitar desalinhamentos */
+br {
+    display: none;
+}
+
+/* Fundo da página com gradiente em camadas */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--vermelho-profundo);
+    background-image: 
+        radial-gradient(ellipse 130% 90% at 100% -10%, var(--vermelho-principal) 0%, transparent 55%),
+        radial-gradient(ellipse 110% 80% at 0% 110%, var(--vermelho-escuro) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 120% at 100% 80%, var(--vermelho-medio) 0%, transparent 65%),
+        linear-gradient(135deg, var(--vermelho-profundo) 0%, var(--vermelho-medio) 100%);
+    background-attachment: fixed;
+    padding: 20px;
+}
+
+/* Cartão Central do Formulário de Cadastro */
+form {
+    background-color: var(--fundo-card);
+    width: 100%;
+    max-width: 380px;
+    padding: 35px 28px 30px 28px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    
+    /* Grelha de 2 colunas para os botões e organização dos campos */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Título principal do formulário */
+form h2 {
+    grid-column: 1 / -1;
+    order: 1;
+    text-align: center;
+    font-size: 2rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Rótulos dos campos (Labels) */
+form label {
+    grid-column: 1 / -1;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--preto);
+    margin-top: 4px;
+}
+
+/* Ordem de exibição dos campos */
+label[for="nome"] { order: 2; }
+input#nome { order: 3; }
+
+label[for="CPF"] { order: 4; }
+input#CPF { order: 5; }
+
+label[for="email"] { order: 6; }
+input#email { order: 7; }
+
+label[for="curso"] { order: 8; }
+input#curso { order: 9; }
+
+label[for="senha"] { order: 10; }
+input#senha { order: 11; }
+
+/* Campos de entrada (Inputs) */
+form input {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--cinza-medio);
+    border-radius: 8px;
+    background-color: var(--branco);
+    font-size: 0.9rem;
+    color: var(--preto);
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form input:focus {
+    border-color: var(--vermelho-principal);
+    box-shadow: 0 0 0 2px var(--vermelho-principal);
+}
+
+/* ==========================================================================
+   BOTÕES "CADASTRAR" E "VOLTAR" (Lado a Lado) - Ordem 12
+   ========================================================================== */
+
+/* Coluna 1: Botão Cadastrar */
+form button[type="submit"] {
+    grid-column: 1;
+    order: 12;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* Coluna 2: Link Voltar estilizado como botão */
+form > a:not([href*="login"]) {
+    grid-column: 2;
+    order: 12;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+/* Estilação unificada do botão e do link Voltar */
+form button[type="submit"],
+form > a:not([href*="login"]) {
+    height: 42px;
+    width: 100%;
+    background-color: var(--vermelho-escuro);
+    color: var(--branco);
+    border: none;
+    border-radius: 10px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+form button[type="submit"]:hover,
+form > a:not([href*="login"]):hover {
+    background-color: var(--vermelho-profundo);
+    box-shadow: 0 6px 14px rgba(172, 1, 1, 0.35);
+}
+
+form button[type="submit"]:active,
+form > a:not([href*="login"]):active {
+    transform: scale(0.97);
+}
+
+form p {
+    grid-column: 1 / -1;
+    order: 13;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+form p a {
+    text-decoration: none;
+    color: var(--vermelho-escuro);
+    font-weight: bold;
+    transition: color 0.2s ease;
+}
+
+form p a:hover {
+    color: var(--vermelho-profundo);
+    text-decoration: underline;
+}

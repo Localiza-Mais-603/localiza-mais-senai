@@ -1,0 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+body {
+    background-color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Layout e alinhamento dos cards */
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+/* Estilização individual dos cards vermelhos */
+.card {
+    background-color: #ff2d2d;
+    color: #ffffff;
+    text-decoration: none;
+    width: 135px;
+    height: 280px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.15rem;
+    line-height: 1.35;
+    box-shadow: 0 4px 12px rgba(255, 45, 45, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efeito escalonado (card esquerdo mais alto, card direito mais baixo) */
+.card-container .card:nth-child(1) {
+    transform: translateY(-40px);
+}
+
+.card-container .card:nth-child(1):hover {
+    transform: translateY(-40px) scale(1.03);
+}
+
+.card-container .card:nth-child(2) {
+    transform: translateY(40px);
+}
+
+.card-container .card:nth-child(2):hover {
+    transform: translateY(40px) scale(1.03);
+}
+
+/* Botão Voltar no canto inferior direito */
+.btn-voltar {
+    position: absolute;
+    bottom: 30px;
+    right: 25px;
+    background-color: #ba1c1c;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease;
+}
+
+.btn-voltar:hover {
+    background-color: #961313;
+}

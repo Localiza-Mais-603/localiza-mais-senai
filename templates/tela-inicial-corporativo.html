@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tela_corporativa.css') }}">
+    <title>Tela inicial</title>
+</head>
+<body>
+    <div class="card-container">
+        <!-- Aponta para a rota pag_editar_item_cadastrado do seu app.py -->
+        <a href="{{ url_for('pag_editar_item_cadastrado') }}" class="card">
+            Editar itens perdidos
+        </a>
+
+        <!-- Futura rota do relatório de itens -->
+        <a href="{{ url_for('visualizar_itens') }}" class="card">
+            Relatório de itens (alunos)
+        </a>
+    </div>
+
+    <!-- Aponta para a rota selecionar_perfil do seu app.py -->
+    <a href="{{ url_for('selecionar_perfil') }}" class="btn-voltar">Voltar</a>
+</body>
+</html>

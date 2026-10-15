@@ -1,0 +1,223 @@
+:root {
+    /* Cores principais do CSS */
+    --vermelho-principal: #FF0000;
+    --vermelho-escuro: #E00000;
+    --vermelho-medio: #C20000;
+    --vermelho-profundo: #AC0101;
+
+    /* Cores neutras */
+    --branco: #FFFFFF;
+    --cinza-claro: #E8E8E8;
+    --cinza-medio: #CFCFCF;
+    --cinza-escuro: #A8A8A8;
+    --preto: #2D2D2D;
+
+    /* Tom rosa/creme suave para o fundo do cartão */
+    --fundo-card: #FDECEA;
+}
+
+/* Reset básico de estilos globais com fonte nativa */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Oculta as tags <br> para não desalinhar a grelha CSS */
+br {
+    display: none;
+}
+
+/* Fundo da página 100% CSS manual (efeito de ondas/profundidade via gradientes radiais nativos) */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--vermelho-profundo);
+    background-image: 
+        radial-gradient(ellipse 130% 90% at 100% -10%, var(--vermelho-principal) 0%, transparent 55%),
+        radial-gradient(ellipse 110% 80% at 0% 110%, var(--vermelho-escuro) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 120% at 100% 80%, var(--vermelho-medio) 0%, transparent 65%),
+        linear-gradient(135deg, var(--vermelho-profundo) 0%, var(--vermelho-medio) 100%);
+    background-attachment: fixed;
+    padding: 20px;
+}
+
+/* Cartão central de Login */
+.container-login {
+    background-color: var(--fundo-card);
+    width: 100%;
+    max-width: 350px;
+    padding: 40px 28px 30px 28px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    
+    /* Grelha de 2 colunas para alinhar os botões no rodapé */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Permite rearranjar os elementos internos diretamente na grelha do container principal */
+.container-form,
+.container-form form,
+.container-go-back {
+    display: contents;
+}
+
+/* Cabeçalho */
+.container-header {
+    grid-column: 1 / -1;
+    order: 1;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.container-header h1 {
+    font-size: 2.3rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.container-header h4 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.75rem;
+    color: var(--preto);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Destaque em vermelho para 'SETOR DE APOIO' */
+.container-header h4 span {
+    color: var(--vermelho-escuro);
+}
+
+/* Rótulos dos campos (Labels) */
+.container-form label {
+    grid-column: 1 / -1;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--preto);
+    margin-top: 8px;
+}
+
+/* Ordem de exibição dos campos */
+label[for="cpf"] { order: 2; }
+input#cpf { order: 3; }
+label[for="senha"] { order: 4; }
+input#senha { order: 5; }
+
+/* Campos de entrada (Inputs) */
+.container-form input {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 12px 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--branco);
+    font-size: 0.9rem;
+    color: var(--preto);
+    outline: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.container-form input::placeholder {
+    color: var(--cinza-escuro);
+}
+
+.container-form input:focus {
+    box-shadow: 0 0 0 2px var(--vermelho-principal);
+}
+
+/* Textos e Links informativos */
+.container-form p {
+    grid-column: 1 / -1;
+    order: 6;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-top: 35px;
+}
+
+.container-go-back p {
+    grid-column: 1 / -1;
+    order: 7;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--preto);
+    font-weight: bold;
+    margin-top: 6px;
+    margin-bottom: 25px;
+}
+
+.link-secundario {
+    text-decoration: none;
+    color: var(--preto);
+    font-weight: bold;
+}
+
+.container-go-back .link-secundario {
+    color: var(--vermelho-escuro);
+}
+
+.link-secundario:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   FORMATAÇÃO DOS BOTÕES "ENTRAR" (<button>) E "VOLTAR" (<a>) LADO A LADO
+   ========================================================================== */
+
+/* Estilo unificado para o botão 'Entrar' e o link 'Voltar' */
+.botao,
+.container-form > a:not(.link-secundario) {
+    order: 8;
+    height: 42px;
+    background-color: var(--vermelho-escuro);
+    color: var(--branco);
+    border: none;
+    border-radius: 10px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+/* Coluna esquerda: Botão Entrar */
+form .botao {
+    grid-column: 1;
+    width: 100%;
+}
+
+/* Coluna direita: Link Voltar estilizado como botão */
+.container-form > a:not(.link-secundario) {
+    grid-column: 2;
+    width: 100%;
+}
+
+/* Efeito Hover */
+.botao:hover,
+.container-form > a:not(.link-secundario):hover {
+    background-color: var(--vermelho-profundo);
+    box-shadow: 0 6px 14px rgba(172, 1, 1, 0.35);
+}
+
+/* Efeito ao Clicar */
+.botao:active,
+.container-form > a:not(.link-secundario):active {
+    transform: scale(0.97);
+}
