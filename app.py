@@ -110,18 +110,6 @@ def selecionar_perfil():
 def pag_cadastrar_item():
     return render_template("cadastrar_itens.html")
 
-
-@app.route("/cadastrar/item/salvar", methods=["POST"])
-def salvar_item():
-    produto = request.form["produto"]
-    local = request.form["local"]
-    data = request.form["data"]
-    descricao = request.form["descricao"]
-
-    cadastrar_item(produto, local, data, descricao)
-
-    return redirect("/cadastrar/item")
-
 @app.route("/tela/inicial/corporativo")
 def tela_inicial_corporativo():
     return render_template("tela-inicial-corporativo.html")
