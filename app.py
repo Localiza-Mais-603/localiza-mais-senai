@@ -67,8 +67,7 @@ def pag_login_coordenacao():
 def pag_selecionar_perfil():
     return redirect('selecionar-perfil.html')
 
-
-#CADASTRO USUARIO
+# CADASTRO USUARIO
 @app.route("/cadastro/usuario") 
 def pag_cadastro(): 
     return render_template("cadastrar_usuario.html") 
@@ -102,12 +101,10 @@ def cadastro_coor():
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
 
-#tela seleção de perfil
+# tela seleção de perfil
 @app.route("/selecionar-perfil")
 def selecionar_perfil():
     return render_template("selecionar-perfil.html")
-
-
 
 @app.route("/cadastrar/item")
 def pag_cadastrar_item():
@@ -133,7 +130,6 @@ def tela_inicial_corporativo():
 def pag_inicial_usuario():
     return render_template("tela_inicial_usuario.html")
 
-
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
     return render_template("visualizar_perfil.html")
@@ -147,6 +143,18 @@ def editar_perfil():
 def visualizar_itens():
     return render_template("visualizar_itens.html")
 
+# ROTA ÚNICA DE SALVAR ITEM
+@app.route("/cadastrar/item/salvar", methods=["POST"])
+def salvar_item():
+    produto = request.form["produto"]
+    local = request.form["local"]
+    data = request.form.get("data")
+    descricao = request.form["descricao"]
+
+    # Mantém a ordem esperada pelo model: item, descricao, local, data
+    cadastrar_item(produto, descricao, local, data)
+
+    return redirect("/cadastrar/item")
 
 @app.route("/recuperar-senha")
 def pag_recuperar_senha():
