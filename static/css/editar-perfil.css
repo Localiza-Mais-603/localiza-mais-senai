@@ -44,6 +44,7 @@ body {
 
 /* Botão Voltar (Topo Esquerdo) */
 .botao-voltar {
+  text-decoration: none;
   position: absolute;
   top: 15px;
   left: 15px;
@@ -186,6 +187,8 @@ body {
 .botao-cancelar {
   background-color: var(--vermelho-principal);
   color: var(--branco);
+  text-align: center;
+  text-decoration: none;
 }
 
 .botao-cancelar:hover {
