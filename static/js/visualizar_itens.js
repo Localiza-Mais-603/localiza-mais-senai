@@ -1,13 +1,9 @@
 
 function AlterarTema(){
     document.body.classList.toggle("escuro")
-
-    
-
 }
 
 const cards = document.querySelectorAll(".card")
-
 const botaoAbrir = document.getElementById('btnAbrir')
 const botaoFechar = document.getElementById('btnFechar')
 const filtragem = document.getElementById('janelaFiltro')

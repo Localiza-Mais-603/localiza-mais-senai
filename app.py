@@ -2,8 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
-from model.cadastrar_itens import cadastrar_item
+
 from model.login import verificar_login_coor, verificar_login_usuario
+from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
+
+import os
+from werkzeug.utils import secure_filename
+
 
 
 app = Flask(__name__)
@@ -81,8 +86,7 @@ def pag_login_coordenacao():
 def pag_selecionar_perfil():
     return redirect('selecionar-perfil.html')
 
-
-#CADASTRO USUARIO
+# CADASTRO USUARIO
 @app.route("/cadastro/usuario") 
 def pag_cadastro(): 
     return render_template("cadastrar_usuario.html") 
@@ -116,28 +120,14 @@ def cadastro_coor():
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
 
-#tela seleção de perfil
+# tela seleção de perfil
 @app.route("/selecionar-perfil")
 def selecionar_perfil():
     return render_template("selecionar-perfil.html")
 
-
-
 @app.route("/cadastrar/item")
 def pag_cadastrar_item():
-    return render_template("cadastrar_itens.html")
-
-
-@app.route("/cadastrar/item/salvar", methods=["POST"])
-def salvar_item():
-    produto = request.form["produto"]
-    local = request.form["local"]
-    data = request.form["data"]
-    descricao = request.form["descricao"]
-
-    cadastrar_item(produto, local, data, descricao)
-
-    return redirect("/cadastrar/item")
+    return render_template("registrar_item_perdido.html")
 
 @app.route("/tela/inicial/corporativo")
 def tela_inicial_corporativo():
@@ -146,7 +136,6 @@ def tela_inicial_corporativo():
 @app.route("/tela/inicial/usuario")
 def pag_inicial_usuario():
     return render_template("tela_inicial_usuario.html")
-
 
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
@@ -161,11 +150,63 @@ def editar_perfil():
 def visualizar_itens():
     return render_template("visualizar_itens.html")
 
+# ROTA ÚNICA DE SALVAR ITEM
+@app.route("/cadastrar/item/salvar", methods=["POST"])
+def salvar_item():
+    produto = request.form["produto"]
+    local = request.form["local"]
+    data = request.form.get("data")
+    descricao = request.form["descricao"]
+
+    # Mantém a ordem esperada pelo model: item, descricao, local, data
+    cadastrar_item(produto, descricao, local, data)
+
+    return redirect("/cadastrar/item")
 
 @app.route("/recuperar-senha")
 def pag_recuperar_senha():
     return render_template('recuperar-senha.html')
 
+@app.route("/registro/itens", methods=["GET", "POST"])
+def registrar_itens():
+    if request.method == "POST":
+        item = request.form.get("item")
+        local = request.form.get("local")
+        data_encontrado = request.form.get("data")  
+        if data_encontrado == "":
+            data_encontrado = None
+        descricao = request.form.get("descricao")
+        email = session["usuario"].get("email")
+        nome_foto = None
+        foto = request.files.get("foto")
+
+       
+
+        if foto and foto.filename != "":
+            nome_foto = secure_filename(foto.filename)
+            
+            pasta_destino = os.path.join("static", "img_upload")
+            os.makedirs(pasta_destino, exist_ok=True)
+       
+            caminho_completo = os.path.join(pasta_destino, nome_foto)
+            foto.save(caminho_completo)
+
+        registrar_item_perdido(
+            item=item,
+            descricao=descricao,
+            data_encontrado=data_encontrado,
+            status="Perdido",
+            id_categoria=1,
+            local=local,
+            foto=nome_foto,
+            email=email,
+            cpf_coordenador=None
+        )
+
+
+        return redirect(url_for("registrar_itens"))
+
+    return render_template("registrar_item_perdido.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
