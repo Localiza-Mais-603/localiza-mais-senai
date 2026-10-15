@@ -18,22 +18,27 @@
         </div>
 
         <div class="container-form">
-    
-    <form action="{{ url_for('pag_login_coordenacao') }}" method="post">
-        <label for="cpf">CPF:</label><br>
-        <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..."><br>
+            
+            <!-- Exibe mensagem de erro caso o login falhe -->
+            {% if erro %}
+                <p style="color: red; font-weight: bold;">{{ erro }}</p>
+            {% endif %}
 
-        <label for="senha">Senha:</label><br>
-        <input id="senha" name="senha" type="password" placeholder="Digite sua senha..."><br>
+            <form action="{{ url_for('pag_login_coordenacao') }}" method="post">
+                <label for="cpf">CPF:</label><br>
+                <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..." required><br>
 
-        <button type="submit" class="botao">Entrar</button>
-    </form>
+                <label for="senha">Senha:</label><br>
+                <input id="senha" name="senha" type="password" placeholder="Digite sua senha..." required><br>
 
-    <a href="{{ url_for('index') }}">Voltar</a>
+                <button type="submit" class="botao">Entrar</button>
+            </form>
 
-    <p>Não possui uma conta? <a href="{{ url_for('cadastro_coor') }}" class="link-secundario">Cadastre-se</a></p>
+            <a href="{{ url_for('selecionar_perfil') }}">Voltar</a>
 
-</div>
+            <p>Não possui uma conta? <a href="{{ url_for('cadastro_coor') }}" class="link-secundario">Cadastre-se</a></p>
+
+        </div>
     </section>
 
 </body>

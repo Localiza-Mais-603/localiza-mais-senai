@@ -1,18 +1,38 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.cadastrar_itens import cadastrar_item
+from model.login import verificar_login_coor, verificar_login_usuario
 
 
 app = Flask(__name__)
+
+app.secret_key = "chciclete"
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
 # login usuario
-@app.route("/login/usuario")
+@app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
-    return render_template("login-usuario.html")
+    erro = None
+    if request.method == "POST":
+        email = request.form["email"]
+        senha = request.form["senha"]
+
+        usuario = verificar_login_usuario(email, senha)
+
+        if usuario:
+          
+            session["usuario"] = usuario 
+            
+            return redirect(url_for("pag_inicial_usuario"))
+        else:
+            erro = "E-mail ou senha incorretos!"
+
+    return render_template("login-usuario.html", erro=erro)
+
+
 
 @app.route("/tela-corporativa")
 def pag_tela_corporativa():
@@ -20,13 +40,25 @@ def pag_tela_corporativa():
     
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
+    erro = None
+    
     if request.method == "POST":
         cpf = request.form["cpf"]
         senha = request.form["senha"]
 
-        return redirect(url_for("pag_tela_corporativa"))
+       
+        coordenador = verificar_login_coor(cpf, senha)
 
-    return render_template("login-coor.html")
+        if coordenador:
+           
+            return redirect(url_for("pag_tela_corporativa"))
+        else:
+         
+            erro = "CPF ou senha incorretos!"
+
+  
+    return render_template("login-coor.html", erro=erro)
+
 
 # Selecionar perfil
 @app.route("/selecionar/perfil")
@@ -112,6 +144,11 @@ def editar_perfil():
 @app.route("/visualizar-itens")
 def visualizar_itens():
     return render_template("visualizar_itens.html")
+
+
+@app.route("/recuperar-senha")
+def pag_recuperar_senha():
+    return render_template('recuperar-senha.html')
 
 
 if __name__ == "__main__":

@@ -1,24 +1,26 @@
 from database.conexao import conectar
 
 
-def cadastrar_item(id_item, id_coord, item, descricao, data, local, status):
+def cadastrar_item( item, descricao, data_encontrado, status, id_categoria,  local:str = None, foto: str = None, email: str = None, cpf_coordenador: str = None ):
 
     conexao, cursor = conectar()
 
     sql = """
-        INSERT INTO cadastro_item
-        (id_item, id_coord, item, descricao, data, local, status)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO item
+        ( item, descricao, data_encontrado, local, status, foto, email, cpf_coordenador, id_categoria)
+        VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
 
     valores = (
-        id_item,
-        id_coord,
         item,
         descricao,
-        data,
+        data_encontrado,
         local,
-        status
+        status,
+        foto,
+        email,
+        cpf_coordenador,
+        id_categoria
     )
 
     cursor.execute(sql, valores)

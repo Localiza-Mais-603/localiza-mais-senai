@@ -1,0 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+body {
+    
+    background: linear-gradient(207deg, #1c1c1c 0%, #121212 50%, #1a0505 100%) fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden; 
+    padding: 40px 20px;
+}
+
+
+body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 15% 15%, rgb(255, 0, 0), transparent 60%),
+                radial-gradient(circle at 85% 85%, rgb(255, 0, 0), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; 
+    gap: 30px;       
+    width: 100%;
+    max-width: 600px; 
+    padding: 20px;
+    position: relative;
+    z-index: 1;      
+}
+
+
+.card {
+    background-color: #fcf8f8;
+    text-decoration: none;
+    width: 170px;    
+    height: 310px;   
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;   
+    font-size: 1.2rem; 
+    line-height: 1.4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); 
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+}
+
+
+@media (min-width: 480px) {
+    .card-container .card:nth-child(1) {
+        transform: translateY(-25px);
+    }
+    .card-container .card:nth-child(1):hover {
+        transform: translateY(-25px) scale(1.04);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-container .card:nth-child(2) {
+        transform: translateY(25px);
+    }
+    .card-container .card:nth-child(2):hover {
+        transform: translateY(25px) scale(1.04);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
+    }
+}
+
+
+@media (max-width: 479px) {
+    .card-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .card:hover {
+        transform: scale(1.03);
+    }
+    
+    
+    .btn-voltar {
+        position: static !important;
+        margin-top: 40px;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: #080808;
+}
+
