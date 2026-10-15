@@ -1,5 +1,7 @@
+
 body.escuro{
     background-color: black;
+    color: white;
 
     
 }
@@ -13,23 +15,6 @@ body{
 }
 
 
-.transparente-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-
-}
-
-.item-central{
-    display: flex;
-    gap: 12px;
-}
-
-
-.item-data{
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+.card-corpo.escuro{
+    color: black;
 }
