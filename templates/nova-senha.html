@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Localiza+</title>
+</head>
+<body>
+
+    <h2>Criar Nova Senha</h2>
+    <p>Defina a sua nova credencial de acesso para o Localiza+.</p>
+    
+    <form method="POST" action="/salvar-senha">
+        <label for="nova_senha">Nova Senha:</label>
+        <input type="password" id="nova_senha" name="nova_senha" placeholder="Digite a nova senha" required>
+        <br><br>
+        
+        <label for="confirmar_senha">Confirmar Senha:</label>
+        <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirme a nova senha" required>
+        <br><br>
+        
+        <button type="submit">Atualizar Senha</button>
+    </form>
+
+</body>
+</html>
