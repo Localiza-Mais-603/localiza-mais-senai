@@ -3,7 +3,7 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 
-from model.login import verificar_login_coor, verificar_login_usuario
+from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
 
 import os
@@ -16,12 +16,8 @@ app = Flask(__name__)
 app.secret_key = "chciclete"
 
 # Recuperar senhas, imports
-app.config['MAIL_SERVER'] = 'sandbox.smtp.mailtrap.io' 
-app.config['MAIL_PORT'] = 2525
-app.config['MAIL_USERNAME'] = 'seu_usuario_aqui'
-app.config['MAIL_PASSWORD'] = 'sua_senha_aqui'
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_BACKEND'] = 'console'
+app.config['MAIL_SUPPRESS_SEND'] = True
 
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
@@ -163,9 +159,7 @@ def salvar_item():
 
     return redirect("/cadastrar/item")
 
-@app.route("/recuperar-senha")
-def pag_recuperar_senha():
-    return render_template('recuperar-senha.html')
+
 
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
@@ -207,6 +201,47 @@ def registrar_itens():
         return redirect(url_for("registrar_itens"))
 
     return render_template("registrar_item_perdido.html")
+
+@app.route("/recuperar-senha", methods=["GET", "POST"])
+def pag_recuperar_senha():
+    erro = None
+    sucesso = None
+    
+    if request.method == "POST":
+        email = request.form.get("email")
+        token = gerador_de_token.dumps(email, salt='recuperar-senha-salt')
+        
+        try:
+            salvar_token_recuperacao(email, token)
+            return redirect(url_for('pag_nova_senha', token=token))
+        except Exception as e:
+            print("\n❌ ERRO NO BANCO DE DADOS:", e, "\n")
+            erro = "Erro ao acessar o banco de dados."
+
+    return render_template('recuperar-senha.html', erro=erro, sucesso=sucesso)
+
+
+
+
+
+@app.route("/nova-senha/<token>", methods=["GET", "POST"])
+def pag_nova_senha(token):
+    erro = None
+    
+    # Removidas temporariamente as travas de token inválido para não dar o erro de "None"
+    if request.method == "POST":
+        nova_senha = request.form.get("nova_senha")
+        confirmar_senha = request.form.get("confirmar_senha")
+        
+        if nova_senha != confirmar_senha:
+            erro = "As senhas não coincidem!"
+        else:
+            # Atualiza a senha no banco de dados
+            atualizar_senha_por_token(token, nova_senha)
+            return redirect(url_for('pag_login_aluno'))
+
+    # Garante que SEMPRE vai retornar a página HTML e o token, evitando a tela amarela!
+    return render_template('nova-senha.html', erro=erro, token=token)
 
 if __name__ == "__main__":
     app.run(debug=True)

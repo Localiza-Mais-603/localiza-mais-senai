@@ -42,4 +42,8 @@ CREATE TABLE item (
  FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria)
 );
 
+ALTER TABLE usuarios ADD COLUMN token_recuperacao VARCHAR(255) NULL;
+ALTER TABLE coordenador ADD COLUMN token_recuperacao VARCHAR(255) NULL;
+
+
 
