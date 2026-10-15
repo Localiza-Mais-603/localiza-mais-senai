@@ -4,6 +4,9 @@ from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
 
+import os
+from werkzeug.utils import secure_filename
+
 
 
 app = Flask(__name__)
@@ -108,7 +111,7 @@ def selecionar_perfil():
 
 @app.route("/cadastrar/item")
 def pag_cadastrar_item():
-    return render_template("cadastrar_itens.html")
+    return render_template("registrar_item_perdido.html")
 
 @app.route("/tela/inicial/corporativo")
 def tela_inicial_corporativo():
@@ -152,21 +155,42 @@ def pag_recuperar_senha():
 def registrar_itens():
     if request.method == "POST":
         item = request.form.get("item")
-        local = request.form.get('local')
-        data_encontrado = request.form.get("data_encontrado")
+        local = request.form.get("local")
+        data_encontrado = request.form.get("data")  
+        if data_encontrado == "":
+            data_encontrado = None
         descricao = request.form.get("descricao")
-        email = "gostosinho@senai.com"
-        foto = request.form.get("foto")
-        endereco_foto= None
-        if foto:
-            endereco_foto = f"static\img_upload\{foto.filename}"
-            foto.save(endereco_foto)
-        
+        email = session["usuario"].get("email")
+        nome_foto = None
+        foto = request.files.get("foto")
+
+       
+
+        if foto and foto.filename != "":
+            nome_foto = secure_filename(foto.filename)
+            
+            pasta_destino = os.path.join("static", "img_upload")
+            os.makedirs(pasta_destino, exist_ok=True)
+       
+            caminho_completo = os.path.join(pasta_destino, nome_foto)
+            foto.save(caminho_completo)
+
+        registrar_item_perdido(
+            item=item,
+            descricao=descricao,
+            data_encontrado=data_encontrado,
+            status="Perdido",
+            id_categoria=1,
+            local=local,
+            foto=nome_foto,
+            email=email,
+            cpf_coordenador=None
+        )
+
+
+        return redirect(url_for("registrar_itens"))
 
     return render_template("registrar_item_perdido.html")
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
