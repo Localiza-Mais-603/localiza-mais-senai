@@ -7,7 +7,10 @@
     <title>Visualizar Itens</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/css/visualizaritens.css">
+    <link rel="stylesheet" href="/static/css/visualizar_itens.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
     
     
 
@@ -51,12 +54,146 @@
             </div>
         </a>
         {% endfor %}
+        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
+            <div class="card-corpo" >
+                <h5 class="card-titulo">
+                    Capacete de segurança
+                </h5>
+                <p class="card-text">
+                    Protege a cabeça contra impactos e queda de objetos.
+                </p>
+                <p class="card-text">
+                  <strong>EPI</strong>
+                </p>
+            </div>
+        </a>
+        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    Luvas de proteção
+                </h5>
+                <p class="card-text">
+                    	
+Protegem as mãos contra cortes, abrasões e outros riscos.
+                </p>
+
+                <p class="card-text">
+                    <strong>EPI</strong>
+                </p>
+            </div>
+        </a>
+        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    Óculos de proteção
+                </h5>
+                <p class="card-text">
+                    Protegem os olhos contra poeira, partículas e respingos.
+                </p>
+                <p class="card-text">
+                    <strong>EPI</strong>
+                </p>
+            </div>
+        </a>
+        <a class="card" style="width: 18rem;" href="" data-categoria="acessorio">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    Mochila
+                </h5>
+                <p class="card-text">
+                    Acessório utilizado para transportar objetos e pertences pessoais.
+                </p>
+                <p class="card-text">
+                    <strong>Acessório</strong>
+                </p>
+            </div>
+        </a>
+        <a class="card" style="width: 18rem;" href="" data-categoria="acessorio">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    Cinto
+                </h5>
+                <p class="card-text">
+                    Acessório utilizado para ajustar e manter a calça na cintura.
+                </p>
+
+                <p class="card-text">
+                    <strong>
+                        Acessório
+                    </strong>
+                </p>
+            </div>
+        </a>
+        <a class="card" style="width: 18rem;" href="" data-categoria="acessorio">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    Boné
+                </h5>
+                <p class="card-text">
+                    	
+Acessório utilizado para proteger a cabeça contra o sol.
+                </p>
+
+                <p class="card-text">
+                    <strong>
+                        Acessório
+                    </strong>
+                </p>
+            </div>
+        </a>
+        
+        <a class="card" style="width: 18rem;" href="" data-categoria="roupas">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    Camiseta
+                </h5>
+                <p class="card-text">
+                    Peça de vestuário utilizada para cobrir a parte superior do corpo.
+                </p>
+                <p class="card-text">
+                    <strong>Roupas</strong>
+                </p>
+            </div>
+        </a>
+        
+        <a class="card" style="width: 18rem;" href="" data-categoria="roupas">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    Calça
+                </h5>
+                <p class="card-text">
+                    Peça de vestuário que cobre as pernas e oferece proteção e conforto.
+                </p>
+                <p class="card-text">
+                    <strong>Roupas</strong>
+                </p>
+            </div>
+        </a>
+        <a class="card" style="width: 18rem;" href="" data-categoria="roupas">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    Jaqueta
+                </h5>
+                <p class="card-text">
+                    Peça de vestuário utilizada para proteger o corpo contra o frio e o vento.
+                </p>
+                <p class="card-text">
+                    <strong>
+                        Roupas
+                    </strong>
+                </p>
+            </div>
+        </a>
+        
     </div>
+
+
+
 
 
     <div class="grupo-filtro" id="janelaFiltro">
         <div class="grupo-conteudo">
-            <button class="btn-fechar" id="btnFechar">❌</button>
+            <button class="btn-fechar" id="btnFechar">X</button>
             <h3>Categorias</h3>
 
                 
@@ -66,19 +203,19 @@
 
             <h3>Sub-Categorias</h3>
             <label for="">
-                <input type="checkbox">Roupas
+                <input type="checkbox" class="filtro-categoria" value="roupas">Roupas
+            </label>
+
+            <label for=""> 
+                <input type="checkbox" class="filtro-categoria" value="epi">EPI
             </label>
 
             <label for="">
-                <input type="checkbox">EPI
-            </label>
-
-            <label for="">
-                <input type="checkbox">Acessórios
+                <input type="checkbox" class="filtro-categoria" value="acessorio">Acessórios
             </label>
 
 
-            <button>Aplicar filtro</button>
+            <button onclick="Filtrar()">Aplicar Filtro</button>
             
 
 
@@ -86,9 +223,7 @@
         </div>
     </div>
 
-    <script src="/static/js/visualizaritens.js">
-
-    </script>
+    <script src="/static/js/visualizar_itens.js"></script>
 
 </body>
 
