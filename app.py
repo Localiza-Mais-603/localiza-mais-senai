@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 
 from model.login import verificar_login_coor, verificar_login_usuario
@@ -12,6 +14,20 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 app.secret_key = "chciclete"
+
+# Recuperar senhas, imports
+app.config['MAIL_SERVER'] = 'sandbox.smtp.mailtrap.io' 
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = 'seu_usuario_aqui'
+app.config['MAIL_PASSWORD'] = 'sua_senha_aqui'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+mail = Mail(app)
+gerador_de_token = URLSafeTimedSerializer(app.secret_key)
+
+
+
 
 @app.route("/")
 def index():
