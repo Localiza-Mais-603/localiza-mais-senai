@@ -14,20 +14,21 @@
             <h1 class="titulo-perfil">LOCALIZA +</h1>
             <a type="button" class="btn-voltar" href="/tela/inicial/usuario">voltar</a>
         </header>
-
+        {% if usuario %}
         <section class="boas-vindas">
-            <h2 class="texto-recep">Olá Fulano!</h2>
+            <h2 class="texto-recep">Olá {{usuario.nome}}!</h2>
             <img src="https://placehold.co/150" alt="perfil">
         </section>
 
         <section class="dados-perfil">
             <div class="card-dados">
-                <p class="campos-dados">Nome</p>
-                <p class="campos-dados">E-mail</p>
-                <p class="campos-dados">Curso</p>     
+                <p class="campos-dados">{{usuario.nome}}</p>
+                <p class="campos-dados">{{usuario.email}}</p>
+                <p class="campos-dados">{{usuario.curso if usuario.curso else 'Não informado'}}</p>     
             </div>
             <a type="button" class="btn-editar" href="/editar/perfil">Editar dados</a>
         </section>
+        {% endif %}
     </main>
 </body>
 
