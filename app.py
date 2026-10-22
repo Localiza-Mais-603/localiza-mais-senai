@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
 from model.listar_itens import listar_todos
+from model.visualizar_perfil import buscar_usuario_por_email
 import os
 from werkzeug.utils import secure_filename
 
@@ -139,7 +140,15 @@ def pag_inicial_usuario():
 
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
-    return render_template("visualizar_perfil.html")
+    usuario_sessao = session.get("usuario")
+    
+    if not usuario_sessao:
+        return redirect(url_for("pag_login_aluno"))
+    email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    
+    usuario_atualizado = buscar_usuario_por_email(email)
+    
+    return render_template("visualizar_perfil.html", usuario=usuario_atualizado)
 
 
 @app.route("/editar/perfil")
