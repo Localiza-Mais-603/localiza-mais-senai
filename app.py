@@ -97,7 +97,7 @@ def pag_selecionar_perfil():
 # CADASTRO USUARIO
 @app.route("/cadastro/usuario") 
 def pag_cadastro(): 
-    return render_template("cadastrar_usuario.html") 
+    return render_template("cadastrar-usuario.html") 
 
 @app.route("/cadastro", methods=["POST"]) 
 def cadastro(): 
@@ -121,7 +121,7 @@ def cadastro_coor():
 
         return redirect('/login/setor/de/apoio')
 
-    return render_template('cadastro_coordenacao.html')
+    return render_template('cadastro-coordenacao.html')
 
 # editar itens cadastrado
 @app.route("/editar-item-cadastrado")
@@ -135,7 +135,7 @@ def selecionar_perfil():
 
 @app.route("/cadastrar/item")
 def pag_cadastrar_item():
-    return render_template("registrar_item_perdido.html")
+    return render_template("registrar-item-perdido.html")
 
 @app.route("/tela/inicial/corporativo")
 def tela_inicial_corporativo():
@@ -143,7 +143,7 @@ def tela_inicial_corporativo():
     
 @app.route("/tela/inicial/usuario")
 def pag_inicial_usuario():
-    return render_template("tela_inicial_usuario.html")
+    return render_template("tela-inicial-usuario.html")
 
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
@@ -155,7 +155,7 @@ def visualizar_perfil():
     
     usuario_atualizado = buscar_usuario_por_email(email)
     
-    return render_template("visualizar_perfil.html", usuario=usuario_atualizado)
+    return render_template("visualizar-perfil.html", usuario=usuario_atualizado)
 
 
 @app.route("/editar/perfil")
@@ -167,7 +167,7 @@ def editar_perfil():
 @app.route("/visualizar-itens")
 def visualizar_itens():
     itens = listar_todos()
-    return render_template("visualizar_itens.html",
+    return render_template("visualizar-itens.html",
                            itens = itens)
 
 
@@ -222,7 +222,7 @@ def registrar_itens():
 
         return redirect(url_for("registrar_itens"))
 
-    return render_template("registrar_item_perdido.html")
+    return render_template("registrar-item-perdido.html")
 
 
 
