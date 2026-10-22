@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 
 from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
-
+from model.listar_itens import listar_todos
 import os
 from werkzeug.utils import secure_filename
 
@@ -12,6 +14,20 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 app.secret_key = "chciclete"
+
+# Recuperar senhas, imports
+app.config['MAIL_SERVER'] = 'sandbox.smtp.mailtrap.io' 
+app.config['MAIL_PORT'] = 2525
+app.config['MAIL_USERNAME'] = 'seu_usuario_aqui'
+app.config['MAIL_PASSWORD'] = 'sua_senha_aqui'
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+mail = Mail(app)
+gerador_de_token = URLSafeTimedSerializer(app.secret_key)
+
+
+
 
 @app.route("/")
 def index():
@@ -125,14 +141,18 @@ def pag_inicial_usuario():
 def visualizar_perfil():
     return render_template("visualizar_perfil.html")
 
+
 @app.route("/editar/perfil")
 def editar_perfil():
     return render_template("editar-perfil.html")
 
 
+
 @app.route("/visualizar-itens")
 def visualizar_itens():
-    return render_template("visualizar_itens.html")
+    itens = listar_todos()
+    return render_template("visualizar_itens.html",
+                           itens = itens)
 
 # ROTA ÚNICA DE SALVAR ITEM
 @app.route("/cadastrar/item/salvar", methods=["POST"])
