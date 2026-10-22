@@ -1,42 +1,89 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar item cadastrado</title>
+    <title>Visualizar Itens</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/visualizar_itens.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    
+
 </head>
+
 <body>
-    <main class="container-principal">
+
+    <nav class="navbar transparente-header">
+        <div class="container-fluido">
+            <h1>LOCALIZA+</h1>
+        </div>
+        <div class="itens-central">
+            <button onclick="AlterarTema()">Modo</button>
+            <a href="/cadastrar/item"><button class="botao-add">Adicionar</button></a>
+        </div>
+
+
+
+    </nav>
+
+
+    <div class="itens-card">
+        {% for item in itens %}
+        <a class="card" style="width: 18rem;" href="" data-categoria="{{ item.id_categoria }}">
+            <div class="card-corpo">
+                <h5 class="card-titulo">
+                    {{ item.item }}
+                </h5>
+                <p class="card-text">
+                    {{ item.descricao }}
+                </p>
+            </div>
+        </a>
+        {% endfor %}
         
-        <form action="" class="formulario-editar-cadastro-item">
-            <div class="input-produto">
-                <label for="produto">Produto:</label></div><br>
-                <input type="text" id="produto" name="produto" required>
-            </div>
 
-            <div class="input-local">
-                <label for="local">Local (opcional):</label><br>
-                <input type="text" id="local" name="local">
-            </div>
 
-            <div class="input-data">
-                <label for="data">Data (opcional):</label><br>
-                <input type="date" id="data" name="data">
-            </div>
 
-            <div class="input-descricao">
-                <label for="descricao">Descrição:</label><br>
-                <textarea id="descricao" name="descricao" rows="4" required></textarea> 
-            </div>
 
-            <div class="botoes">
-                <button type="submit">Salvar alteração</button><br>
-                <button type="button">Cancelar</button>
-                <button type="button" class="btn-excluir">Excluir</button>
-            </div>
+    <div class="grupo-filtro" id="janelaFiltro">
+        <div class="grupo-conteudo">
+            <button class="btn-fechar" id="btnFechar">X</button>
+            <h3>Categorias</h3>
 
-        </form>
-        
-    </main>
+                
+            <label for="">
+                <input type="checkbox">Disponível
+            </label>
+
+            <h3>Sub-Categorias</h3>
+            <label for="">
+                <input type="checkbox" class="filtro-categoria" value="1">Acessórios
+            </label>
+
+            <label for=""> 
+                <input type="checkbox" class="filtro-categoria" value="2">EPI
+            </label>
+
+            <label for="">
+                <input type="checkbox" class="filtro-categoria" value="3">Roupas
+            </label>
+
+
+            <button onclick="Filtrar()">Aplicar Filtro</button>
+            
+
+
+            
+        </div>
+    </div>
+
+    <script src="/static/js/visualizar_itens.js"></script>
+
 </body>
+
 </html>

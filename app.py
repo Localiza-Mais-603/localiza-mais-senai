@@ -135,7 +135,26 @@ def selecionar_perfil():
 
 @app.route("/cadastrar/item")
 def pag_cadastrar_item():
-    return render_template("registrar_item_perdido.html")
+    return render_template("cadastrar_itens_coor.html")
+
+
+@app.route("/cadastrar/item/salvar", methods=["POST"])
+def salvar_item():
+    item = request.form["item"]
+    local = request.form["local"]
+    data = request.form.get("data") or None
+    descricao = request.form["descricao"]
+
+    registrar_item_perdido(
+        item=item,
+        descricao=descricao,
+        data_encontrado=data,
+        status="Perdido",
+        id_categoria=1,
+        local=local
+    )
+
+    return redirect("/cadastrar/item")
 
 @app.route("/tela/inicial/corporativo")
 def tela_inicial_corporativo():
@@ -170,16 +189,6 @@ def visualizar_itens():
     return render_template("visualizar_itens.html",
                            itens = itens)
 
-
-@app.route("/cadastrar/item/salvar", methods=["POST"])
-def salvar_item():
-    produto = request.form["produto"]
-    local = request.form["local"]
-    data = request.form.get("data")
-    descricao = request.form["descricao"]
-    cadastrar_item(produto, descricao, local, data)
-
-    return redirect("/cadastrar/item")
 
 
 
