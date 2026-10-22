@@ -193,3 +193,156 @@ section > a:hover {
 section > a:active {
     transform: scale(0.97);
 }
+
+
+header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 25px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+
+/* ===================================================
+   REGRAS DE MODO ESCURO ADICIONADAS (body.escuro)
+   =================================================== */
+
+/* Fundo geral mais escuro com gradientes avermelhados profundos */
+body.escuro {
+    background-color: #0d0d0d;
+    background-image: 
+        radial-gradient(ellipse 130% 90% at 100% -10%, #4a0000 0%, transparent 55%),
+        radial-gradient(ellipse 110% 80% at 0% 110%, #380000 0%, transparent 60%),
+        radial-gradient(ellipse 90% 120% at 100% 80%, #290000 0%, transparent 65%),
+        linear-gradient(135deg, #121212 0%, #1e0000 100%);
+    color: #ffffff;
+}
+
+/* Cartão Central (Section) no Modo Escuro */
+body.escuro section {
+    background-color: #1e1e1e;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+    border-top: 4px solid var(--vermelho-principal);
+}
+
+/* Título e Subtítulos */
+body.escuro section h1 {
+    color: #ff4d4d;
+}
+
+body.escuro section > p:first-of-type {
+    color: #cccccc;
+}
+
+/* Rótulos e Campos de Texto */
+body.escuro form label {
+    color: #dddddd;
+}
+
+body.escuro form input {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+body.escuro form input:focus {
+    box-shadow: 0 0 0 2px #ff4d4d;
+}
+
+/* Botão Cadastrar */
+body.escuro form button,
+body.escuro form button[type="submit"] {
+    background-color: #b30000;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+body.escuro form button:hover,
+body.escuro form button[type="submit"]:hover {
+    background-color: #e60000;
+}
+
+/* Textos e Links no Rodapé da Section */
+body.escuro section > p:nth-of-type(2) {
+    color: #cccccc;
+}
+
+body.escuro section > p:nth-of-type(2) a {
+    color: #ff4d4d;
+}
+
+/* Botão Voltar */
+body.escuro section > a {
+    background-color: #b30000;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+body.escuro section > a:hover {
+    background-color: #e60000;
+}
+
+/* Botão Modo Escuro no Header */
+body.escuro header .modo-escuro {
+    background-color: #2b2b2b;
+    color: #ff4d4d;
+    border: 2px solid #ff4d4d;
+}
+
+body.escuro header .modo-escuro:hover {
+    background-color: #ff4d4d;
+    color: #121212;
+}
+
+body.escuro .header-principal,
+body.escuro .item-data,
+body.escuro .grupo-conteudo {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+body.escuro .card {
+    background-color: #1e1e1e;
+    border-top-color: #d11a2a;
+}
+
+body.escuro .card-titulo {
+    color: #ff4d4d;
+}
+
+body.escuro .card-text {
+    color: #cccccc;
+}
+
+body.escuro .item-data input[type="date"] {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border-color: #d11a2a;
+}
+
+body.escuro .grupo-conteudo h3,
+body.escuro .item-data label {
+    color: #ff4d4d;
+}
+
+body.escuro .grupo-conteudo label {
+    color: #dddddd;
+}
+
+
+
+.modo-escuro{
+    text-decoration: none;
+    color: #ba1c1c;
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border: 1px solid #ba1c1c;
+    border-radius: 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}

@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_coordenacao.css') }}">
+    <link rel="stylesheet" href="/static/css/cadastro_coordenacao.css">
     <title>Cadastro</title>
 </head>
 
 <body>
 
     <main>
+
+        <header class="header-principal">
+            <button class="modo-escuro" onclick="AlterarTema()">Modo</button>
+        </header>
+        
         <section>
             <h1>Cadastro</h1>
 
@@ -43,6 +48,8 @@
 
         </section>
     </main>
+
+    <script src="/static/js/visualizar_itens.js"></script>
 
 </body>
 </html>

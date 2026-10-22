@@ -18,6 +18,54 @@ body {
     padding: 20px;
 }
 
+body.escuro {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+
+.header-principal{
+    background-color: #ffffff;
+
+    
+}
+
+
+body.escuro .header-principal,
+body.escuro .item-data,
+body.escuro .grupo-conteudo {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+body.escuro .card {
+  background-color: #1e1e1e;
+  border-top-color: #d11a2a;
+}
+
+body.escuro .card-titulo {
+  color: #ff4d4d;
+}
+
+body.escuro .card-text {
+  color: #cccccc;
+}
+
+body.escuro .item-data input[type="date"] {
+  background-color: #2a2a2a;
+  color: #ffffff;
+  border-color: #d11a2a;
+}
+
+body.escuro .grupo-conteudo h3,
+body.escuro .item-data label {
+  color: #ff4d4d;
+}
+
+body.escuro .grupo-conteudo label {
+  color: #dddddd;
+}
+
 /* Cabeçalho */
 header {
     position: absolute;
@@ -52,6 +100,18 @@ header nav a {
     border-radius: 20px;
     transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+.modo-escuro{
+    text-decoration: none;
+    color: #ba1c1c;
+    font-weight: bold;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border: 1px solid #ba1c1c;
+    border-radius: 20px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 
 header nav a:hover {
     background-color: #ba1c1c;

@@ -10,16 +10,20 @@
 
 <body>
 
-    <header>
+    <header class="header-principal">
         <h1>SENAI | LOCALIZA+</h1>
 
         <nav>
             <ul>
                 <li>
+                    <button class="modo-escuro" onclick="AlterarTema()">Modo</button>
                     <a href="{{ url_for('visualizar_perfil') }}">
                         👤 Perfil
                     </a>
+
+                    
                 </li>
+
             </ul>
         </nav>
     </header>
@@ -39,6 +43,9 @@
             </a>
         </section>
     </main>
+
+
+    <script src="/static/js/visualizar_itens.js"></script>
 
 </body>
 
