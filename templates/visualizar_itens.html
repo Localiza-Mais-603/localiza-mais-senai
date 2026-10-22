@@ -24,7 +24,7 @@
         </div>
         <div class="itens-central">
             <button onclick="AlterarTema()">Modo</button>
-            <a href=""><button class="botao-voltar">voltar</button></a>
+            <a href="./tela_inicial_usuario.html"><button class="botao-voltar">voltar</button></a>
         </div>
 
 
@@ -43,13 +43,16 @@
 
     <div class="itens-card">
         {% for item in itens %}
-        <a class="card" style="width: 18rem;" href="">
+        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
             <div class="card-corpo">
                 <h5 class="card-titulo">
                     {{ item.item }}
                 </h5>
                 <p class="card-text">
                     {{ item.descricao }}
+                </p>
+                <p class="card-text">
+                    {{ item.status }}
                 </p>
             </div>
         </a>
