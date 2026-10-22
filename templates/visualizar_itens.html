@@ -43,7 +43,7 @@
 
     <div class="itens-card">
         {% for item in itens %}
-        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
+        <a class="card" style="width: 18rem;" href="" data-categoria="{{ item.id_categoria }}">
             <div class="card-corpo">
                 <h5 class="card-titulo">
                     {{ item.item }}
@@ -51,145 +51,10 @@
                 <p class="card-text">
                     {{ item.descricao }}
                 </p>
-                <p class="card-text">
-                    {{ item.status }}
-                </p>
             </div>
         </a>
         {% endfor %}
-        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
-            <div class="card-corpo" >
-                <h5 class="card-titulo">
-                    Capacete de segurança
-                </h5>
-                <p class="card-text">
-                    Protege a cabeça contra impactos e queda de objetos.
-                </p>
-                <p class="card-text">
-                  <strong>EPI</strong>
-                </p>
-            </div>
-        </a>
-        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Luvas de proteção
-                </h5>
-                <p class="card-text">
-                    	
-Protegem as mãos contra cortes, abrasões e outros riscos.
-                </p>
-
-                <p class="card-text">
-                    <strong>EPI</strong>
-                </p>
-            </div>
-        </a>
-        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Óculos de proteção
-                </h5>
-                <p class="card-text">
-                    Protegem os olhos contra poeira, partículas e respingos.
-                </p>
-                <p class="card-text">
-                    <strong>EPI</strong>
-                </p>
-            </div>
-        </a>
-        <a class="card" style="width: 18rem;" href="" data-categoria="acessorio">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Mochila
-                </h5>
-                <p class="card-text">
-                    Acessório utilizado para transportar objetos e pertences pessoais.
-                </p>
-                <p class="card-text">
-                    <strong>Acessório</strong>
-                </p>
-            </div>
-        </a>
-        <a class="card" style="width: 18rem;" href="" data-categoria="acessorio">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Cinto
-                </h5>
-                <p class="card-text">
-                    Acessório utilizado para ajustar e manter a calça na cintura.
-                </p>
-
-                <p class="card-text">
-                    <strong>
-                        Acessório
-                    </strong>
-                </p>
-            </div>
-        </a>
-        <a class="card" style="width: 18rem;" href="" data-categoria="acessorio">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Boné
-                </h5>
-                <p class="card-text">
-                    	
-Acessório utilizado para proteger a cabeça contra o sol.
-                </p>
-
-                <p class="card-text">
-                    <strong>
-                        Acessório
-                    </strong>
-                </p>
-            </div>
-        </a>
         
-        <a class="card" style="width: 18rem;" href="" data-categoria="roupas">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Camiseta
-                </h5>
-                <p class="card-text">
-                    Peça de vestuário utilizada para cobrir a parte superior do corpo.
-                </p>
-                <p class="card-text">
-                    <strong>Roupas</strong>
-                </p>
-            </div>
-        </a>
-        
-        <a class="card" style="width: 18rem;" href="" data-categoria="roupas">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Calça
-                </h5>
-                <p class="card-text">
-                    Peça de vestuário que cobre as pernas e oferece proteção e conforto.
-                </p>
-                <p class="card-text">
-                    <strong>Roupas</strong>
-                </p>
-            </div>
-        </a>
-        <a class="card" style="width: 18rem;" href="" data-categoria="roupas">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Jaqueta
-                </h5>
-                <p class="card-text">
-                    Peça de vestuário utilizada para proteger o corpo contra o frio e o vento.
-                </p>
-                <p class="card-text">
-                    <strong>
-                        Roupas
-                    </strong>
-                </p>
-            </div>
-        </a>
-        
-    </div>
-
 
 
 
@@ -206,15 +71,15 @@ Acessório utilizado para proteger a cabeça contra o sol.
 
             <h3>Sub-Categorias</h3>
             <label for="">
-                <input type="checkbox" class="filtro-categoria" value="roupas">Roupas
+                <input type="checkbox" class="filtro-categoria" value="1">Acessórios
             </label>
 
             <label for=""> 
-                <input type="checkbox" class="filtro-categoria" value="epi">EPI
+                <input type="checkbox" class="filtro-categoria" value="2">EPI
             </label>
 
             <label for="">
-                <input type="checkbox" class="filtro-categoria" value="acessorio">Acessórios
+                <input type="checkbox" class="filtro-categoria" value="3">Roupas
             </label>
 
 

@@ -8,14 +8,14 @@ const botaoAbrir = document.getElementById('btnAbrir')
 const botaoFechar = document.getElementById('btnFechar')
 const filtragem = document.getElementById('janelaFiltro')
 
-
 // Ele irá percorrer cada um dos cards encontrados, e impede o comportamento dessa tag
 
-// cards.forEach(card => {
-//     card.addEventListener('click', (event) =>{
-//         event.preventDefault()
-//     })
-// })
+cards.forEach(card => {
+    card.addEventListener('click', (event) =>{
+        event.preventDefault()
+    })
+})
+
 
 botaoAbrir.addEventListener('click', () =>{
     filtragem.classList.add('aberto')
@@ -38,6 +38,9 @@ function Filtrar(){
     cards.forEach(card =>{
         const categoria = card.getAttribute('data-categoria')
 
+        const data = card.getAttribute('data-data')
+        
+
         if(filtros.length === 0 || filtros.includes(categoria)){
             card.style.display = 'block'
         } else {
@@ -45,8 +48,10 @@ function Filtrar(){
         }
     })
 
-
-    filtragem.classList.remove('aberto')
+    if(filtragem){
+        filtragem.classList.remove('aberto');
+    }
+    
 
 
 }
