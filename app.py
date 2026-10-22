@@ -4,8 +4,11 @@ from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
+from dotenv import load_dotenv
+from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
-
+from model.listar_itens import listar_todos
+from model.visualizar_perfil import buscar_usuario_por_email
 import os
 from werkzeug.utils import secure_filename
 
@@ -104,7 +107,7 @@ def cadastro():
     email = request.form["email"] 
     senha = request.form["senha"] 
     cadastrar_usuario(cpf, nome, curso, email, senha) 
-    return redirect("/cadastro/usuario")
+    return redirect("/login/usuario")
 
 @app.route('/cadastro-coor', methods=['GET', 'POST'])
 def cadastro_coor():
@@ -144,16 +147,28 @@ def pag_inicial_usuario():
 
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
-    return render_template("visualizar_perfil.html")
+    usuario_sessao = session.get("usuario")
+    
+    if not usuario_sessao:
+        return redirect(url_for("pag_login_aluno"))
+    email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    
+    usuario_atualizado = buscar_usuario_por_email(email)
+    
+    return render_template("visualizar_perfil.html", usuario=usuario_atualizado)
+
 
 @app.route("/editar/perfil")
 def editar_perfil():
     return render_template("editar-perfil.html")
 
 
+
 @app.route("/visualizar-itens")
 def visualizar_itens():
-    return render_template("visualizar_itens.html")
+    itens = listar_todos()
+    return render_template("visualizar_itens.html",
+                           itens = itens)
 
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])

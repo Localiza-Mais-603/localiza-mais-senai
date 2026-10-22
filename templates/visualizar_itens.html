@@ -24,7 +24,7 @@
         </div>
         <div class="itens-central">
             <button onclick="AlterarTema()">Modo</button>
-            <a href=""><button class="botao-voltar">voltar</button></a>
+            <a href="./tela_inicial_usuario.html"><button class="botao-voltar">voltar</button></a>
         </div>
 
 
@@ -42,38 +42,19 @@
     </div> 
 
     <div class="itens-card">
-        <a class="card" style="width: 18rem;" href="" data-categoria="roupas">
-            <div class="card-corpo" >
-                <h5 class="card-titulo">
-                    Oculos perdido
-                </h5>
-                <p class="card-text">
-                    Oculos redondo fino perdido na sala 9 
-                </p>
-            </div>
-        </a>
-        <a class="card" style="width: 18rem;" href="" data-categoria="acessorio">
+        {% for item in itens %}
+        <a class="card" style="width: 18rem;" href="" data-categoria="{{ item.id_categoria }}">
             <div class="card-corpo">
                 <h5 class="card-titulo">
-                    Oculos perdido
+                    {{ item.item }}
                 </h5>
                 <p class="card-text">
-                    Oculos redondo fino perdido na sala 9 
+                    {{ item.descricao }}
                 </p>
             </div>
         </a>
-        <a class="card" style="width: 18rem;" href="" data-categoria="epi">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    Oculos perdido
-                </h5>
-                <p class="card-text">
-                    Oculos redondo fino perdido na sala 9 
-                </p>
-            </div>
-        </a>
-    </div>
-
+        {% endfor %}
+        
 
 
 
@@ -90,19 +71,19 @@
 
             <h3>Sub-Categorias</h3>
             <label for="">
-                <input type="checkbox">Roupas
+                <input type="checkbox" class="filtro-categoria" value="1">Acessórios
             </label>
 
             <label for=""> 
-                <input type="checkbox">EPI
+                <input type="checkbox" class="filtro-categoria" value="2">EPI
             </label>
 
             <label for="">
-                <input type="checkbox">Acessórios
+                <input type="checkbox" class="filtro-categoria" value="3">Roupas
             </label>
 
 
-            <button>Aplicar Filtro</button>
+            <button onclick="Filtrar()">Aplicar Filtro</button>
             
 
 
