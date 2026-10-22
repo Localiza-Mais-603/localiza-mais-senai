@@ -100,7 +100,7 @@ def cadastro():
     email = request.form["email"] 
     senha = request.form["senha"] 
     cadastrar_usuario(cpf, nome, curso, email, senha) 
-    return redirect("/cadastro/usuario")
+    return redirect("/login/usuario")
 
 @app.route('/cadastro-coor', methods=['GET', 'POST'])
 def cadastro_coor():
