@@ -19,10 +19,7 @@
 
         <div class="container-form">
 
-            <!-- Mensagem de erro (caso ocorra falha no login) -->
-            {% if erro %}
-                <p style="color: red; text-align: center;">{{ erro }}</p>
-            {% endif %}
+            
 
             <!-- CORREÇÃO AQUI: Usando url_for com o nome da função em Python -->
             <form action="{{ url_for('pag_login_aluno') }}" method="post">
@@ -36,6 +33,11 @@
             </form>
 
         </div>
+
+        <!-- Mensagem de erro (caso ocorra falha no login) -->
+            {% if erro %}
+                <p style="color: red; text-align: center;">{{ erro }}</p>
+            {% endif %}
 
         <a href="{{ url_for('selecionar_perfil') }}">Voltar</a>
 
