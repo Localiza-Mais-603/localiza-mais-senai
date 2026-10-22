@@ -15,12 +15,26 @@ app = Flask(__name__)
 
 app.secret_key = "chciclete"
 
-# Recuperar senhas, imports
-app.config['MAIL_BACKEND'] = 'console'
-app.config['MAIL_SUPPRESS_SEND'] = True
+# CONFIGURAÇÃO DE E-MAIL REAL (GMAIL)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+
+# Coloque o e-mail da sua equipe ou do projeto Localiza+
+app.config['MAIL_USERNAME'] = 'seu_email_do_tcc@gmail.com'  
+
+# ⚠️ NÃO É A SENHA NORMAL DO SEU E-MAIL! 
+# É uma "Senha de App" de 16 letras gerada dentro da sua Conta Google
+app.config['MAIL_PASSWORD'] = 'abcd efgh ijkl mnop'  
+
+# Define quem está enviando por padrão
+app.config['MAIL_DEFAULT_SENDER'] = 'seu_email_do_tcc@gmail.com'  
 
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
+
+
 
 
 
@@ -202,6 +216,9 @@ def registrar_itens():
 
     return render_template("registrar_item_perdido.html")
 
+
+
+
 @app.route("/recuperar-senha", methods=["GET", "POST"])
 def pag_recuperar_senha():
     erro = None
@@ -209,39 +226,52 @@ def pag_recuperar_senha():
     
     if request.method == "POST":
         email = request.form.get("email")
-        token = gerador_de_token.dumps(email, salt='recuperar-senha-salt')
+        
+        # 1. Gera o token
+        token_gerado = gerador_de_token.dumps(email, salt='recuperar-senha-salt')
         
         try:
-            salvar_token_recuperacao(email, token)
-            return redirect(url_for('pag_nova_senha', token=token))
+            # 2. Salva o token no banco usando a função do seu grupo
+            salvar_token_recuperacao(email, token_gerado)
+            
+            # 3. CRUCIAL: Monta o link manualmente de forma simples, sem usar url_for!
+            link_recuperacao = f"http://127.0.0{token_gerado}"
+            
+            # 4. Configura o e-mail real
+            msg = Message(
+                subject="Localiza+ - Recuperação de Senha",
+                recipients=[email]
+            )
+            msg.body = f"Olá!\n\nPara redefinir sua senha no Localiza+, clique no link:\n{link_recuperacao}"
+            
+            # 5. Envia o e-mail de verdade
+            mail.send(msg)
+            
+            sucesso = "O link de recuperação foi enviado para o seu e-mail!"
         except Exception as e:
-            print("\n❌ ERRO NO BANCO DE DADOS:", e, "\n")
-            erro = "Erro ao acessar o banco de dados."
+            print("\n❌ ERRO DETALHADO:", e, "\n")
+            erro = "Ocorreu um erro ao processar a recuperação."
 
     return render_template('recuperar-senha.html', erro=erro, sucesso=sucesso)
-
-
-
-
 
 @app.route("/nova-senha/<token>", methods=["GET", "POST"])
 def pag_nova_senha(token):
     erro = None
+    usuario_valido = verificar_token_valido(token)
     
-    # Removidas temporariamente as travas de token inválido para não dar o erro de "None"
+    if not usuario_valido:
+        return "<h3>❌ Link inválido!</h3>"
+    
     if request.method == "POST":
         nova_senha = request.form.get("nova_senha")
-        confirmar_senha = request.form.get("confirmar_senha")
-        
-        if nova_senha != confirmar_senha:
-            erro = "As senhas não coincidem!"
-        else:
-            # Atualiza a senha no banco de dados
-            atualizar_senha_por_token(token, nova_senha)
-            return redirect(url_for('pag_login_aluno'))
+        atualizar_senha_por_token(token, nova_senha)
+        return redirect(url_for('pag_login_aluno'))
 
-    # Garante que SEMPRE vai retornar a página HTML e o token, evitando a tela amarela!
     return render_template('nova-senha.html', erro=erro, token=token)
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
