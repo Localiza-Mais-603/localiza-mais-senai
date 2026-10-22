@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
+
+from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
 from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
@@ -16,16 +18,21 @@ app = Flask(__name__)
 
 app.secret_key = "chciclete"
 
-# Recuperar senhas, imports
-app.config['MAIL_SERVER'] = 'sandbox.smtp.mailtrap.io' 
-app.config['MAIL_PORT'] = 2525
-app.config['MAIL_USERNAME'] = 'seu_usuario_aqui'
-app.config['MAIL_PASSWORD'] = 'sua_senha_aqui'
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 
+
+app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'  
+app.config['MAIL_PASSWORD'] = 'rffwsrozekhyezce'  
+app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.com')
+
+
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
+
+
 
 
 
@@ -163,22 +170,18 @@ def visualizar_itens():
     return render_template("visualizar_itens.html",
                            itens = itens)
 
-# ROTA ÚNICA DE SALVAR ITEM
+
 @app.route("/cadastrar/item/salvar", methods=["POST"])
 def salvar_item():
     produto = request.form["produto"]
     local = request.form["local"]
     data = request.form.get("data")
     descricao = request.form["descricao"]
-
-    # Mantém a ordem esperada pelo model: item, descricao, local, data
     cadastrar_item(produto, descricao, local, data)
 
     return redirect("/cadastrar/item")
 
-@app.route("/recuperar-senha")
-def pag_recuperar_senha():
-    return render_template('recuperar-senha.html')
+
 
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
@@ -220,6 +223,61 @@ def registrar_itens():
         return redirect(url_for("registrar_itens"))
 
     return render_template("registrar_item_perdido.html")
+
+
+
+
+@app.route("/recuperar-senha", methods=["GET", "POST"])
+def pag_recuperar_senha():
+    erro = None
+    sucesso = None
+    
+    if request.method == "POST":
+        email = request.form.get("email")
+        token_gerado = gerador_de_token.dumps(email, salt='recuperar-senha-salt')
+        
+        try:
+            salvar_token_recuperacao(email, token_gerado)
+            link_recuperacao = url_for('pag_nova_senha', token=token_gerado, _external=True)
+            msg = Message(
+                subject="Localiza+ - Recuperação de Senha",
+                recipients=[email]
+            )
+            msg.body = f"Olá!\n\nPara redefinir sua senha no Localiza+, clique no link abaixo:\n\n{link_recuperacao}\n\nSe você não solicitou essa alteração, ignore este e-mail."
+            mail.send(msg)
+            
+            sucesso = "O link de recuperação foi enviado para o seu e-mail!"
+        except Exception as e:
+            print("\n ERRO DETALHADO NO ENVIO:", e, "\n")
+            erro = "Ocorreu um erro ao processar a recuperação de senha."
+
+
+    return render_template('recuperar-senha.html', erro=erro, sucesso=sucesso)
+
+
+@app.route("/nova-senha/<token>", methods=["GET", "POST"])
+def pag_nova_senha(token):
+    erro = None
+    usuario_valido = verificar_token_valido(token)
+    
+    if not usuario_valido:
+        return "<h3>Link inválido ou expirado!</h3>", 400
+    
+    if request.method == "POST":
+        nova_senha = request.form.get("nova_senha")
+        confirmar_senha = request.form.get("confirmar_senha")
+        if nova_senha != confirmar_senha:
+            erro = "As senhas não coincidem! Tente novamente."
+            return render_template('nova-senha.html', erro=erro, token=token)
+            
+        atualizar_senha_por_token(token, nova_senha)
+        return redirect(url_for('pag_login_aluno'))
+
+    return render_template('nova-senha.html', erro=erro, token=token)
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
