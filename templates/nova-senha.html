@@ -9,6 +9,9 @@
     <h2>Criar Nova Senha</h2>
     <p>Defina a sua nova credencial de acesso para o Localiza+.</p>
     
+    <!-- ADICIONADO: Exibição de alertas de erro vindos do Python -->
+    {% if erro %}<p style="color: red;">{{ erro }}</p>{% endif %}
+    
    <form method="POST" action="{{ url_for('pag_nova_senha', token=token) }}">
 
         <label for="nova_senha">Nova Senha:</label>
