@@ -23,16 +23,16 @@
         </section>
 
         <section class="editar-perfil-form">
-            <form id="form-editar-perfil">
+            <form id="form-editar-perfil" action="/editar/perfil" method="POST">
                 <div class="campos-grupo">
                     <label for="nome-novo" class="campo-label">Nome:</label>
-                    <input class="campo-dados-novos" id="nome-novo" name="nome" type="text" placeholder="Nome">
+                    <input class="campo-dados-novos" id="nome-novo" name="nome" type="text" placeholder="Nome" value="{{ usuario.nome }}">
 
                     <label for="email-novo" class="campo-label">E-mail:</label>
-                    <input class="campo-dados-novos" id="email-novo" name="email" type="email" placeholder="E-mail">
+                    <input class="campo-dados-novos" id="email-novo" name="email" type="email" placeholder="E-mail" value="{{ usuario.email }}">
 
                     <label for="curso-novo" class="campo-label">Curso:</label>
-                    <input class="campo-dados-novos" id="curso-novo" name="curso" type="text" placeholder="Curso">
+                    <input class="campo-dados-novos" id="curso-novo" name="curso" type="text" placeholder="Curso" value="{{ usuario.curso if usuario.curso else '' }}">
                 </div>
 
                 <div class="acoes-grupo">

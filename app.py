@@ -7,6 +7,7 @@ from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
+from model.editar_perfil import atualizar_usuario
 import os
 from werkzeug.utils import secure_filename
 
@@ -151,10 +152,30 @@ def visualizar_perfil():
     return render_template("visualizar_perfil.html", usuario=usuario_atualizado)
 
 
-@app.route("/editar/perfil")
+@app.route("/editar/perfil", methods=["GET", "POST"])
 def editar_perfil():
-    return render_template("editar-perfil.html")
+    usuario_sessao = session.get("usuario")
+    if not usuario_sessao:
+        return redirect(url_for("pag_login_aluno"))
+    
+    email_atual = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
 
+    if request.method == "POST":
+        novo_nome = request.form.get("nome")
+        novo_email = request.form.get("email")
+        novo_curso = request.form.get("curso")
+
+        atualizar_usuario(email_atual, novo_nome, novo_email, novo_curso)
+
+        usuario_atualizado = buscar_usuario_por_email(novo_email)
+        print("Usuário retornado após update:", usuario_atualizado)
+
+        session["usuario"] = usuario_atualizado
+
+        return redirect(url_for("visualizar_perfil"))
+
+    usuario = buscar_usuario_por_email(email_atual)
+    return render_template("editar-perfil.html", usuario=usuario)
 
 
 @app.route("/visualizar-itens")
