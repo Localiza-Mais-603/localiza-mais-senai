@@ -1,4 +1,4 @@
 flask
 mysql-connector-python
-flask_mail
-dotenv
+Flask-Mail
+python-dotenv
