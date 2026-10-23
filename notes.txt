@@ -1,0 +1,20 @@
+@app.route("/login/setor/de/apoio", methods=["GET", "POST"])
+def pag_login_coordenacao():
+    erro = None
+    
+    if request.method == "POST":
+        cpf = request.form["cpf"]
+        senha = request.form["senha"]
+
+       
+        coordenador = verificar_login_coor(cpf, senha)
+
+        if coordenador:
+           
+            return redirect(url_for("pag_tela_corporativa"))
+        else:
+         
+            erro = "CPF ou senha incorretos!"
+
+  
+    return render_template("login-coor.html", erro=erro)
