@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +12,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
     
     
-
 </head>
-
 <body>
-
     <nav class="navbar transparente-header">
         <div class="container-fluido">
             <h1>LOCALIZA+</h1>
@@ -28,21 +24,14 @@
             <a href="/visualizar-perfil"><button class="botao-formulario">perfil</button></a>
         </div>
         </div>
-
-
-
     </nav>
-
-
     <div class="item-data">
         <label for="data">A partir de:</label>
         <input type="date" name="data" value="2026-09-25">
-
         <button class="btn-abrir" id="btnAbrir" >
                 filtros
             </button>
     </div> 
-
     <div class="itens-card">
         {% for item in itens %}
         <a class="card" style="width: 18rem;" href="" data-categoria="{{ item.id_categoria }}">
@@ -57,44 +46,29 @@
         </a>
         {% endfor %}
         
-
-
-
-
     <div class="grupo-filtro" id="janelaFiltro">
         <div class="grupo-conteudo">
             <button class="btn-fechar" id="btnFechar">X</button>
             <h3>Categorias</h3>
-
                 
             <label for="">
                 <input type="checkbox">Disponível
             </label>
-
             <h3>Sub-Categorias</h3>
             <label for="">
                 <input type="checkbox" class="filtro-categoria" value="1">Acessórios
             </label>
-
             <label for=""> 
                 <input type="checkbox" class="filtro-categoria" value="2">EPI
             </label>
-
             <label for="">
                 <input type="checkbox" class="filtro-categoria" value="3">Roupas
             </label>
-
-
             <button onclick="Filtrar()">Aplicar Filtro</button>
             
-
-
             
         </div>
     </div>
-
     <script src="/static/js/visualizar_itens.js"></script>
-
 </body>
-
 </html>
