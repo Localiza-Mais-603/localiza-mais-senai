@@ -48,3 +48,11 @@ def listar_categorias():
     categorias = cursor.fetchall()
     conexao.close()
     return categorias
+
+def cadastrar_categoria(nome):
+    conexao, cursor = conectar()
+    cursor.execute("INSERT INTO categoria (nome) VALUES (%s)", [nome])
+    conexao.commit()
+    id_criado = cursor.lastrowid  
+    conexao.close()
+    return id_criado
