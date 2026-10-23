@@ -55,7 +55,7 @@ def pag_login_aluno():
           
             session["usuario"] = usuario 
             
-            return redirect(url_for("pag_inicial_usuario"))
+            return redirect(url_for("visualizar_itens"))
         else:
             erro = "E-mail ou senha incorretos!"
 
