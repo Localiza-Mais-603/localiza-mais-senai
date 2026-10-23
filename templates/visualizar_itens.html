@@ -57,7 +57,16 @@
     </nav>
 
     
- <div class="itens-card">
+    <div class="item-data">
+        <label for="data">A partir de:</label>
+        <input type="date" name="data" value="2026-09-25">
+
+        <button class="btn-abrir" id="btnAbrir">
+            filtros
+        </button>
+    </div>
+
+    <div class="itens-card">
 
         {% for item in itens %}
 
@@ -161,43 +170,6 @@
 
         </div>
 
-    </div>
-
-
-
-    <div class="item-data">
-        <label for="data">A partir de:</label>
-        <input type="date" name="data" value="2026-09-25">
-
-        <button class="btn-abrir" id="btnAbrir">
-            filtros
-        </button>
-    </div>
-
-    <div class="itens-card">
-        {% for item in itens %}
-        <div class="card" style="width: 18rem;" data-categoria="{{ item.id_categoria }}">
-            <!-- O link agora envolve apenas o conteúdo do item -->
-            <a href="" class="card-link-conteudo text-decoration-none text-dark">
-                <div class="card-corpo">
-                    <h5 class="card-titulo">
-                        {{ item.item }}
-                    </h5>
-                    <p class="card-text">
-                        {{ item.descricao }}
-                    </p>
-                </div>
-            </a>
-
-            <!-- Os botões ficam na base do card, sem quebrar o layout -->
-            {% if session.get('perfil') == 'coordenacao' %}
-            <div class="card-botoes-acao">
-                <a href="/editar-item-cadastrado" class="btn-editar-card">Editar</a>
-                <button class="btn-excluir-card">Excluir</button>
-            </div>
-            {% endif %}
-        </div>
-        {% endfor %}
     </div>
 
 
