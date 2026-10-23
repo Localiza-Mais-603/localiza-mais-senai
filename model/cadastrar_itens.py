@@ -42,3 +42,9 @@ def registrar_item_perdido (item, descricao, data_encontrado, status, id_categor
     conexao.close()
     return True
 
+def listar_categorias():
+    conexao, cursor = conectar()
+    cursor.execute("SELECT id_categoria, nome FROM categoria ORDER BY nome ASC")
+    categorias = cursor.fetchall()
+    conexao.close()
+    return categorias

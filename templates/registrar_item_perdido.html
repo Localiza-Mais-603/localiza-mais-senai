@@ -23,6 +23,16 @@
                     <label for="item" class="rotulo">Item perdido: *</label>
                     <input type="text" id="item" name="item" class="entrada-texto" required>
                 </div>
+
+                <div class="campo-grupo">
+                    <label for="categoria" class="rotulo">Categoria: *</label>
+                    <select id="categoria" name="categoria_id" class="entrada-texto" required>
+                        <option value="" disabled selected>Selecione uma categoria...</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
                 
                 <div class="campo-grupo">
                     <label for="local" class="rotulo">Local (opcional)</label>

@@ -6,7 +6,7 @@ from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
 from model.login import verificar_login_coor, verificar_login_usuario
-from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
+from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 import os
@@ -186,6 +186,7 @@ def salvar_item():
 def registrar_itens():
     if request.method == "POST":
         item = request.form.get("item")
+        id_categoria = request.form.get("categoria_id")
         local = request.form.get("local")
         data_encontrado = request.form.get("data")  
         if data_encontrado == "":
@@ -211,7 +212,7 @@ def registrar_itens():
             descricao=descricao,
             data_encontrado=data_encontrado,
             status="Perdido",
-            id_categoria=1,
+            id_categoria=id_categoria,
             local=local,
             foto=nome_foto,
             email=email,
@@ -221,7 +222,8 @@ def registrar_itens():
 
         return redirect(url_for("registrar_itens"))
 
-    return render_template("registrar_item_perdido.html")
+    categorias = listar_categorias()
+    return render_template("registrar_item_perdido.html", categorias=categorias)
 
 
 
