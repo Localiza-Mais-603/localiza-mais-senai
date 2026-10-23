@@ -1,22 +1,24 @@
-function TabButton(type){
-    const usuarioBtn = document.querySelector('.tab-buttons button:nth-child(1)');
-    const apoioBtn = document.querySelector('.tab-buttons button:nth-child(2)');
-    const usuarioForm = document.getElementById('form-usuario');
-    const apoioForm = document.getElementById('form-apoio');
+
+function ButtonsTap(tipo){
+    const formUsuario = document.getElementById('form-usuario')
+    const formApoio = document.getElementById('form-apoio')
+
+    const botoes = document.querySelectorAll('.tab-buttons')
 
 
-    if(type == 'usuario'){
-        usuarioBtn.classList.add('active');
-        usuarioBtn.classList.remove('active');
-        usuarioForm.classList.add('active');
-        usuarioForm.classList.remove('active');
-    } else if (type == 'apoio'){
-        apoioBtn.classList.add('active');
-        apoioBtn.classList.remove('active');
-        apoioForm.classList.add('active');
-        apoioForm.classList.remove('active');
+    botoes.forEach(botao => botao.classList.remove('active'));
+    if(formApoio) formApoio.classList.remove('active');
+    if (formUsuario) formUsuario.classList.remove('active')
 
+
+    if(tipo == 'usuario'){
+        if(formUsuario) formUsuario.classList.add('active');
         
-    }
 
+        botoes[0].classList.add('active')
+    } else if(tipo == 'apoio'){
+        if(formApoio)formApoio.classList.add('active')
+
+        botoes[1].classList.add('active')
+    }
 }

@@ -269,10 +269,10 @@ form .botao {
 
 /* Esconde os formulários inativos por defeito */
 .container-form {
-    display: none !important;
+    display: none;
 }
 
 /* Mostra apenas o formulário ativo mantendo a grelha intacta */
 .container-form.active {
-    display: contents !important;
+    display: contents;
 }

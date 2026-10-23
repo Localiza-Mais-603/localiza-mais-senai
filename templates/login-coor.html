@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login_coordenacao.css') }}">
     <title>Fazer login</title>
+    <script src="/static/js/tab-buttons.js"></script>
     
 </head>
 
@@ -13,8 +14,8 @@
 
     <div class="container-botoes">
         <div class="buttontab">
-            <button class="tab-buttons active" onclick="TabButton('usuario')">Usuário</button>
-            <button class="tab-buttons" onclick="TabButton('apoio')">Setor de Apoio</button>
+           <button class="tab-buttons active" onclick="ButtonsTap('usuario')">Usuário</button>
+            <button class="tab-buttons" onclick="ButtonsTap('apoio')">Setor de Apoio</button>
 
         </div>
     </div>
@@ -22,7 +23,7 @@
     <!-- Formulario setor de apoio -->
 
     <main class="container-login">
-        <div id="form-apoio" class="container-form active">
+        <div id="form-apoio" class="container-form">
             <div class="container-header">
                 <h1>Entrar</h1>
                 <h4>PERFIL | SETOR DE APOIO </h4>
@@ -43,11 +44,14 @@
                 <input id="senha-apoio" name="senha" type="password" placeholder="Digite sua senha..." required><br>
 
                 <button type="submit" class="botao">Entrar</button>
-            </form>
 
+                
+            </form>
             <a href="{{ url_for('selecionar_perfil') }}">Voltar</a>
 
             <p>Não possui uma conta? <a href="{{ url_for('cadastro_coor') }}" class="link-secundario">Cadastre-se</a></p>
+
+            
 
         
 
@@ -60,7 +64,7 @@
     <!-- Login do Usuário -->
 
 
-    <div id="form-usuario" class="container-form">
+    <div id="form-usuario" class="container-form active">
         <div class="container-header">
             <h1>Entrar</h1>
             <h4>PERFIL | ALUNO </h4>
@@ -68,6 +72,10 @@
 
         
 
+            
+            {% if erro and tipo == 'aluno' %}
+                <p style="color: red; text-align: center;">{{ erro }}</p>
+            {% endif %}
             
 
             <!-- CORREÇÃO AQUI: Usando url_for com o nome da função em Python -->
@@ -81,12 +89,9 @@
                 <button type="submit" class="botao">Entrar</button>
             </form>
 
-        </div>
+        
 
-        <!-- Mensagem de erro (caso ocorra falha no login) -->
-            {% if erro and tipo == 'aluno' %}
-                <p style="color: red; text-align: center;">{{ erro }}</p>
-            {% endif %}
+        
 
         <a href="{{ url_for('selecionar_perfil') }}">Voltar</a>
 
@@ -105,7 +110,7 @@
 
     </main>
 
-    <script src="{{ url_for('static', filename='js/tab-buttons.js') }}"></script>
+    
 
     
 
