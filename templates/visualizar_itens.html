@@ -9,11 +9,8 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/visualizar_itens.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    
-
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -24,46 +21,56 @@
         </div>
         <div class="itens-central">
             <button onclick="AlterarTema()">Modo</button>
-            <a href="./tela_inicial_usuario.html"><button class="botao-voltar">voltar</button></a>
+            
+            <!-- botao relatar pra aluno apenas -->
+            {% if session.get('perfil') == 'aluno' %}
+                <a href="/registro/itens"><button class="botao-formulario">relatar itens</button></a>
+            {% endif %}
+            
+            <a href="/visualizar-perfil"><button class="botao-formulario">perfil</button></a>
         </div>
-
-
-
     </nav>
-
 
     <div class="item-data">
         <label for="data">A partir de:</label>
         <input type="date" name="data" value="2026-09-25">
 
-        <button class="btn-abrir" id="btnAbrir" >
-                filtros
-            </button>
+        <button class="btn-abrir" id="btnAbrir">
+            filtros
+        </button>
     </div> 
 
-    <div class="itens-card">
+        <div class="itens-card">
         {% for item in itens %}
-        <a class="card" style="width: 18rem;" href="" data-categoria="{{ item.id_categoria }}">
-            <div class="card-corpo">
-                <h5 class="card-titulo">
-                    {{ item.item }}
-                </h5>
-                <p class="card-text">
-                    {{ item.descricao }}
-                </p>
-            </div>
-        </a>
+        <div class="card" style="width: 18rem;" data-categoria="{{ item.id_categoria }}">
+            <!-- O link agora envolve apenas o conteúdo do item -->
+            <a href="" class="card-link-conteudo text-decoration-none text-dark">
+                <div class="card-corpo">
+                    <h5 class="card-titulo">
+                        {{ item.item }}
+                    </h5>
+                    <p class="card-text">
+                        {{ item.descricao }}
+                    </p>
+                </div>
+            </a>
+            
+            <!-- Os botões ficam na base do card, sem quebrar o layout -->
+            {% if session.get('perfil') == 'coordenacao' %}
+                <div class="card-botoes-acao">
+                    <a href="/editar-item-cadastrado" class="btn-editar-card">Editar</a>
+                    <button class="btn-excluir-card">Excluir</button>
+                </div>
+            {% endif %}
+        </div>
         {% endfor %}
-        
-
-
+    </div>
 
 
     <div class="grupo-filtro" id="janelaFiltro">
         <div class="grupo-conteudo">
             <button class="btn-fechar" id="btnFechar">X</button>
             <h3>Categorias</h3>
-
                 
             <label for="">
                 <input type="checkbox">Disponível
@@ -82,12 +89,7 @@
                 <input type="checkbox" class="filtro-categoria" value="3">Roupas
             </label>
 
-
             <button onclick="Filtrar()">Aplicar Filtro</button>
-            
-
-
-            
         </div>
     </div>
 

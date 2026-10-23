@@ -41,7 +41,7 @@ gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 def index():
     return render_template("index.html")
 
-# login usuario
+# login usuario (Aluno)
 @app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
     erro = None
@@ -52,14 +52,33 @@ def pag_login_aluno():
         usuario = verificar_login_usuario(email, senha)
 
         if usuario:
-          
             session["usuario"] = usuario 
-            
-            return redirect(url_for("pag_inicial_usuario"))
+            session["perfil"] = "aluno"  
+            return redirect(url_for("visualizar_itens"))  
         else:
             erro = "E-mail ou senha incorretos!"
 
     return render_template("login-usuario.html", erro=erro, tipo='usuario')
+
+
+# login coordenação
+@app.route("/login/setor/de/apoio", methods=["GET", "POST"])
+def pag_login_coordenacao():
+    erro = None
+    if request.method == "POST":
+        cpf = request.form["cpf"]
+        senha = request.form["senha"]
+
+        coordenador = verificar_login_coor(cpf, senha)
+
+        if coordenador:
+            session["usuario"] = coordenador 
+            session["perfil"] = "coordenacao"  
+            return redirect(url_for("visualizar_itens"))  
+        else:
+            erro = "CPF ou senha incorretos!"
+
+    return render_template("login-coor.html", erro=erro)
 
 
 
@@ -67,13 +86,6 @@ def pag_login_aluno():
 def pag_tela_corporativa():
     return render_template("tela-inicial-corporativo.html") 
     
-@app.route("/login/setor/de/apoio", methods=["GET", "POST"])
-def pag_login_coordenacao():
-    erro = None
-    
-    if request.method == "POST":
-        cpf = request.form["cpf"]
-        senha = request.form["senha"]
 
        
         coordenador = verificar_login_coor(cpf, senha)
@@ -280,4 +292,4 @@ def pag_nova_senha(token):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host = "0.0.0.0", port= 8080)
