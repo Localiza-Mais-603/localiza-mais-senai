@@ -56,4 +56,55 @@ function Filtrar(){
 
 }
 
+function abrirCard(card) {
+
+    document.getElementById("modalTitulo").textContent =
+        card.dataset.item;
+
+
+    document.getElementById("modalDescricao").textContent =
+        card.dataset.descricao;
+
+
+    document.getElementById("modalLocal").textContent =
+        card.dataset.local;
+
+
+    document.getElementById("modalData").textContent =
+        card.dataset.data;
+
+
+    document.getElementById("modalStatus").textContent =
+        card.dataset.status;
+
+
+    document.getElementById("modalCard").classList.add("aberto");
+
+}
+
+
+
+function fecharCard() {
+
+    document.getElementById("modalCard").classList.remove("aberto");
+
+}
+
+
+
+document.getElementById("modalCard").addEventListener("click", function () {
+
+    fecharCard();
+
+});
+
+
+function AlterarTema() {
+
+    document.body.classList.toggle("escuro");
+
+}
+
+
+
 
