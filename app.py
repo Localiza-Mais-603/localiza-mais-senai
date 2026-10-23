@@ -39,7 +39,7 @@ gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("login-coor.html")
 
 # login usuario
 @app.route("/login/usuario", methods=["GET", "POST"])
