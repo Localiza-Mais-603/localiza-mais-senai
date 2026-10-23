@@ -282,3 +282,30 @@ input#senha { order: 5; }
 .container-login > div:not([class]) button:hover {
     background-color: var(--vermelho-profundo);
 }
+
+/* ==========================================================================
+   MODO ESCURO (Dark Mode) - Adicionado ao final
+   ========================================================================== */
+
+body.escuro {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--preto);
+    background-image: 
+        radial-gradient(ellipse 130% 90% at 100% -10%, var(--cinza-escuro) 0%, transparent 55%),
+        radial-gradient(ellipse 110% 80% at 0% 110%, var(--preto) 0%, transparent 60%),
+        radial-gradient(ellipse 90% 120% at 100% 80%, var(--preto) 0%, transparent 65%),
+        linear-gradient(135deg, var(--preto) 0%, var(--preto) 100%);
+    background-attachment: fixed;
+    padding: 20px;
+}
+
+body.escuro .container-login {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+}
+
+body.escuro .container-login > div:not([class]) {
+    background-color: var(--branco);
+}
