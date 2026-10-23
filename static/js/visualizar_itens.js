@@ -56,4 +56,147 @@ function Filtrar(){
 
 }
 
+/* =========================
+   FILTRO
+========================= */
+
+const btnAbrir = document.getElementById("btnAbrir");
+
+const btnFechar = document.getElementById("btnFechar");
+
+const janelaFiltro = document.getElementById("janelaFiltro");
+
+
+btnAbrir.addEventListener("click", function () {
+
+    janelaFiltro.classList.add("aberto");
+
+});
+
+
+btnFechar.addEventListener("click", function () {
+
+    janelaFiltro.classList.remove("aberto");
+
+});
+
+
+/* =========================
+   FILTRAR ITENS
+========================= */
+
+function Filtrar() {
+
+    const categoriasSelecionadas =
+        document.querySelectorAll(".filtro-categoria:checked");
+
+
+    const categorias = [];
+
+
+    categoriasSelecionadas.forEach(function (checkbox) {
+
+        categorias.push(checkbox.value);
+
+    });
+
+
+    const cards =
+        document.querySelectorAll(".itens-card .card");
+
+
+    cards.forEach(function (card) {
+
+        const categoria =
+            card.getAttribute("data-categoria");
+
+
+        if (categorias.length === 0) {
+
+            card.style.display = "flex";
+
+        }
+
+        else if (categorias.includes(categoria)) {
+
+            card.style.display = "flex";
+
+        }
+
+        else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+
+    janelaFiltro.classList.remove("aberto");
+
+}
+
+
+/* =========================
+   ABRIR ITEM
+========================= */
+
+function abrirCard(card) {
+
+    document.getElementById("modalTitulo").textContent =
+        card.dataset.item;
+
+
+    document.getElementById("modalDescricao").textContent =
+        card.dataset.descricao;
+
+
+    document.getElementById("modalLocal").textContent =
+        card.dataset.local;
+
+
+    document.getElementById("modalData").textContent =
+        card.dataset.data;
+
+
+    document.getElementById("modalStatus").textContent =
+        card.dataset.status;
+
+
+    document.getElementById("modalCard").classList.add("aberto");
+
+}
+
+
+/* =========================
+   FECHAR ITEM
+========================= */
+
+function fecharCard() {
+
+    document.getElementById("modalCard").classList.remove("aberto");
+
+}
+
+
+/* =========================
+   FECHAR CLICANDO NO FUNDO
+========================= */
+
+document.getElementById("modalCard").addEventListener("click", function () {
+
+    fecharCard();
+
+});
+
+
+/* =========================
+   MODO ESCURO
+========================= */
+
+function AlterarTema() {
+
+    document.body.classList.toggle("escuro");
+
+}
 

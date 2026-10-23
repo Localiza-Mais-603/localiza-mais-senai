@@ -9,310 +9,648 @@
 
 
 body {
-  background-color: #ffffff; 
+  background-color: #ffffff;
   color: #000000;
   padding: 20px;
 }
 
 
+/* =========================
+   CABEÇALHO
+========================= */
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 15px 25px;
-  background-color: transparent; 
+
+  background-color: transparent;
+
   border-radius: 6px;
+
   margin-bottom: 20px;
-  
+
   border-bottom: 4px solid #024873;
 }
 
+
 .navbar h1 {
   font-size: 1.6rem;
+
   font-weight: 900;
-  color: #024873; 
+
+  color: #024873;
+
   letter-spacing: 1px;
 }
 
+
 .itens-central {
   display: flex;
+
   gap: 10px;
 }
 
-/* Botões do Topo */
+
+/* BOTÕES DO TOPO */
+
 .itens-central button,
 .btn-abrir {
+
   padding: 9px 18px;
+
   border: 2px solid #024873;
+
   border-radius: 4px;
+
   background-color: #024873;
+
   color: #ffffff;
+
   cursor: pointer;
+
   font-weight: bold;
+
   text-transform: uppercase;
+
   font-size: 0.85rem;
+
   transition: all 0.2s ease;
 }
 
+
 .itens-central button:hover,
 .btn-abrir:hover {
+
   background-color: #ffffff;
+
   color: #024873;
 }
 
+
 .botao-voltar {
   background-color: transparent !important;
+
   color: #024873 !important;
 }
 
+
 .botao-voltar:hover {
+
   background-color: #024873 !important;
+
   color: #ffffff !important;
 }
 
 
+/* =========================
+   DATA
+========================= */
+
 .item-data {
+
   display: flex;
+
   align-items: center;
+
   gap: 12px;
+
   margin-bottom: 20px;
-  
+
   color: #333333;
+
   padding: 15px 20px;
+
   border-radius: 6px;
+
   font-weight: bold;
-  
 }
+
 
 .item-data label {
   color: #024873;
 }
 
+
 .item-data input[type="date"] {
+
   padding: 8px 12px;
+
   border: 1px solid #024873;
+
   border-radius: 4px;
+
   outline: none;
+
   font-weight: bold;
+
   color: #333333;
 }
 
 
+/* =========================
+   CARDS
+========================= */
+
 .itens-card {
+
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 20px;
 }
 
+
 .card {
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
   background-color: #ffffff;
-  border: none;
-  border-top: 5px solid #024873; /* Linha de destaque industrial topo */
-  border-radius: 6px;
-  padding: 18px;
+
+  border: 1px solid #dddddd;
+
+  border-top: 5px solid #024873;
+
+  border-radius: 8px;
+
+  padding: 15px;
+
   text-decoration: none;
+
   color: #333333;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+  margin-bottom: 20px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
 
 .card:hover {
+
   transform: translateY(-4px);
-  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.35);
+
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
 }
 
+
 .card-titulo {
+
   font-size: 1.2rem;
+
   font-weight: 800;
+
   margin-bottom: 8px;
-  color: #024873; /* Título em destaque vermelho */
+
+  color: #024873;
+
   text-transform: uppercase;
 }
 
+
 .card-text {
+
   font-size: 0.95rem;
+
   color: #444444;
+
   line-height: 1.4;
 }
 
 
-.grupo-filtro {
-  position: fixed;
-  top: 0;
-  left: 0;
+/* =========================
+   BOTÕES DOS CARDS
+========================= */
+
+.card-botoes-acao {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 15px;
+
   width: 100%;
+}
+
+
+.btn-editar-card {
+
+  flex: 1;
+
+  background-color: #297464;
+
+  color: #ffffff;
+
+  border: none;
+
+  padding: 6px 12px;
+
+  border-radius: 4px;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+.btn-excluir-card {
+
+  flex: 1;
+
+  background-color: #dc3545;
+
+  color: #ffffff;
+
+  border: none;
+
+  padding: 6px 12px;
+
+  border-radius: 4px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+.btn-editar-card:hover {
+
+  background-color: #1f574b;
+
+  color: #ffffff;
+}
+
+
+.btn-excluir-card:hover {
+
+  background-color: #c82333;
+}
+
+
+/* =========================
+   MODAL DO ITEM
+========================= */
+
+.modal-card {
+
+  position: fixed;
+
+  top: 0;
+
+  left: 0;
+
+  width: 100%;
+
   height: 100%;
+
   display: none;
+
   background-color: rgba(0, 0, 0, 0.7);
+
   justify-content: center;
+
   align-items: center;
+
   z-index: 1000;
 }
 
-.grupo-filtro.aberto {
+
+.modal-card.aberto {
+
   display: flex;
 }
 
-.grupo-conteudo {
-  background-color: #ffffff;
-  color: #222222;
-  padding: 25px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 360px;
+
+/* CARD EM DESTAQUE */
+
+.card-destaque {
+
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+
+  width: 90%;
+
+  max-width: 450px;
+
+  background-color: #ffffff;
+
+  padding: 25px;
+
+  border-radius: 8px;
+
   border-top: 6px solid #024873;
+
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
-.grupo-conteudo h3 {
-  font-size: 1.1rem;
+
+.card-destaque h2 {
+
   color: #024873;
+
+  font-size: 1.3rem;
+
+  font-weight: 800;
+
   text-transform: uppercase;
+
+  margin-bottom: 20px;
+}
+
+
+.card-destaque p {
+
+  color: #444444;
+
+  font-size: 0.95rem;
+
+  margin-bottom: 10px;
+}
+
+
+/* BOTÃO X */
+
+.fechar-card {
+
+  position: absolute;
+
+  top: 15px;
+
+  right: 15px;
+
+  background: none;
+
+  border: none;
+
+  cursor: pointer;
+
+  color: #222222;
+
+  font-size: 1.1rem;
+
+  font-weight: bold;
+}
+
+
+.fechar-card:hover {
+
+  color: #024873;
+}
+
+
+/* =========================
+   FILTRO
+========================= */
+
+.grupo-filtro {
+
+  position: fixed;
+
+  top: 0;
+
+  left: 0;
+
+  width: 100%;
+
+  height: 100%;
+
+  display: none;
+
+  background-color: rgba(0, 0, 0, 0.7);
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 1000;
+}
+
+
+.grupo-filtro.aberto {
+
+  display: flex;
+}
+
+
+.grupo-conteudo {
+
+  background-color: #ffffff;
+
+  color: #222222;
+
+  padding: 25px;
+
+  border-radius: 8px;
+
+  width: 90%;
+
+  max-width: 360px;
+
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  border-top: 6px solid #024873;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+
+.grupo-conteudo h3 {
+
+  font-size: 1.1rem;
+
+  color: #024873;
+
+  text-transform: uppercase;
+
   margin-top: 10px;
+
   border-bottom: 2px solid #f0f0f0;
+
   padding-bottom: 4px;
 }
 
+
 .grupo-conteudo label {
+
   display: flex;
+
   align-items: center;
+
   gap: 10px;
+
   cursor: pointer;
+
   font-weight: 600;
+
   color: #444444;
 }
 
+
 .btn-fechar {
+
   position: absolute;
+
   top: 15px;
+
   right: 15px;
+
   background: none;
+
   border: none;
+
   cursor: pointer;
+
   font-size: 1.1rem;
 }
 
+
 .grupo-conteudo button:not(.btn-fechar) {
+
   margin-top: 15px;
+
   padding: 12px;
+
   background-color: #024873;
+
   color: #ffffff;
+
   border: none;
+
   border-radius: 4px;
+
   font-weight: bold;
+
   text-transform: uppercase;
+
   cursor: pointer;
+
   transition: background-color 0.2s;
 }
 
+
 .grupo-conteudo button:not(.btn-fechar):hover {
+
   background-color: #024873;
 }
 
 
+/* =========================
+   MODO ESCURO
+========================= */
 
 body.escuro {
+
   background-color: #121212;
+
   color: #ffffff;
 }
+
 
 body.escuro .navbar,
-body.escuro .item-data,
-body.escuro .grupo-conteudo {
+body.escuro .item-data {
+
   background-color: #1e1e1e;
+
   color: #ffffff;
 }
 
+
 body.escuro .card {
+
   background-color: #1e1e1e;
+
   border-top-color: #024873;
+
+  border-color: #333333;
 }
 
+
 body.escuro .card-titulo {
+
   color: #024873;
 }
 
+
 body.escuro .card-text {
+
   color: #cccccc;
 }
 
+
 body.escuro .item-data input[type="date"] {
+
   background-color: #2a2a2a;
+
   color: #ffffff;
+
   border-color: #024873;
 }
 
+
+body.escuro .grupo-conteudo {
+
+  background-color: #1e1e1e;
+
+  color: #ffffff;
+}
+
+
 body.escuro .grupo-conteudo h3,
 body.escuro .item-data label {
+
   color: #024873;
 }
 
+
 body.escuro .grupo-conteudo label {
+
   color: #dddddd;
 }
 
 
-/* Garante que o card seja um contêiner flexível vertical */
-.card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-}
+/* MODAL NO MODO ESCURO */
 
-/* Tira o sublinhado azul padrão dos links do conteúdo */
-.card-link-conteudo {
-    color: inherit;
-    text-decoration: none;
-    display: block;
-    flex-grow: 1;
-}
+body.escuro .card-destaque {
 
-/* Organiza os botões lado a lado no final do card */
-.card-botoes-acao {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-    width: 100%;
-}
+  background-color: #1e1e1e;
 
-/* botão editar */
-.btn-editar-card {
-    flex: 1;
-    background-color: #297464;
-    color: #ffffff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-/*  botão excluir */
-.btn-excluir-card {
-    flex: 1;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+  color: #ffffff;
 }
 
 
-.btn-editar-card:hover { background-color: #1f574b; color: #ffffff; }
-.btn-excluir-card:hover { background-color: #c82333; }
+body.escuro .card-destaque p {
+
+  color: #dddddd;
+}
+
+
+body.escuro .fechar-card {
+
+  color: #ffffff;
+}
