@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
@@ -6,7 +6,7 @@ from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
 from model.login import verificar_login_coor, verificar_login_usuario
-from model.cadastrar_itens import cadastrar_item, registrar_item_perdido
+from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias, cadastrar_categoria
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 import os
@@ -39,7 +39,16 @@ gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("login-coor.html")
+
+@app.route("/logout")
+def logout():
+    # Remove as informações de usuário e perfil da sessão
+    session.pop("usuario", None)
+    session.pop("perfil", None)
+    
+    # Redireciona para a raiz do site (que abre o login)
+    return redirect("/")
 
 # login usuario (Aluno)
 @app.route("/login/usuario", methods=["GET", "POST"])
@@ -165,9 +174,16 @@ def editar_perfil():
 
 @app.route("/visualizar-itens")
 def visualizar_itens():
+    usuario_sessao = session.get("usuario")
+    usuario_atualizado = None
+    
+    if usuario_sessao:
+        # Pega o e-mail dependendo de como está armazenado na session
+        email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+        usuario_atualizado = buscar_usuario_por_email(email)
+
     itens = listar_todos()
-    return render_template("visualizar_itens.html",
-                           itens = itens)
+    return render_template("visualizar_itens.html", itens=itens, usuario=usuario_atualizado)
 
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])
@@ -182,10 +198,13 @@ def salvar_item():
 
 
 
+
+
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
     if request.method == "POST":
         item = request.form.get("item")
+        id_categoria = request.form.get("categoria_id")
         local = request.form.get("local")
         data_encontrado = request.form.get("data")  
         if data_encontrado == "":
@@ -211,7 +230,7 @@ def registrar_itens():
             descricao=descricao,
             data_encontrado=data_encontrado,
             status="Perdido",
-            id_categoria=1,
+            id_categoria=id_categoria,
             local=local,
             foto=nome_foto,
             email=email,
@@ -221,7 +240,26 @@ def registrar_itens():
 
         return redirect(url_for("registrar_itens"))
 
-    return render_template("registrar_item_perdido.html")
+    categorias = listar_categorias()
+    return render_template("registrar_item_perdido.html", categorias=categorias)
+
+@app.route("/api/categorias", methods=["POST"])
+def api_cadastrar_categoria():
+    dados = request.get_json()
+    nome = dados.get("nome") if dados else None
+    
+    if not nome or nome.strip() == "":
+        return jsonify({"sucesso": False, "mensagem": "Nome da categoria inválido."}), 400
+        
+    # Insere no banco e recupera o ID recém-criado
+    id_novo = cadastrar_categoria(nome.strip())
+    
+    # Devolve o ID e o Nome para o JavaScript adicionar ao <select> sem recarregar a página
+    return jsonify({
+        "sucesso": True, 
+        "id_categoria": id_novo, 
+        "nome": nome.strip()
+    })
 
 
 
