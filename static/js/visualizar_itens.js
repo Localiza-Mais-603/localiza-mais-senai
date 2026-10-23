@@ -56,9 +56,6 @@ function Filtrar(){
 
 }
 
-/* =========================
-   FILTRO
-========================= */
 
 const btnAbrir = document.getElementById("btnAbrir");
 
@@ -80,10 +77,6 @@ btnFechar.addEventListener("click", function () {
 
 });
 
-
-/* =========================
-   FILTRAR ITENS
-========================= */
 
 function Filtrar() {
 
@@ -137,10 +130,6 @@ function Filtrar() {
 }
 
 
-/* =========================
-   ABRIR ITEM
-========================= */
-
 function abrirCard(card) {
 
     document.getElementById("modalTitulo").textContent =
@@ -168,9 +157,6 @@ function abrirCard(card) {
 }
 
 
-/* =========================
-   FECHAR ITEM
-========================= */
 
 function fecharCard() {
 
@@ -179,9 +165,6 @@ function fecharCard() {
 }
 
 
-/* =========================
-   FECHAR CLICANDO NO FUNDO
-========================= */
 
 document.getElementById("modalCard").addEventListener("click", function () {
 
@@ -189,10 +172,6 @@ document.getElementById("modalCard").addEventListener("click", function () {
 
 });
 
-
-/* =========================
-   MODO ESCURO
-========================= */
 
 function AlterarTema() {
 
