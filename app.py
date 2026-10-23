@@ -78,7 +78,7 @@ def pag_login_coordenacao():
         else:
             erro = "CPF ou senha incorretos!"
 
-    return render_template("login-coor.html", erro=erro)
+    return render_template("login-coor.html", erro=erro, tipo = 'apoio' )
 
 
 
@@ -86,19 +86,6 @@ def pag_login_coordenacao():
 def pag_tela_corporativa():
     return render_template("tela-inicial-corporativo.html") 
     
-
-       
-        coordenador = verificar_login_coor(cpf, senha)
-
-        if coordenador:
-           
-            return redirect(url_for("pag_tela_corporativa"))
-        else:
-         
-            erro = "CPF ou senha incorretos!"
-
-  
-    return render_template("login-coor.html", erro=erro, tipo='apoio')
 
 
 # Selecionar perfil
