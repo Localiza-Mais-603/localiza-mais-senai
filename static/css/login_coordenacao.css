@@ -33,6 +33,7 @@ br {
 body {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: var(--vermelho-profundo);
@@ -44,6 +45,7 @@ body {
     background-attachment: fixed;
     padding: 20px;
 }
+
 
 /* Cartão central de Login */
 .container-login {
@@ -107,10 +109,10 @@ body {
 }
 
 /* Ordem de exibição dos campos */
-label[for="cpf"] { order: 2; }
-input#cpf { order: 3; }
-label[for="senha"] { order: 4; }
-input#senha { order: 5; }
+label[for="cpf"], label[for="email"] { order: 2; }
+input#cpf, input#email { order: 3; }
+label[for="senha"], label[for="senha-apoio"], label[for="senha-usuario"] { order: 4; }
+input#senha, input#senha-apoio, input#senha-usuario { order: 5; }
 
 /* Campos de entrada (Inputs) */
 .container-form input {
@@ -135,7 +137,7 @@ input#senha { order: 5; }
 }
 
 /* Textos e Links informativos */
-.container-form p {
+.container-form > p {
     grid-column: 1 / -1;
     order: 6;
     text-align: center;
@@ -220,4 +222,57 @@ form .botao {
 .botao:active,
 .container-form > a:not(.link-secundario):active {
     transform: scale(0.97);
+}
+
+
+/* ==========================================================================
+   ESTILOS DAS ABAS ALTERNÁVEIS (Adicionado para controlar o seu HTML)
+   ========================================================================== */
+
+.container-botoes {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    justify-content: center;
+}
+
+.buttontab {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 5px;
+    border-radius: 15px;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.tab-buttons {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--branco);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Botão da aba ativa */
+.tab-buttons.active {
+    background-color: var(--fundo-card);
+    color: var(--preto);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Esconde os formulários inativos por defeito */
+.container-form {
+    display: none !important;
+}
+
+/* Mostra apenas o formulário ativo mantendo a grelha intacta */
+.container-form.active {
+    display: contents !important;
 }

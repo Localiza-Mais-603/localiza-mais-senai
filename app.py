@@ -59,7 +59,7 @@ def pag_login_aluno():
         else:
             erro = "E-mail ou senha incorretos!"
 
-    return render_template("login-usuario.html", erro=erro)
+    return render_template("login-usuario.html", erro=erro, tipo='usuario')
 
 
 
@@ -86,7 +86,7 @@ def pag_login_coordenacao():
             erro = "CPF ou senha incorretos!"
 
   
-    return render_template("login-coor.html", erro=erro)
+    return render_template("login-coor.html", erro=erro, tipo='apoio')
 
 
 # Selecionar perfil
