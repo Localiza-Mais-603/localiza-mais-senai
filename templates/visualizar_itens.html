@@ -56,6 +56,7 @@
         </div>
     </nav>
 
+    
     <div class="item-data">
         <label for="data">A partir de:</label>
         <input type="date" name="data" value="2026-09-25">
@@ -66,29 +67,109 @@
     </div>
 
     <div class="itens-card">
-        {% for item in itens %}
-        <div class="card" style="width: 18rem;" data-categoria="{{ item.id_categoria }}">
-            <!-- O link agora envolve apenas o conteúdo do item -->
-            <a href="" class="card-link-conteudo text-decoration-none text-dark">
-                <div class="card-corpo">
-                    <h5 class="card-titulo">
-                        {{ item.item }}
-                    </h5>
-                    <p class="card-text">
-                        {{ item.descricao }}
-                    </p>
-                </div>
-            </a>
 
-            <!-- Os botões ficam na base do card, sem quebrar o layout -->
-            {% if session.get('perfil') == 'coordenacao' %}
-            <div class="card-botoes-acao">
-                <a href="/editar-item-cadastrado" class="btn-editar-card">Editar</a>
-                <button class="btn-excluir-card">Excluir</button>
+        {% for item in itens %}
+
+        <div class="card"
+             style="width: 20rem;"
+
+             data-categoria="{{ item.id_categoria }}"
+
+             data-item="{{ item.item }}"
+             data-descricao="{{ item.descricao }}"
+             data-local="{{ item.local }}"
+             data-data="{{ item.data }}"
+             data-status="{{ item.status }}"
+
+             onclick="abrirCard(this)">
+
+
+            <div class="card-corpo">
+
+                <h5 class="card-titulo">
+                    {{ item.item }}
+                </h5>
+
+                <p class="card-text">
+                    {{ item.descricao }}
+                </p>
+
             </div>
+
+
+            {% if session.get('perfil') == 'coordenacao' %}
+
+            <div class="card-botoes-acao">
+
+                <a href="/editar-item-cadastrado"
+                   class="btn-editar-card"
+                   onclick="event.stopPropagation()">
+
+                    Editar
+
+                </a>
+
+
+                <button class="btn-excluir-card"
+                        onclick="event.stopPropagation()">
+
+                    Excluir
+
+                </button>
+
+            </div>
+
             {% endif %}
+
         </div>
+
         {% endfor %}
+
+    </div>
+
+
+
+    <div class="modal-card" id="modalCard">
+
+        <div class="card-destaque"
+             onclick="event.stopPropagation()">
+
+            <button class="fechar-card"
+                    onclick="fecharCard()">
+
+                X
+
+            </button>
+
+
+            <h2 id="modalTitulo"></h2>
+
+
+            <p>
+                <strong>Descrição:</strong>
+                <span id="modalDescricao"></span>
+            </p>
+
+
+            <p>
+                <strong>Local:</strong>
+                <span id="modalLocal"></span>
+            </p>
+
+
+            <p>
+                <strong>Data:</strong>
+                <span id="modalData"></span>
+            </p>
+
+
+            <p>
+                <strong>Status:</strong>
+                <span id="modalStatus"></span>
+            </p>
+
+        </div>
+
     </div>
 
 
