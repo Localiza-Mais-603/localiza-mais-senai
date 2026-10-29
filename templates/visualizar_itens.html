@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -8,299 +7,210 @@
 
     <title>Visualizar Itens</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/visualizar_itens.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- CABEÇALHO -->
-    <nav class="navbar transparente-header">
-
-        <div class="container-fluido">
-            <h1>LOCALIZA+</h1>
-        </div>
-
-        <div class="itens-central">
-
-            <button onclick="AlterarTema()">Modo</button>
-
-            {% if session.get('perfil') == 'coordenacao' %}
-
-            <a href="/adicionar/item"><button>Adicionar</button></a>
-            {% endif %}
-
-            {% if usuario %}
-            <div class="dropdown">
-
-                <button class="botao-formulario dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuPerfil"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    {{ usuario.nome }}
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end shadow"
-                    aria-labelledby="dropdownMenuPerfil">
-
-                    <li class="dropdown-header text-center">
-
-                        <img src="https://placehold.co/60"
-                            alt="perfil"
-                            class="rounded-circle mb-2"
-                            style="width: 50px; height: 50px;">
-
-                        <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
-
-                        <small class="text-muted">
-                            {{ usuario.email }}
-                        </small>
-
-                    </li>
-
-                    <li><hr class="dropdown-divider"></li>
-
-                    <li>
-                        <a class="dropdown-item">
-                            Curso: {{ usuario.curso if usuario.curso else 'Não informado' }}
-                        </a>
-                    </li>
-
-                    <li><hr class="dropdown-divider"></li>
-
-                    <li>
-                        <a class="dropdown-item text-danger" href="/logout">
-                            Sair
-                        </a>
-                    </li>
-
-                </ul>
-            </div>
-            {% endif %}
-
-        </div>
-    </nav>
-
-    <!-- RELATAR ITEM -->
-    {% if session.get('perfil') == 'aluno' %}
-
-    <div class="container my-3 d-flex justify-content-center">
-
-        <div class="d-flex align-items-center justify-content-between p-3 bg-white rounded-3 shadow-sm border"
-            style="max-width: 480px; width: 100%;">
-
-            <div class="d-flex align-items-center gap-3">
-
-                <div style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background-color: #e6f0f7; border-radius: 50%;">
-
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="#024873"
-                        viewBox="0 0 16 16">
-
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-
-                    </svg>
-
-                </div>
-
-                <div>
-
-                    <h5 class="fw-bold m-0"
-                        style="color: #024873; font-size: 1.1rem; text-transform: uppercase;">
-                        Perdi Algo
-                    </h5>
-
-                    <small class="text-muted">
-                        Perdeu um item? Publique aqui!
-                    </small>
-
-                </div>
-
+    <!-- CABEÇALHO DA PÁGINA -->
+    <header>
+        <nav class="navbar transparente-header">
+            <div class="container-fluido">
+                <h1>LOCALIZA+</h1>
             </div>
 
-            <a href="/registro/itens"
-                class="btn fw-bold px-3 py-2 text-white text-uppercase"
-                style="background-color: #F28705; border-radius: 6px; font-size: 0.85rem; text-decoration: none;">
-                Relatar item
-            </a>
+            <div class="itens-central">
+                <button type="button" onclick="AlterarTema()">Modo</button>
 
-        </div>
-
-    </div>
-
-    {% endif %}
-
-    <!-- FILTRO DE DATA -->
-    <div class="item-data">
-
-        <label for="data">A partir de:</label>
-
-        <input type="date"
-            id="data"
-            name="data"
-            value="2026-09-25">
-
-        <button class="btn-abrir" id="btnAbrir">
-            Filtros
-        </button>
-
-    </div>
-
-    <!-- CARDS DOS ITENS -->
-    <div class="itens-card">
-
-        {% for item in itens %}
-
-        <div class="card"
-            style="width: 20rem;"
-            data-categoria="{{ item.id_categoria }}"
-            data-item="{{ item.item }}"
-            data-descricao="{{ item.descricao }}"
-            data-local="{{ item.local if item.local else '' }}"
-            data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
-            data-status="{{ item.status }}"
-            data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
-            onclick="abrirCard(this)">
-
-            <div class="card-corpo">
-
-                <!-- A FOTO NÃO APARECE NA LISTAGEM -->
-
-                <h5 class="card-titulo">
-                    {{ item.item }}
-                </h5>
-
-                <p class="card-text">
-                    {{ item.descricao }}
-                </p>
-
-            </div>
-
-            <!-- BOTÕES DA COORDENAÇÃO -->
-            {% if session.get('perfil') == 'coordenacao' %}
-
-            <div class="card-botoes-acao"
-                onclick="event.stopPropagation()">
-
-                <a href="/editar-item-cadastrado"
-                    class="btn-editar-card">
-                    Editar
-                </a>
-
-                <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
-                    method="POST"
-                    class="form-excluir"
-                    onclick="event.stopPropagation()">
-
-                    <button type="submit" class="btn-excluir-card">
-                        Excluir
+                {% if usuario %}
+                <div class="dropdown">
+                    <button class="botao-formulario dropdown-toggle"
+                        type="button"
+                        id="dropdownMenuPerfil"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        {{ usuario.nome }}
                     </button>
 
-                </form>
-
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
+                        <li class="dropdown-header text-center">
+                            <img src="https://placehold.co/60"
+                                alt="Foto de perfil de {{ usuario.nome }}"
+                                class="rounded-circle mb-2"
+                                style="width: 50px; height: 50px;">
+                            <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
+                            <small class="text-muted">{{ usuario.email }}</small>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <span class="dropdown-item">
+                                Curso: {{ usuario.curso if usuario.curso else 'Não informado' }}
+                            </span>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">Sair</a>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
             </div>
+        </nav>
+    </header>
 
-            {% endif %}
+    <!-- CONTEÚDO PRINCIPAL DA PÁGINA -->
+    <main>
 
-        </div>
+        <!-- SECÇÃO: RELATAR ITEM -->
+        {% if session.get('perfil') == 'aluno' %}
+        <section class="container my-3 d-flex justify-content-center" aria-label="Relatar item perdido">
+            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border card-relatar-item"
+                style="max-width: 480px; width: 100%;">
 
-        {% endfor %}
+                <div class="d-flex align-items-center gap-3">
+                    <div class="icone-busca-container" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </div>
 
-    </div>
+                    <div>
+                        <h2 class="fw-bold m-0 titulo-card" style="font-size: 1.1rem; text-transform: uppercase;">
+                            Perdi Algo
+                        </h2>
+                        <small class="texto-sub-card">
+                            Perdeu um item? Publique aqui!
+                        </small>
+                    </div>
+                </div>
+
+                <a href="/registro/itens"
+                    class="btn fw-bold px-3 py-2 text-white text-uppercase"
+                    style="background-color: #F28705; border-radius: 6px; font-size: 0.85rem; text-decoration: none;">
+                    Relatar item
+                </a>
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- SECÇÃO: FILTRO DE DATA -->
+        <section class="item-data" aria-label="Filtro de datas">
+            <label for="data">A partir de:</label>
+            <input type="date" id="data" name="data" value="2026-09-25">
+            <button type="button" class="btn-abrir" id="btnAbrir">Filtros</button>
+        </section>
+
+        <!-- SECÇÃO: LISTA DE ITENS ENCONTRADOS -->
+        <section aria-label="Itens registados">
+            <!-- Mudado de <div> para <ul> por ser uma lista de elementos -->
+            <ul class="itens-card">
+
+                {% for item in itens %}
+                <!-- Cada card passa a ser um <li> que contém um <article> -->
+                <li style="list-style: none;">
+                    <article class="card"
+                        style="width: 20rem;"
+                        data-categoria="{{ item.id_categoria }}"
+                        data-item="{{ item.item }}"
+                        data-descricao="{{ item.descricao }}"
+                        data-local="{{ item.local if item.local else '' }}"
+                        data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
+                        data-status="{{ item.status }}"
+                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                        onclick="abrirCard(this)">
+
+                        <div class="card-corpo">
+                            <h3 class="card-titulo">
+                                {{ item.item }}
+                            </h3>
+                            <p class="card-text">
+                                {{ item.descricao }}
+                            </p>
+                        </div>
+
+                        <!-- BOTÕES DA COORDENAÇÃO -->
+                        {% if session.get('perfil') == 'coordenacao' %}
+                        <div class="card-botoes-acao" onclick="event.stopPropagation()">
+                            <a href="/editar-item-cadastrado" class="btn-editar-card">
+                                Editar
+                            </a>
+
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
+                                method="POST"
+                                class="form-excluir"
+                                onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-excluir-card">
+                                    Excluir
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+
+                    </article>
+                </li>
+                {% endfor %}
+
+            </ul>
+        </section>
+
+    </main>
 
     <!-- MODAL DE DETALHES -->
-    <div class="modal-card" id="modalCard">
-
-        <div class="card-destaque" onclick="event.stopPropagation()">
-
-            <button class="fechar-card"
-                type="button"
-                onclick="fecharCard()">
+    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true">
+        <article class="card-destaque" onclick="event.stopPropagation()">
+            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">
                 X
             </button>
 
             <h2 id="modalTitulo"></h2>
 
-            <!-- FOTO APARECE SOMENTE AO ABRIR O CARD -->
-            <img id="modalFoto"
-                src=""
-                alt="Foto do item"
-                class="modal-foto"
-                style="display: none;">
+            <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none;">
 
-            <p>
-                <strong>Descrição:</strong>
-                <span id="modalDescricao"></span>
-            </p>
-
-            <p>
-                <strong>Local:</strong>
-                <span id="modalLocal"></span>
-            </p>
-
-            <p>
-                <strong>Data:</strong>
-                <span id="modalData"></span>
-            </p>
-
-            <p>
-                <strong>Status:</strong>
-                <span id="modalStatus"></span>
-            </p>
-
-        </div>
-
+            <p><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
+            <p><strong>Local:</strong> <span id="modalLocal"></span></p>
+            <p><strong>Data:</strong> <span id="modalData"></span></p>
+            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+        </article>
     </div>
-   
-<div class="grupo-filtro" id="janelaFiltro">
-    
-    <form action="{{ url_for('visualizar_itens') }}" method="GET" class="grupo-conteudo">
-        
-        <h3>Categorias</h3>
-        <label>
-            <input type="checkbox" name="disponivel" value="1" {% if request.args.get('disponivel') %}checked{% endif %}> Disponível
-        </label>
 
-        <h3>Sub-Categorias</h3>
-        {% for categoria in categorias %}
-            {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
-            {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
+    <!-- JANELA DE FILTROS -->
+    <div class="grupo-filtro" id="janelaFiltro" role="dialog" aria-hidden="true">
+        <form action="{{ url_for('visualizar_itens') }}" method="GET" class="grupo-conteudo">
             
+            <h3>Categorias</h3>
             <label>
-               
-                <input type="checkbox" name="categoria" value="{{ cat_id }}" 
-                       {% if cat_id|string in request.args.getlist('categoria') %}checked{% endif %}> 
-                {{ cat_nome }}
+                <input type="checkbox" name="disponivel" value="1" {% if request.args.get('disponivel') %}checked{% endif %}> 
+                Disponível
             </label>
-        {% endfor %}
 
-     
-        <button type="submit">Aplicar Filtro</button>
-        
-        
-        <a href="{{ url_for('visualizar_itens') }}" class="btn-limpar">Limpar Filtros</a>
-    </form>
-</div>
+            <h3>Sub-Categorias</h3>
+            {% for categoria in categorias %}
+                {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
+                {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
+                
+                <label>
+                    <input type="checkbox" name="categoria" value="{{ cat_id }}" 
+                           {% if cat_id|string in request.args.getlist('categoria') %}checked{% endif %}> 
+                    {{ cat_nome }}
+                </label>
+            {% endfor %}
+
+            <button type="submit">Aplicar Filtro</button>
+            <a href="{{ url_for('visualizar_itens') }}" class="btn-limpar">Limpar Filtros</a>
+        </form>
+    </div>
+
+    <!-- SCRIPTS -->
     <script src="/static/js/visualizar_itens.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5"></script>
-
     <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
 
 </body>
 
 </html>
-
