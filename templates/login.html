@@ -1,3 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazer Login - LOCALIZA+</title>
+
+    <!-- Estilos do Design System e Login -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Script JS das Abas -->
+    <script src="{{ url_for('static', filename='js/tab-buttons.js') }}"></script>
+</head>
+
+<body>
+
+    <!-- Navegação por Abas -->
+    <nav class="container-botoes" aria-label="Seleção de tipo de perfil">
+        <div class="buttontab">
+            <button class="tab-buttons active" onclick="ButtonsTap('usuario')" type="button">Usuário</button>
+            <button class="tab-buttons" onclick="ButtonsTap('apoio')" type="button">Setor de Apoio</button>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="container-login">
+
+        <!-- Form Apoio / Coordenação (Inativo por padrão, só abre se ativado) -->
+        <section id="form-apoio" class="container-form" aria-labelledby="titulo-apoio">
+            <header class="container-header">
+                <h1>Entrar</h1>
+                <h4 id="titulo-apoio">PERFIL | SETOR DE APOIO</h4>
+            </header>
+
+            {% if erro and tipo == 'apoio' %}
+                <p class="erro-mensagem">{{ erro }}</p>
+            {% endif %}
+
+            <form action="{{ url_for('pag_login_coordenacao') }}" method="post">
+                <label for="cpf">CPF:</label>
+                <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..." required>
+
+                <label for="senha-apoio">Senha:</label>
+                <input id="senha-apoio" name="senha" type="password" placeholder="Digite sua senha..." required>
+
+                <div class="acoes-login">
+                    <a href="{{ url_for('selecionar_perfil') }}" class="btn-voltar">Voltar</a>
                     <button type="submit" class="btn-entrar">Entrar</button>
                 </div>
             </form>
@@ -7,7 +61,7 @@
             </footer>
         </section>
 
-        <!-- Form Usuário -->
+        <!-- Form Usuário / Aluno (Ativo por padrão) -->
         <section id="form-usuario" class="container-form active" aria-labelledby="titulo-usuario">
             <header class="container-header">
                 <h1>Entrar</h1>
