@@ -182,6 +182,8 @@ def editar_perfil():
 def visualizar_itens():
     usuario_sessao = session.get("usuario")
     usuario_atualizado = None
+
+
     
     if usuario_sessao:
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
@@ -354,6 +356,8 @@ def excluir_item(id_item):
     excluir_itens(id_item)
 
     return redirect(request.referrer or '/')
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
