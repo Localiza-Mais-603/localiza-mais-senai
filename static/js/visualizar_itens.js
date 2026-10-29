@@ -1,109 +1,104 @@
 
-function AlterarTema(){
-    document.body.classList.toggle("escuro")
+function AlterarTema() {
+    document.body.classList.toggle("escuro");
 }
 
-const cards = document.querySelectorAll(".card")
-const botaoAbrir = document.getElementById('btnAbrir')
-const botaoFechar = document.getElementById('btnFechar')
-const filtragem = document.getElementById('janelaFiltro')
+const cards = document.querySelectorAll(".card");
+const botaoAbrir = document.getElementById("btnAbrir");
+const botaoFechar = document.getElementById("btnFechar");
+const filtragem = document.getElementById("janelaFiltro");
+const modal = document.getElementById("modalCard");
 
-// Ele irá percorrer cada um dos cards encontrados, e impede o comportamento dessa tag
-
-cards.forEach(card => {
-    card.addEventListener('click', (event) =>{
-        event.preventDefault()
-    })
-})
-
-
-botaoAbrir.addEventListener('click', () =>{
-    filtragem.classList.add('aberto')
+// Abrir janela de filtros
+if (botaoAbrir && filtragem) {
+    botaoAbrir.addEventListener("click", () => {
+        filtragem.classList.add("aberto");
+    });
 }
-)
 
+// Fechar janela de filtros
+if (botaoFechar && filtragem) {
+    botaoFechar.addEventListener("click", () => {
+        filtragem.classList.remove("aberto");
+    });
+}
 
-botaoFechar.addEventListener('click', () =>{
-    filtragem.classList.remove('aberto')
-})
+// Filtrar cards por categoria
+function Filtrar() {
+    const filtros = Array.from(
+        document.querySelectorAll(".filtro-categoria:checked")
+    ).map(input => input.value);
 
+    cards.forEach(card => {
+        const categoria = card.dataset.categoria;
 
-
-
-
-function Filtrar(){
-    // Ele irá buscar apenas os filtros que estão com as caixas marcadas, e tambem ele irá apenas extrair o texto do value de cada caixa selecionada
-    const filtros = Array.from(document.querySelectorAll('.grupo-conteudo input:checked')).map(i => i.value)
-
-    cards.forEach(card =>{
-        const categoria = card.getAttribute('data-categoria')
-
-        const data = card.getAttribute('data-data')
-        
-
-        if(filtros.length === 0 || filtros.includes(categoria)){
-            card.style.display = 'block'
+        if (filtros.length === 0 || filtros.includes(categoria)) {
+            card.style.display = "";
         } else {
-            card.style.display = 'none'
+            card.style.display = "none";
         }
-    })
+    });
 
-    if(filtragem){
-        filtragem.classList.remove('aberto');
+    if (filtragem) {
+        filtragem.classList.remove("aberto");
     }
-    
-
-
 }
 
+// Abrir detalhes do card
 function abrirCard(card) {
-
     document.getElementById("modalTitulo").textContent =
-        card.dataset.item;
-
+        card.dataset.item || "";
 
     document.getElementById("modalDescricao").textContent =
-        card.dataset.descricao;
-
+        card.dataset.descricao || "";
 
     document.getElementById("modalLocal").textContent =
-        card.dataset.local;
-
+        card.dataset.local || "Não informado";
 
     document.getElementById("modalData").textContent =
-        card.dataset.data;
-
+        card.dataset.data && card.dataset.data !== "None"
+            ? card.dataset.data
+            : "Não informada";
 
     document.getElementById("modalStatus").textContent =
-        card.dataset.status;
+        card.dataset.status || "Não informado";
 
+    // Mostrar foto do item
+    const modalFoto = document.getElementById("modalFoto");
+    const foto = card.dataset.foto;
 
-    document.getElementById("modalCard").classList.add("aberto");
+    if (foto && foto.trim() !== "" && foto !== "None") {
+        modalFoto.onerror = function () {
+            modalFoto.style.display = "none";
+        };
 
+        modalFoto.onload = function () {
+            modalFoto.style.display = "block";
+        };
+
+        modalFoto.src = foto;
+    } else {
+        modalFoto.removeAttribute("src");
+        modalFoto.style.display = "none";
+    }
+
+    modal.classList.add("aberto");
 }
 
-
-
+// Fechar detalhes
 function fecharCard() {
-
-    document.getElementById("modalCard").classList.remove("aberto");
-
+    modal.classList.remove("aberto");
 }
 
-
-
-document.getElementById("modalCard").addEventListener("click", function () {
-
-    fecharCard();
-
-});
-
-
-function AlterarTema() {
-
-    document.body.classList.toggle("escuro");
-
+// Fechar ao clicar fora do modal
+if (modal) {
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            fecharCard();
+        }
+    });
 }
+
 
 
 
