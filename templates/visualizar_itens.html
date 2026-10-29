@@ -26,6 +26,13 @@
        
         
 
+
+            <!-- botão add coordenação -->
+
+             {% if session.get('perfil') == 'coordenacao' %}
+             <a href="/adicionar/item"><button class="botao-formulario">Adicionar</button></a>
+             {% endif %}
+
            
             
            
@@ -195,6 +202,11 @@
         </div>
 
     </div>
+
+
+
+
+
     <!-- JANELA FILTROS -->
     <div class="grupo-filtro" id="janelaFiltro">
         <div class="grupo-conteudo">
