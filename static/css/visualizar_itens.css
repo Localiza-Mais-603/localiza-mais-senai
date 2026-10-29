@@ -1,729 +1,480 @@
-
+/* RESET E MODO CLARO (PADRÃO) */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Chakra Petch';
+  font-family: 'Chakra Petch', sans-serif;
 }
 
-
+/* Fundo da página branco / Texto preto */
 body {
   background-color: #ffffff;
   color: #000000;
   padding: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 
-
+/* NAVBAR (TOPO) */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   padding: 15px 25px;
-
   background-color: transparent;
-
   border-radius: 6px;
-
   margin-bottom: 20px;
-
   border-bottom: 4px solid #024873;
 }
 
-
 .navbar h1 {
   font-size: 1.6rem;
-
   font-weight: 900;
-
   color: #024873;
-
   letter-spacing: 1px;
 }
 
-
 .itens-central {
   display: flex;
-
   gap: 10px;
 }
 
-
-/* BOTÕES DO TOPO */
-
+/* Botões do topo e filtros */
 .itens-central button,
 .btn-abrir {
-
   padding: 9px 18px;
-
   border: 2px solid #024873;
-
   border-radius: 4px;
-
   background-color: #024873;
-
   color: #ffffff;
-
   cursor: pointer;
-
   font-weight: bold;
-
   text-transform: uppercase;
-
   font-size: 0.85rem;
-
   transition: all 0.2s ease;
 }
 
-
 .itens-central button:hover,
 .btn-abrir:hover {
-
   background-color: #ffffff;
-
   color: #024873;
 }
 
-
 .botao-voltar {
   background-color: transparent !important;
-
   color: #024873 !important;
 }
 
-
 .botao-voltar:hover {
-
   background-color: #024873 !important;
-
   color: #ffffff !important;
 }
 
 
-
-
-.item-data {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  margin-bottom: 20px;
-
-  color: #333333;
-
-  padding: 15px 20px;
-
-  border-radius: 6px;
-
-  font-weight: bold;
+/* CARD "PERDI ALGO" (MODO CLARO) */
+.card-relatar-item {
+  background-color: #ffffff;             /* Fundo do card: Branco */
+  border-color: #dee2e6 !important;     /* Borda: Cinza claro */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
+.card-relatar-item .icone-busca-container {
+  background-color: #e6f0f7;            /* Fundo da lupa: Azul bem claro */
+  color: #024873;                       /* Ícone: Azul */
+}
+
+.card-relatar-item .titulo-card {
+  color: #024873;                       /* Título "PERDI ALGO": Azul */
+}
+
+.card-relatar-item .texto-sub-card {
+  color: #6c757d;                       /* Subtítulo: Cinza */
+}
+
+
+/* FILTRO DE DATAS */
+.item-data {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  color: #333333;
+  padding: 15px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+}
 
 .item-data label {
   color: #024873;
 }
 
-
 .item-data input[type="date"] {
-
   padding: 8px 12px;
-
   border: 1px solid #024873;
-
   border-radius: 4px;
-
   outline: none;
-
   font-weight: bold;
-
   color: #333333;
 }
 
 
-
-
+/* LISTA DE CARDS DOS ITENS */
 .itens-card {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
   gap: 20px;
+  align-items: start;
+  padding: 20px;
+  list-style: none;
 }
 
-
-.card {
-
+.itens-card .card {
+  width: 100% !important;
+  min-width: 0;
+  height: auto !important;
+  min-height: 0;
+  align-self: start;
   display: flex;
-
   flex-direction: column;
-
-  justify-content: space-between;
-
+  position: relative;
+  margin: 0;
+  overflow: hidden;
   background-color: #ffffff;
-
   border: 1px solid #dddddd;
-
   border-top: 5px solid #024873;
-
   border-radius: 8px;
-
-  padding: 15px;
-
   text-decoration: none;
-
   color: #333333;
-
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-
-  margin-bottom: 20px;
-
   cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
 
-
-.card:hover {
-
+.itens-card .card:hover {
   transform: translateY(-4px);
-
   box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
 }
 
+.itens-card .card-corpo {
+  flex: 0 0 auto;
+  padding: 16px;
+}
 
-.card-titulo {
+.itens-card .card-imagem {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
 
+.itens-card .card-titulo {
   font-size: 1.2rem;
-
   font-weight: 800;
-
   margin-bottom: 8px;
-
   color: #024873;
-
   text-transform: uppercase;
 }
 
-
-.card-text {
-
+.itens-card .card-text {
   font-size: 0.95rem;
-
   color: #444444;
-
   line-height: 1.4;
+  margin-bottom: 12px;
 }
 
-
-
-
-.card-botoes-acao {
-
+/* Botões da Coordenação */
+.itens-card .card-botoes-acao {
   display: flex;
-
   gap: 10px;
-
-  margin-top: 15px;
-
+  padding: 0 16px 16px;
+  margin-top: auto;
   width: 100%;
 }
 
-
 .btn-editar-card {
-
   flex: 1;
-
   background-color: #297464;
-
   color: #ffffff;
-
   border: none;
-
   padding: 6px 12px;
-
   border-radius: 4px;
-
   text-align: center;
-
   text-decoration: none;
-
   font-size: 14px;
-
   font-weight: 600;
-
   cursor: pointer;
 }
-
 
 .btn-excluir-card {
-
   flex: 1;
-
   background-color: #dc3545;
-
   color: #ffffff;
-
   border: none;
-
   padding: 6px 12px;
-
   border-radius: 4px;
-
   font-size: 14px;
-
   font-weight: 600;
-
   cursor: pointer;
 }
 
+.itens-card .form-excluir {
+  flex: 0 0 auto;
+}
+
+.itens-card .btn-excluir-card {
+  height: 100%;
+}
 
 .btn-editar-card:hover {
-
   background-color: #1f574b;
-
   color: #ffffff;
 }
 
-
 .btn-excluir-card:hover {
-
   background-color: #c82333;
 }
 
 
-
+/* MODAL DE DETALHES */
 .modal-card {
-
   position: fixed;
-
   top: 0;
-
   left: 0;
-
   width: 100%;
-
   height: 100%;
-
   display: none;
-
   background-color: rgba(0, 0, 0, 0.7);
-
   justify-content: center;
-
   align-items: center;
-
   z-index: 1000;
 }
 
-
 .modal-card.aberto {
-
   display: flex;
 }
 
-
-/* CARD EM DESTAQUE */
-
 .card-destaque {
-
   position: relative;
-
   width: 90%;
-
   max-width: 450px;
-
   background-color: #ffffff;
-
   padding: 25px;
-
   border-radius: 8px;
-
   border-top: 6px solid #024873;
-
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
-
 .card-destaque h2 {
-
   color: #024873;
-
   font-size: 1.3rem;
-
   font-weight: 800;
-
   text-transform: uppercase;
-
   margin-bottom: 20px;
 }
 
-
 .card-destaque p {
-
   color: #444444;
-
   font-size: 0.95rem;
-
   margin-bottom: 10px;
 }
 
-
-
+.modal-foto {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: 160px;
+  object-fit: contain;
+  margin: 15px auto;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
 
 .fechar-card {
-
   position: absolute;
-
   top: 15px;
-
   right: 15px;
-
   background: none;
-
   border: none;
-
   cursor: pointer;
-
   color: #222222;
-
   font-size: 1.1rem;
-
   font-weight: bold;
 }
 
-
 .fechar-card:hover {
-
   color: #024873;
 }
 
 
-
-
+/* JANELA DE FILTROS */
 .grupo-filtro {
-
   position: fixed;
-
   top: 0;
-
   left: 0;
-
   width: 100%;
-
   height: 100%;
-
   display: none;
-
   background-color: rgba(0, 0, 0, 0.7);
-
   justify-content: center;
-
   align-items: center;
-
   z-index: 1000;
 }
 
-
 .grupo-filtro.aberto {
-
   display: flex;
 }
 
-
 .grupo-conteudo {
-
   background-color: #ffffff;
-
   color: #222222;
-
   padding: 25px;
-
   border-radius: 8px;
-
   width: 90%;
-
   max-width: 360px;
-
   position: relative;
-
   display: flex;
-
   flex-direction: column;
-
   gap: 12px;
-
   border-top: 6px solid #024873;
-
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
-
 .grupo-conteudo h3 {
-
   font-size: 1.1rem;
-
   color: #024873;
-
   text-transform: uppercase;
-
   margin-top: 10px;
-
   border-bottom: 2px solid #f0f0f0;
-
   padding-bottom: 4px;
 }
 
-
 .grupo-conteudo label {
-
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
   cursor: pointer;
-
   font-weight: 600;
-
   color: #444444;
 }
 
-
 .btn-fechar {
-
   position: absolute;
-
   top: 15px;
-
   right: 15px;
-
   background: none;
-
   border: none;
-
   cursor: pointer;
-
   font-size: 1.1rem;
 }
 
-
 .grupo-conteudo button:not(.btn-fechar) {
-
   margin-top: 15px;
-
   padding: 12px;
-
   background-color: #024873;
-
   color: #ffffff;
-
   border: none;
-
   border-radius: 4px;
-
   font-weight: bold;
-
   text-transform: uppercase;
-
   cursor: pointer;
-
   transition: background-color 0.2s;
 }
 
 
-.grupo-conteudo button:not(.btn-fechar):hover {
+/* MODO ESCURO (body.escuro) */
 
-  background-color: #024873;
-}
-
-
-
+/* Fundo geral preto / Texto branco */
 body.escuro {
-
   background-color: #121212;
-
   color: #ffffff;
 }
 
-
+/* Navbar e barra de data escuras */
 body.escuro .navbar,
 body.escuro .item-data {
-
   background-color: #1e1e1e;
-
   color: #ffffff;
 }
 
+/* Card "PERDI ALGO" no modo escuro (Azul) */
+body.escuro .card-relatar-item,
+body.escuro div.card-relatar-item {
+  background-color: #024873 !important; /* Fundo do card: Azul */
+  border-color: #38bdf8 !important;     /* Borda: Azul claro */
+}
 
+body.escuro .card-relatar-item .icone-busca-container {
+  background-color: #012e4a !important; /* Círculo da lupa: Azul escuro */
+}
+
+body.escuro .card-relatar-item .icone-busca-container svg {
+  fill: #38bdf8 !important;              /* Ícone da lupa: Azul claro */
+  color: #38bdf8 !important;
+}
+
+body.escuro .card-relatar-item .titulo-card {
+  color: #ffffff !important;            /* Título "PERDI ALGO": Branco */
+}
+
+body.escuro .card-relatar-item .texto-sub-card {
+  color: #e0f2fe !important;            /* Subtítulo: Azul bem claro */
+}
+
+/* Demais cards e modais no modo escuro */
 body.escuro .card {
-
-  background-color: #1e1e1e;
-
+  background-color: #1e1e1e;            /* Cards de itens: Cinza escuro */
   border-top-color: #024873;
-
   border-color: #333333;
 }
 
-
 body.escuro .card-titulo {
-
   color: #024873;
 }
 
-
 body.escuro .card-text {
-
   color: #cccccc;
 }
 
-
 body.escuro .item-data input[type="date"] {
-
   background-color: #2a2a2a;
-
   color: #ffffff;
-
   border-color: #024873;
 }
 
-
 body.escuro .grupo-conteudo {
-
   background-color: #1e1e1e;
-
   color: #ffffff;
 }
-
 
 body.escuro .grupo-conteudo h3,
 body.escuro .item-data label {
-
   color: #024873;
 }
 
-
 body.escuro .grupo-conteudo label {
-
   color: #dddddd;
 }
-
-
 
 body.escuro .card-destaque {
-
   background-color: #1e1e1e;
-
   color: #ffffff;
 }
 
-
 body.escuro .card-destaque p {
-
   color: #dddddd;
 }
 
-
 body.escuro .fechar-card {
-
   color: #ffffff;
 }
 
-/* Organização dos cards */
-.itens-card {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
-    gap: 20px;
-    align-items: start;
-    padding: 20px;
-}
 
-/* Card individual */
-.itens-card .card {
-    width: 100% !important;
-    min-width: 0;
-    height: auto !important;
-    min-height: 0;
-    align-self: start;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    margin: 0;
-    overflow: hidden;
-}
-
-/* Conteúdo do card */
-.itens-card .card-corpo {
-    flex: 0 0 auto;
-    padding: 16px;
-}
-
-/* Imagem do item */
-
-.itens-card .card-imagem {
-    display: block;
-    width: 100%;
-    height: 120px;
-    object-fit: contain;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-/* Título e descrição */
-.itens-card .card-titulo {
-    margin-bottom: 8px;
-}
-
-.itens-card .card-text {
-    margin-bottom: 12px;
-}
-
-/* Botões da coordenação */
-.itens-card .card-botoes-acao {
-    display: flex;
-    gap: 10px;
-    padding: 0 16px 16px;
-    margin-top: auto;
-    width: 100%;
-}
-
-.itens-card .btn-editar-card {
-    flex: 1;
-    text-align: center;
-}
-
-.itens-card .form-excluir {
-    flex: 0 0 auto;
-}
-
-.itens-card .btn-excluir-card {
-    height: 100%;
-}
-
-
-.modal-foto {
-    display: block;
-    width: 100%;
-    max-width: 280px;
-    height: 160px;
-    object-fit: contain;
-    margin: 15px auto;
-    border-radius: 8px;
-    background-color: #f5f5f5;
-}
-
-
-/* Ajuste para telas menores */
+/* RESPONSIVIDADE */
 @media (max-width: 600px) {
-    .itens-card {
-        grid-template-columns: 1fr;
-        padding: 12px;
-    }
+  .itens-card {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
 }
