@@ -1,7 +1,28 @@
 
 function AlterarTema(){
     document.body.classList.toggle("escuro")
+
+
+    const modoescuroAtivo = document.body.classList.contains('escuro')
+
+
+    if(modoescuroAtivo){
+        localStorage.setItem('tema', 'escuro')
+
+    } else{
+        localStorage.setItem('tema', 'claro')
+    }
 }
+
+(function carregarTemaSalvo(){
+    const temaSalvo = localStorage.getItem('tema')
+
+    if(temaSalvo === 'escuro'){
+        document.body.classList.add('escuro')
+    } if (temaSalvo === 'claro') {
+        document.body.classList.remove('escuro')
+    }
+})
 
 const cards = document.querySelectorAll(".card")
 const botaoAbrir = document.getElementById('btnAbrir')
@@ -50,10 +71,7 @@ function Filtrar(){
 
     if(filtragem){
         filtragem.classList.remove('aberto');
-    }
-    
-
-
+    }   
 }
 
 function abrirCard(card) {

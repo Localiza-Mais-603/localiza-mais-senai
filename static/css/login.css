@@ -276,3 +276,131 @@ form .botao {
 .container-form.active {
     display: contents;
 }
+
+
+
+/* BOTÕES DO TOPO */
+
+
+
+.itens-central {
+  position: absolute;
+  top: 15px;    
+  right: 20px;  
+}
+
+.itens-central button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 18px;
+  border: 2px solid #024873;
+  border-radius: 4px;
+  background-color: #024873;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.itens-central button:hover {
+  background-color: #ffffff;
+  color: #024873;
+}
+
+/* ==========================================================================
+   MODO ESCURO (.escuro adicionado ao <body>)
+   ========================================================================== */
+
+body.escuro {
+    /* Reescreve os tons de fundo da página para cores escuras/grafite */
+    background-color: #121212;
+    background-image: 
+        radial-gradient(ellipse 130% 90% at 100% -10%, #2a0000 0%, transparent 55%),
+        radial-gradient(ellipse 110% 80% at 0% 110%, #1a0000 0%, transparent 60%),
+        radial-gradient(ellipse 90% 120% at 100% 80%, #220000 0%, transparent 65%),
+        linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
+    color: #e0e0e0;
+}
+
+/* Cartão Central */
+body.escuro .container-login {
+    background-color: #1e1e1e;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+    border: 1px solid #2d2d2d;
+}
+
+/* Títulos e Textos */
+body.escuro .container-header h1,
+body.escuro .container-header h4,
+body.escuro .container-form label,
+body.escuro .container-form > p,
+body.escuro .container-go-back p,
+body.escuro .link-secundario {
+    color: #e0e0e0;
+}
+
+/* Destaque Vermelho no Modo Escuro */
+body.escuro .container-header h4 span,
+body.escuro .container-go-back .link-secundario {
+    color: #ff4d4d;
+}
+
+/* Campos de Input */
+body.escuro .container-form input {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+    border: 1px solid #3d3d3d;
+}
+
+body.escuro .container-form input::placeholder {
+    color: #888888;
+}
+
+body.escuro .container-form input:focus {
+    box-shadow: 0 0 0 2px #ff4d4d;
+}
+
+/* Abas Superiores (Tabs) */
+body.escuro .buttontab {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.escuro .tab-buttons {
+    color: #aaaaaa;
+}
+
+body.escuro .tab-buttons.active {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Botões de Ação ("Entrar" e "Voltar") */
+body.escuro .botao,
+body.escuro .container-form > a:not(.link-secundario) {
+    background-color: var(--vermelho-escuro);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+body.escuro .botao:hover,
+body.escuro .container-form > a:not(.link-secundario):hover {
+    background-color: var(--vermelho-principal);
+    box-shadow: 0 6px 14px rgba(255, 0, 0, 0.3);
+}
+
+/* Botão de Troca de Tema (Modo) */
+body.escuro .itens-central button {
+    border-color: #ffffff;
+    background-color: transparent;
+    color: #ffffff;
+}
+
+body.escuro .itens-central button:hover {
+    background-color: #ffffff;
+    color: #121212;
+}

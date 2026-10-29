@@ -4,13 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_coordenacao.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
     <title>Fazer login</title>
     <script src="/static/js/tab-buttons.js"></script>
     
 </head>
 
 <body>
+    <nav class="navbar transparente-header">
+        <div class="itens-central">
+            <button onclick="AlterarTema()">Modo</button>
+        </div>
+        
+    </nav>
 
     <div class="container-botoes">
         <div class="buttontab">
@@ -109,6 +115,8 @@
     
 
     </main>
+
+    <script src="/static/js/visualizar_itens.js"></script>
 
     
 
