@@ -1,51 +1,21 @@
-:root {
-    /* Cores principais do CSS */
-    --vermelho-principal: #FF0000;
-    --vermelho-escuro: #E00000;
-    --vermelho-medio: #C20000;
-    --vermelho-profundo: #AC0101;
-
-    /* Cores neutras */
-    --branco: #FFFFFF;
-    --cinza-claro: #E8E8E8;
-    --cinza-medio: #CFCFCF;
-    --cinza-escuro: #A8A8A8;
-    --preto: #2D2D2D;
-
-    /* Fundo do cartão e borda */
-    --fundo-card: #FFE7E5;
-    --azul-borda: #3B82F6;
-}
-
-/* Reset de estilos globais */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
 
-/* Oculta quebras de linha puras */
 br {
     display: none;
 }
 
-/* Fundo da página */
 body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--vermelho-profundo);
-    background-image: 
-        radial-gradient(ellipse 130% 90% at 100% -10%, var(--vermelho-principal) 0%, transparent 55%),
-        radial-gradient(ellipse 110% 80% at 0% 110%, var(--vermelho-escuro) 0%, transparent 60%),
-        radial-gradient(ellipse 90% 120% at 100% 80%, var(--vermelho-medio) 0%, transparent 65%),
-        linear-gradient(135deg, var(--vermelho-profundo) 0%, var(--vermelho-medio) 100%);
-    background-attachment: fixed;
+    background-color: #ffffff; 
     padding: 20px;
-    position: relative;
-    overflow-x: hidden;
 }
 
 main {
@@ -55,38 +25,32 @@ main {
     align-items: center;
 }
 
-/* Cartão Central (Section) */
 section {
-    background-color: var(--fundo-card);
+    background-color: #ffffff;
     width: 100%;
-    max-width: 360px;
-    padding: 30px 24px 24px;
-    border-radius: 8px;
+    max-width: 420px; 
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); 
     text-align: center;
 }
 
-/* Título principal */
 section h1 {
-    font-size: 2.1rem;
-    color: var(--preto);
+    font-size: 24px;
+    color: #333333;
     font-weight: bold;
-    text-align: center;
     margin-bottom: 4px;
 }
 
-/* Subtítulo: PERFIL | SETOR DE APOIO */
 section > p:first-of-type {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.75rem;
-    color: var(--preto);
-    font-weight: bold;
+    font-size: 12px;
+    color: #666666;
+    font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 24px;
 }
 
-/* Formulário e Empilhamento Vertical dos Campos */
 form {
     width: 100%;
     display: flex;
@@ -94,102 +58,84 @@ form {
 }
 
 form label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: var(--preto);
+    font-size: 14px;
+    font-weight: 600;
+    color: #444444;
     margin-top: 10px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     text-align: left;
 }
 
 form input {
     width: 100%;
-    padding: 10px 14px;
-    border: none;
-    border-radius: 10px;
-    background-color: var(--branco);
-    font-size: 0.9rem;
-    color: var(--preto);
+    padding: 12px 16px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #333333;
     outline: none;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
+
 
 form input:focus {
-    box-shadow: 0 0 0 2px var(--vermelho-principal);
+    border-color: #E87A24;
+    box-shadow: 0 0 0 3px rgba(232, 122, 36, 0.1);
 }
 
-/* FORMATO DO BOTÃO "CADASTRAR" */
-form button,
-form button[type="submit"] {
+
+form button {
     display: block;
-    width: 65%;
-    margin: 25px auto 10px auto;
-    padding: 10px 0;
+    width: 100%; 
+    margin: 24px auto 16px auto;
+    padding: 14px;
     border: none;
-    border-radius: 12px;
-    background-color: var(--vermelho-escuro);
-    color: var(--branco);
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 0.9rem;
-    font-weight: bold;
-    text-align: center;
+    border-radius: 8px;
+    background-color: #024873; 
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    transition: background-color 0.2s;
 }
 
-form button:hover,
-form button[type="submit"]:hover {
-    background-color: var(--vermelho-profundo);
+form button:hover {
+    background-color: #02385a;
 }
 
-form button:active,
-form button[type="submit"]:active {
-    transform: scale(0.97);
+form button:active, section > a:active {
+    transform: scale(0.98);
 }
 
-/* Texto: Já possui uma conta? Logue. */
 section > p:nth-of-type(2) {
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--preto);
-    font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 14px;
+    font-size: 14px;
+    color: #666666;
+    margin-top: 12px;
+    margin-bottom: 16px;
 }
+
 
 section > p:nth-of-type(2) a {
-    color: var(--preto);
+    color: #E87A24;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 section > p:nth-of-type(2) a:hover {
     text-decoration: underline;
 }
 
-/* FORMATO DO BOTÃO "VOLTAR" */
+
 section > a {
     display: inline-block;
-    margin: 0 auto;
-    padding: 6px 32px;
-    border-radius: 20px;
-    background-color: var(--vermelho-escuro);
-    color: var(--branco);
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 0.85rem;
-    font-weight: bold;
+    color: #024873;
+    font-size: 14px;
+    font-weight: 600;
     text-decoration: none;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    transition: color 0.2s;
 }
 
 section > a:hover {
-    background-color: var(--vermelho-profundo);
-}
-
-section > a:active {
-    transform: scale(0.97);
+    color: #02385a;
+    text-decoration: underline;
 }
