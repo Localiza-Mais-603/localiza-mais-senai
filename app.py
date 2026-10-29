@@ -207,6 +207,10 @@ def registrar_itens():
     if request.method == "POST":
         item = request.form.get("item")
         id_categoria = request.form.get("categoria_id")
+        if not id_categoria or id_categoria.strip() == "":
+         id_categoria = None
+        else:
+            id_categoria = int(id_categoria)
         local = request.form.get("local")
         data_encontrado = request.form.get("data")  
         if data_encontrado == "":
