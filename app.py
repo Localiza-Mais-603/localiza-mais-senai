@@ -221,8 +221,6 @@ def salvar_item():
 
 
 
-
-
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
     if request.method == "POST":
