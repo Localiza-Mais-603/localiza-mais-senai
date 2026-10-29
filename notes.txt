@@ -18,3 +18,11 @@ def pag_login_coordenacao():
 
   
     return render_template("login-coor.html", erro=erro)
+
+
+
+
+    <!-- botao relatar pra aluno apenas -->
+            <!-- {% if session.get('perfil') == 'aluno' %}
+            <a href="/registro/itens"><button class="botao-formulario">relatar itens</button></a>  
+            {% endif %} -->

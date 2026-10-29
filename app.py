@@ -55,6 +55,7 @@ def logout():
 @app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
     erro = None
+    sucesso = request.args.get("sucesso") 
     if request.method == "POST":
         email = request.form["email"]
         senha = request.form["senha"]
@@ -179,7 +180,7 @@ def visualizar_itens():
     usuario_atualizado = None
     
     if usuario_sessao:
-        # Pega o e-mail dependendo de como está armazenado na session
+       
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
@@ -285,12 +286,14 @@ def pag_recuperar_senha():
             mail.send(msg)
             
             sucesso = "O link de recuperação foi enviado para o seu e-mail!"
+        except ValueError as e_validacao:
+            erro = str(e_validacao)
         except Exception as e:
             print("\n ERRO DETALHADO NO ENVIO:", e, "\n")
             erro = "Ocorreu um erro ao processar a recuperação de senha."
 
-
     return render_template('recuperar-senha.html', erro=erro, sucesso=sucesso)
+
 
 
 @app.route("/nova-senha/<token>", methods=["GET", "POST"])
@@ -309,7 +312,7 @@ def pag_nova_senha(token):
             return render_template('nova-senha.html', erro=erro, token=token)
             
         atualizar_senha_por_token(token, nova_senha)
-        return redirect(url_for('pag_login_aluno'))
+        return redirect(url_for('pag_login_aluno', sucesso="Senha alterada com sucesso! Faça seu login."))
 
     return render_template('nova-senha.html', erro=erro, token=token)
 
@@ -322,7 +325,6 @@ def excluir_item(id_item):
     excluir_itens(id_item)
 
     return redirect(request.referrer or '/')
-
 
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
