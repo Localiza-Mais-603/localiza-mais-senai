@@ -3,7 +3,7 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.excluir_item import excluir_itens
-
+from model.filtro import buscar_itens_filtrados
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
 from model.login import verificar_login_coor, verificar_login_usuario
@@ -174,19 +174,36 @@ def editar_perfil():
 
 
 
-@app.route("/visualizar-itens")
+@app.route("/visualizar-itens", methods=["GET"])
 def visualizar_itens():
     usuario_sessao = session.get("usuario")
     usuario_atualizado = None
     
     if usuario_sessao:
-       
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
-    itens = listar_todos()
-    return render_template("visualizar_itens.html", itens=itens, usuario=usuario_atualizado)
+    # Captura os filtros da URL
+    categorias_ids = request.args.getlist("categoria")
+    apenas_disponiveis = request.args.get("disponivel")
 
+    # Remove valores vazios da lista (ex: quando seleciona nada ou passa parâmetro limpo)
+    categorias_ids = [c for c in categorias_ids if c.strip()]
+
+    # Se houver categorias ou filtro de disponível marcado, busca filtrado; senão traz todos
+    if categorias_ids or apenas_disponiveis:
+        itens = buscar_itens_filtrados(categorias_ids, apenas_disponiveis)
+    else:
+        itens = listar_todos()
+
+    categorias = listar_categorias()
+
+    return render_template(
+        "visualizar_itens.html", 
+        itens=itens, 
+        usuario=usuario_atualizado, 
+        categorias=categorias
+    )
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])
 def salvar_item():
