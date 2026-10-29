@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
+from model.excluir_item import excluir_itens
 
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
@@ -54,6 +55,7 @@ def logout():
 @app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
     erro = None
+    sucesso = request.args.get("sucesso") 
     if request.method == "POST":
         email = request.form["email"]
         senha = request.form["senha"]
@@ -182,7 +184,7 @@ def visualizar_itens():
     usuario_atualizado = None
     
     if usuario_sessao:
-        # Pega o e-mail dependendo de como está armazenado na session
+       
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
@@ -209,6 +211,10 @@ def registrar_itens():
     if request.method == "POST":
         item = request.form.get("item")
         id_categoria = request.form.get("categoria_id")
+        if not id_categoria or id_categoria.strip() == "":
+         id_categoria = None
+        else:
+            id_categoria = int(id_categoria)
         local = request.form.get("local")
         data_encontrado = request.form.get("data")  
         if data_encontrado == "":
@@ -288,12 +294,14 @@ def pag_recuperar_senha():
             mail.send(msg)
             
             sucesso = "O link de recuperação foi enviado para o seu e-mail!"
+        except ValueError as e_validacao:
+            erro = str(e_validacao)
         except Exception as e:
             print("\n ERRO DETALHADO NO ENVIO:", e, "\n")
             erro = "Ocorreu um erro ao processar a recuperação de senha."
 
-
     return render_template('recuperar-senha.html', erro=erro, sucesso=sucesso)
+
 
 
 @app.route("/nova-senha/<token>", methods=["GET", "POST"])
@@ -312,13 +320,19 @@ def pag_nova_senha(token):
             return render_template('nova-senha.html', erro=erro, token=token)
             
         atualizar_senha_por_token(token, nova_senha)
-        return redirect(url_for('pag_login_aluno'))
+        return redirect(url_for('pag_login_aluno', sucesso="Senha alterada com sucesso! Faça seu login."))
 
     return render_template('nova-senha.html', erro=erro, token=token)
 
+@app.route('/excluir-item/<int:id_item>', methods=['POST'])
+def excluir_item(id_item):
 
+    if session.get('perfil') != 'coordenacao':
+        return redirect('/login/usuario')
 
+    excluir_itens(id_item)
 
+    return redirect(request.referrer or '/')
 
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
