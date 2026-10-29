@@ -20,10 +20,13 @@
             <button onclick="AlterarTema()">Modo</button>
 
             <!-- botao relatar pra aluno apenas -->
-            {% if session.get('perfil') == 'aluno' %}
-            <a href="/registro/itens"><button class="botao-formulario">relatar itens</button></a>
-            {% endif %}
+       
+        
 
+            
+           
+
+            
             <!-- DROPDOWN DE PERFIL -->
             {% if usuario %}
             <div class="dropdown">
@@ -53,6 +56,7 @@
         </div>
     </nav>
     <!-- CARD RETANGULAR COM ÍCONE AZUL -->
+      {% if session.get('perfil') == 'aluno' %}
     <div class="container my-3 d-flex justify-content-center">
         <div class="d-flex align-items-center justify-content-between p-3 bg-white rounded-3 shadow-sm border" style="max-width: 480px; width: 100%;">
             <div class="d-flex align-items-center gap-3">
@@ -72,6 +76,7 @@
             </a>
         </div>
     </div>
+     {% endif %} 
     <!-- FILTRO DE DATA -->
     <div class="item-data">
         <label for="data">A partir de:</label>
