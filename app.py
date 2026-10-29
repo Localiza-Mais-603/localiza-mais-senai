@@ -28,7 +28,7 @@ gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
 @app.route("/")
 def index():
-    return render_template("login.html")
+    return render_template("login-coor.html")
 
 @app.route("/logout")
 def logout():
@@ -49,6 +49,7 @@ def pag_login_aluno():
             return redirect(url_for("visualizar_itens"))  
         else:
             erro = "E-mail ou senha incorretos!"
+
     return render_template("login.html", erro=erro, tipo='usuario')
 
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
@@ -64,6 +65,7 @@ def pag_login_coordenacao():
             return redirect(url_for("visualizar_itens"))  
         else:
             erro = "CPF ou senha incorretos!"
+
     return render_template("login.html", erro=erro, tipo = 'apoio' )
 
 @app.route("/cadastro/usuario") 
