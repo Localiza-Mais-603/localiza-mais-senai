@@ -223,6 +223,7 @@ def salvar_item():
 
 
 
+
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
     if request.method == "POST":
@@ -240,8 +241,6 @@ def registrar_itens():
         email = session["usuario"].get("email")
         nome_foto = None
         foto = request.files.get("foto")
-
-       
 
         if foto and foto.filename != "":
             nome_foto = secure_filename(foto.filename)
@@ -264,11 +263,13 @@ def registrar_itens():
             cpf_coordenador=None
         )
 
+        flash("Item registrado com sucesso!", "success")
 
         return redirect(url_for("registrar_itens"))
 
     categorias = listar_categorias()
     return render_template("registrar_item_perdido.html", categorias=categorias)
+
 
 @app.route("/api/categorias", methods=["POST"])
 def api_cadastrar_categoria():
