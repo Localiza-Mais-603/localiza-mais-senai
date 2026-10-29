@@ -10,10 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/static/js/excluir_Itens.js"></script>
 </head>
+
 <body>
     <nav class="navbar transparente-header">
         <div class="container-fluido">
@@ -129,14 +127,13 @@
 
                 <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
                     method="POST"
-                    onsubmit="event.stopPropagation(); return confirm('Tem certeza que deseja excluir este item?')">
+                    class="form-excluir">
 
-                    
-
-                        <button type="submit" class="btn-excluir-card">
-                            Excluir
-                        </button>
-
+                    <button type="submit"
+                            class="btn-excluir-card"
+                            onclick="event.stopPropagation()">
+                        Excluir
+                    </button>
 
                 </form>
 
@@ -218,8 +215,8 @@
             <button onclick="Filtrar()">Aplicar Filtro</button>
         </div>
     </div>
-    <script src="/static/js/visualizar_itens.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="..." crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5"></script>
+<script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
 
 </body>
 
