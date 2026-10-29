@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/static/js/excluir_Itens.js"></script>
 </head>
 <body>
     <nav class="navbar transparente-header">
@@ -89,21 +92,18 @@
 
     <div class="itens-card">
 
+       
         {% for item in itens %}
 
         <div class="card"
-             style="width: 20rem;"
-
-             data-categoria="{{ item.id_categoria }}"
-
-             data-item="{{ item.item }}"
-             data-descricao="{{ item.descricao }}"
-             data-local="{{ item.local }}"
-             data-data="{{ item.data }}"
-             data-status="{{ item.status }}"
-
-             onclick="abrirCard(this)">
-
+            style="width: 20rem;"
+            data-categoria="{{ item.id_categoria }}"
+            data-item="{{ item.item }}"
+            data-descricao="{{ item.descricao }}"
+            data-local="{{ item.local }}"
+            data-data="{{ item.data_encontrado }}"
+            data-status="{{ item.status }}"
+            onclick="abrirCard(this)">
 
             <div class="card-corpo">
 
@@ -117,26 +117,28 @@
 
             </div>
 
-
             {% if session.get('perfil') == 'coordenacao' %}
 
-            <div class="card-botoes-acao">
+            <div class="card-botoes-acao"
+                onclick="event.stopPropagation()">
 
                 <a href="/editar-item-cadastrado"
-                   class="btn-editar-card"
-                   onclick="event.stopPropagation()">
-
+                class="btn-editar-card">
                     Editar
-
                 </a>
 
+                <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
+                    method="POST"
+                    onsubmit="event.stopPropagation(); return confirm('Tem certeza que deseja excluir este item?')">
 
-                <button class="btn-excluir-card"
-                        onclick="event.stopPropagation()">
+                    
 
-                    Excluir
+                        <button type="submit" class="btn-excluir-card">
+                            Excluir
+                        </button>
 
-                </button>
+
+                </form>
 
             </div>
 
@@ -145,6 +147,7 @@
         </div>
 
         {% endfor %}
+
 
     </div>
 

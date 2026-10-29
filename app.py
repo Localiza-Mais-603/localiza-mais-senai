@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
+from model.excluir_item import excluir_itens
 
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
@@ -315,8 +316,15 @@ def pag_nova_senha(token):
 
     return render_template('nova-senha.html', erro=erro, token=token)
 
+@app.route('/excluir-item/<int:id_item>', methods=['POST'])
+def excluir_item(id_item):
 
+    if session.get('perfil') != 'coordenacao':
+        return redirect('/login/usuario')
 
+    excluir_itens(id_item)
+
+    return redirect(request.referrer or '/')
 
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
