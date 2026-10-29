@@ -248,16 +248,15 @@
                        {% if cat_id|string in request.args.getlist('categoria') %}checked{% endif %}> 
                 {{ cat_nome }}
             </label>
+        {% endfor %}
 
-            <label for="">
-                <input type="checkbox" class="filtro-categoria" value="2">EPI
-            </label>
-            <label for="">
-                <input type="checkbox" class="filtro-categoria" value="3">Roupas
-            </label>
-            <button onclick="Filtrar()">Aplicar Filtro</button>
-        </div>
-    </div>
+     
+        <button type="submit">Aplicar Filtro</button>
+        
+        
+        <a href="{{ url_for('visualizar_itens') }}" class="btn-limpar">Limpar Filtros</a>
+    </form>
+</div>
     <script src="/static/js/visualizar_itens.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
