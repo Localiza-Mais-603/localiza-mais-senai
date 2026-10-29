@@ -68,5 +68,23 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/static/js/modal-registro-item.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script id="flash-messages" type="application/json">
+    {{ get_flashed_messages(with_categories=true) | tojson }}
+</script> 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ url_for('static', filename='js/modal-registro-item.js') }}"></script>
+<script src="{{ url_for('static', filename='js/registrar_item.js') }}"></script>
 </body>
 </html>
+
+    
