@@ -182,6 +182,8 @@ def editar_perfil():
 def visualizar_itens():
     usuario_sessao = session.get("usuario")
     usuario_atualizado = None
+
+    lista_categorias = Categoria.query.all()
     
     if usuario_sessao:
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
