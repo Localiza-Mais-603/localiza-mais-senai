@@ -1,75 +1,76 @@
-document.addEventListener('DOMContentLoaded', () => {
-    configurarModalCategoria();
-});
 
-function configurarModalCategoria() {
-    // Seleciona os elementos
-    const modal = document.getElementById('modal-categoria');
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Captura do botão e do campo select do teu HTML
     const btnAbrir = document.getElementById('btn-abrir-modal');
-    const btnFechar = document.getElementById('btn-fechar-modal');
-    const btnCancelar = document.getElementById('btn-cancelar-modal');
-    const formModal = document.getElementById('form-cadastrar-categoria');
-    const inputNome = document.getElementById('nova-categoria-nome');
     const selectCategoria = document.getElementById('categoria');
 
-    //  Abrir e fechar a janela
-    const abrirModal = () => {
-        modal.style.display = 'flex';
-        inputNome.value = ''; 
-        inputNome.focus();
-    };
+    if (btnAbrir) {
+        btnAbrir.addEventListener('click', () => {
+            // Dispara o modal do SweetAlert2
+            Swal.fire({
+                title: 'Cadastrar Nova Categoria',
+                input: 'text',
+                inputLabel: 'Nome da Categoria',
+                inputPlaceholder: 'Ex: Eletrónicos, Documentos...',
+                showCancelButton: true,
+                confirmButtonText: 'Salvar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#ff3b3b', // Cor vermelha compatível com o teu tema
+                cancelButtonColor: '#296fad',
+                
+                // Validação: Impede enviar o campo em branco
+                inputValidator: (valor) => {
+                    if (!valor || !valor.trim()) {
+                        return 'Por favor, digite o nome da categoria!';
+                    }
+                },
+                
+                // Processamento assíncrono antes de fechar o modal
+                showLoaderOnConfirm: true,
+                preConfirm: async (nomeCategoria) => {
+                    try {
+                        const resposta = await fetch('/api/categorias', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ nome: nomeCategoria.trim() })
+                        });
 
-    const fecharModal = () => {
-        modal.style.display = 'none';
-        inputNome.value = '';
-    };
+                        const resultado = await resposta.json();
 
-    if (btnAbrir) btnAbrir.addEventListener('click', abrirModal);
-    if (btnFechar) btnFechar.addEventListener('click', fecharModal);
-    if (btnCancelar) btnCancelar.addEventListener('click', fecharModal);
+                        if (!resposta.ok || !resultado.sucesso) {
+                            throw new Error(resultado.mensagem || 'Erro ao cadastrar categoria.');
+                        }
 
-    // Fechar o model se o usuário apertar na parte externa
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            fecharModal();
-        }
-    });
+                        return resultado; // Retorna os dados (id_categoria e nome)
+                    } catch (erro) {
+                        Swal.showValidationMessage(`Falha: ${erro.message}`);
+                    }
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                // Se o utilizador clicou em "Salvar" e a API respondeu com sucesso
+                if (result.isConfirmed && result.value) {
+                    const dados = result.value;
 
-    // Enviar a nova categoria para o back-end
-    if (formModal) {
-        formModal.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Impede a página de recarregar
-
-            const nomeCategoria = inputNome.value.trim();
-
-            if (!nomeCategoria) return;
-
-            try {
-                const resposta = await fetch('/api/categorias', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome: nomeCategoria })
-                });
-
-                const resultado = await resposta.json();
-
-                if (resultado.sucesso) {
-                    // Cria uma nova categoria
+                    // Criar e selecionar a nova opção no <select> do formulário
                     const novaOpcao = document.createElement('option');
-                    novaOpcao.value = resultado.id_categoria;
-                    novaOpcao.textContent = resultado.nome;
+                    novaOpcao.value = dados.id_categoria;
+                    novaOpcao.textContent = dados.nome;
                     novaOpcao.selected = true; // Seleciona automaticamente a categoria criada
 
-                    // Adiciona a categoria
                     selectCategoria.appendChild(novaOpcao);
-                    fecharModal();
-                } else {
-                    alert('Erro ao cadastrar categoria: ' + (resultado.mensagem || 'Tente novamente.'));
+
+                    // Alerta rápido de confirmação
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sucesso!',
+                        text: 'Categoria adicionada com sucesso.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
                 }
-            } catch (erro) {
-                console.error('Erro na requisição:', erro);
-                alert('Falha ao ligar ao servidor.');
-            }
+            });
         });
     }
-}
+});
