@@ -33,6 +33,12 @@
 
             <button onclick="AlterarTema()">Modo</button>
 
+            {% if session.get('perfil') == 'coordenacao' %}
+
+            <a href="/adicionar/item"><button>Adicionar</button></a>
+
+            {% endif %}
+
             {% if usuario %}
             <div class="dropdown">
 
