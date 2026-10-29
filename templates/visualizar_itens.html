@@ -257,49 +257,36 @@
         </div>
 
     </div>
+   
+<div class="grupo-filtro" id="janelaFiltro">
+    
+    <form action="{{ url_for('visualizar_itens') }}" method="GET" class="grupo-conteudo">
+        
+        <h3>Categorias</h3>
+        <label>
+            <input type="checkbox" name="disponivel" value="1" {% if request.args.get('disponivel') %}checked{% endif %}> Disponível
+        </label>
 
-    <!-- JANELA DE FILTROS -->
-    <div class="grupo-filtro" id="janelaFiltro">
-
-        <div class="grupo-conteudo">
-
-            <button class="btn-fechar" id="btnFechar">
-                X
-            </button>
-
-            <h3>Categorias</h3>
-
+        <h3>Sub-Categorias</h3>
+        {% for categoria in categorias %}
+            {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
+            {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
+            
             <label>
-                <input type="checkbox">
-                Disponível
+               
+                <input type="checkbox" name="categoria" value="{{ cat_id }}" 
+                       {% if cat_id|string in request.args.getlist('categoria') %}checked{% endif %}> 
+                {{ cat_nome }}
             </label>
+        {% endfor %}
 
-            <h3>Sub-Categorias</h3>
-
-            <label>
-                <input type="checkbox" class="filtro-categoria" value="1">
-                Acessórios
-            </label>
-
-            <label>
-                <input type="checkbox" class="filtro-categoria" value="2">
-                EPI
-            </label>
-
-            <label>
-                <input type="checkbox" class="filtro-categoria" value="3">
-                Roupas
-            </label>
-
-            <button onclick="Filtrar()">
-                Aplicar Filtro
-            </button>
-
-        </div>
-
-    </div>
-
-    <!-- SCRIPTS -->
+     
+        <button type="submit">Aplicar Filtro</button>
+        
+        
+        <a href="{{ url_for('visualizar_itens') }}" class="btn-limpar">Limpar Filtros</a>
+    </form>
+</div>
     <script src="/static/js/visualizar_itens.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
