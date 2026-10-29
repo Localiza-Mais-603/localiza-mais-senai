@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,9 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-
     <nav class="navbar transparente-header">
         <div class="container-fluido">
             <h1>LOCALIZA+</h1>
@@ -23,11 +20,15 @@
             <button onclick="AlterarTema()">Modo</button>
 
             <!-- botao relatar pra aluno apenas -->
-            {% if session.get('perfil') == 'aluno' %}
-            <a href="/registro/itens"><button class="botao-formulario">relatar itens</button></a>
-            {% endif %}
+       
+        
 
            
+            
+           
+
+            
+            <!-- DROPDOWN DE PERFIL -->
             {% if usuario %}
             <div class="dropdown">
                 <button class="botao-formulario dropdown-toggle" type="button" id="dropdownMenuPerfil"
@@ -55,12 +56,32 @@
             {% endif %}
         </div>
     </nav>
-
-    
+    <!-- CARD RETANGULAR COM ÍCONE AZUL -->
+      {% if session.get('perfil') == 'aluno' %}
+    <div class="container my-3 d-flex justify-content-center">
+        <div class="d-flex align-items-center justify-content-between p-3 bg-white rounded-3 shadow-sm border" style="max-width: 480px; width: 100%;">
+            <div class="d-flex align-items-center gap-3">
+                <!-- ÍCONE DE LUPA AZUL -->
+                <div style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background-color: #e6f0f7; border-radius: 50%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#024873" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h5 class="fw-bold m-0" style="color: #024873; font-size: 1.1rem; text-transform: uppercase;">Perdi Algo</h5>
+                    <small class="text-muted">Perdeu um item? Publique aqui!</small>
+                </div>
+            </div>
+            <a href="/registro/itens" class="btn fw-bold px-3 py-2 text-white text-uppercase" style="background-color: #F28705; border-radius: 6px; font-size: 0.85rem; text-decoration: none;">
+                Relatar item
+            </a>
+        </div>
+    </div>
+     {% endif %} 
+    <!-- FILTRO DE DATA -->
     <div class="item-data">
         <label for="data">A partir de:</label>
         <input type="date" name="data" value="2026-09-25">
-
         <button class="btn-abrir" id="btnAbrir">
             filtros
         </button>
@@ -171,8 +192,7 @@
         </div>
 
     </div>
-
-
+    <!-- JANELA FILTROS -->
     <div class="grupo-filtro" id="janelaFiltro">
         <div class="grupo-conteudo">
             <button class="btn-fechar" id="btnFechar">X</button>
@@ -181,7 +201,6 @@
             <label for="">
                 <input type="checkbox">Disponível
             </label>
-
             <h3>Sub-Categorias</h3>
             <label for="">
                 <input type="checkbox" class="filtro-categoria" value="1">Acessórios
@@ -190,15 +209,12 @@
             <label for="">
                 <input type="checkbox" class="filtro-categoria" value="2">EPI
             </label>
-
             <label for="">
                 <input type="checkbox" class="filtro-categoria" value="3">Roupas
             </label>
-
             <button onclick="Filtrar()">Aplicar Filtro</button>
         </div>
     </div>
-
     <script src="/static/js/visualizar_itens.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="..." crossorigin="anonymous"></script>
 
