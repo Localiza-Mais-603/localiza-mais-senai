@@ -285,7 +285,9 @@ def pag_recuperar_senha():
             msg.body = f"Olá!\n\nPara redefinir sua senha no Localiza+, clique no link abaixo:\n\n{link_recuperacao}\n\nSe você não solicitou essa alteração, ignore este e-mail."
             mail.send(msg)
             
-            sucesso = "O link de recuperação foi enviado para o seu e-mail!"
+            # ALTERADO AQUI: Texto direto e objetivo como você pediu!
+            sucesso = "E-mail enviado!"
+            
         except ValueError as e_validacao:
             erro = str(e_validacao)
         except Exception as e:
@@ -293,6 +295,7 @@ def pag_recuperar_senha():
             erro = "Ocorreu um erro ao processar a recuperação de senha."
 
     return render_template('recuperar-senha.html', erro=erro, sucesso=sucesso)
+
 
 
 
