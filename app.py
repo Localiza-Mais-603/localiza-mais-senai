@@ -179,7 +179,7 @@ def visualizar_itens():
     usuario_atualizado = None
     
     if usuario_sessao:
-        # Pega o e-mail dependendo de como está armazenado na session
+       
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
