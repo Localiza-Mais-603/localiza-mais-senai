@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,19 +22,16 @@
 
 <body>
 
+    <!-- CABEÇALHO -->
     <nav class="navbar transparente-header">
+
         <div class="container-fluido">
             <h1>LOCALIZA+</h1>
         </div>
 
         <div class="itens-central">
+
             <button onclick="AlterarTema()">Modo</button>
-        
-        <a href="/adicionar/item">
-            <button>
-                Adicionar
-            </button>
-        </a>
 
             {% if usuario %}
             <div class="dropdown">
@@ -50,13 +48,18 @@
                     aria-labelledby="dropdownMenuPerfil">
 
                     <li class="dropdown-header text-center">
+
                         <img src="https://placehold.co/60"
                             alt="perfil"
                             class="rounded-circle mb-2"
                             style="width: 50px; height: 50px;">
 
                         <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
-                        <small class="text-muted">{{ usuario.email }}</small>
+
+                        <small class="text-muted">
+                            {{ usuario.email }}
+                        </small>
+
                     </li>
 
                     <li><hr class="dropdown-divider"></li>
@@ -78,10 +81,13 @@
                 </ul>
             </div>
             {% endif %}
+
         </div>
     </nav>
 
+    <!-- RELATAR ITEM -->
     {% if session.get('perfil') == 'aluno' %}
+
     <div class="container my-3 d-flex justify-content-center">
 
         <div class="d-flex align-items-center justify-content-between p-3 bg-white rounded-3 shadow-sm border"
@@ -100,9 +106,11 @@
                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
 
                     </svg>
+
                 </div>
 
                 <div>
+
                     <h5 class="fw-bold m-0"
                         style="color: #024873; font-size: 1.1rem; text-transform: uppercase;">
                         Perdi Algo
@@ -111,7 +119,9 @@
                     <small class="text-muted">
                         Perdeu um item? Publique aqui!
                     </small>
+
                 </div>
+
             </div>
 
             <a href="/registro/itens"
@@ -121,14 +131,20 @@
             </a>
 
         </div>
+
     </div>
+
     {% endif %}
 
     <!-- FILTRO DE DATA -->
     <div class="item-data">
 
         <label for="data">A partir de:</label>
-        <input type="date" id="data" name="data" value="2026-09-25">
+
+        <input type="date"
+            id="data"
+            name="data"
+            value="2026-09-25">
 
         <button class="btn-abrir" id="btnAbrir">
             Filtros
@@ -146,12 +162,15 @@
             data-categoria="{{ item.id_categoria }}"
             data-item="{{ item.item }}"
             data-descricao="{{ item.descricao }}"
-            data-local="{{ item.local }}"
-            data-data="{{ item.data_encontrado }}"
+            data-local="{{ item.local if item.local else '' }}"
+            data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
             data-status="{{ item.status }}"
+            data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
             onclick="abrirCard(this)">
 
             <div class="card-corpo">
+
+                <!-- A FOTO NÃO APARECE NA LISTAGEM -->
 
                 <h5 class="card-titulo">
                     {{ item.item }}
@@ -163,6 +182,7 @@
 
             </div>
 
+            <!-- BOTÕES DA COORDENAÇÃO -->
             {% if session.get('perfil') == 'coordenacao' %}
 
             <div class="card-botoes-acao"
@@ -194,16 +214,25 @@
 
     </div>
 
-    <!-- MODAL DE DETALHES DO ITEM -->
+    <!-- MODAL DE DETALHES -->
     <div class="modal-card" id="modalCard">
 
         <div class="card-destaque" onclick="event.stopPropagation()">
 
-            <button class="fechar-card" onclick="fecharCard()">
+            <button class="fechar-card"
+                type="button"
+                onclick="fecharCard()">
                 X
             </button>
 
             <h2 id="modalTitulo"></h2>
+
+            <!-- FOTO APARECE SOMENTE AO ABRIR O CARD -->
+            <img id="modalFoto"
+                src=""
+                alt="Foto do item"
+                class="modal-foto"
+                style="display: none;">
 
             <p>
                 <strong>Descrição:</strong>
@@ -226,6 +255,7 @@
             </p>
 
         </div>
+
     </div>
 
     <!-- JANELA DE FILTROS -->
@@ -233,12 +263,15 @@
 
         <div class="grupo-conteudo">
 
-            <button class="btn-fechar" id="btnFechar">X</button>
+            <button class="btn-fechar" id="btnFechar">
+                X
+            </button>
 
             <h3>Categorias</h3>
 
             <label>
-                <input type="checkbox"> Disponível
+                <input type="checkbox">
+                Disponível
             </label>
 
             <h3>Sub-Categorias</h3>
@@ -258,9 +291,12 @@
                 Roupas
             </label>
 
-            <button onclick="Filtrar()">Aplicar Filtro</button>
+            <button onclick="Filtrar()">
+                Aplicar Filtro
+            </button>
 
         </div>
+
     </div>
 
     <!-- SCRIPTS -->
@@ -273,4 +309,6 @@
     <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
 
 </body>
+
 </html>
+
