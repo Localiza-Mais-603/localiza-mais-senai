@@ -145,6 +145,10 @@ def selecionar_perfil():
 def pag_cadastrar_item():
     return render_template("registrar_item_perdido.html")
 
+@app.route("/adicionar/item")
+def pag_cadastrar_item_coor():
+    return render_template("cadastrar_itens_coor.html")
+
 @app.route("/tela/inicial/corporativo")
 def tela_inicial_corporativo():
     return render_template("tela-inicial-corporativo.html")

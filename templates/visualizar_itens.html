@@ -27,6 +27,13 @@
             <a href="/registro/itens"><button class="botao-formulario">relatar itens</button></a>
             {% endif %}
 
+
+            <!-- botão add coordenação -->
+
+             {% if session.get('perfil') == 'coordenacao' %}
+             <a href="/adicionar/item"><button class="botao-formulario">Adicionar</button></a>
+             {% endif %}
+
             <!-- DROPDOWN DE PERFIL -->
             {% if usuario %}
             <div class="dropdown">
@@ -90,6 +97,9 @@
         </div>
         {% endfor %}
     </div>
+
+
+
 
 
     <div class="grupo-filtro" id="janelaFiltro">
