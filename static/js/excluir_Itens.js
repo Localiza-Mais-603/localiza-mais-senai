@@ -1,26 +1,30 @@
-document.querySelectorAll('.form-excluir').forEach(form => {
+document.addEventListener('DOMContentLoaded', function () {
 
-    form.addEventListener('submit', function (event) {
+    const formularios = document.querySelectorAll('.form-excluir');
 
-        event.preventDefault();
-        event.stopPropagation();
+    formularios.forEach(function (form) {
 
-        Swal.fire({
-            title: 'Tem certeza?',
-            text: 'Essa ação excluirá o item permanentemente!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sim, excluir!',
-            cancelButtonText: 'Cancelar',
-            reverseButtons: true
-        }).then((resultado) => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
 
-            if (resultado.isConfirmed) {
-                form.submit();
-            }
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: 'Deseja excluir este item permanentemente?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sim, excluir!',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then(function (resultado) {
 
+                if (resultado.isConfirmed) {
+                    HTMLFormElement.prototype.submit.call(form);
+                }
+
+            });
         });
 
     });
