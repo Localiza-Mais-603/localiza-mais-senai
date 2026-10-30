@@ -121,16 +121,20 @@
         {% endif %}
 
         {% if session.get('perfil') == 'coordenacao' %}
-        <section class="container my-3 d-flex flex-wrap justify-content-center gap-3" aria-label="Painel da Coordenação">
-            
+        <section class="container my-3 d-flex flex-wrap justify-content-center gap-3"
+            aria-label="Painel da Coordenação">
+
             <!-- CARD 1: RELATÓRIO DE PERDA -->
             <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border card-relatar-item"
                 style="max-width: 480px; width: 100%;">
 
                 <div class="d-flex align-items-center gap-3">
-                    <div class="icone-busca-container" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 1.5 13.5 5.5H9.5V1.5zM4.5 7.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm0 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm0 2h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1 0-1z"/>
+                    <div class="icone-busca-container"
+                        style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                            viewBox="0 0 16 16" aria-hidden="true">
+                            <path
+                                d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 1.5 13.5 5.5H9.5V1.5zM4.5 7.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm0 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm0 2h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1 0-1z" />
                         </svg>
                     </div>
 
@@ -141,8 +145,7 @@
                     </div>
                 </div>
 
-                <a href="/relatorios-perda"
-                    class="btn fw-bold px-3 py-2 text-white text-uppercase"
+                <a href="/relatorios-perda" class="btn fw-bold px-3 py-2 text-white text-uppercase"
                     style="background-color: #024873; border-radius: 6px; font-size: 0.85rem; text-decoration: none;">
                     Acessar
                 </a>
@@ -153,9 +156,12 @@
                 style="max-width: 480px; width: 100%;">
 
                 <div class="d-flex align-items-center gap-3">
-                    <div class="icone-busca-container" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                            <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                    <div class="icone-busca-container"
+                        style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor"
+                            viewBox="0 0 16 16" aria-hidden="true">
+                            <path
+                                d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
                         </svg>
                     </div>
 
@@ -166,8 +172,7 @@
                     </div>
                 </div>
 
-                <a href="/itens-arquivados"
-                    class="btn fw-bold px-3 py-2 text-white text-uppercase"
+                <a href="/itens-arquivados" class="btn fw-bold px-3 py-2 text-white text-uppercase"
                     style="background-color: #024873; border-radius: 6px; font-size: 0.85rem; text-decoration: none;">
                     Acessar
                 </a>
@@ -188,42 +193,42 @@
             <ul class="itens-card">
 
                 {% for item in itens %}
-                    {% if item.status != 'Perdido' %}
-                    <li style="list-style: none;">
-                        <article class="card"
-                            style="width: 20rem;"
-                            data-categoria="{{ item.id_categoria }}"
-                            data-item="{{ item.item }}"
-                            data-descricao="{{ item.descricao }}"
-                            data-local="{{ item.local if item.local else '' }}"
-                            data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
-                            data-status="{{ item.status }}"
-                            data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
-                            onclick="abrirCard(this)">
+                {% if item.status != 'Perdido' %}
+                <li style="list-style: none;">
+                    <article class="card" style="width: 20rem;" data-categoria="{{ item.id_categoria }}"
+                        data-item="{{ item.item }}" data-descricao="{{ item.descricao }}"
+                        data-local="{{ item.local if item.local else '' }}"
+                        data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
+                        data-status="{{ item.status }}"
+                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                        onclick="abrirCard(this)">
 
-                            <div class="card-corpo">
-                                <h3 class="card-titulo">
-                                    {{ item.item }}
-                                </h3>
-                                <p class="card-text">
-                                    {{ item.descricao }}
-                                </p>
-                            </div>
+                        <div class="card-corpo">
+                            <h3 class="card-titulo">
+                                {{ item.item }}
+                            </h3>
+                            <p class="card-text">
+                                {{ item.descricao }}
+                            </p>
+                        </div>
 
                         <!-- BOTÕES DA COORDENAÇÃO (EDITAR, ARQUIVAR E EXCLUIR) -->
                         {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
-                            <button type="button" class="btn-editar-card" onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
+                            <button type="button" class="btn-editar-card"
+                                onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
                                 Editar
                             </button>
 
-                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}" method="POST" class="form-acao" onclick="event.stopPropagation()">
+                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}" method="POST"
+                                class="form-acao" onclick="event.stopPropagation()">
                                 <button type="submit" class="btn-arquivar-card">
                                     Arquivar
                                 </button>
                             </form>
 
-                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST" class="form-acao" onclick="event.stopPropagation()">
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST"
+                                class="form-acao" onclick="event.stopPropagation()">
                                 <button type="submit" class="btn-excluir-card">
                                     Excluir
                                 </button>
@@ -231,9 +236,9 @@
                         </div>
                         {% endif %}
 
-                        </article>
-                    </li>
-                    {% endif %}
+                    </article>
+                </li>
+                {% endif %}
                 {% endfor %}
 
             </ul>
@@ -268,7 +273,7 @@
 
             <h2>Editar Item</h2>
 
-            <form id="formEdicao" method="POST" enctype="multipart/form-data" onclick="event.stopPropagation()">
+            <form id="formEdicao" method="POST" onclick="event.stopPropagation()">
                 <div class="mb-3">
                     <label for="editItem">Nome do Item</label>
                     <input type="text" id="editItem" name="item" class="form-control" required>
@@ -287,20 +292,6 @@
                 <div class="mb-3">
                     <label for="editData">Data</label>
                     <input type="date" id="editData" name="data" class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label for="editStatus">Status</label>
-                    <select id="editStatus" name="status" class="form-control">
-                        <option value="Perdido">Perdido</option>
-                        <option value="Devolvido">Devolvido</option>
-                        <option value="Descartado">Descartado</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="editFoto">Foto (Opcional)</label>
-                    <input type="file" id="editFoto" name="foto" class="form-control">
                 </div>
 
                 <button type="submit" class="btn btn-success mt-2">Salvar Alterações</button>

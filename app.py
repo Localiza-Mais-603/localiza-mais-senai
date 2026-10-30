@@ -358,6 +358,21 @@ def relatorios_perda():
         usuario=usuario_atualizado
     )
 
+@app.route("/atualizar-item/<int:id_item>", methods=["POST"])
+def editar_item(id_item):
+    if session.get('perfil') != 'coordenacao':
+        return redirect(url_for('pag_login_aluno'))
 
+    item_nome = request.form.get("item")
+    descricao = request.form.get("descricao")
+    local = request.form.get("local")
+    data_encontrado = request.form.get("data")
+    if data_encontrado == "":
+        data_encontrado = None
+
+    # Atualiza no banco sem alterar o status
+    atualizar_item_no_banco(id_item, item_nome, descricao, local, data_encontrado)
+    
+    return redirect(url_for("visualizar_itens"))
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
