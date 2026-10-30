@@ -3,46 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Itens - SENAI LOCALIZA+</title>
+    <title>Cadastrar Itens - Coordenação</title>
+    <link rel="stylesheet" href="/static/css/cadastrar-item-coordenacao.css">
 </head>
+
 <body>
 
     <main>
-        <h1>Cadastrar itens</h1>
+        <section class="card-principal">
 
-        <section>
-            <h2>SENAI | LOCALIZA+</h2>
+            <h1 class="titulo-principal">SENAI | LOCALIZA+</h1>
+            <h2 class="subtitulo">Cadastrar Item</h2>
 
-            
-            <form action="/cadastrar/item/salvar" method="POST">
+            <form action="/cadastrar/item/salvar" method="POST" class="formulario-perda">
+
+                <div class="campo-grupo">
+                    <label for="item" class="rotulo">Item perdido: *</label>
+                    <input type="text" id="item" name="item" class="entrada-texto" required>
+                </div>
+
+               <div class="campo-grupo">
+                    <label for="categoria" class="rotulo">Categoria: *</label>
+                    <div class="categoria-group">
+                        <select id="categoria" name="id_categoria" class="entrada-texto" required>
+                            <option value="" disabled selected>Selecione uma categoria...</option>
+                            {% for cat in categorias %}
+                                <option value="{{ cat.id if cat.id is defined else cat[0] }}">
+                                    {{ cat.nome if cat.nome is defined else cat[1] }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" id="btn-abrir-modal" class="btn-add-categoria" title="Cadastrar nova categoria">add categoria</button>
+                    </div>
+                </div>
+                                
+                <div class="campo-grupo">
+                    <label for="local" class="rotulo">Local (opcional)</label>
+                    <input type="text" id="local" name="local" class="entrada-texto">
+                </div>
                 
-                <div>
-                    <label for="item">Item:</label>
-                    <input type="text" id="item" name="item" required>
+                <div class="campo-grupo">
+                    <label for="data" class="rotulo">Data (opcional)</label>
+                    <input type="date" id="data" name="data" class="entrada-texto">
                 </div>
-
-                <div>
-                    <label for="local">Local:</label>
-                    <input type="text" id="local" name="local" required>
+                
+                <div class="campo-grupo">
+                    <label for="descricao" class="rotulo">Descrição *</label>
+                    <textarea id="descricao" name="descricao" class="entrada-area-texto" required></textarea>
                 </div>
-
-                <div>
-                    <label for="data">Data (opcional):</label>
-                    <input type="date" id="data" name="data">
+                
+                <div class="grupo-botoes">
+                    <button type="submit" class="botao-submit">Enviar</button>
+                    <button type="button" class="botao-cancelar" onclick="window.location.href='/visualizar/itens'">Cancelar</button>
                 </div>
-
-                <div>
-                    <label for="descricao">Descrição:</label>
-                    <textarea id="descricao" name="descricao" rows="4" required></textarea>
-                </div>
-
-                <button type="submit">Cadastrar item</button>
 
             </form>
-        </section>
 
-        <a href="/">Voltar</a>
+            <a href="/visualizar/itens" class="link-voltar">Voltar à página principal</a>
+
+        </section>
     </main>
 
+    <!-- Scripts e Mensagens Flash -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script id="flash-messages" type="application/json">
+        {{ get_flashed_messages(with_categories=true) | tojson }}
+    </script> 
+
+    <!-- Script unificado para o modal de categoria -->
+    <script src="{{ url_for('static', filename='js/modal-registro-item.js') }}"></script>
 </body>
 </html>
