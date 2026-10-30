@@ -1,12 +1,9 @@
-
-
 function AlterarTema() {
     document.body.classList.toggle("escuro");
 
     const modoEscuroAtivo = document.body.classList.contains("escuro");
     localStorage.setItem("tema", modoEscuroAtivo ? "escuro" : "claro");
 }
-
 
 (function carregarTemaSalvo() {
     const temaSalvo = localStorage.getItem("tema");
@@ -18,13 +15,14 @@ function AlterarTema() {
     }
 })();
 
+const modalEdicao = document.getElementById("modalEdicao");
+const modal = document.getElementById("modalCard");
 
 document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".card");
     const botaoAbrir = document.getElementById("btnAbrir");
     const botaoFechar = document.getElementById("btnFechar");
     const filtragem = document.getElementById("janelaFiltro");
-    const modal = document.getElementById("modalCard");
 
     if (botaoAbrir && filtragem) {
         botaoAbrir.addEventListener("click", () => {
@@ -37,13 +35,32 @@ document.addEventListener("DOMContentLoaded", () => {
             filtragem.classList.remove("aberto");
         });
     }
-})
+
+    // Validação de campos obrigatórios no modal de edição
+    const formEdicao = document.getElementById("formEdicao");
+    if (formEdicao) {
+        formEdicao.addEventListener("submit", function (event) {
+            const nomeItem = document.getElementById("editItem").value.trim();
+            const descricaoItem = document.getElementById("editDescricao").value.trim();
+
+            if (!nomeItem || !descricaoItem) {
+                event.preventDefault();
+                
+                Swal.fire({
+                    title: 'Atenção!',
+                    text: 'Por favor, preencha os campos obrigatórios: Nome do Item e Descrição.',
+                    icon: 'warning',
+                    confirmButtonColor: '#F28705'
+                });
+            }
+        });
+    }
+});
 
 function Filtrar() {
     const cards = document.querySelectorAll(".card");
     const filtragem = document.getElementById("janelaFiltro");
 
-    // Busca checkboxes marcados na janela de filtros
     const filtros = Array.from(
         document.querySelectorAll(".grupo-conteudo input:checked")
     ).map(input => input.value);
@@ -64,26 +81,13 @@ function Filtrar() {
 }
 
 function abrirCard(card) {
-    const modal = document.getElementById("modalCard");
     if (!modal) return;
 
-    document.getElementById("modalTitulo").textContent =
-        card.dataset.item || "";
-
-    document.getElementById("modalDescricao").textContent =
-        card.dataset.descricao || "";
-
-    document.getElementById("modalLocal").textContent =
-        card.dataset.local || "Não informado";
-
-    document.getElementById("modalData").textContent =
-        card.dataset.data && card.dataset.data !== "None"
-            ? card.dataset.data
-            : "Não informada";
-
-    document.getElementById("modalStatus").textContent =
-        card.dataset.status || "Não informado";
-
+    document.getElementById("modalTitulo").textContent = card.dataset.item || "";
+    document.getElementById("modalDescricao").textContent = card.dataset.descricao || "";
+    document.getElementById("modalLocal").textContent = card.dataset.local || "Não informado";
+    document.getElementById("modalData").textContent = card.dataset.data && card.dataset.data !== "None" ? card.dataset.data : "Não informada";
+    document.getElementById("modalStatus").textContent = card.dataset.status || "Não informado";
 
     const modalFoto = document.getElementById("modalFoto");
     const foto = card.dataset.foto;
@@ -93,11 +97,9 @@ function abrirCard(card) {
             modalFoto.onerror = function () {
                 modalFoto.style.display = "none";
             };
-
             modalFoto.onload = function () {
                 modalFoto.style.display = "block";
             };
-
             modalFoto.src = foto;
         } else {
             modalFoto.removeAttribute("src");
@@ -108,11 +110,28 @@ function abrirCard(card) {
     modal.classList.add("aberto");
 }
 
-
 function fecharCard() {
-    modal.classList.remove("aberto");
+    if (modal) modal.classList.remove("aberto");
 }
 
+// Funções do Modal de Edição
+function abrirModalEdicao(botao, idItem) {
+    const card = botao.closest(".card");
+
+    document.getElementById("editItem").value = card.dataset.item || "";
+    document.getElementById("editDescricao").value = card.dataset.descricao || "";
+    document.getElementById("editLocal").value = card.dataset.local !== "None" ? card.dataset.local : "";
+    document.getElementById("editData").value = card.dataset.data !== "None" ? card.dataset.data : "";
+    document.getElementById("editStatus").value = card.dataset.status || "Perdido";
+
+    document.getElementById("formEdicao").action = `/atualizar-item/${idItem}`;
+
+    if (modalEdicao) modalEdicao.classList.add("aberto");
+}
+
+function fecharModalEdicao() {
+    if (modalEdicao) modalEdicao.classList.remove("aberto");
+}
 
 if (modal) {
     modal.addEventListener("click", function (event) {
@@ -121,8 +140,3 @@ if (modal) {
         }
     });
 }
-
-
-
-
-
