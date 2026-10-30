@@ -210,23 +210,26 @@
                                 </p>
                             </div>
 
-                            <!-- BOTÕES DA COORDENAÇÃO -->
-                            {% if session.get('perfil') == 'coordenacao' %}
-                            <div class="card-botoes-acao" onclick="event.stopPropagation()">
-                                <button type="button" class="btn-editar-card" onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
-                                    Editar
-                                </button>
+                        <!-- BOTÕES DA COORDENAÇÃO (EDITAR, ARQUIVAR E EXCLUIR) -->
+                        {% if session.get('perfil') == 'coordenacao' %}
+                        <div class="card-botoes-acao" onclick="event.stopPropagation()">
+                            <button type="button" class="btn-editar-card" onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
+                                Editar
+                            </button>
 
-                                <!-- <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
-                                    method="POST"
-                                    class="form-excluir"
-                                    onclick="event.stopPropagation()">
-                                    <button type="submit" class="btn-excluir-card">
-                                        Excluir
-                                    </button> -->
-                                </form>
-                            </div>
-                            {% endif %}
+                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}" method="POST" class="form-acao" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-arquivar-card">
+                                    Arquivar
+                                </button>
+                            </form>
+
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST" class="form-acao" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-excluir-card">
+                                    Excluir
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
 
                         </article>
                     </li>
