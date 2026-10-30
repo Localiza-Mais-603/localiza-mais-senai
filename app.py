@@ -139,7 +139,11 @@ def visualizar_itens():
 #     descricao = request.form["descricao"]
 #     cadastrar_item(produto, descricao, local, data)
 
-#     return redirect("/cadastrar/item")
+    return redirect("/cadastrar/item")
+
+
+
+
 
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
@@ -158,6 +162,9 @@ def registrar_itens():
         email = session["usuario"].get("email")
         nome_foto = None
         foto = request.files.get("foto")
+
+       
+
         if foto and foto.filename != "":
             nome_foto = secure_filename(foto.filename)
             pasta_destino = os.path.join("static", "img_upload")
@@ -175,9 +182,12 @@ def registrar_itens():
             email=email,
             cpf_coordenador=None
         )
+
+
         return redirect(url_for("registrar_itens"))
     categorias = listar_categorias()
     return render_template("registrar_item_perdido.html", categorias=categorias)
+
 
 @app.route("/api/categorias", methods=["POST"])
 def api_cadastrar_categoria():
@@ -238,6 +248,8 @@ def excluir_item(id_item):
         return redirect('/login/usuario')
     excluir_itens(id_item)
     return redirect(request.referrer or '/')
+
+
 
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
