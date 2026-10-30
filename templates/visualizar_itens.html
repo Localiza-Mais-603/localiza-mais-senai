@@ -259,7 +259,7 @@
         </article>
     </div>
 
-    <!-- MODAL DE EDIÇÃO -->
+   <!-- MODAL DE EDIÇÃO -->
     <div class="modal-card" id="modalEdicao" role="dialog" aria-hidden="true">
         <article class="card-destaque" onclick="event.stopPropagation()">
             <button class="fechar-card" type="button" onclick="fecharModalEdicao()" aria-label="Fechar modal">
@@ -268,7 +268,7 @@
 
             <h2>Editar Item</h2>
 
-            <form id="formEdicao" method="POST" enctype="multipart/form-data" onclick="event.stopPropagation()">
+            <form id="formEdicao" method="POST" onclick="event.stopPropagation()">
                 <div class="mb-3">
                     <label for="editItem">Nome do Item</label>
                     <input type="text" id="editItem" name="item" class="form-control" required>
@@ -292,15 +292,10 @@
                 <div class="mb-3">
                     <label for="editStatus">Status</label>
                     <select id="editStatus" name="status" class="form-control">
-                        <option value="Perdido">Perdido</option>
+                        <option value="DISPONIVEL">Disponível</option>
                         <option value="Devolvido">Devolvido</option>
                         <option value="Descartado">Descartado</option>
                     </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="editFoto">Foto (Opcional)</label>
-                    <input type="file" id="editFoto" name="foto" class="form-control">
                 </div>
 
                 <button type="submit" class="btn btn-success mt-2">Salvar Alterações</button>
