@@ -1,12 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
+from database.conexao import conectar
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.excluir_item import excluir_itens
 from model.filtro import buscar_itens_filtrados
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
-from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias, cadastrar_categoria
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
@@ -134,18 +134,33 @@ def visualizar_perfil():
 @app.route("/visualizar-itens", methods=["GET"])
 def visualizar_itens():
     usuario_sessao = session.get("usuario")
+    perfil = session.get("perfil")
     usuario_atualizado = None
+
     if usuario_sessao:
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
-        usuario_atualizado = buscar_usuario_por_email(email)
+        
+        if perfil == "coordenacao":
+            conexao, cursor = conectar()
+            cursor = conexao.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM coordenador WHERE email = %s", (email,))
+            usuario_atualizado = cursor.fetchone()
+            cursor.close()
+            conexao.close()
+        else:
+            usuario_atualizado = buscar_usuario_por_email(email)
+
     categorias_ids = request.args.getlist("categoria")
     apenas_disponiveis = request.args.get("disponivel")
     categorias_ids = [c for c in categorias_ids if c.strip()]
+    
     if categorias_ids or apenas_disponiveis:
         itens = buscar_itens_filtrados(categorias_ids, apenas_disponiveis)
     else:
         itens = listar_todos()
+        
     categorias = listar_categorias()
+    
     return render_template(
         "visualizar_itens.html", 
         itens=itens, 
@@ -159,7 +174,7 @@ def registrar_itens():
         item = request.form.get("item")
         id_categoria = request.form.get("categoria_id")
         if not id_categoria or id_categoria.strip() == "":
-         id_categoria = None
+            id_categoria = None
         else:
             id_categoria = int(id_categoria)
         local = request.form.get("local")
@@ -177,6 +192,7 @@ def registrar_itens():
             os.makedirs(pasta_destino, exist_ok=True)
             caminho_completo = os.path.join(pasta_destino, nome_foto)
             foto.save(caminho_completo)
+            
         registrar_item_perdido(
             item=item,
             descricao=descricao,
@@ -189,6 +205,7 @@ def registrar_itens():
             cpf_coordenador=None
         )
         return redirect(url_for("registrar_itens"))
+        
     categorias = listar_categorias()
     return render_template("registrar_item_perdido.html", categorias=categorias)
 
