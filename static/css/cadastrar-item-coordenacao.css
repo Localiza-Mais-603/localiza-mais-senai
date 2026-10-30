@@ -1,0 +1,194 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff; 
+    padding: 20px;
+}
+
+main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card central */
+.card-principal {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 440px; 
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.titulo-principal {
+    font-size: 24px;
+    color: #333333;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.subtitulo {
+    font-size: 12px;
+    color: #666666;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+
+.formulario-perda {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.campo-grupo {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.rotulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444444;
+    margin-bottom: 8px;
+}
+
+/* Container flex para alinhar o Select e o Botão Add Categoria lado a lado */
+.categoria-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+
+.categoria-group select {
+    flex: 1;
+}
+
+/* Botão de adicionar categoria integrado no grupo */
+.btn-add-categoria {
+    padding: 0 16px;
+    background-color: #024873; 
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    height: 45px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-add-categoria:hover {
+    background-color: #02385a;
+}
+
+/* Inputs, Select e Textarea */
+.entrada-texto,
+.entrada-area-texto,
+select.entrada-texto {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #333333;
+    outline: none;
+    background-color: #ffffff;
+    height: 45px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.entrada-area-texto {
+    height: 100px;
+    resize: vertical;
+}
+
+/* Borda de foco em laranja */
+.entrada-texto:focus,
+.entrada-area-texto:focus,
+select.entrada-texto:focus {
+    border-color: #E87A24;
+    box-shadow: 0 0 0 3px rgba(232, 122, 36, 0.1);
+}
+
+/* Grupo de botões Enviar e Cancelar */
+.grupo-botoes {
+    display: flex;
+    gap: 12px;
+    margin: 10px 0 24px 0;
+}
+
+.botao-submit {
+    flex: 1;
+    padding: 14px;
+    background-color: #024873; 
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.botao-submit:hover {
+    background-color: #02385a;
+}
+
+.botao-cancelar {
+    flex: 1;
+    padding: 14px;
+    background-color: transparent;
+    color: #666666;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.botao-cancelar:hover {
+    background-color: #f5f5f5;
+    color: #333333;
+}
+
+.botao-submit:active,
+.botao-cancelar:active,
+.btn-add-categoria:active {
+    transform: scale(0.98);
+}
+
+.link-voltar {
+    display: inline-block;
+    color: #E87A24;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.link-voltar:hover {
+    color: #c96416;
+    text-decoration: underline;
+}

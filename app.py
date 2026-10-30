@@ -93,34 +93,9 @@ def cadastro_coor():
         return redirect('/login/setor/de/apoio')
     return render_template('cadastro_coordenacao.html')
 
-# ATUALIZAR ITEM NO BANCO (MODAL)
-@app.route("/atualizar-item/<int:id_item>", methods=["POST"])
-def atualizar_item_rota(id_item):
-    if session.get('perfil') != 'coordenacao':
-        return redirect('/login/usuario')
-
-    item = request.form.get("item")
-    descricao = request.form.get("descricao")
-    local = request.form.get("local")
-    data = request.form.get("data")
-    status = request.form.get("status")
-    
-    foto = request.files.get("foto")
-    nome_foto = None
-    if foto and foto.filename != "":
-        nome_foto = secure_filename(foto.filename)
-        pasta_destino = os.path.join("static", "img_upload")
-        os.makedirs(pasta_destino, exist_ok=True)
-        foto.save(os.path.join(pasta_destino, nome_foto))
-
-    atualizar_item_no_banco(id_item, item, descricao, local, data, status, nome_foto)
-    flash("Item alterado com sucesso!", "success")
-
-    return redirect(url_for('visualizar_itens'))
-
-@app.route("/adicionar/item")
-def pag_cadastrar_item_coor():
-    return render_template("cadastrar_itens_coor.html")
+@app.route("/editar-item-cadastrado")
+def pag_editar_item_cadastrado():
+    return render_template("editar-item-cadastrado.html")
 
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
@@ -167,6 +142,44 @@ def visualizar_itens():
         usuario=usuario_atualizado, 
         categorias=categorias
     )
+
+@app.route("/adicionar/item")
+def pag_cadastrar_item_coor():
+    categorias_bd = listar_categorias()
+    return render_template("cadastrar_itens_coor.html", categorias=categorias_bd)
+
+
+@app.route("/cadastrar/item/salvar", methods=["POST"])
+def registrar_itens_coordenacao():
+    item = request.form.get("item")
+    
+    # Tratamento da categoria
+    id_categoria = request.form.get("id_categoria")
+    id_categoria = int(id_categoria) if id_categoria and id_categoria.strip() else None
+
+    local = request.form.get("local")
+    
+    # Tratamento da data
+    data_encontrado = request.form.get("data")
+    if not data_encontrado or not data_encontrado.strip():
+        data_encontrado = None
+
+    descricao = request.form.get("descricao")
+    cpf_coordenador = session.get("usuario", {}).get("cpf")
+
+    cadastrar_item(
+        item=item,
+        descricao=descricao,
+        data_encontrado=data_encontrado,
+        status="DISPONIVEL",
+        id_categoria=id_categoria,
+        local=local,
+        foto=None,
+        email=None,
+        cpf_coordenador=cpf_coordenador
+    )
+
+    return redirect(url_for("visualizar_itens"))
 
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
