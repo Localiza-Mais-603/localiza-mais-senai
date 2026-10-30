@@ -265,6 +265,7 @@ def excluir_item(id_item):
     excluir_itens(id_item)
     return redirect(request.referrer or '/')
 
+
 @app.route('/arquivar-item/<int:id_item>', methods=['POST'])
 def arquivar_item(id_item):
     if session.get('perfil') != 'coordenacao':
@@ -273,10 +274,11 @@ def arquivar_item(id_item):
     try:
         from model.editar_item import atualizar_status_item
         atualizar_status_item(id_item, 'Arquivado')
-    except Exception:
-        pass
+    except Exception as e:
+        print("Erro ao arquivar item:", e)
 
-    return redirect(request.referrer or url_for('visualizar_itens'))
+    # Redireciona diretamente para a tela de itens arquivados
+    return redirect(url_for('itens_arquivados'))
 
 @app.route("/itens-arquivados")
 def itens_arquivados():
@@ -297,7 +299,21 @@ def itens_arquivados():
         if status == 'Arquivado':
             arquivados.append(item)
 
-    return render_template("itens_arquivados.html", itens=arquivados, usuario=usuario_atualizado)
+    return render_template("arquivar_itens_coor.html", itens=arquivados, usuario=usuario_atualizado)
+
+# ROTA: DESARQUIVAR ITEM (VOLTA O STATUS PARA 'Perdido')
+@app.route('/desarquivar-item/<int:id_item>', methods=['POST'])
+def desarquivar_item(id_item):
+    if session.get('perfil') != 'coordenacao':
+        return redirect('/login/usuario')
+
+    try:
+        from model.editar_item import atualizar_status_item
+        atualizar_status_item(id_item, 'Perdido')
+    except Exception as e:
+        print("Erro ao desarquivar item:", e)
+
+    return redirect(url_for('itens_arquivados'))
 
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)

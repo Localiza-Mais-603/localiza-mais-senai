@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Itens Arquivados - LOCALIZA+</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,10 +17,10 @@
 
 <body>
 
+    <!-- CABEÇALHO DA PÁGINA (IGUAL AO DAS OUTRAS TELAS) -->
     <header>
         <nav class="navbar transparente-header">
-            <div class="container-fluido d-flex align-items-center gap-3">
-                <a href="/visualizar-itens" class="btn btn-outline-secondary botao-voltar">← Voltar</a>
+            <div class="container-fluido">
                 <h1>LOCALIZA+</h1>
             </div>
 
@@ -28,16 +29,24 @@
 
                 {% if usuario %}
                 <div class="dropdown">
-                    <button class="botao-formulario dropdown-toggle" type="button" id="dropdownMenuPerfil" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="botao-formulario dropdown-toggle" type="button" id="dropdownMenuPerfil"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ usuario.nome }}
                     </button>
+
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
                         <li class="dropdown-header text-center">
+                            <img src="https://placehold.co/60" alt="Foto de perfil de {{ usuario.nome }}"
+                                class="rounded-circle mb-2" style="width: 50px; height: 50px;">
                             <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
                             <small class="text-muted">{{ usuario.email }}</small>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="/logout">Sair</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">Sair</a>
+                        </li>
                     </ul>
                 </div>
                 {% endif %}
@@ -45,45 +54,60 @@
         </nav>
     </header>
 
-    <main class="container my-4">
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main>
 
-        <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-2">
-            <h2 class="titulo-secao-itens m-0">📦 ITENS ARQUIVADOS (HISTÓRICO)</h2>
-            <span class="badge bg-warning text-dark fs-6">{{ itens|length }} Item(ns) Arquivado(s)</span>
+        <!-- BOTÃO VOLTAR E TÍTULO SIMPLES DA SEÇÃO -->
+        <div class="container my-2">
+            <a href="/visualizar-itens" class="btn-abrir mb-3 text-decoration-none d-inline-block">← Voltar</a>
+            <h2 class="titulo-secao-itens">ITENS ARQUIVADOS</h2>
         </div>
 
+        <!-- LISTA DE ITENS ARQUIVADOS -->
         <section aria-label="Itens arquivados">
             <ul class="itens-card">
 
                 {% for item in itens %}
                 <li style="list-style: none;">
-                    <article class="card" style="width: 20rem; opacity: 0.85; border-style: dashed;" onclick="abrirCard(this)"
-                        data-item="{{ item.item }}"
-                        data-descricao="{{ item.descricao }}"
+                    <article class="card" style="width: 20rem;" data-categoria="{{ item.id_categoria }}"
+                        data-item="{{ item.item }}" data-descricao="{{ item.descricao }}"
                         data-local="{{ item.local if item.local else '' }}"
                         data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
                         data-status="{{ item.status }}"
-                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}">
+                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                        onclick="abrirCard(this)">
 
                         <div class="card-corpo">
-                            <h3 class="card-titulo text-secondary">{{ item.item }}</h3>
-                            <p class="card-text text-muted">{{ item.descricao }}</p>
-                            <span class="badge bg-secondary mb-2">Status: {{ item.status }}</span>
+                            <h3 class="card-titulo">
+                                {{ item.item }}
+                            </h3>
+                            <p class="card-text">
+                                {{ item.descricao }}
+                            </p>
                         </div>
 
+                        {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
-                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST" class="w-100">
-                                <button type="submit" class="btn-excluir-card w-100">
-                                    Excluir Definitivamente
+                            <form action="{{ url_for('desarquivar_item', id_item=item.id_item) }}" method="POST"
+                                class="form-acao" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-editar-card">
+                                    Desarquivar
+                                </button>
+                            </form>
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST"
+                                class="form-acao" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-excluir-card">
+                                    Excluir
                                 </button>
                             </form>
                         </div>
+                        {% endif %}
 
                     </article>
                 </li>
                 {% else %}
                 <div class="col-12 text-center py-5">
-                    <p class="text-muted fs-5">Nenhum item arquivado no momento.</p>
+                    <p class="text-muted fs-6">Nenhum item arquivado no momento.</p>
                 </div>
                 {% endfor %}
 
@@ -92,12 +116,17 @@
 
     </main>
 
-    <!-- MODAL DE DETALHES -->
+    <!-- MODAL DE DETALHES DA FOTO/DESCRIÇÃO -->
     <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true">
         <article class="card-destaque" onclick="event.stopPropagation()">
-            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">X</button>
+            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">
+                X
+            </button>
+
             <h2 id="modalTitulo"></h2>
-            <img id="modalFoto" src="" alt="Foto do item" class="modal-foto" style="display: none;">
+
+            <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none;">
+
             <p><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
             <p><strong>Local:</strong> <span id="modalLocal"></span></p>
             <p><strong>Data:</strong> <span id="modalData"></span></p>
@@ -105,8 +134,10 @@
         </article>
     </div>
 
+    <!-- SCRIPTS -->
     <script src="/static/js/visualizar_itens.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
