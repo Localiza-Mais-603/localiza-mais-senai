@@ -18,6 +18,55 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    position: relative; /* Garante contexto de posicionamento */
+}
+
+/* NAVBAR & BOTÃO SUPERIOR DIREITO */
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background-color: transparent;
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+.navbar h1 {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #024873;
+    letter-spacing: 1px;
+}
+
+/* Posiciona os itens do topo no canto direito */
+.itens-central {
+    display: flex;
+    gap: 10px;
+    margin-left: auto; /* Empurra os botões totalmente para a direita */
+}
+
+/* Estilo do Botão no Topo Direito */
+.itens-central button {
+    padding: 9px 18px;
+    border: 2px solid #024873;
+    border-radius: 4px;
+    background-color: #024873;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.itens-central button:hover {
+    background-color: #ffffff;
+    color: #024873;
 }
 
 /* Container de Abas (Topo) */
@@ -25,6 +74,7 @@ body {
     width: 100%;
     max-width: 420px;
     margin-bottom: 15px;
+    margin-top: 40px; /* Esspaço para não sobrepor com a navbar */
 }
 
 .buttontab {
@@ -67,8 +117,7 @@ body {
     padding: 30px 25px;
 }
 
-/* REGRA DE OURO PARA AS ABAS ALTERNÁVEIS:
-   Garante que a aba sem .active NUNCA apareça, independentemente do display interno */
+/* REGRA DE OURO PARA AS ABAS ALTERNÁVEIS */
 .container-form {
     display: none !important; 
 }
@@ -212,8 +261,193 @@ form input:focus {
     text-decoration: underline;
 }
 
-/* Ajuste Responsivo para Telemóvel */
+/* ==========================================
+   MODO ESCURO - VISUALIZAR ITENS & LOGIN
+   ========================================== */
+
+/* Fundo geral da página e textos principais */
+body.escuro {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Header e Navbar no Modo Escuro */
+body.escuro header,
+body.escuro .transparente-header {
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #333333;
+}
+
+body.escuro .transparente-header h1 {
+    color: #ffffff;
+}
+
+body.escuro .transparente-header button {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444444;
+}
+
+body.escuro .transparente-header button:hover {
+    background-color: #024873;
+    color: #ffffff;
+}
+
+/* Dropdown de Perfil */
+body.escuro .dropdown-menu {
+    background-color: #1e1e1e;
+    border: 1px solid #333333;
+}
+
+body.escuro .dropdown-menu .dropdown-item {
+    color: #dddddd;
+}
+
+body.escuro .dropdown-menu .dropdown-item:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+body.escuro .dropdown-divider {
+    border-color: #333333;
+}
+
+/* Card "PERDI ALGO" (Seção de Relatar Item) */
+body.escuro .card-relatar-item {
+    background-color: #024873 !important;
+    border-color: #38bdf8 !important;
+}
+
+body.escuro .card-relatar-item .icone-busca-container {
+    background-color: #012e4a !important;
+}
+
+body.escuro .card-relatar-item .icone-busca-container svg {
+    fill: #38bdf8 !important;
+    color: #38bdf8 !important;
+}
+
+body.escuro .card-relatar-item .titulo-card {
+    color: #ffffff !important;
+}
+
+body.escuro .card-relatar-item .texto-sub-card {
+    color: #e0f2fe !important;
+}
+
+/* Filtro de Data */
+body.escuro .item-data {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+body.escuro .item-data label {
+    color: #024873;
+}
+
+body.escuro .item-data input[type="date"] {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #024873;
+}
+
+body.escuro .item-data .btn-abrir {
+    background-color: #024873;
+    color: #ffffff;
+    border: none;
+}
+
+/* Cards da Lista de Itens Encontrados */
+body.escuro .card {
+    background-color: #1e1e1e;
+    border: 1px solid #333333;
+    border-top: 3px solid #024873;
+}
+
+body.escuro .card-titulo {
+    color: #ffffff;
+}
+
+body.escuro .card-text {
+    color: #cccccc;
+}
+
+/* Botões de Ação da Coordenação nos Cards */
+body.escuro .btn-editar-card {
+    background-color: #2a2a2a;
+    color: #38bdf8;
+    border: 1px solid #38bdf8;
+}
+
+body.escuro .btn-excluir-card {
+    background-color: #2a2a2a;
+    color: #f75a68;
+    border: 1px solid #f75a68;
+}
+
+/* Modal de Detalhes do Card */
+body.escuro .modal-card {
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+body.escuro .card-destaque {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #333333;
+}
+
+body.escuro .card-destaque h2 {
+    color: #38bdf8;
+}
+
+body.escuro .card-destaque p {
+    color: #dddddd;
+}
+
+body.escuro .fechar-card {
+    color: #ffffff;
+}
+
+/* Modal / Janela Lateral de Filtros */
+body.escuro .grupo-filtro {
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+body.escuro .grupo-conteudo {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border-left: 1px solid #333333;
+}
+
+body.escuro .grupo-conteudo h3 {
+    color: #38bdf8;
+}
+
+body.escuro .grupo-conteudo label {
+    color: #dddddd;
+}
+
+body.escuro .grupo-conteudo button[type="submit"] {
+    background-color: #024873;
+    color: #ffffff;
+}
+
+body.escuro .grupo-conteudo .btn-limpar {
+    background-color: #2a2a2a;
+    color: #cccccc;
+    border: 1px solid #444444;
+}
+
+/* Ajuste Responsivo para Dispositivos Móveis */
 @media (max-width: 480px) {
+    .navbar {
+        padding: 12px 15px;
+    }
+
+    .container-botoes {
+        margin-top: 50px;
+    }
+
     .container-login, 
     .container-botoes {
         max-width: 100%;
