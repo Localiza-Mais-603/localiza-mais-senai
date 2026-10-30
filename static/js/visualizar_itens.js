@@ -1,6 +1,4 @@
-/* ==========================================================
-   GERENCIAMENTO DE TEMA (MODO ESCURO / CLARO)
-   ========================================================== */
+
 
 function AlterarTema() {
     document.body.classList.toggle("escuro");
@@ -9,7 +7,7 @@ function AlterarTema() {
     localStorage.setItem("tema", modoEscuroAtivo ? "escuro" : "claro");
 }
 
-// Executa imediatamente ao carregar o script para aplicar o tema salvo
+
 (function carregarTemaSalvo() {
     const temaSalvo = localStorage.getItem("tema");
 
@@ -20,9 +18,6 @@ function AlterarTema() {
     }
 })();
 
-/* ==========================================================
-   MANIPULAÇÃO DA INTERFACE E MODAIS
-   ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".card");
@@ -31,35 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const filtragem = document.getElementById("janelaFiltro");
     const modal = document.getElementById("modalCard");
 
-    // Abrir janela de filtros
-    if (botaoAbrir && filtragem) {
-        botaoAbrir.addEventListener("click", () => {
-            filtragem.classList.add("aberto");
-        });
-    }
+if (botaoAbrir && filtragem) {
+    botaoAbrir.addEventListener("click", () => {
+        filtragem.classList.add("aberto");
+    });
+}
 
-    // Fechar janela de filtros (se o botão existir)
-    if (botaoFechar && filtragem) {
-        botaoFechar.addEventListener("click", () => {
-            filtragem.classList.remove("aberto");
-        });
-    }
+if (botaoFechar && filtragem) {
+    botaoFechar.addEventListener("click", () => {
+        filtragem.classList.remove("aberto");
+    });
+}
 
-    // Fechar modal ao clicar na área escura de fora
-    if (modal) {
-        modal.addEventListener("click", (event) => {
-            if (event.target === modal) {
-                fecharCard();
-            }
-        });
-    }
-});
-
-/* ==========================================================
-   FUNÇÕES GLOBAIS (FILTROS E MODAL)
-   ========================================================== */
-
-// Filtrar cards por categoria
 function Filtrar() {
     const cards = document.querySelectorAll(".card");
     const filtragem = document.getElementById("janelaFiltro");
@@ -84,7 +62,6 @@ function Filtrar() {
     }
 }
 
-// Abrir detalhes do card no Modal
 function abrirCard(card) {
     const modal = document.getElementById("modalCard");
     if (!modal) return;
@@ -106,7 +83,7 @@ function abrirCard(card) {
     document.getElementById("modalStatus").textContent =
         card.dataset.status || "Não informado";
 
-    // Exibição da foto do item
+
     const modalFoto = document.getElementById("modalFoto");
     const foto = card.dataset.foto;
 
@@ -130,10 +107,21 @@ function abrirCard(card) {
     modal.classList.add("aberto");
 }
 
-// Fechar Modal
+
 function fecharCard() {
-    const modal = document.getElementById("modalCard");
-    if (modal) {
-        modal.classList.remove("aberto");
-    }
+    modal.classList.remove("aberto");
 }
+
+
+if (modal) {
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            fecharCard();
+        }
+    });
+}
+
+
+
+
+
