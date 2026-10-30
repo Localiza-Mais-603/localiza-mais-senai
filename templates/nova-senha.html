@@ -1,29 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
-    <title>Localiza+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nova-senha.css') }}">
+    <title>Localiza+ - Nova Senha</title>
+    <style>
+        .alerta-erro {
+            color: #d9534f;
+            background-color: #f2dede;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
-<body>
 
-    <h2>Criar Nova Senha</h2>
+<body>
+    <section class="container">
+    <h2>Redefinir Senha</h2>
     <p>Defina a sua nova credencial de acesso para o Localiza+.</p>
-    
-    <!-- ADICIONADO: Exibição de alertas de erro vindos do Python -->
-    {% if erro %}<p style="color: red;">{{ erro }}</p>{% endif %}
-    
-   <form method="POST" action="{{ url_for('pag_nova_senha', token=token) }}">
+
+    {% if erro %}
+    <div class="alerta-erro">
+        <strong>Erro:</strong> {{ erro }}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('pag_nova_senha', token=token) }}">
 
         <label for="nova_senha">Nova Senha:</label>
-        <input type="password" id="nova_senha" name="nova_senha" placeholder="Digite a nova senha" required>
+        <input type="password" id="nova_senha" name="nova_senha" placeholder="Digite a nova senha" minlength="6"
+            required>
         <br><br>
-        
+
         <label for="confirmar_senha">Confirmar Senha:</label>
-        <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirme a nova senha" required>
+        <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirme a nova senha"
+            minlength="6" required>
         <br><br>
-        
+
         <button type="submit">Atualizar Senha</button>
     </form>
+    </section>
+
 
 </body>
+
 </html>

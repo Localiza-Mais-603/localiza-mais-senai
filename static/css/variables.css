@@ -1,15 +1,35 @@
-
 :root {
-    /* Cores principais do CSS */
-    --vermelho-principal: #FF0000;
-    --vermelho-escuro: #E00000;
-    --vermelho-medio: #C20000;
-    --vermelho-profundo: #AC0101;
+    /* Paleta Principal (Azul, Laranja, Branco, Cinza) */
+    --azul-principal: #0F4C75;
+    --azul-escuro: #0B3251;
+    --azul-hover: #1B6CA8;
+    
+    --laranja-principal: #E87A24;
+    --laranja-hover: #D06513;
 
-    /* Cores neutras */
     --branco: #FFFFFF;
-    --cinza-claro: #E8E8E8;
-    --cinza-medio: #CFCFCF;
-    --cinza-escuro: #A8A8A8;
-    --preto: #2D2D2D;
+    --fundo-pagina: #F4F6F9;
+    --fundo-card: #FFFFFF;
+
+    /* Tons de cinza para bordas e textos secundários */
+    --cinza-borda: #DCDCDC;
+    --cinza-suave: #E9ECEF;
+    --texto-principal: #0B3251;
+    --texto-secundario: #6C757D;
+    
+    /* Fontes e Raios de Borda */
+    --fonte-principal: 'Chakra Petch', sans-serif;
+    --raio-borda: 6px;
+    --sombra-card: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Modo Escuro (Dark Mode) */
+body.escuro {
+    --fundo-pagina: #121212;
+    --fundo-card: #1E1E1E;
+    --texto-principal: #E0E0E0;
+    --texto-secundario: #A0A0A0;
+    --cinza-borda: #2C2C2C;
+    --cinza-suave: #2A2A2A;
+    --sombra-card: 0 6px 18px rgba(0, 0, 0, 0.4);
 }

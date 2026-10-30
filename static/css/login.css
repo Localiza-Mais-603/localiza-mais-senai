@@ -1,406 +1,225 @@
-:root {
-    /* Cores principais do CSS */
-    --vermelho-principal: #FF0000;
-    --vermelho-escuro: #E00000;
-    --vermelho-medio: #C20000;
-    --vermelho-profundo: #AC0101;
+/* ==========================================================================
+   CSS UNIFICADO E SEGURO PARA ABAS - LOCALIZA+
+   ========================================================================== */
 
-    /* Cores neutras */
-    --branco: #FFFFFF;
-    --cinza-claro: #E8E8E8;
-    --cinza-medio: #CFCFCF;
-    --cinza-escuro: #A8A8A8;
-    --preto: #2D2D2D;
-
-    /* Tom rosa/creme suave para o fundo do cartão */
-    --fundo-card: #FDECEA;
-}
-
-/* Reset básico de estilos globais com fonte nativa */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-family: var(--fonte-principal, 'Chakra Petch', sans-serif);
 }
 
-/* Oculta as tags <br> para não desalinhar a grelha CSS */
-br {
-    display: none;
-}
-
-/* Fundo da página 100% CSS manual (efeito de ondas/profundidade via gradientes radiais nativos) */
 body {
-    min-height: 100vh;
+    background-color: var(--fundo-pagina, #F4F6F9);
+    color: var(--texto-principal, #0B3251);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--vermelho-profundo);
-    background-image: 
-        radial-gradient(ellipse 130% 90% at 100% -10%, var(--vermelho-principal) 0%, transparent 55%),
-        radial-gradient(ellipse 110% 80% at 0% 110%, var(--vermelho-escuro) 0%, transparent 60%),
-        radial-gradient(ellipse 90% 120% at 100% 80%, var(--vermelho-medio) 0%, transparent 65%),
-        linear-gradient(135deg, var(--vermelho-profundo) 0%, var(--vermelho-medio) 100%);
-    background-attachment: fixed;
+    min-height: 100vh;
     padding: 20px;
 }
 
-
-/* Cartão central de Login */
-.container-login {
-    background-color: var(--fundo-card);
-    width: 100%;
-    max-width: 350px;
-    padding: 40px 28px 30px 28px;
-    border-radius: 20px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-    
-    /* Grelha de 2 colunas para alinhar os botões no rodapé */
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    align-items: center;
-}
-
-/* Permite rearranjar os elementos internos diretamente na grelha do container principal */
-.container-form,
-.container-form form,
-.container-go-back {
-    display: contents;
-}
-
-/* Cabeçalho */
-.container-header {
-    grid-column: 1 / -1;
-    order: 1;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.container-header h1 {
-    font-size: 2.3rem;
-    color: var(--preto);
-    font-weight: bold;
-    margin-bottom: 6px;
-}
-
-.container-header h4 {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 0.75rem;
-    color: var(--preto);
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-/* Destaque em vermelho para 'SETOR DE APOIO' */
-.container-header h4 span {
-    color: var(--vermelho-escuro);
-}
-
-/* Rótulos dos campos (Labels) */
-.container-form label {
-    grid-column: 1 / -1;
-    font-size: 0.95rem;
-    font-weight: bold;
-    color: var(--preto);
-    margin-top: 8px;
-}
-
-/* Ordem de exibição dos campos */
-label[for="cpf"], label[for="email"] { order: 2; }
-input#cpf, input#email { order: 3; }
-label[for="senha"], label[for="senha-apoio"], label[for="senha-usuario"] { order: 4; }
-input#senha, input#senha-apoio, input#senha-usuario { order: 5; }
-
-/* Campos de entrada (Inputs) */
-.container-form input {
-    grid-column: 1 / -1;
-    width: 100%;
-    padding: 12px 14px;
-    border: none;
-    border-radius: 8px;
-    background-color: var(--branco);
-    font-size: 0.9rem;
-    color: var(--preto);
-    outline: none;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
-}
-
-.container-form input::placeholder {
-    color: var(--cinza-escuro);
-}
-
-.container-form input:focus {
-    box-shadow: 0 0 0 2px var(--vermelho-principal);
-}
-
-/* Textos e Links informativos */
-.container-form > p {
-    grid-column: 1 / -1;
-    order: 6;
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--preto);
-    font-weight: bold;
-    margin-top: 35px;
-}
-
-.container-go-back p {
-    grid-column: 1 / -1;
-    order: 7;
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--preto);
-    font-weight: bold;
-    margin-top: 6px;
-    margin-bottom: 25px;
-}
-
-.link-secundario {
-    text-decoration: none;
-    color: var(--preto);
-    font-weight: bold;
-}
-
-.container-go-back .link-secundario {
-    color: var(--vermelho-escuro);
-}
-
-.link-secundario:hover {
-    text-decoration: underline;
-}
-
-/* ==========================================================================
-   FORMATAÇÃO DOS BOTÕES "ENTRAR" (<button>) E "VOLTAR" (<a>) LADO A LADO
-   ========================================================================== */
-
-/* Estilo unificado para o botão 'Entrar' e o link 'Voltar' */
-.botao,
-.container-form > a:not(.link-secundario) {
-    order: 8;
-    height: 42px;
-    background-color: var(--vermelho-escuro);
-    color: var(--branco);
-    border: none;
-    border-radius: 10px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 0.95rem;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    outline: none;
-    box-shadow: 0 4px 10px rgba(224, 0, 0, 0.25);
-    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-}
-
-/* Coluna esquerda: Botão Entrar */
-form .botao {
-    grid-column: 1;
-    width: 100%;
-}
-
-/* Coluna direita: Link Voltar estilizado como botão */
-.container-form > a:not(.link-secundario) {
-    grid-column: 2;
-    width: 100%;
-}
-
-/* Efeito Hover */
-.botao:hover,
-.container-form > a:not(.link-secundario):hover {
-    background-color: var(--vermelho-profundo);
-    box-shadow: 0 6px 14px rgba(172, 1, 1, 0.35);
-}
-
-/* Efeito ao Clicar */
-.botao:active,
-.container-form > a:not(.link-secundario):active {
-    transform: scale(0.97);
-}
-
-
-/* ==========================================================================
-   ESTILOS DAS ABAS ALTERNÁVEIS (Adicionado para controlar o seu HTML)
-   ========================================================================== */
-
+/* Container de Abas (Topo) */
 .container-botoes {
-    margin-bottom: 20px;
     width: 100%;
-    max-width: 350px;
-    display: flex;
-    justify-content: center;
+    max-width: 420px;
+    margin-bottom: 15px;
 }
 
 .buttontab {
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 5px;
-    border-radius: 15px;
     display: flex;
-    gap: 8px;
-    width: 100%;
+    background-color: var(--cinza-suave, #E9ECEF);
+    border-radius: var(--raio-borda, 6px);
+    padding: 4px;
+    gap: 6px;
+    box-shadow: var(--sombra-card, 0 4px 12px rgba(0, 0, 0, 0.05));
 }
 
 .tab-buttons {
     flex: 1;
-    background: transparent;
+    padding: 10px 15px;
     border: none;
-    padding: 10px;
-    border-radius: 10px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: var(--branco);
+    background: transparent;
+    color: var(--texto-secundario, #6C757D);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    border-radius: var(--raio-borda, 4px);
+    transition: all 0.2s ease;
 }
 
-/* Botão da aba ativa */
 .tab-buttons.active {
-    background-color: var(--fundo-card);
-    color: var(--preto);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    background-color: var(--azul-escuro, #0B3251);
+    color: var(--branco, #FFFFFF);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Esconde os formulários inativos por defeito */
+/* Card Principal */
+.container-login {
+    width: 100%;
+    max-width: 420px;
+    background-color: var(--fundo-card, #FFFFFF);
+    border-radius: var(--raio-borda, 8px);
+    box-shadow: var(--sombra-card, 0 6px 18px rgba(0, 0, 0, 0.08));
+    border-top: 5px solid var(--azul-escuro, #0B3251);
+    padding: 30px 25px;
+}
+
+/* REGRA DE OURO PARA AS ABAS ALTERNÁVEIS:
+   Garante que a aba sem .active NUNCA apareça, independentemente do display interno */
 .container-form {
-    display: none;
+    display: none !important; 
 }
 
-/* Mostra apenas o formulário ativo mantendo a grelha intacta */
 .container-form.active {
-    display: contents;
+    display: flex !important;
+    flex-direction: column;
+    gap: 14px;
 }
 
-
-
-/* BOTÕES DO TOPO */
-
-
-
-.itens-central {
-  position: absolute;
-  top: 15px;    
-  right: 20px;  
+/* Cabeçalho do Formulário */
+.container-header {
+    text-align: center;
+    margin-bottom: 8px;
 }
 
-.itens-central button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 9px 18px;
-  border: 2px solid #024873;
-  border-radius: 4px;
-  background-color: #024873;
-  color: #ffffff;
-  cursor: pointer;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  transition: all 0.2s ease;
+.container-header h1 {
+    font-size: 1.7rem;
+    color: var(--azul-escuro, #0B3251);
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
-.itens-central button:hover {
-  background-color: #ffffff;
-  color: #024873;
+.container-header h4 {
+    font-size: 0.8rem;
+    color: var(--laranja-principal, #E87A24);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
 }
 
-/* ==========================================================================
-   MODO ESCURO (.escuro adicionado ao <body>)
-   ========================================================================== */
-
-body.escuro {
-    /* Reescreve os tons de fundo da página para cores escuras/grafite */
-    background-color: #121212;
-    background-image: 
-        radial-gradient(ellipse 130% 90% at 100% -10%, #2a0000 0%, transparent 55%),
-        radial-gradient(ellipse 110% 80% at 0% 110%, #1a0000 0%, transparent 60%),
-        radial-gradient(ellipse 90% 120% at 100% 80%, #220000 0%, transparent 65%),
-        linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
-    color: #e0e0e0;
+/* Formulário e Elementos Interiores */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
 }
 
-/* Cartão Central */
-body.escuro .container-login {
-    background-color: #1e1e1e;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
-    border: 1px solid #2d2d2d;
+form label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--azul-escuro, #0B3251);
 }
 
-/* Títulos e Textos */
-body.escuro .container-header h1,
-body.escuro .container-header h4,
-body.escuro .container-form label,
-body.escuro .container-form > p,
-body.escuro .container-go-back p,
-body.escuro .link-secundario {
-    color: #e0e0e0;
+form input[type="text"],
+form input[type="password"] {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--cinza-borda, #DCDCDC);
+    border-radius: var(--raio-borda, 6px);
+    background-color: var(--fundo-card, #FFFFFF);
+    color: var(--texto-principal, #0B3251);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Destaque Vermelho no Modo Escuro */
-body.escuro .container-header h4 span,
-body.escuro .container-go-back .link-secundario {
-    color: #ff4d4d;
+form input:focus {
+    border-color: var(--azul-principal, #0F4C75);
+    box-shadow: 0 0 0 3px rgba(15, 76, 117, 0.15);
 }
 
-/* Campos de Input */
-body.escuro .container-form input {
-    background-color: #2a2a2a;
-    color: #ffffff;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
-    border: 1px solid #3d3d3d;
+/* Botões do Rodapé do Form */
+.acoes-login {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
 }
 
-body.escuro .container-form input::placeholder {
-    color: #888888;
+.btn-entrar,
+.btn-voltar {
+    flex: 1;
+    height: 42px;
+    border-radius: var(--raio-borda, 6px);
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
 }
 
-body.escuro .container-form input:focus {
-    box-shadow: 0 0 0 2px #ff4d4d;
+.btn-entrar {
+    background-color: var(--azul-escuro, #0B3251);
+    color: var(--branco, #FFFFFF);
 }
 
-/* Abas Superiores (Tabs) */
-body.escuro .buttontab {
-    background-color: rgba(255, 255, 255, 0.05);
+.btn-entrar:hover {
+    background-color: var(--azul-hover, #1B6CA8);
 }
 
-body.escuro .tab-buttons {
-    color: #aaaaaa;
-}
-
-body.escuro .tab-buttons.active {
-    background-color: #1e1e1e;
-    color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
-
-/* Botões de Ação ("Entrar" e "Voltar") */
-body.escuro .botao,
-body.escuro .container-form > a:not(.link-secundario) {
-    background-color: var(--vermelho-escuro);
-    color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-body.escuro .botao:hover,
-body.escuro .container-form > a:not(.link-secundario):hover {
-    background-color: var(--vermelho-principal);
-    box-shadow: 0 6px 14px rgba(255, 0, 0, 0.3);
-}
-
-/* Botão de Troca de Tema (Modo) */
-body.escuro .itens-central button {
-    border-color: #ffffff;
+.btn-voltar {
     background-color: transparent;
-    color: #ffffff;
+    border: 2px solid var(--azul-escuro, #0B3251);
+    color: var(--azul-escuro, #0B3251);
 }
 
-body.escuro .itens-central button:hover {
-    background-color: #ffffff;
-    color: #121212;
+.btn-voltar:hover {
+    background-color: var(--azul-escuro, #0B3251);
+    color: var(--branco, #FFFFFF);
+}
+
+/* Mensagens de Erro Flask */
+.erro-mensagem {
+    color: #D9534F;
+    background-color: #FDF2F2;
+    border: 1px solid #F5C6CB;
+    padding: 10px;
+    border-radius: var(--raio-borda, 6px);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Links Adicionais */
+.rodape-card {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.rodape-card p {
+    font-size: 0.85rem;
+    color: var(--texto-secundario, #6C757D);
+}
+
+.link-secundario {
+    color: var(--laranja-principal, #E87A24);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.link-secundario:hover {
+    color: var(--laranja-hover, #D06513);
+    text-decoration: underline;
+}
+
+/* Ajuste Responsivo para Telemóvel */
+@media (max-width: 480px) {
+    .container-login, 
+    .container-botoes {
+        max-width: 100%;
+    }
+
+    .acoes-login {
+        flex-direction: column-reverse;
+    }
 }

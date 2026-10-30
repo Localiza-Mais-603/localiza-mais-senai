@@ -4,10 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazer Login - LOCALIZA+</title>
+
+    <!-- Estilos do Design System e Login -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    <title>Fazer login</title>
-    <script src="/static/js/tab-buttons.js"></script>
-    
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Script JS das Abas -->
+    <script src="{{ url_for('static', filename='js/tab-buttons.js') }}"></script>
 </head>
 
 <body>
@@ -18,109 +27,79 @@
         
     </nav>
 
-    <div class="container-botoes">
+    <!-- Navegação por Abas -->
+    <nav class="container-botoes" aria-label="Seleção de tipo de perfil">
         <div class="buttontab">
-           <button class="tab-buttons active" onclick="ButtonsTap('usuario')">Usuário</button>
-            <button class="tab-buttons" onclick="ButtonsTap('apoio')">Setor de Apoio</button>
-
+            <button class="tab-buttons active" onclick="ButtonsTap('usuario')" type="button">Usuário</button>
+            <button class="tab-buttons" onclick="ButtonsTap('apoio')" type="button">Setor de Apoio</button>
         </div>
-    </div>
+    </nav>
 
-    <!-- Formulario setor de apoio -->
-
+    <!-- Conteúdo Principal -->
     <main class="container-login">
-        <div id="form-apoio" class="container-form">
-            <div class="container-header">
-                <h1>Entrar</h1>
-                <h4>PERFIL | SETOR DE APOIO </h4>
-            </div>
 
-        
-            
-            <!-- Exibe mensagem de erro caso o login falhe -->
+        <!-- Form Apoio / Coordenação (Inativo por padrão, só abre se ativado) -->
+        <section id="form-apoio" class="container-form" aria-labelledby="titulo-apoio">
+            <header class="container-header">
+                <h1>Entrar</h1>
+                <h4 id="titulo-apoio">PERFIL | SETOR DE APOIO</h4>
+            </header>
+
             {% if erro and tipo == 'apoio' %}
-                <p style="color: red; font-weight: bold;">{{ erro }}</p>
+                <p class="erro-mensagem">{{ erro }}</p>
             {% endif %}
 
             <form action="{{ url_for('pag_login_coordenacao') }}" method="post">
-                <label for="cpf">CPF:</label><br>
-                <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..." required><br>
+                <label for="cpf">CPF:</label>
+                <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..." required>
 
-                <label for="senha-apoio">Senha:</label><br>
-                <input id="senha-apoio" name="senha" type="password" placeholder="Digite sua senha..." required><br>
+                <label for="senha-apoio">Senha:</label>
+                <input id="senha-apoio" name="senha" type="password" placeholder="Digite sua senha..." required>
 
-                <button type="submit" class="botao">Entrar</button>
-
-                
+                <div class="acoes-login">
+                    
+                    <button type="submit" class="btn-entrar">Entrar</button>
+                </div>
             </form>
-            <a href="{{ url_for('selecionar_perfil') }}">Voltar</a>
 
-            <p>Não possui uma conta? <a href="{{ url_for('cadastro_coor') }}" class="link-secundario">Cadastre-se</a></p>
+            <footer class="rodape-card">
+                <p>Não possui uma conta? <a href="{{ url_for('cadastro_coor') }}" class="link-secundario">Cadastre-se</a></p>
+            </footer>
+        </section>
 
-            
+        <!-- Form Usuário / Aluno (Ativo por padrão) -->
+        <section id="form-usuario" class="container-form active" aria-labelledby="titulo-usuario">
+            <header class="container-header">
+                <h1>Entrar</h1>
+                <h4 id="titulo-usuario">PERFIL | ALUNO</h4>
+            </header>
 
-        
-
-        </div>
-        
-    
-
-
-
-    <!-- Login do Usuário -->
-
-
-    <div id="form-usuario" class="container-form active">
-        <div class="container-header">
-            <h1>Entrar</h1>
-            <h4>PERFIL | ALUNO </h4>
-        </div>
-
-        
-
-            
             {% if erro and tipo == 'aluno' %}
-                <p style="color: red; text-align: center;">{{ erro }}</p>
+                <p class="erro-mensagem">{{ erro }}</p>
             {% endif %}
-            
 
-            <!-- CORREÇÃO AQUI: Usando url_for com o nome da função em Python -->
             <form action="{{ url_for('pag_login_aluno') }}" method="post">
-                <label for="email">E-mail:</label><br>
-                <input id="email" name="email" type="text" placeholder="Digite seu E-mail..." required><br>
+                <label for="email">E-mail:</label>
+                <input id="email" name="email" type="text" placeholder="Digite seu E-mail..." required>
 
-                <label for="senha-usuario">Senha:</label><br>
-                <input id="senha-usuario" name="senha" type="password" placeholder="Digite sua senha..." required><br>
+                <label for="senha-usuario">Senha:</label>
+                <input id="senha-usuario" name="senha" type="password" placeholder="Digite sua senha..." required>
 
-                <button type="submit" class="botao">Entrar</button>
+                <div class="acoes-login">
+                    
+                    <button type="submit" class="btn-entrar">Entrar</button>
+                </div>
             </form>
 
-        
-
-        
-
-        <a href="{{ url_for('selecionar_perfil') }}">Voltar</a>
-
-        <p>Não possui uma conta? <a href="{{ url_for('pag_cadastro') }}" class="link-secundario">Cadastre-se</a></p>
-
-
-        <div class="container-go-back">
-            <p>Esqueceu sua senha? <a href="/recuperar-senha" class="link-secundario">Recuperar senha</a></p>
-        </div>
-
-
-    </div>
-
-        
-    
+            <footer class="rodape-card">
+                <p>Não possui uma conta? <a href="{{ url_for('pag_cadastro') }}" class="link-secundario">Cadastre-se</a></p>
+                <p>Esqueceu sua senha? <a href="/recuperar-senha" class="link-secundario">Recuperar senha</a></p>
+            </footer>
+        </section>
 
     </main>
 
     <script src="/static/js/visualizar_itens.js"></script>
-
-    
-
-    
 
 </body>
 

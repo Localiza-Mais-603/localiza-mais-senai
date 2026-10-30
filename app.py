@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from model.cadastro import cadastrar_usuario, cadastrar_coor
-
+from model.excluir_item import excluir_itens
+from model.filtro import buscar_itens_filtrados
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
 from model.login import verificar_login_coor, verificar_login_usuario
@@ -54,6 +55,7 @@ def logout():
 @app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
     erro = None
+    sucesso = request.args.get("sucesso") 
     if request.method == "POST":
         email = request.form["email"]
         senha = request.form["senha"]
@@ -145,6 +147,10 @@ def selecionar_perfil():
 def pag_cadastrar_item():
     return render_template("registrar_item_perdido.html")
 
+@app.route("/adicionar/item")
+def pag_cadastrar_item_coor():
+    return render_template("cadastrar_itens_coor.html")
+
 @app.route("/tela/inicial/corporativo")
 def tela_inicial_corporativo():
     return render_template("tela-inicial-corporativo.html")
@@ -172,19 +178,38 @@ def editar_perfil():
 
 
 
-@app.route("/visualizar-itens")
+@app.route("/visualizar-itens", methods=["GET"])
 def visualizar_itens():
     usuario_sessao = session.get("usuario")
     usuario_atualizado = None
+
+
     
     if usuario_sessao:
-        # Pega o e-mail dependendo de como está armazenado na session
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
-    itens = listar_todos()
-    return render_template("visualizar_itens.html", itens=itens, usuario=usuario_atualizado)
+    # Captura os filtros da URL
+    categorias_ids = request.args.getlist("categoria")
+    apenas_disponiveis = request.args.get("disponivel")
 
+    # Remove valores vazios da lista (ex: quando seleciona nada ou passa parâmetro limpo)
+    categorias_ids = [c for c in categorias_ids if c.strip()]
+
+    # Se houver categorias ou filtro de disponível marcado, busca filtrado; senão traz todos
+    if categorias_ids or apenas_disponiveis:
+        itens = buscar_itens_filtrados(categorias_ids, apenas_disponiveis)
+    else:
+        itens = listar_todos()
+
+    categorias = listar_categorias()
+
+    return render_template(
+        "visualizar_itens.html", 
+        itens=itens, 
+        usuario=usuario_atualizado, 
+        categorias=categorias
+    )
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])
 def salvar_item():
@@ -200,11 +225,16 @@ def salvar_item():
 
 
 
+
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
     if request.method == "POST":
         item = request.form.get("item")
         id_categoria = request.form.get("categoria_id")
+        if not id_categoria or id_categoria.strip() == "":
+         id_categoria = None
+        else:
+            id_categoria = int(id_categoria)
         local = request.form.get("local")
         data_encontrado = request.form.get("data")  
         if data_encontrado == "":
@@ -213,8 +243,6 @@ def registrar_itens():
         email = session["usuario"].get("email")
         nome_foto = None
         foto = request.files.get("foto")
-
-       
 
         if foto and foto.filename != "":
             nome_foto = secure_filename(foto.filename)
@@ -237,11 +265,13 @@ def registrar_itens():
             cpf_coordenador=None
         )
 
+        flash("Item registrado com sucesso!", "success")
 
         return redirect(url_for("registrar_itens"))
 
     categorias = listar_categorias()
     return render_template("registrar_item_perdido.html", categorias=categorias)
+
 
 @app.route("/api/categorias", methods=["POST"])
 def api_cadastrar_categoria():
@@ -283,13 +313,18 @@ def pag_recuperar_senha():
             msg.body = f"Olá!\n\nPara redefinir sua senha no Localiza+, clique no link abaixo:\n\n{link_recuperacao}\n\nSe você não solicitou essa alteração, ignore este e-mail."
             mail.send(msg)
             
-            sucesso = "O link de recuperação foi enviado para o seu e-mail!"
+            # ALTERADO AQUI: Texto direto e objetivo como você pediu!
+            sucesso = "E-mail enviado!"
+            
+        except ValueError as e_validacao:
+            erro = str(e_validacao)
         except Exception as e:
             print("\n ERRO DETALHADO NO ENVIO:", e, "\n")
             erro = "Ocorreu um erro ao processar a recuperação de senha."
 
-
     return render_template('recuperar-senha.html', erro=erro, sucesso=sucesso)
+
+
 
 
 @app.route("/nova-senha/<token>", methods=["GET", "POST"])
@@ -308,11 +343,19 @@ def pag_nova_senha(token):
             return render_template('nova-senha.html', erro=erro, token=token)
             
         atualizar_senha_por_token(token, nova_senha)
-        return redirect(url_for('pag_login_aluno'))
+        return redirect(url_for('pag_login_aluno', sucesso="Senha alterada com sucesso! Faça seu login."))
 
     return render_template('nova-senha.html', erro=erro, token=token)
 
+@app.route('/excluir-item/<int:id_item>', methods=['POST'])
+def excluir_item(id_item):
 
+    if session.get('perfil') != 'coordenacao':
+        return redirect('/login/usuario')
+
+    excluir_itens(id_item)
+
+    return redirect(request.referrer or '/')
 
 
 
