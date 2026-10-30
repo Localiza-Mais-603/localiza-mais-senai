@@ -10,6 +10,7 @@ from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias, cadastrar_categoria
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
+from model.editar_item import atualizar_item_no_banco
 import os
 from werkzeug.utils import secure_filename
 
@@ -92,9 +93,30 @@ def cadastro_coor():
         return redirect('/login/setor/de/apoio')
     return render_template('cadastro_coordenacao.html')
 
-@app.route("/editar-item-cadastrado")
-def pag_editar_item_cadastrado():
-    return render_template("editar-item-cadastrado.html")
+# ATUALIZAR ITEM NO BANCO (MODAL)
+@app.route("/atualizar-item/<int:id_item>", methods=["POST"])
+def atualizar_item_rota(id_item):
+    if session.get('perfil') != 'coordenacao':
+        return redirect('/login/usuario')
+
+    item = request.form.get("item")
+    descricao = request.form.get("descricao")
+    local = request.form.get("local")
+    data = request.form.get("data")
+    status = request.form.get("status")
+    
+    foto = request.files.get("foto")
+    nome_foto = None
+    if foto and foto.filename != "":
+        nome_foto = secure_filename(foto.filename)
+        pasta_destino = os.path.join("static", "img_upload")
+        os.makedirs(pasta_destino, exist_ok=True)
+        foto.save(os.path.join(pasta_destino, nome_foto))
+
+    atualizar_item_no_banco(id_item, item, descricao, local, data, status, nome_foto)
+    flash("Item alterado com sucesso!", "success")
+
+    return redirect(url_for('visualizar_itens'))
 
 @app.route("/adicionar/item")
 def pag_cadastrar_item_coor():
@@ -131,16 +153,6 @@ def visualizar_itens():
         categorias=categorias
     )
 
-# @app.route("/cadastrar/item/salvar", methods=["POST"])
-# def salvar_item():
-#     produto = request.form["produto"]
-#     local = request.form["local"]
-#     data = request.form.get("data")
-#     descricao = request.form["descricao"]
-#     cadastrar_item(produto, descricao, local, data)
-
-#     return redirect("/cadastrar/item")
-
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
     if request.method == "POST":
@@ -159,8 +171,6 @@ def registrar_itens():
         nome_foto = None
         foto = request.files.get("foto")
 
-       
-
         if foto and foto.filename != "":
             nome_foto = secure_filename(foto.filename)
             pasta_destino = os.path.join("static", "img_upload")
@@ -178,12 +188,9 @@ def registrar_itens():
             email=email,
             cpf_coordenador=None
         )
-
-
         return redirect(url_for("registrar_itens"))
     categorias = listar_categorias()
     return render_template("registrar_item_perdido.html", categorias=categorias)
-
 
 @app.route("/api/categorias", methods=["POST"])
 def api_cadastrar_categoria():
@@ -244,8 +251,6 @@ def excluir_item(id_item):
         return redirect('/login/usuario')
     excluir_itens(id_item)
     return redirect(request.referrer or '/')
-
-
 
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
