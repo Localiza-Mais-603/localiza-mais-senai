@@ -26,17 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const filtragem = document.getElementById("janelaFiltro");
     const modal = document.getElementById("modalCard");
 
-if (botaoAbrir && filtragem) {
-    botaoAbrir.addEventListener("click", () => {
-        filtragem.classList.add("aberto");
-    });
-}
+    if (botaoAbrir && filtragem) {
+        botaoAbrir.addEventListener("click", () => {
+            filtragem.classList.add("aberto");
+        });
+    }
 
-if (botaoFechar && filtragem) {
-    botaoFechar.addEventListener("click", () => {
-        filtragem.classList.remove("aberto");
-    });
-}
+    if (botaoFechar && filtragem) {
+        botaoFechar.addEventListener("click", () => {
+            filtragem.classList.remove("aberto");
+        });
+    }
+})
 
 function Filtrar() {
     const cards = document.querySelectorAll(".card");
