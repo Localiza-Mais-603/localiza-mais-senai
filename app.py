@@ -96,10 +96,6 @@ def cadastro_coor():
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
 
-@app.route("/adicionar/item")
-def pag_cadastrar_item_coor():
-    return render_template("cadastrar_itens_coor.html")
-
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
     usuario_sessao = session.get("usuario")
@@ -131,15 +127,43 @@ def visualizar_itens():
         categorias=categorias
     )
 
-# @app.route("/cadastrar/item/salvar", methods=["POST"])
-# def salvar_item():
-#     produto = request.form["produto"]
-#     local = request.form["local"]
-#     data = request.form.get("data")
-#     descricao = request.form["descricao"]
-#     cadastrar_item(produto, descricao, local, data)
+@app.route("/adicionar/item")
+def pag_cadastrar_item_coor():
+    categorias_bd = listar_categorias()
+    return render_template("cadastrar_itens_coor.html", categorias=categorias_bd)
 
-#     return redirect("/cadastrar/item")
+
+@app.route("/cadastrar/item/salvar", methods=["POST"])
+def registrar_itens_coordenacao():
+    item = request.form.get("item")
+    
+    # Tratamento da categoria
+    id_categoria = request.form.get("id_categoria")
+    id_categoria = int(id_categoria) if id_categoria and id_categoria.strip() else None
+
+    local = request.form.get("local")
+    
+    # Tratamento da data
+    data_encontrado = request.form.get("data")
+    if not data_encontrado or not data_encontrado.strip():
+        data_encontrado = None
+
+    descricao = request.form.get("descricao")
+    cpf_coordenador = session.get("usuario", {}).get("cpf")
+
+    cadastrar_item(
+        item=item,
+        descricao=descricao,
+        data_encontrado=data_encontrado,
+        status="DISPONIVEL",
+        id_categoria=id_categoria,
+        local=local,
+        foto=None,
+        email=None,
+        cpf_coordenador=cpf_coordenador
+    )
+
+    return redirect(url_for("visualizar_itens"))
 
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
