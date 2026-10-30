@@ -1,143 +1,164 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatórios de Itens Perdidos</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visualizar_itens.css') }}">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Relatórios de Itens Perdidos - Localiza+</title>
+    <!-- Adicionando Bootstrap para manter as classes de estilização funcionando -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos do Modal */
+        .modal-card {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.6); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1050;
+        }
+        .card-destaque {
+            background-color: #fff;
+            max-width: 500px; 
+            width: 90%; 
+            border-radius: 8px; 
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .fechar-card {
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+            background: none; 
+            border: none; 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            cursor: pointer;
+            color: #333;
+        }
+        /* Efeito hover nos cards */
+        .card-clicavel:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s ease-in-out;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+        }
+    </style>
 </head>
+<body class="bg-light">
 
-<body>
-
-    <!-- CABEÇALHO DA PÁGINA -->
-    <header>
-        <nav class="navbar transparente-header">
-            <div class="container-fluido">
-                <h1>LOCALIZA+</h1>
+    <!-- Navbar simples para navegação (Opcional, caso não tenha um base.html) -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #024873;">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Localiza+ Coordenação</a>
+            <div class="d-flex">
+                <a href="{{ url_for('visualizar_itens') }}" class="btn btn-outline-light btn-sm me-2">Voltar</a>
             </div>
+        </div>
+    </nav>
 
-            <div class="itens-central">
-                <button type="button" onclick="window.location.href='/visualizar-itens'">Voltar</button>
+    <div class="container mt-5">
+        <h2 class="text-center fw-bold mb-4" style="color: #024873;">Relatórios de Itens Perdidos</h2>
+        <p class="text-center text-muted">Abaixo estão os itens relatados como perdidos pelos alunos.</p>
 
-                {% if usuario %}
-                <div class="dropdown">
-                    <button class="botao-formulario dropdown-toggle"
-                        type="button"
-                        id="dropdownMenuPerfil"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        {{ usuario.nome }}
-                    </button>
-
-                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
-                        <li class="dropdown-header text-center">
-                            <img src="https://placehold.co/60"
-                                alt="Foto de perfil de {{ usuario.nome }}"
-                                class="rounded-circle mb-2"
-                                style="width: 50px; height: 50px;">
-                            <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
-                            <small class="text-muted">{{ usuario.email }}</small>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item text-danger" href="/logout">Sair</a>
-                        </li>
-                    </ul>
-                </div>
-                {% endif %}
-            </div>
-        </nav>
-    </header>
-
-    <!-- CONTEÚDO PRINCIPAL DA PÁGINA -->
-    <main class="container my-4">
-        <h2 class="fw-bold mb-4" style="color: #024873; text-transform: uppercase;">
-            Relatórios de Perda (Alunos)
-        </h2>
-
-        <section aria-label="Itens relatados">
+        <!-- Container dos Cards -->
+        <div class="d-flex flex-wrap gap-4 justify-content-center mt-4">
+            
             {% if itens %}
-            <ul class="itens-card p-0 d-flex flex-wrap gap-3">
                 {% for item in itens %}
-                <li style="list-style: none;">
-                    <article class="card p-3 shadow-sm border" 
-                        style="width: 20rem; border-radius: 8px; cursor: pointer;"
-                        data-item="{{ item.item }}"
-                        data-descricao="{{ item.descricao }}"
-                        data-local="{{ item.local if item.local else 'Não informado' }}"
-                        data-data="{{ item.data_encontrado if item.data_encontrado else 'Não informada' }}"
-                        data-status="{{ item.status }}"
-                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
-                        onclick="abrirCard(this)">
+                <article class="card p-3 shadow-sm border card-clicavel" 
+                    style="width: 20rem; border-radius: 8px; cursor: pointer;"
+                    data-item="{{ item.item }}"
+                    data-descricao="{{ item.descricao }}"
+                    data-local="{{ item.local if item.local else 'Não informado' }}"
+                    data-data="{{ item.data_encontrado if item.data_encontrado else 'Não informada' }}"
+                    data-status="{{ item.status }}"
+                    data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                    data-email="{{ item.email if item.email else 'Não informado' }}"
+                    data-nome="{{ item.nome_usuario if item.nome_usuario else 'Desconhecido' }}"
+                    onclick="abrirCard(this)">
 
-                        <div class="card-corpo">
-                            <h3 class="card-titulo fw-bold mb-2" style="font-size: 1.1rem; color: #024873; text-transform: uppercase;">
-                                {{ item.item }}
-                            </h3>
-                            <p class="card-text text-secondary mb-2">
-                                {{ item.descricao }}
-                            </p>
-                            <small class="d-block text-muted"><strong>Local:</strong> {{ item.local if item.local else 'Não informado' }}</small>
-                            <small class="d-block text-muted"><strong>Data:</strong> {{ item.data_encontrado if item.data_encontrado else 'Não informada' }}</small>
-                            <span class="badge mt-2 text-white" style="background-color: #F28705;">Status: {{ item.status }}</span>
-                        </div>
-                    </article>
-                </li>
+                    <div class="card-corpo">
+                        <h3 class="card-titulo fw-bold mb-2" style="font-size: 1.1rem; color: #024873; text-transform: uppercase;">
+                            {{ item.item }}
+                        </h3>
+                        <p class="card-text text-secondary mb-2" style="height: 48px; overflow: hidden; text-overflow: ellipsis;">
+                            {{ item.descricao }}
+                        </p>
+                        
+                        <!-- Nome e e-mail no card -->
+                        <small class="d-block text-muted mt-2">
+                            <strong>Relatado por:</strong> <br>
+                            {{ item.nome_usuario if item.nome_usuario else 'Desconhecido' }} <br>
+                            ({{ item.email if item.email else 'Sem e-mail' }})
+                        </small>
+                        
+                        <small class="d-block text-muted mt-2"><strong>Local da perda:</strong> {{ item.local if item.local else 'Não informado' }}</small>
+                        <small class="d-block text-muted"><strong>Data:</strong> {{ item.data_encontrado if item.data_encontrado else 'Não informada' }}</small>
+                        <span class="badge mt-3 text-white" style="background-color: #F28705; font-size: 0.9rem;">Status: {{ item.status }}</span>
+                    </div>
+                </article>
                 {% endfor %}
-            </ul>
             {% else %}
-            <div class="alert alert-secondary text-center" role="alert">
-                Nenhum relatório de perda registado até ao momento.
-            </div>
+                <div class="alert alert-info text-center w-100" role="alert">
+                    Não há itens relatados como perdidos no momento.
+                </div>
             {% endif %}
-        </section>
-    </main>
 
-    <!-- MODAL DE DETALHES -->
+        </div>
+    </div>
+
+    <!-- Estrutura do Modal Ampliado -->
     <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCard()">
-        <article class="card-destaque" onclick="event.stopPropagation()">
-            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">
-                X
-            </button>
+        <article class="card-destaque p-4" onclick="event.stopPropagation()">
+            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">×</button>
 
-            <h2 id="modalTitulo"></h2>
+            <h3 id="modalTitulo" class="mb-3 fw-bold" style="color: #024873; text-transform: uppercase;"></h3>
 
-            <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none; max-width: 100%; border-radius: 8px; margin-bottom: 1rem;">
+            <div class="text-center mb-3">
+                <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto img-fluid shadow-sm" style="display: none; max-height: 250px; border-radius: 8px; margin: 0 auto;">
+            </div>
 
-            <p><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
-            <p><strong>Local:</strong> <span id="modalLocal"></span></p>
-            <p><strong>Data:</strong> <span id="modalData"></span></p>
-            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+            <!-- Nome e e-mail no modal -->
+            <div class="bg-light p-3 rounded mb-3 border">
+                <p class="mb-0"><strong>Relatado por:</strong> <span id="modalNome" class="text-primary"></span></p>
+                <p class="mb-0"><strong>E-mail de contato:</strong> <span id="modalEmail" class="text-muted"></span></p>
+            </div>
+            
+            <p class="mb-1"><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
+            <p class="mb-1"><strong>Local da perda:</strong> <span id="modalLocal"></span></p>
+            <p class="mb-1"><strong>Data da ocorrência:</strong> <span id="modalData"></span></p>
+            <p class="mb-0"><strong>Status atual:</strong> <span id="modalStatus" class="badge bg-warning text-dark"></span></p>
         </article>
     </div>
 
-    <!-- SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         function abrirCard(elemento) {
-            document.getElementById('modalTitulo').innerText = elemento.getAttribute('data-item') || '';
-            document.getElementById('modalDescricao').innerText = elemento.getAttribute('data-descricao') || '';
+            // Preenche os dados básicos
+            document.getElementById('modalTitulo').innerText = elemento.getAttribute('data-item') || 'Item';
+            document.getElementById('modalDescricao').innerText = elemento.getAttribute('data-descricao') || 'Sem descrição.';
             document.getElementById('modalLocal').innerText = elemento.getAttribute('data-local') || 'Não informado';
             document.getElementById('modalData').innerText = elemento.getAttribute('data-data') || 'Não informada';
             document.getElementById('modalStatus').innerText = elemento.getAttribute('data-status') || '';
+            
+            // Preenche Nome e E-mail
+            document.getElementById('modalEmail').innerText = elemento.getAttribute('data-email') || 'Não informado';
+            document.getElementById('modalNome').innerText = elemento.getAttribute('data-nome') || 'Desconhecido';
 
+            // Tratamento da imagem
             const foto = elemento.getAttribute('data-foto');
             const imgElement = document.getElementById('modalFoto');
-            if (foto) {
+            if (foto && foto !== "None" && foto !== "") {
                 imgElement.src = foto;
                 imgElement.style.display = 'block';
             } else {
                 imgElement.style.display = 'none';
+                imgElement.src = '';
             }
 
+            // Exibe o modal
             const modal = document.getElementById('modalCard');
             modal.style.display = 'flex';
             modal.setAttribute('aria-hidden', 'false');
@@ -150,5 +171,4 @@
         }
     </script>
 </body>
-
 </html>
