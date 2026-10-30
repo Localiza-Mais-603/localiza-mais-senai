@@ -16,17 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 showCancelButton: true,
                 confirmButtonText: 'Salvar',
                 cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#ff3b3b', // Cor vermelha compatível com o teu tema
-                cancelButtonColor: '#296fad',
+                confirmButtonColor: '#313b97', 
+                cancelButtonColor: '#216097',
                 
-                // Validação: Impede enviar o campo em branco
+
                 inputValidator: (valor) => {
                     if (!valor || !valor.trim()) {
                         return 'Por favor, digite o nome da categoria!';
                     }
                 },
                 
-                // Processamento assíncrono antes de fechar o modal
                 showLoaderOnConfirm: true,
                 preConfirm: async (nomeCategoria) => {
                     try {
@@ -42,26 +41,22 @@ document.addEventListener('DOMContentLoaded', () => {
                             throw new Error(resultado.mensagem || 'Erro ao cadastrar categoria.');
                         }
 
-                        return resultado; // Retorna os dados (id_categoria e nome)
+                        return resultado; 
                     } catch (erro) {
                         Swal.showValidationMessage(`Falha: ${erro.message}`);
                     }
                 },
                 allowOutsideClick: () => !Swal.isLoading()
             }).then((result) => {
-                // Se o utilizador clicou em "Salvar" e a API respondeu com sucesso
                 if (result.isConfirmed && result.value) {
                     const dados = result.value;
-
-                    // Criar e selecionar a nova opção no <select> do formulário
                     const novaOpcao = document.createElement('option');
                     novaOpcao.value = dados.id_categoria;
                     novaOpcao.textContent = dados.nome;
-                    novaOpcao.selected = true; // Seleciona automaticamente a categoria criada
+                    novaOpcao.selected = true; 
 
                     selectCategoria.appendChild(novaOpcao);
 
-                    // Alerta rápido de confirmação
                     Swal.fire({
                         icon: 'success',
                         title: 'Sucesso!',

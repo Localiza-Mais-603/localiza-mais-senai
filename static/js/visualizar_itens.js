@@ -9,21 +9,18 @@ const botaoFechar = document.getElementById("btnFechar");
 const filtragem = document.getElementById("janelaFiltro");
 const modal = document.getElementById("modalCard");
 
-// Abrir janela de filtros
 if (botaoAbrir && filtragem) {
     botaoAbrir.addEventListener("click", () => {
         filtragem.classList.add("aberto");
     });
 }
 
-// Fechar janela de filtros
 if (botaoFechar && filtragem) {
     botaoFechar.addEventListener("click", () => {
         filtragem.classList.remove("aberto");
     });
 }
 
-// Filtrar cards por categoria
 function Filtrar() {
     const filtros = Array.from(
         document.querySelectorAll(".filtro-categoria:checked")
@@ -44,7 +41,6 @@ function Filtrar() {
     }
 }
 
-// Abrir detalhes do card
 function abrirCard(card) {
     document.getElementById("modalTitulo").textContent =
         card.dataset.item || "";
@@ -63,7 +59,7 @@ function abrirCard(card) {
     document.getElementById("modalStatus").textContent =
         card.dataset.status || "Não informado";
 
-    // Mostrar foto do item
+
     const modalFoto = document.getElementById("modalFoto");
     const foto = card.dataset.foto;
 
@@ -85,12 +81,12 @@ function abrirCard(card) {
     modal.classList.add("aberto");
 }
 
-// Fechar detalhes
+
 function fecharCard() {
     modal.classList.remove("aberto");
 }
 
-// Fechar ao clicar fora do modal
+
 if (modal) {
     modal.addEventListener("click", function (event) {
         if (event.target === modal) {
