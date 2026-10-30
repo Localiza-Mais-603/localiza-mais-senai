@@ -252,5 +252,39 @@ def excluir_item(id_item):
     excluir_itens(id_item)
     return redirect(request.referrer or '/')
 
+@app.route('/arquivar-item/<int:id_item>', methods=['POST'])
+def arquivar_item(id_item):
+    if session.get('perfil') != 'coordenacao':
+        return redirect('/login/usuario')
+
+    try:
+        from model.editar_item import atualizar_status_item
+        atualizar_status_item(id_item, 'Arquivado')
+    except Exception:
+        pass
+
+    return redirect(request.referrer or url_for('visualizar_itens'))
+
+@app.route("/itens-arquivados")
+def itens_arquivados():
+    if session.get('perfil') != 'coordenacao':
+        return redirect(url_for('pag_login_aluno'))
+
+    usuario_sessao = session.get("usuario")
+    usuario_atualizado = None
+    if usuario_sessao:
+        email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+        usuario_atualizado = buscar_usuario_por_email(email)
+
+    todos_itens = listar_todos()
+    arquivados = []
+
+    for item in todos_itens:
+        status = item.get('status') if isinstance(item, dict) else getattr(item, 'status', '')
+        if status == 'Arquivado':
+            arquivados.append(item)
+
+    return render_template("itens_arquivados.html", itens=arquivados, usuario=usuario_atualizado)
+
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)

@@ -66,7 +66,7 @@
     <!-- CONTEÚDO PRINCIPAL DA PÁGINA -->
     <main>
 
-        <!-- SECÇÃO: RELATAR ITEM -->
+        <!-- SECÇÃO: RELATAR ITEM (EXCLUSIVO PARA ALUNOS) -->
         {% if session.get('perfil') == 'aluno' %}
         <section class="container my-3 d-flex justify-content-center" aria-label="Relatar item perdido">
             <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border card-relatar-item"
@@ -95,6 +95,69 @@
                     Relatar item
                 </a>
             </div>
+        </section>
+        {% endif %}
+
+        <!-- SECÇÃO: 2 CARDS DA COORDENAÇÃO (RELATÓRIO E ARQUIVADOS) -->
+        {% if session.get('perfil') == 'coordenacao' %}
+        <section class="container my-3 d-flex flex-wrap justify-content-center gap-3" aria-label="Painel da Coordenação">
+            
+            <!-- CARD 1: RELATÓRIO DE PERDA -->
+            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border card-relatar-item"
+                style="max-width: 480px; width: 100%;">
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="icone-busca-container" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 1.5 13.5 5.5H9.5V1.5zM4.5 7.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm0 2h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1zm0 2h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1 0-1z"/>
+                        </svg>
+                    </div>
+
+                    <div>
+                        <h2 class="fw-bold m-0 titulo-card" style="font-size: 1.1rem; text-transform: uppercase;">
+                            Relatórios
+                        </h2>
+                        <small class="texto-sub-card">
+                            Itens relatados pelos alunos
+                        </small>
+                    </div>
+                </div>
+
+                <a href="/relatorios-perda"
+                    class="btn fw-bold px-3 py-2 text-white text-uppercase"
+                    style="background-color: #024873; border-radius: 6px; font-size: 0.85rem; text-decoration: none;">
+                    Acessar
+                </a>
+            </div>
+
+            <!-- CARD 2: ARQUIVADOS -->
+            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border card-relatar-item"
+                style="max-width: 480px; width: 100%;">
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="icone-busca-container" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1V2zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5H2zm13-3H1v2h14V2zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </div>
+
+                    <div>
+                        <h2 class="fw-bold m-0 titulo-card" style="font-size: 1.1rem; text-transform: uppercase;">
+                            Arquivados
+                        </h2>
+                        <small class="texto-sub-card">
+                            Itens arquivados e descartados
+                        </small>
+                    </div>
+                </div>
+
+                <a href="/itens-arquivados"
+                    class="btn fw-bold px-3 py-2 text-white text-uppercase"
+                    style="background-color: #024873; border-radius: 6px; font-size: 0.85rem; text-decoration: none;">
+                    Acessar
+                </a>
+            </div>
+
         </section>
         {% endif %}
 
@@ -131,17 +194,20 @@
                             </p>
                         </div>
 
-                        <!-- BOTÕES DA COORDENAÇÃO -->
+                        <!-- BOTÕES DA COORDENAÇÃO (EDITAR, ARQUIVAR E EXCLUIR) -->
                         {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
                             <button type="button" class="btn-editar-card" onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
                                 Editar
                             </button>
 
-                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
-                                method="POST"
-                                class="form-excluir"
-                                onclick="event.stopPropagation()">
+                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}" method="POST" class="form-acao" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-arquivar-card">
+                                    Arquivar
+                                </button>
+                            </form>
+
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST" class="form-acao" onclick="event.stopPropagation()">
                                 <button type="submit" class="btn-excluir-card">
                                     Excluir
                                 </button>
@@ -237,7 +303,7 @@
 
             <h3>Sub-Categorias</h3>
             {% for categoria in categorias %}
-                {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
+                {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
                 {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
                 
                 <label>
