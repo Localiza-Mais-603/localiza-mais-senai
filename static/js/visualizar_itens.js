@@ -19,7 +19,7 @@ function AlterarTema(){
 
     if(temaSalvo === 'escuro'){
         document.body.classList.add('escuro')
-    } if (temaSalvo === 'claro') {
+    } else if (temaSalvo === 'claro') {
         document.body.classList.remove('escuro')
     }
 })
