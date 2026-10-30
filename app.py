@@ -10,6 +10,7 @@ from model.login import verificar_login_coor, verificar_login_usuario
 from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias, cadastrar_categoria
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
+from model.editar_item import atualizar_item_no_banco
 import os
 from werkzeug.utils import secure_filename
 
@@ -183,8 +184,6 @@ def registrar_itens():
         nome_foto = None
         foto = request.files.get("foto")
 
-       
-
         if foto and foto.filename != "":
             nome_foto = secure_filename(foto.filename)
             pasta_destino = os.path.join("static", "img_upload")
@@ -202,12 +201,9 @@ def registrar_itens():
             email=email,
             cpf_coordenador=None
         )
-
-
         return redirect(url_for("registrar_itens"))
     categorias = listar_categorias()
     return render_template("registrar_item_perdido.html", categorias=categorias)
-
 
 @app.route("/api/categorias", methods=["POST"])
 def api_cadastrar_categoria():
@@ -268,8 +264,6 @@ def excluir_item(id_item):
         return redirect('/login/usuario')
     excluir_itens(id_item)
     return redirect(request.referrer or '/')
-
-
 
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)

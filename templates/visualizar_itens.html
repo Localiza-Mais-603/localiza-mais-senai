@@ -108,11 +108,9 @@
 
         <!-- SECÇÃO: LISTA DE ITENS ENCONTRADOS -->
         <section aria-label="Itens registados">
-            <!-- Mudado de <div> para <ul> por ser uma lista de elementos -->
             <ul class="itens-card">
 
                 {% for item in itens %}
-                <!-- Cada card passa a ser um <li> que contém um <article> -->
                 <li style="list-style: none;">
                     <article class="card"
                         style="width: 20rem;"
@@ -137,9 +135,9 @@
                         <!-- BOTÕES DA COORDENAÇÃO -->
                         {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
-                            <a href="/editar-item-cadastrado" class="btn-editar-card">
+                            <button type="button" class="btn-editar-card" onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
                                 Editar
-                            </a>
+                            </button>
 
                             <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
                                 method="POST"
@@ -179,6 +177,55 @@
         </article>
     </div>
 
+    <!-- MODAL DE EDIÇÃO -->
+    <div class="modal-card" id="modalEdicao" role="dialog" aria-hidden="true">
+        <article class="card-destaque" onclick="event.stopPropagation()">
+            <button class="fechar-card" type="button" onclick="fecharModalEdicao()" aria-label="Fechar modal">
+                X
+            </button>
+
+            <h2>Editar Item</h2>
+
+            <form id="formEdicao" method="POST" enctype="multipart/form-data" onclick="event.stopPropagation()">
+                <div class="mb-3">
+                    <label for="editItem">Nome do Item</label>
+                    <input type="text" id="editItem" name="item" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editDescricao">Descrição</label>
+                    <textarea id="editDescricao" name="descricao" class="form-control" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editLocal">Local</label>
+                    <input type="text" id="editLocal" name="local" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="editData">Data</label>
+                    <input type="date" id="editData" name="data" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="editStatus">Status</label>
+                    <select id="editStatus" name="status" class="form-control">
+                        <option value="Perdido">Perdido</option>
+                        <option value="Devolvido">Devolvido</option>
+                        <option value="Descartado">Descartado</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="editFoto">Foto (Opcional)</label>
+                    <input type="file" id="editFoto" name="foto" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-success mt-2">Salvar Alterações</button>
+            </form>
+        </article>
+    </div>
+
     <!-- JANELA DE FILTROS -->
     <div class="grupo-filtro" id="janelaFiltro" role="dialog" aria-hidden="true">
         <form action="{{ url_for('visualizar_itens') }}" method="GET" class="grupo-conteudo">
@@ -191,7 +238,7 @@
 
             <h3>Sub-Categorias</h3>
             {% for categoria in categorias %}
-                {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
+                {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
                 {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
                 
                 <label>
@@ -211,6 +258,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5"></script>
     <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
+
+    <!-- SWEETALERT APÓS EDIÇÃO -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          {% if category == 'success' %}
+          <script>
+            Swal.fire({
+              title: 'Sucesso!',
+              text: '{{ message }}',
+              icon: 'success',
+              confirmButtonColor: '#F28705'
+            });
+          </script>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
 </body>
 
