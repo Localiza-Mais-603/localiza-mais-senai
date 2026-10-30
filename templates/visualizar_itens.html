@@ -86,7 +86,7 @@
     <!-- CONTEÚDO PRINCIPAL DA PÁGINA -->
     <main>
 
-        <!-- SECÇÃO: RELATAR ITEM (EXCLUSIVO PARA ALUNOS) -->
+        <!-- SECÇÃO: RELATAR ITEM -->
         {% if session.get('perfil') == 'aluno' %}
         <section class="container my-3 d-flex justify-content-center" aria-label="Relatar item perdido">
             <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border card-relatar-item"
@@ -120,7 +120,6 @@
         </section>
         {% endif %}
 
-        <!-- SECÇÃO: 2 CARDS DA COORDENAÇÃO (RELATÓRIO E ARQUIVADOS) -->
         {% if session.get('perfil') == 'coordenacao' %}
         <section class="container my-3 d-flex flex-wrap justify-content-center gap-3" aria-label="Painel da Coordenação">
             
@@ -139,9 +138,6 @@
                         <h2 class="fw-bold m-0 titulo-card" style="font-size: 1.1rem; text-transform: uppercase;">
                             Relatórios
                         </h2>
-                        <small class="texto-sub-card">
-                            Itens relatados pelos alunos
-                        </small>
                     </div>
                 </div>
 
@@ -167,9 +163,6 @@
                         <h2 class="fw-bold m-0 titulo-card" style="font-size: 1.1rem; text-transform: uppercase;">
                             Arquivados
                         </h2>
-                        <small class="texto-sub-card">
-                            Itens arquivados e descartados
-                        </small>
                     </div>
                 </div>
 
@@ -217,22 +210,11 @@
                                 </p>
                             </div>
 
-                        <!-- BOTÕES DA COORDENAÇÃO (EDITAR, ARQUIVAR E EXCLUIR) -->
-                        {% if session.get('perfil') == 'coordenacao' %}
-                        <div class="card-botoes-acao" onclick="event.stopPropagation()">
-                            <button type="button" class="btn-editar-card" onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
-                                Editar
-                            </button>
-
-                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}" method="POST" class="form-acao" onclick="event.stopPropagation()">
-                                <button type="submit" class="btn-arquivar-card">
-                                    Arquivar
-                                </button>
-                            </form>
-
-                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST" class="form-acao" onclick="event.stopPropagation()">
-                                <button type="submit" class="btn-excluir-card">
-                                    Excluir
+                            <!-- BOTÕES DA COORDENAÇÃO -->
+                            {% if session.get('perfil') == 'coordenacao' %}
+                            <div class="card-botoes-acao" onclick="event.stopPropagation()">
+                                <button type="button" class="btn-editar-card" onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
+                                    Editar
                                 </button>
 
                                 <!-- <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
@@ -335,14 +317,14 @@
 
             <h3>Sub-Categorias</h3>
             {% for categoria in categorias %}
-                {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
-                {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
-                
-                <label>
-                    <input type="checkbox" name="categoria" value="{{ cat_id }}" 
-                           {% if cat_id|string in request.args.getlist('categoria') %}checked{% endif %}> 
-                    {{ cat_nome }}
-                </label>
+            {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
+            {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
+
+            <label>
+                <input type="checkbox" name="categoria" value="{{ cat_id }}" {% if cat_id|string in
+                    request.args.getlist('categoria') %}checked{% endif %}>
+                {{ cat_nome }}
+            </label>
             {% endfor %}
 
             <button type="submit">Aplicar Filtro</button>
