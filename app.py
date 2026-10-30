@@ -369,11 +369,9 @@ def editar_item(id_item):
     data_encontrado = request.form.get("data")
     if data_encontrado == "":
         data_encontrado = None
-        
-    status = request.form.get("status")
 
-    # Atualiza no banco sem mexer com fotos
-    atualizar_item_no_banco(id_item, item_nome, descricao, local, data_encontrado, status)
+    # Atualiza no banco sem alterar o status
+    atualizar_item_no_banco(id_item, item_nome, descricao, local, data_encontrado)
     
     return redirect(url_for("visualizar_itens"))
 if __name__ == "__main__":

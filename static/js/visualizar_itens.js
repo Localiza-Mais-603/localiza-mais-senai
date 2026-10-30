@@ -115,7 +115,6 @@ function fecharCard() {
 }
 
 // Funções do Modal de Edição
-// Funções do Modal de Edição
 function abrirModalEdicao(botao, idItem) {
     const card = botao.closest(".card");
 
@@ -123,7 +122,6 @@ function abrirModalEdicao(botao, idItem) {
     document.getElementById("editDescricao").value = card.dataset.descricao || "";
     document.getElementById("editLocal").value = card.dataset.local !== "None" ? card.dataset.local : "";
     document.getElementById("editData").value = card.dataset.data !== "None" ? card.dataset.data : "";
-    document.getElementById("editStatus").value = card.dataset.status || "DISPONIVEL";
 
     document.getElementById("formEdicao").action = `/atualizar-item/${idItem}`;
 

@@ -1,10 +1,10 @@
 from database.conexao import conectar
 
-def atualizar_item_no_banco(id_item, item, descricao, local, data, status):
+def atualizar_item_no_banco(id_item, item, descricao, local, data):
     conexao, cursor = conectar()
     
-    sql = """UPDATE item SET item = %s, descricao = %s, local = %s, data_encontrado = %s, status = %s WHERE id_item = %s"""
-    cursor.execute(sql, (item, descricao, local, data, status, id_item))
+    sql = """UPDATE item SET item = %s, descricao = %s, local = %s, data_encontrado = %s WHERE id_item = %s"""
+    cursor.execute(sql, (item, descricao, local, data, id_item))
 
     conexao.commit()
     cursor.close()
