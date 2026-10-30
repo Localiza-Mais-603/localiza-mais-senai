@@ -26,34 +26,53 @@
 
             <div class="itens-central">
                 <button type="button" onclick="AlterarTema()">Modo</button>
-               
+                {% if session.get('perfil') == 'coordenacao'%}
+                <button type="button" onclick="window.location.href='/adicionar/item'">Cadastrar item</button>
+                {% endif %}
 
                 {% if usuario %}
                 <div class="dropdown">
-                    <button class="botao-formulario dropdown-toggle"
-                        type="button"
-                        id="dropdownMenuPerfil"
-                        data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    <button class="botao-formulario dropdown-toggle" type="button" id="dropdownMenuPerfil"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         {{ usuario.nome }}
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
                         <li class="dropdown-header text-center">
-                            <img src="https://placehold.co/60"
-                                alt="Foto de perfil de {{ usuario.nome }}"
-                                class="rounded-circle mb-2"
-                                style="width: 50px; height: 50px;">
+                            <img src="https://placehold.co/60" alt="Foto de perfil de {{ usuario.nome }}"
+                                class="rounded-circle mb-2" style="width: 50px; height: 50px;">
                             <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
+
+                            <!-- O e-mail pequeno abaixo do nome aparece apenas para alunos -->
+                            {% if session.get('perfil') == 'aluno' %}
                             <small class="text-muted">{{ usuario.email }}</small>
+                            {% endif %}
                         </li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <!-- EXIBIÇÃO DINÂMICA CONFORME O PERFIL -->
+                        {% if session.get('perfil') == 'aluno' %}
                         <li>
                             <span class="dropdown-item">
                                 Curso: {{ usuario.curso if usuario.curso else 'Não informado' }}
                             </span>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% elif session.get('perfil') == 'coordenacao' %}
+                        <li>
+                            <span class="dropdown-item">
+                                E-mail: {{ usuario.email }}
+                            </span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        {% endif %}
+
                         <li>
                             <a class="dropdown-item text-danger" href="/logout">Sair</a>
                         </li>
@@ -74,9 +93,12 @@
                 style="max-width: 480px; width: 100%;">
 
                 <div class="d-flex align-items-center gap-3">
-                    <div class="icone-busca-container" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    <div class="icone-busca-container"
+                        style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            viewBox="0 0 16 16" aria-hidden="true">
+                            <path
+                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                         </svg>
                     </div>
 
@@ -90,8 +112,7 @@
                     </div>
                 </div>
 
-                <a href="/registro/itens"
-                    class="btn fw-bold px-3 py-2 text-white text-uppercase"
+                <a href="/registro/itens" class="btn fw-bold px-3 py-2 text-white text-uppercase"
                     style="background-color: #F28705; border-radius: 6px; font-size: 0.85rem; text-decoration: none;">
                     Relatar item
                 </a>
@@ -112,11 +133,8 @@
 
                 {% for item in itens %}
                 <li style="list-style: none;">
-                    <article class="card"
-                        style="width: 20rem;"
-                        data-categoria="{{ item.id_categoria }}"
-                        data-item="{{ item.item }}"
-                        data-descricao="{{ item.descricao }}"
+                    <article class="card" style="width: 20rem;" data-categoria="{{ item.id_categoria }}"
+                        data-item="{{ item.item }}" data-descricao="{{ item.descricao }}"
                         data-local="{{ item.local if item.local else '' }}"
                         data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
                         data-status="{{ item.status }}"
@@ -135,14 +153,13 @@
                         <!-- BOTÕES DA COORDENAÇÃO -->
                         {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
-                            <button type="button" class="btn-editar-card" onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
+                            <button type="button" class="btn-editar-card"
+                                onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
                                 Editar
                             </button>
 
-                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
-                                method="POST"
-                                class="form-excluir"
-                                onclick="event.stopPropagation()">
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST"
+                                class="form-excluir" onclick="event.stopPropagation()">
                                 <button type="submit" class="btn-excluir-card">
                                     Excluir
                                 </button>
@@ -229,23 +246,24 @@
     <!-- JANELA DE FILTROS -->
     <div class="grupo-filtro" id="janelaFiltro" role="dialog" aria-hidden="true">
         <form action="{{ url_for('visualizar_itens') }}" method="GET" class="grupo-conteudo">
-            
+
             <h3>Categorias</h3>
             <label>
-                <input type="checkbox" name="disponivel" value="1" {% if request.args.get('disponivel') %}checked{% endif %}> 
+                <input type="checkbox" name="disponivel" value="1" {% if request.args.get('disponivel') %}checked{%
+                    endif %}>
                 Disponível
             </label>
 
             <h3>Sub-Categorias</h3>
             {% for categoria in categorias %}
-                {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
-                {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
-                
-                <label>
-                    <input type="checkbox" name="categoria" value="{{ cat_id }}" 
-                           {% if cat_id|string in request.args.getlist('categoria') %}checked{% endif %}> 
-                    {{ cat_nome }}
-                </label>
+            {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
+            {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
+
+            <label>
+                <input type="checkbox" name="categoria" value="{{ cat_id }}" {% if cat_id|string in
+                    request.args.getlist('categoria') %}checked{% endif %}>
+                {{ cat_nome }}
+            </label>
             {% endfor %}
 
             <button type="submit">Aplicar Filtro</button>
@@ -261,20 +279,20 @@
 
     <!-- SWEETALERT APÓS EDIÇÃO -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          {% if category == 'success' %}
-          <script>
-            Swal.fire({
-              title: 'Sucesso!',
-              text: '{{ message }}',
-              icon: 'success',
-              confirmButtonColor: '#F28705'
-            });
-          </script>
-          {% endif %}
-        {% endfor %}
-      {% endif %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'success' %}
+    <script>
+        Swal.fire({
+            title: 'Sucesso!',
+            text: '{{ message }}',
+            icon: 'success',
+            confirmButtonColor: '#F28705'
+        });
+    </script>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
     {% endwith %}
 
 </body>
