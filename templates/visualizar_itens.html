@@ -26,7 +26,9 @@
 
             <div class="itens-central">
                 <button type="button" onclick="AlterarTema()">Modo</button>
+                {% if session.get('perfil') == 'coordenacao'%}
                 <button type="button" onclick="window.location.href='/adicionar/item'">Cadastrar item</button>
+                {% endif %}
 
                 {% if usuario %}
                 <div class="dropdown">
