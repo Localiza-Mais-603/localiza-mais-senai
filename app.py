@@ -282,5 +282,31 @@ def excluir_item(id_item):
     excluir_itens(id_item)
     return redirect(request.referrer or '/')
 
+@app.route("/relatorios-perda")
+def relatorios_perda():
+    # Proteção: apenas coordenação pode acessar
+    if session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
+    usuario_sessao = session.get("usuario")
+    usuario_atualizado = None
+    if usuario_sessao:
+        email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+        usuario_atualizado = buscar_usuario_por_email(email)
+
+    # Busca todos os itens e filtra apenas os relatórios com status "Perdido"
+    todos_itens = listar_todos()
+    itens_relatados = [
+        item for item in todos_itens 
+        if (isinstance(item, dict) and item.get("status") == "Perdido") 
+        or (hasattr(item, "status") and item.status == "Perdido")
+    ]
+
+    return render_template(
+        "relatorios_perda.html", 
+        itens=itens_relatados, 
+        usuario=usuario_atualizado
+    )
+
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
