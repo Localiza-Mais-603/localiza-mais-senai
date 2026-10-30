@@ -237,7 +237,7 @@
 
             <h3>Sub-Categorias</h3>
             {% for categoria in categorias %}
-                {% set cat_id = categoria.id if categoria.id is defined else categoria[0] %}
+                {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
                 {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
                 
                 <label>
