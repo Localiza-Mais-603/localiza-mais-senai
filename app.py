@@ -106,6 +106,43 @@ def visualizar_perfil():
     usuario_atualizado = buscar_usuario_por_email(email)
     return render_template("visualizar_perfil.html", usuario=usuario_atualizado)
 
+# @app.route("/visualizar-itens", methods=["GET"])
+# def visualizar_itens():
+#     usuario_sessao = session.get("usuario")
+#     perfil = session.get("perfil")
+#     usuario_atualizado = None
+
+#     if usuario_sessao:
+#         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+        
+#         if perfil == "coordenacao":
+#             conexao, cursor = conectar()
+#             cursor = conexao.cursor(dictionary=True)
+#             cursor.execute("SELECT * FROM coordenador WHERE email = %s", (email,))
+#             usuario_atualizado = cursor.fetchone()
+#             cursor.close()
+#             conexao.close()
+#         else:
+#             usuario_atualizado = buscar_usuario_por_email(email)
+
+#     categorias_ids = request.args.getlist("categoria")
+#     apenas_disponiveis = request.args.get("disponivel")
+#     categorias_ids = [c for c in categorias_ids if c.strip()]
+    
+#     if categorias_ids or apenas_disponiveis:
+#         itens = buscar_itens_filtrados(categorias_ids, apenas_disponiveis)
+#     else:
+#         itens = listar_todos()
+        
+#     categorias = listar_categorias()
+    
+#     return render_template(
+#         "visualizar_itens.html", 
+#         itens=itens, 
+#         usuario=usuario_atualizado, 
+#         categorias=categorias
+#     )
+
 @app.route("/visualizar-itens", methods=["GET"])
 def visualizar_itens():
     usuario_sessao = session.get("usuario")
@@ -133,6 +170,12 @@ def visualizar_itens():
         itens = buscar_itens_filtrados(categorias_ids, apenas_disponiveis)
     else:
         itens = listar_todos()
+
+    # Remove os itens com status 'Arquivado' da tela principal
+    itens = [
+        item for item in itens 
+        if (item.get('status') if isinstance(item, dict) else getattr(item, 'status', '')) != 'Arquivado'
+    ]
         
     categorias = listar_categorias()
     
@@ -142,6 +185,7 @@ def visualizar_itens():
         usuario=usuario_atualizado, 
         categorias=categorias
     )
+
 
 @app.route("/adicionar/item")
 def pag_cadastrar_item_coor():
@@ -319,6 +363,19 @@ def itens_arquivados():
     return render_template("arquivar_itens_coor.html", itens=arquivados, usuario=usuario_atualizado)
 
 # ROTA: DESARQUIVAR ITEM (VOLTA O STATUS PARA 'Perdido')
+# @app.route('/desarquivar-item/<int:id_item>', methods=['POST'])
+# def desarquivar_item(id_item):
+#     if session.get('perfil') != 'coordenacao':
+#         return redirect('/login/usuario')
+
+#     try:
+#         from model.editar_item import atualizar_status_item
+#         atualizar_status_item(id_item, 'Perdido')
+#     except Exception as e:
+#         print("Erro ao desarquivar item:", e)
+
+#     return redirect(url_for('itens_arquivados'))
+
 @app.route('/desarquivar-item/<int:id_item>', methods=['POST'])
 def desarquivar_item(id_item):
     if session.get('perfil') != 'coordenacao':
@@ -326,11 +383,11 @@ def desarquivar_item(id_item):
 
     try:
         from model.editar_item import atualizar_status_item
-        atualizar_status_item(id_item, 'Perdido')
+        # Define o status como 'DISPONIVEL' para aparecer na tela principal
+        atualizar_status_item(id_item, 'DISPONIVEL')
     except Exception as e:
         print("Erro ao desarquivar item:", e)
-
-    return redirect(url_for('itens_arquivados'))
+    return redirect(url_for('visualizar_itens'))
 
 @app.route("/relatorios-perda")
 def relatorios_perda():
