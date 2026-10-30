@@ -1,6 +1,4 @@
-/* ==========================================================
-   GERENCIAMENTO DE TEMA (MODO ESCURO / CLARO)
-   ========================================================== */
+
 
 function AlterarTema() {
     document.body.classList.toggle("escuro");
@@ -9,7 +7,7 @@ function AlterarTema() {
     localStorage.setItem("tema", modoEscuroAtivo ? "escuro" : "claro");
 }
 
-// Executa imediatamente ao carregar o script para aplicar o tema salvo
+
 (function carregarTemaSalvo() {
     const temaSalvo = localStorage.getItem("tema");
 
@@ -20,9 +18,6 @@ function AlterarTema() {
     }
 })();
 
-/* ==========================================================
-   MANIPULAÇÃO DA INTERFACE E MODAIS
-   ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".card");
