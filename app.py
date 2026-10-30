@@ -139,11 +139,7 @@ def visualizar_itens():
 #     descricao = request.form["descricao"]
 #     cadastrar_item(produto, descricao, local, data)
 
-    return redirect("/cadastrar/item")
-
-
-
-
+#     return redirect("/cadastrar/item")
 
 @app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
