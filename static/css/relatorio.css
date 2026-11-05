@@ -1,0 +1,104 @@
+body.escuro,
+html.escuro body {
+    background-color: #121212 !important;
+    color: #e0e0e0;
+}
+
+/* Fundo da página e containers */
+body.escuro .bg-light,
+body.escuro .card-destaque {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0;
+}
+
+/* Cards de itens */
+body.escuro .card {
+    background-color: #1e1e1e !important;
+    border-color: #333333 !important;
+    color: #e0e0e0;
+}
+
+body.escuro .card-clicavel:hover {
+    box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Títulos e textos em destaque */
+body.escuro h2,
+body.escuro .card-titulo,
+body.escuro #modalTitulo {
+    color: #4da6ff !important; /* Azul mais claro para contraste no escuro */
+}
+
+/* Textos secundários, silenciados e labels */
+body.escuro .text-muted,
+body.escuro .text-secondary {
+    color: #a0a0a0 !important;
+}
+
+body.escuro .text-primary,
+body.escuro #modalNome {
+    color: #66b2ff !important;
+}
+
+/* Caixa com informações do relator dentro do modal */
+body.escuro .modal-card .bg-light {
+    background-color: #2a2a2a !important;
+    border-color: #3d3d3d !important;
+}
+
+/* Botão de fechar o modal */
+body.escuro .fechar-card {
+    color: #e0e0e0;
+}
+
+body.escuro .fechar-card:hover {
+    color: #ffffff;
+}
+
+/* Borda dos cards e divisores */
+body.escuro .border {
+    border-color: #333333 !important;
+}
+
+/* Botão de alterar tema dentro da Navbar */
+body.escuro .itens-central button {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+body.escuro .itens-central button:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: #ffffff;
+}
+
+/* Alerta quando não há itens */
+body.escuro .alert-info {
+    background-color: #1a2733;
+    color: #80c4ff;
+    border-color: #003366;
+}
+
+
+.itens-central button {
+        background-color: transparent;
+        color: #ffffff;
+        border: 1px solid #555555;
+        border-radius: 20px;
+        padding: 4px 14px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .itens-central button:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: #ffffff;
+    }
