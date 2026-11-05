@@ -40,7 +40,6 @@ def logout():
 @app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
     erro = None
-    sucesso = request.args.get("sucesso") 
     if request.method == "POST":
         email = request.form["email"]
         senha = request.form["senha"]
@@ -51,7 +50,8 @@ def pag_login_aluno():
             return redirect(url_for("visualizar_itens"))  
         else:
             erro = "E-mail ou senha incorretos!"
-    return render_template("login.html", erro=erro, tipo='usuario')
+    # Passa tipo='aluno' (ou 'usuario') no GET
+    return render_template("login.html", erro=erro, tipo='aluno')
 
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
@@ -66,7 +66,8 @@ def pag_login_coordenacao():
             return redirect(url_for("visualizar_itens"))  
         else:
             erro = "CPF ou senha incorretos!"
-    return render_template("login.html", erro=erro, tipo = 'apoio' )
+    # Passa tipo='apoio' no GET
+    return render_template("login.html", erro=erro, tipo='apoio')
 
 @app.route("/cadastro/usuario") 
 def pag_cadastro(): 
