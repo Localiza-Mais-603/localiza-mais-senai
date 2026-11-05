@@ -10,26 +10,26 @@ document.addEventListener('submit', function (event) {
             text: 'O item será movido para a lista de itens arquivados.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#024873', // Cor adaptada ao seu tema
+            confirmButtonColor: '#024873',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sim, arquivar',
             cancelButtonText: 'Cancelar'
         }).then((resultado) => {
             if (resultado.isConfirmed) {
-                // Envia os dados silenciosamente via Fetch API
                 fetch(formulario.action, {
                     method: formulario.method,
                     body: new FormData(formulario)
                 }).then(response => {
                     if (response.ok) {
-                        // Mostra o alerta de sucesso e recarrega a página ao fechar
                         Swal.fire({
                             title: 'Arquivado!',
                             text: 'O item foi arquivado com sucesso.',
                             icon: 'success',
-                            confirmButtonColor: '#F28705'
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true
                         }).then(() => {
-                            window.location.reload(); 
+                            window.location.reload();
                         });
                     } else {
                         Swal.fire('Erro!', 'Não foi possível arquivar o item.', 'error');
@@ -65,7 +65,9 @@ document.addEventListener('submit', function (event) {
                             title: 'Desarquivado!',
                             text: 'O item foi restaurado com sucesso.',
                             icon: 'success',
-                            confirmButtonColor: '#F28705'
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true
                         }).then(() => {
                             window.location.reload();
                         });
