@@ -174,3 +174,140 @@ main {
     color: #c96416;
     text-decoration: underline;
 }
+
+/* ==========================================================================
+   MODO ESCURO
+   ========================================================================== */
+
+/* Suporte automático pelas preferências do sistema */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+    }
+
+    .card-principal {
+        background-color: #1e1e1e;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .titulo-principal {
+        color: #f5f5f5;
+    }
+
+    .subtitulo {
+        color: #a0a0a0;
+    }
+
+    .rotulo {
+        color: #cccccc;
+    }
+
+    .entrada-texto,
+    .entrada-area-texto {
+        background-color: #2a2a2a;
+        border-color: #444444;
+        color: #f5f5f5;
+    }
+
+    .entrada-texto:focus,
+    .entrada-area-texto:focus {
+        border-color: #E87A24;
+        box-shadow: 0 0 0 3px rgba(232, 122, 36, 0.25);
+    }
+
+    .botao-cancelar {
+        color: #cccccc;
+        border-color: #444444;
+    }
+
+    .botao-cancelar:hover {
+        background-color: #2a2a2a;
+        color: #ffffff;
+    }
+}
+
+/* Ativação manual via classe no HTML (ex: <body class="escuro">) */
+body.escuro {
+    background-color: #121212;
+}
+
+body.escuro .card-principal {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.escuro .titulo-principal {
+    color: #f5f5f5;
+}
+
+body.escuro .subtitulo {
+    color: #a0a0a0;
+}
+
+body.escuro .rotulo {
+    color: #cccccc;
+}
+
+body.escuro .entrada-texto,
+body.escuro .entrada-area-texto {
+    background-color: #2a2a2a;
+    border-color: #444444;
+    color: #f5f5f5;
+}
+
+body.escuro .entrada-texto:focus,
+body.escuro .entrada-area-texto:focus {
+    border-color: #E87A24;
+    box-shadow: 0 0 0 3px rgba(232, 122, 36, 0.25);
+}
+
+body.escuro .botao-cancelar {
+    color: #cccccc;
+    border-color: #444444;
+}
+
+body.escuro .botao-cancelar:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background-color: transparent;
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+/* Posiciona os itens do topo no canto direito */
+.itens-central {
+    display: flex;
+    gap: 10px;
+    margin-left: auto; /* Empurra os botões totalmente para a direita */
+}
+
+/* Estilo do Botão no Topo Direito */
+.itens-central button {
+    padding: 9px 18px;
+    border: 2px solid #024873;
+    border-radius: 4px;
+    background-color: #024873;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.itens-central button:hover {
+    background-color: #ffffff;
+    color: #024873;
+}
