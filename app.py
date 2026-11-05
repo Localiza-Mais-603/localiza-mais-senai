@@ -250,7 +250,7 @@ def registrar_itens():
             caminho_completo = os.path.join(pasta_destino, nome_foto)
             foto.save(caminho_completo)
             
-        registrar_item_perdido(
+            registrar_item_perdido(
             item=item,
             descricao=descricao,
             data_encontrado=data_encontrado,
@@ -261,6 +261,9 @@ def registrar_itens():
             email=email,
             cpf_coordenador=None
         )
+
+        flash("O item foi cadastrado com sucesso!", "success")
+
         return redirect(url_for("registrar_itens"))
         
     categorias = listar_categorias()

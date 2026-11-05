@@ -62,3 +62,64 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+const formulario = document.querySelector(".formulario-perda");
+
+formulario.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    Swal.fire({
+        title: "Deseja cadastrar este item?",
+        text: "Confira se todas as informações estão corretas.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#198754",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, enviar",
+        cancelButtonText: "Cancelar"
+    }).then((resultado) => {
+
+        if (resultado.isConfirmed) {
+            formulario.submit();
+        }
+
+    });
+
+});
+
+
+// Mensagens enviadas pelo Flask
+const mensagens = document.getElementById("flash-messages");
+
+if (mensagens) {
+
+    const flashMessages = JSON.parse(mensagens.textContent);
+
+    flashMessages.forEach(([categoria, mensagem]) => {
+
+        if (categoria === "success") {
+
+            Swal.fire({
+                title: "Cadastrado com sucesso!",
+                text: mensagem,
+                icon: "success",
+                confirmButtonColor: "#198754",
+                confirmButtonText: "OK"
+            });
+
+        } else if (categoria === "error" || categoria === "danger") {
+
+            Swal.fire({
+                title: "Erro!",
+                text: mensagem,
+                icon: "error",
+                confirmButtonColor: "#d33",
+                confirmButtonText: "OK"
+            });
+
+        }
+
+    });
+
+}
