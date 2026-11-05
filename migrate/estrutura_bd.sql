@@ -8,7 +8,7 @@ CREATE TABLE categoria (
 
 
 CREATE TABLE coordenador (
- cpf VARCHAR(12) NOT NULL PRIMARY KEY,
+ cpf VARCHAR(11) NOT NULL PRIMARY KEY,
  nome VARCHAR(30) NOT NULL,
  email VARCHAR(200) NOT NULL,
  senha VARCHAR(200) NOT NULL
@@ -17,7 +17,7 @@ CREATE TABLE coordenador (
 
 CREATE TABLE usuarios (
  email VARCHAR(200) NOT NULL PRIMARY KEY,
- cpf VARCHAR(12) NOT NULL,
+ cpf VARCHAR(11) NOT NULL,
  nome VARCHAR(30) NOT NULL,
  curso VARCHAR(30),
  senha VARCHAR(200) NOT NULL
@@ -45,5 +45,5 @@ CREATE TABLE item (
 ALTER TABLE usuarios ADD COLUMN token_recuperacao VARCHAR(255) NULL;
 ALTER TABLE coordenador ADD COLUMN token_recuperacao VARCHAR(255) NULL;
 
-
+ALTER TABLE usuarios ADD CONSTRAINT uc_cpf_usuario UNIQUE (cpf);
 
