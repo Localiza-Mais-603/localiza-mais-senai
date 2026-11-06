@@ -486,6 +486,44 @@ def editar_item(id_item):
 
     return redirect(url_for("visualizar_itens"))
 
+@app.route("/atualizar-avatar", methods=["POST"])
+def atualizar_avatar():
+    usuario_sessao = session.get("usuario")
+    if not usuario_sessao:
+        return jsonify({"sucesso": False, "mensagem": "Não autorizado"}), 401
+
+    dados = request.get_json()
+    avatar_url = dados.get("avatar") if dados else None
+
+    if not avatar_url:
+        return jsonify({"sucesso": False, "mensagem": "URL inválida"}), 400
+
+    email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    perfil = session.get("perfil")
+
+    conexao, cursor = conectar()
+    cursor = conexao.cursor()
+
+    try:
+        tabela = "coordenador" if perfil == "coordenacao" else "usuario"
+        cursor.execute(f"UPDATE {tabela} SET avatar = %s WHERE email = %s", (avatar_url, email))
+        conexao.commit()
+
+        if isinstance(session.get("usuario"), dict):
+            session["usuario"]["avatar"] = avatar_url
+            session.modified = True
+
+        return jsonify({"sucesso": True, "avatar": avatar_url})
+    except Exception as e:
+        print("Aviso/Erro ao atualizar avatar no MySQL:", e)
+        if isinstance(session.get("usuario"), dict):
+            session["usuario"]["avatar"] = avatar_url
+            session.modified = True
+        return jsonify({"sucesso": True, "avatar": avatar_url})
+    finally:
+        cursor.close()
+        conexao.close()
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

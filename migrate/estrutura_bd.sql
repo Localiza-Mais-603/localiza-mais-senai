@@ -15,7 +15,8 @@ CREATE TABLE coordenador (
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(200) NOT NULL,
     senha VARCHAR(200) NOT NULL,
-    token_recuperacao VARCHAR(255) NULL
+    token_recuperacao VARCHAR(255) NULL,
+    avatar VARCHAR(500) NULL
 );
 
 
@@ -26,7 +27,8 @@ CREATE TABLE usuarios (
     nome VARCHAR(100) NOT NULL,
     curso VARCHAR(50),
     senha VARCHAR(200) NOT NULL,
-    token_recuperacao VARCHAR(255) NULL
+    token_recuperacao VARCHAR(255) NULL,
+    avatar VARCHAR(500) NULL
 );
 
 
