@@ -456,7 +456,6 @@ def desarquivar_item(id_item):
 @app.route("/relatorios-perda")
 def relatorios_perda():
 
-    # Apenas coordenação pode acessar
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
@@ -464,35 +463,49 @@ def relatorios_perda():
     usuario_atualizado = None
 
     if usuario_sessao:
-        email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
-        usuario_atualizado = buscar_usuario_por_email(email)
+        email = usuario_sessao.get("email")
+        conexao, cursor = conectar()
+        cursor = conexao.cursor(dictionary=True)
 
-    # Busca todos os itens cadastrados
+        cursor.execute(
+            "SELECT * FROM coordenador WHERE email = %s",
+            (email,)
+        )
+
+        usuario_atualizado = cursor.fetchone()
+
+        cursor.close()
+        conexao.close()
+
     todos_itens = listar_todos()
 
-    # Inclui os itens perdidos e os encontrados
-    itens_relatados = [
+    # ITENS QUE OS ALUNOS RELATARAM TER PERDIDO
+    itens_perdidos = [
         item for item in todos_itens
-        if (
-            status_do_item(item) == 'perdido'
-            or item.get('destino_objeto')
-        )
+        if status_do_item(item) == "perdido"
     ]
 
-    # Busca o nome de quem publicou
-    for item in itens_relatados:
+    # ITENS QUE OS ALUNOS CADASTRARAM COMO ENCONTRADOS
+    itens_encontrados = [
+        item for item in todos_itens
+        if item.get("destino_objeto")
+    ]
 
-        email_publicador = item.get('email')
+    # ADICIONA O NOME DE QUEM PUBLICOU
+    for item in itens_perdidos + itens_encontrados:
+
+        email_publicador = item.get("email")
 
         if email_publicador:
             publicador = buscar_usuario_por_email(email_publicador)
-            item['publicado_nome'] = publicador['nome'] if publicador else ''
+            item["publicado_nome"] = publicador["nome"] if publicador else ""
         else:
-            item['publicado_nome'] = ''
+            item["publicado_nome"] = ""
 
     return render_template(
         "relatorios_perda.html",
-        itens=itens_relatados,
+        itens_perdidos=itens_perdidos,
+        itens_encontrados=itens_encontrados,
         usuario=usuario_atualizado
     )
 
