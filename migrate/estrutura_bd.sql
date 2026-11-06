@@ -1,49 +1,60 @@
 CREATE DATABASE IF NOT EXISTS db_localiza;
 USE db_localiza;
 
+-- TABELA DE CATEGORIAS
 CREATE TABLE categoria (
- id_categoria INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
- nome VARCHAR(20) NOT NULL
+    id_categoria INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50) NOT NULL
 );
 
-
+-- TABELA DE COORDENADORES (Setor de Apoio)
 CREATE TABLE coordenador (
- cpf VARCHAR(11) NOT NULL PRIMARY KEY,
- nome VARCHAR(30) NOT NULL,
- email VARCHAR(200) NOT NULL,
- senha VARCHAR(200) NOT NULL
+    cpf VARCHAR(11) NOT NULL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(200) NOT NULL,
+    senha VARCHAR(200) NOT NULL,
+    token_recuperacao VARCHAR(255) NULL
 );
 
-
+-- TABELA DE USUÁRIOS (Alunos)
 CREATE TABLE usuarios (
- email VARCHAR(200) NOT NULL PRIMARY KEY,
- cpf VARCHAR(11) NOT NULL,
- nome VARCHAR(30) NOT NULL,
- curso VARCHAR(30),
- senha VARCHAR(200) NOT NULL
+    email VARCHAR(200) NOT NULL PRIMARY KEY,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    nome VARCHAR(100) NOT NULL,
+    curso VARCHAR(50),
+    senha VARCHAR(200) NOT NULL,
+    token_recuperacao VARCHAR(255) NULL
 );
 
-
+-- TABELA DE ITENS (Perdidos / Encontrados)
 CREATE TABLE item (
- id_item INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
- item VARCHAR(20) NOT NULL,
- local VARCHAR(20),
- data_encontrado DATE,
- foto VARCHAR(200),
- descricao VARCHAR(200) NOT NULL,
- email VARCHAR(200),
- cpf_coordenador VARCHAR(12),
- status VARCHAR(10) NOT NULL,
- data_devolvido_descartado DATE,
- id_categoria INT,
+    id_item INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    item VARCHAR(50) NOT NULL,
+    local VARCHAR(50),
+    data_encontrado DATE,
+    foto VARCHAR(200),
+    descricao VARCHAR(255) NOT NULL,
+    email VARCHAR(200),
+    cpf_coordenador VARCHAR(11),
+    status VARCHAR(20) NOT NULL,
+    id_categoria INT,
+    destino_objeto VARCHAR(100) NULL,
 
- FOREIGN KEY (email) REFERENCES usuarios (email),
- FOREIGN KEY (cpf_coordenador) REFERENCES coordenador (cpf),
- FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria)
+    FOREIGN KEY (email) REFERENCES usuarios (email),
+    FOREIGN KEY (cpf_coordenador) REFERENCES coordenador (cpf),
+    FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria)
 );
 
-ALTER TABLE usuarios ADD COLUMN token_recuperacao VARCHAR(255) NULL;
-ALTER TABLE coordenador ADD COLUMN token_recuperacao VARCHAR(255) NULL;
+-- TABELA DE ITENS (retirados)
+CREATE TABLE retirada (
+    id_retirada INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id_item INT NOT NULL,
+    nome_retirante VARCHAR(100) NOT NULL,
+    telefone_retirante VARCHAR(20) NOT NULL,
+    curso_retirante VARCHAR(50) NOT NULL,
+    email_retirante VARCHAR(200) NULL,
+    cpf_retirante VARCHAR(11) NULL,
+    data_retirada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-ALTER TABLE usuarios ADD CONSTRAINT uc_cpf_usuario UNIQUE (cpf);
-
+    FOREIGN KEY (id_item) REFERENCES item (id_item)
+);
