@@ -131,3 +131,24 @@ function abrirModalEdicao(botao, idItem) {
 function fecharModalEdicao() {
     if (modalEdicao) modalEdicao.classList.remove("aberto");
 }
+
+
+function confirmarReivindicar(botao) {
+    const nomeItem = botao.getAttribute('data-nome');
+    const formulario = botao.closest('form');
+
+    Swal.fire({
+        title: "Confirmar identificação?",
+        text: "Deseja avisar a coordenação que o item '" + nomeItem + "' pertence a você?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#F28705",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Sim, notificar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            formulario.submit(); 
+        }
+    });
+}

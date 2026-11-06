@@ -434,5 +434,59 @@ def editar_item(id_item):
     atualizar_item_no_banco(id_item, item_nome, descricao, local, data_encontrado)
     
     return redirect(url_for("visualizar_itens"))
+
+@app.route("/reivindicar-item/<int:id_item>", methods=["POST"])
+def reivindicar_item(id_item):
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
+
+    usuario_sessao = session.get("usuario")
+    email_usuario = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    usuario = buscar_usuario_por_email(email_usuario)
+
+    item = next((i for i in listar_todos() if i["id_item"] == id_item), None)
+    if not item:
+        flash("Item não encontrado.", "error")
+        return redirect(url_for("visualizar_itens"))
+
+    # CORRIGIDO: Removida a linha duplicada que sobrescrevia o cursor incorretamente
+    conexao, _ = conectar() 
+    cursor = conexao.cursor(dictionary=True)
+    cursor.execute("SELECT email FROM coordenador")
+    destinatarios = [c["email"] for c in cursor.fetchall() if c["email"]]
+    cursor.close()
+    conexao.close()
+
+    if not destinatarios:
+        flash("Não foi possível avisar a coordenação no momento.", "error")
+        return redirect(url_for("visualizar_itens"))
+
+    try:
+        msg = Message(
+            subject=f"Localiza+ - Item identificado: {item['item']}",
+            sender=app.config.get("MAIL_USERNAME"), 
+            recipients=destinatarios,
+            reply_to=email_usuario,
+        )
+        msg.body = (
+            "Olá!\n\n"
+            "Um usuário identificou um item como seu:\n\n"
+            f"Item: {item['item']}\n"
+            f"Descrição: {item['descricao']}\n"
+            f"Local: {item.get('local') or 'Não informado'}\n\n"
+            "Dados do usuário:\n"
+            f"Nome: {usuario['nome']}\n"
+            f"Curso: {usuario.get('curso') or 'Não informado'}\n"
+            f"E-mail: {email_usuario}\n\n"
+            "Responda este e-mail para falar diretamente com o usuário."
+        )
+        mail.send(msg)
+        flash("A coordenação foi avisada! Eles entrarão em contato.", "success")
+    except Exception as e:
+        print("Erro ao enviar e-mail de reivindicação:", e)
+        flash("Ocorreu um erro ao avisar a coordenação. Tente novamente.", "error")
+
+    return redirect(url_for("visualizar_itens"))
+
 if __name__ == "__main__":
     app.run(debug=True, host = "0.0.0.0", port= 8080)
