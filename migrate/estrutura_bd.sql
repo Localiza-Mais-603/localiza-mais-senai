@@ -38,14 +38,14 @@ CREATE TABLE item (
     cpf_coordenador VARCHAR(11),
     status VARCHAR(20) NOT NULL,
     id_categoria INT,
-    destino_objeto VARCHAR(100) NULL,
+    destino_objeto VARCHAR(150) NULL,
 
     FOREIGN KEY (email) REFERENCES usuarios (email),
     FOREIGN KEY (cpf_coordenador) REFERENCES coordenador (cpf),
     FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria)
 );
 
--- TABELA DE ITENS (retirados)
+-- TABELA DE ITENS RETIRADOS
 CREATE TABLE retirada (
     id_retirada INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     id_item INT NOT NULL,
@@ -57,4 +57,10 @@ CREATE TABLE retirada (
     data_retirada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (id_item) REFERENCES item (id_item)
+);
+
+-- TABELA DE OPÇÕES DE DESTINO (para o dropdown)
+CREATE TABLE destino_opcao (
+    id_destino INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    descricao VARCHAR(150) NOT NULL
 );
