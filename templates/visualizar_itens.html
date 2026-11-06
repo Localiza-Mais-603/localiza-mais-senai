@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -13,6 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -25,8 +27,20 @@
             </div>
 
             <div class="itens-central">
-                <button type="button" onclick="AlterarTema()">Modo</button>
-                {% if session.get('perfil') == 'coordenacao'%}
+               <div class="form-check form-check-inline switch-group">
+                    <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
+                    <label class="form-check-label" for="switch-dark-mode">
+                        <div class="switch-darkmode">
+                            <div class="icons">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <i class="fa-solid fa-moon"></i>
+                            </div>
+                            <div class="circle"></div>
+                        </div>
+                    </label>
+               </div>
+
+                {% if session.get('perfil') == 'coordenacao' %}
                 <button type="button" onclick="window.location.href='/adicionar/item'">Cadastrar item</button>
                 {% endif %}
 
@@ -43,11 +57,11 @@
                                 class="rounded-circle mb-2" style="width: 50px; height: 50px;">
                             <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
 
-                            <!-- O e-mail pequeno abaixo do nome aparece apenas para alunos -->
                             {% if session.get('perfil') == 'aluno' %}
                             <small class="text-muted">{{ usuario.email }}</small>
                             {% endif %}
                         </li>
+
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -62,6 +76,7 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+
                         {% elif session.get('perfil') == 'coordenacao' %}
                         <li>
                             <span class="dropdown-item">
@@ -74,7 +89,7 @@
                         {% endif %}
 
                         <li>
-                            <a class="dropdown-item text-danger" href="/logout">Sair</a>
+                            <a class="dropdown-item text-danger" href="#" onclick="confirmarLogout(event)">Sair</a>
                         </li>
                     </ul>
                 </div>
@@ -220,23 +235,29 @@
                                 Editar
                             </button>
 
-                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}" method="POST"
-                                class="form-acao" onclick="event.stopPropagation()">
+                            <!-- Adicionado onclick="event.stopPropagation()" abaixo -->
+                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}"
+                                method="POST"
+                                class="form-acao form-arquivar"
+                                onclick="event.stopPropagation()">
+
                                 <button type="submit" class="btn-arquivar-card">
                                     Arquivar
                                 </button>
                             </form>
 
-                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST"
-                                class="form-acao" onclick="event.stopPropagation()">
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" 
+                                method="POST"
+                                class="form-acao form-excluir" 
+                                onclick="event.stopPropagation()">
+                                
                                 <button type="submit" class="btn-excluir-card">
                                     Excluir
                                 </button>
                             </form>
                         </div>
                         {% endif %}
-
-                    </article>
+                                            </article>
                 </li>
                 {% endif %}
                 {% endfor %}
@@ -299,13 +320,13 @@
         </article>
     </div>
 
+    <!-- MODAL DE FILTROS -->
     <div class="grupo-filtro" id="janelaFiltro" role="dialog" aria-hidden="true">
         <form action="{{ url_for('visualizar_itens') }}" method="GET" class="grupo-conteudo">
 
             <h3>Categorias</h3>
             <label>
-                <input type="checkbox" name="disponivel" value="1" {% if request.args.get('disponivel') %}checked{%
-                    endif %}>
+                <input type="checkbox" name="disponivel" value="1" {% if request.args.get('disponivel') %}checked{% endif %}>
                 Disponível
             </label>
 
@@ -315,8 +336,7 @@
             {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
 
             <label>
-                <input type="checkbox" name="categoria" value="{{ cat_id }}" {% if cat_id|string in
-                    request.args.getlist('categoria') %}checked{% endif %}>
+                <input type="checkbox" name="categoria" value="{{ cat_id }}" {% if cat_id|string in request.args.getlist('categoria') %}checked{% endif %}>
                 {{ cat_nome }}
             </label>
             {% endfor %}
@@ -326,12 +346,16 @@
         </form>
     </div>
 
-    <!-- SCRIPTS -->
-    <script src="/static/js/visualizar_itens.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5"></script>
-    <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
+   <!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="/static/js/visualizar_itens.js"></script>
+
+<script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/confirmaacoes.js') }}"></script>
     <!-- SWEETALERT APÓS EDIÇÃO -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -349,6 +373,32 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
+
+    <!-- SWEETALERT DE LOGOUT -->
+    <script>
+        function confirmarLogout(event) {
+
+            event.preventDefault();
+
+            Swal.fire({
+                title: "Deseja sair da sua conta?",
+                text: "Você precisará fazer login novamente para acessar o sistema.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Sim, sair",
+                cancelButtonText: "Cancelar"
+            }).then((resultado) => {
+
+                if (resultado.isConfirmed) {
+                    window.location.href = "/logout";
+                }
+
+            });
+
+        }
+    </script>
 
 </body>
 

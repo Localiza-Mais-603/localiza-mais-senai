@@ -5,9 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Itens</title>
     <link rel="stylesheet" href="/static/css/registrarItemPerdido.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
+    <nav class="navbar transparente-header">
+        <div class="itens-central">
+            <div class="form-check form-check-inline switch-group">
+                    <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
+                    <label class="form-check-label" for="switch-dark-mode">
+                        <div class="switch-darkmode">
+                            <div class="icons">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <i class="fa-solid fa-moon"></i>
+                            </div>
+                            <div class="circle"></div>
+                        </div>
+                    </label>
+               </div>
+        </div>
+        
+    </nav>
 
     <main>
         <section class="card-principal">
@@ -31,26 +49,26 @@
                             <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
                         {% endfor %}
                     </select>
-                    <button type="button" id="btn-abrir-modal" class="botao-submit" title="Cadastrar nova categoria">add categoria</button>
+                    <button type="button" id="btn-abrir-modal" class="botao-submit" title="Cadastrar nova categoria">Adicionar Categoria</button>
                 </div>
                 
                 <div class="campo-grupo">
-                    <label for="local" class="rotulo">Local (opcional)</label>
+                    <label for="local" class="rotulo">Local (opcional):</label>
                     <input type="text" id="local" name="local" class="entrada-texto">
                 </div>
                 
                 <div class="campo-grupo">
-                    <label for="data" class="rotulo">Data (opcional)</label>
+                    <label for="data" class="rotulo">Data (opcional):</label>
                     <input type="date" id="data" name="data" class="entrada-texto">
                 </div>
                 
                 <div class="campo-grupo">
-                    <label for="foto" class="rotulo">Foto (opcional)</label>
+                    <label for="foto" class="rotulo">Foto (opcional):</label>
                     <input type="file" id="foto" name="foto" class="entrada-texto">
                 </div>
                 
                 <div class="campo-grupo">
-                    <label for="descricao" class="rotulo">Descrição *</label>
+                    <label for="descricao" class="rotulo">Descrição: *</label>
                     <textarea id="descricao" name="descricao" class="entrada-area-texto" required></textarea>
                 </div>
                 
@@ -83,6 +101,7 @@
 
 <script src="{{ url_for('static', filename='js/modal-registro-item.js') }}"></script>
 <script src="{{ url_for('static', filename='js/registrar_item.js') }}"></script>
+<script src="/static/js/visualizar_itens.js"></script>
 </body>
 </html>
 
