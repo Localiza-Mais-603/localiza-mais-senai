@@ -33,7 +33,7 @@
             <h1 class="titulo-principal">SENAI | LOCALIZA+</h1>
             <h2 class="subtitulo">Cadastrar Item</h2>
 
-            <form action="/cadastrar/item/salvar" method="POST" class="formulario-perda">
+            <form action="/cadastrar/item/salvar" method="POST" enctype="multipart/form-data" class="formulario-perda">
 
                 <div class="campo-grupo">
                     <label for="item" class="rotulo">Item perdido: *</label>
@@ -62,14 +62,21 @@
                 
                 <div class="campo-grupo">
                     <label for="data" class="rotulo">Data (opcional):</label>
-                    <input type="date" id="data" name="data" class="entrada-texto">
+                    <input type="date" id="data" name="data" class="entrada-texto"  accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp">
                 </div>
                 
+                 <div class="campo-grupo">
+                    <label for="foto" class="rotulo">Foto (opcional):</label>
+                    <input type="file" id="foto" name="foto" class="entrada-texto" accept="image/*">
+                </div>
+
                 <div class="campo-grupo">
                     <label for="descricao" class="rotulo">Descrição: *</label>
                     <textarea id="descricao" name="descricao" class="entrada-area-texto" required></textarea>
                 </div>
-                
+
+               
+                                
                 <div class="grupo-botoes">
                     <button type="submit" class="botao-submit">Enviar</button>
                     <button type="reset" class="botao-cancelar">Cancelar</button>
