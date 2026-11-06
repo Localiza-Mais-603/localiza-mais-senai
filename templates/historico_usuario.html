@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Histórico - Localiza+</title>
+
+    <!-- Adicione aqui os seus arquivos de CSS, por exemplo:
+         <link rel="stylesheet" href="/static/css/historico_usuario.css"> -->
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar transparente-header">
+
+            <div class="container-fluido">
+                <h1>LOCALIZA+</h1>
+            </div>
+
+            <div class="itens-central">
+
+                <!-- Botão de tema claro/escuro (usa AlterarTema() do visualizar_itens.js) -->
+                <div class="form-check form-check-inline switch-group">
+                    <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
+                    <label class="form-check-label" for="switch-dark-mode">
+                        <div class="switch-darkmode">
+                            <div class="icons">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <i class="fa-solid fa-moon"></i>
+                            </div>
+                            <div class="circle"></div>
+                        </div>
+                    </label>
+                </div>
+
+                {% if usuario %}
+                <div class="perfil-usuario">
+                    <span class="perfil-nome">{{ usuario.nome }}</span>
+                    <a class="perfil-sair" href="/logout">Sair</a>
+                </div>
+                {% endif %}
+
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="cabecalho-historico">
+            <a href="{{ url_for('visualizar_itens') }}" class="link-voltar">← Voltar</a>
+            <h2 class="titulo-secao-itens">MEU HISTÓRICO DE RELATOS</h2>
+        </section>
+
+        <section class="lista-historico" aria-label="Itens que você relatou">
+
+            {% if itens %}
+            {% for item in itens %}
+            <article class="card-historico">
+
+                {% if item.foto %}
+                <img class="card-historico-foto"
+                     src="{{ url_for('static', filename='img_upload/' ~ item.foto) }}"
+                     alt="Foto de {{ item.item }}">
+                {% endif %}
+
+                <div class="card-historico-corpo">
+                    <h3 class="card-historico-titulo">{{ item.item }}</h3>
+
+                    <p class="card-historico-descricao">{{ item.descricao }}</p>
+
+                    <p class="card-historico-info">
+                        <strong>Local:</strong>
+                        {{ item.local if item.local else 'Não informado' }}
+                    </p>
+
+                    <p class="card-historico-info">
+                        <strong>Data:</strong>
+                        {{ item.data_encontrado if item.data_encontrado else 'Não informada' }}
+                    </p>
+
+                    <span class="card-historico-status">Status: {{ item.status }}</span>
+                </div>
+
+            </article>
+            {% endfor %}
+            {% else %}
+            <p class="historico-vazio">Você ainda não relatou nenhum item.</p>
+            {% endif %}
+
+        </section>
+
+    </main>
+
+    <script src="/static/js/visualizar_itens.js"></script>
+</body>
+
+</html>
