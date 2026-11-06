@@ -210,6 +210,15 @@ def registrar_itens_coordenacao():
 
     descricao = request.form.get("descricao")
     cpf_coordenador = session.get("usuario", {}).get("cpf")
+    nome_foto = None
+    foto = request.files.get("foto")
+
+    if foto and foto.filename != "":
+        nome_foto = secure_filename(foto.filename)
+        pasta_destino = os.path.join("static", "img_upload")
+        os.makedirs(pasta_destino, exist_ok=True)
+        caminho_completo = os.path.join(pasta_destino, nome_foto)
+        foto.save(caminho_completo)
 
     cadastrar_item(
         item=item,
@@ -218,7 +227,7 @@ def registrar_itens_coordenacao():
         status="DISPONIVEL",
         id_categoria=id_categoria,
         local=local,
-        foto=None,
+        foto=nome_foto,
         email=None,
         cpf_coordenador=cpf_coordenador
     )
