@@ -97,6 +97,10 @@ def cadastro_coor():
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
 
+@app.route("/itens_retirados")
+def pag_itens_retirados():
+    return render_template("itens_retirados.html")
+
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
     usuario_sessao = session.get("usuario")
