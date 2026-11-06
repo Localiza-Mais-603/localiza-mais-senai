@@ -54,3 +54,25 @@ def cadastrar_categoria(nome):
     id_criado = cursor.lastrowid  
     conexao.close()
     return id_criado
+
+def cadastrar_item_encontrado(item, descricao, data_encontrado, id_categoria, local, email, destino_objeto):
+    conexao, cursor = conectar()
+    cursor.execute("""
+        INSERT INTO item (item, local, data_encontrado, descricao, email,
+                          status, id_categoria, destino_objeto)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """, (item, local, data_encontrado, descricao, email,
+          "DISPONIVEL", id_categoria, destino_objeto))
+    conexao.commit()
+    cursor.close()
+    conexao.close()
+
+
+def listar_destinos():
+    conexao, cursor = conectar()
+    cursor = conexao.cursor(dictionary=True)
+    cursor.execute("SELECT id_destino, descricao FROM destino_opcao ORDER BY id_destino")
+    destinos = cursor.fetchall()
+    cursor.close()
+    conexao.close()
+    return destinos

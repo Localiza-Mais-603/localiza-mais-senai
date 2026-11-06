@@ -174,3 +174,215 @@ main {
     color: #c96416;
     text-decoration: underline;
 }
+
+/* ==========================================================================
+   MODO ESCURO
+   ========================================================================== */
+
+/* Suporte automático pelas preferências do sistema */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+    }
+
+    .card-principal {
+        background-color: #1e1e1e;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .titulo-principal {
+        color: #f5f5f5;
+    }
+
+    .subtitulo {
+        color: #a0a0a0;
+    }
+
+    .rotulo {
+        color: #cccccc;
+    }
+
+    .entrada-texto,
+    .entrada-area-texto {
+        background-color: #2a2a2a;
+        border-color: #444444;
+        color: #f5f5f5;
+    }
+
+    .entrada-texto:focus,
+    .entrada-area-texto:focus {
+        border-color: #E87A24;
+        box-shadow: 0 0 0 3px rgba(232, 122, 36, 0.25);
+    }
+
+    .botao-cancelar {
+        color: #cccccc;
+        border-color: #444444;
+    }
+
+    .botao-cancelar:hover {
+        background-color: #2a2a2a;
+        color: #ffffff;
+    }
+}
+
+/* Ativação manual via classe no HTML (ex: <body class="escuro">) */
+body.escuro {
+    background-color: #121212;
+}
+
+body.escuro .card-principal {
+    background-color: #1e1e1e;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.escuro .titulo-principal {
+    color: #f5f5f5;
+}
+
+body.escuro .subtitulo {
+    color: #a0a0a0;
+}
+
+body.escuro .rotulo {
+    color: #cccccc;
+}
+
+body.escuro .entrada-texto,
+body.escuro .entrada-area-texto {
+    background-color: #2a2a2a;
+    border-color: #444444;
+    color: #f5f5f5;
+}
+
+body.escuro .entrada-texto:focus,
+body.escuro .entrada-area-texto:focus {
+    border-color: #E87A24;
+    box-shadow: 0 0 0 3px rgba(232, 122, 36, 0.25);
+}
+
+body.escuro .botao-cancelar {
+    color: #cccccc;
+    border-color: #444444;
+}
+
+body.escuro .botao-cancelar:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background-color: transparent;
+    border-radius: 6px;
+    z-index: 1000;
+}
+
+/* Posiciona os itens do topo no canto direito */
+.itens-central {
+    display: flex;
+    gap: 10px;
+    margin-left: auto; /* Empurra os botões totalmente para a direita */
+}
+
+/* Estilo do Botão no Topo Direito */
+.itens-central button {
+    padding: 9px 18px;
+    border: 2px solid #024873;
+    border-radius: 4px;
+    background-color: #024873;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.itens-central button:hover {
+    background-color: #ffffff;
+    color: #024873;
+}
+
+/* Esconde o checkbox nativo do Bootstrap */
+.switch-group .form-check-input {
+    display: none;
+}
+
+/* Container principal do botão */
+.switch-darkmode {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background-color: #e4e4e4;
+    border-radius: 30px;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+/* Container flexível para alinhar os dois ícones lado a lado */
+.switch-darkmode .icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 6px;
+    z-index: 1;
+}
+
+/* Estilo dos ícones */
+.switch-darkmode .icons i {
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.switch-darkmode .fa-lightbulb {
+    color: #f39c12; /* Lâmpada amarela */
+}
+
+.switch-darkmode .fa-moon {
+    color: #7f8c8d; /* Lua cinzenta no modo claro */
+}
+
+/* Círculo deslizante */
+.switch-darkmode .circle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    z-index: 2;
+}
+
+/* ESTADOS QUANDO O CHECKBOX ESTÁ MARCADO (MODO ESCURO) */
+
+/* Move o círculo para a direita */
+#switch-dark-mode:checked + .form-check-label .circle {
+    transform: translateX(30px);
+    background-color: #2c3e50;
+}
+
+/* Altera o fundo do botão */
+#switch-dark-mode:checked + .form-check-label .switch-darkmode {
+    background-color: #1a252f;
+}
+
+/* Ajusta a cor da lua quando ativo */
+#switch-dark-mode:checked + .form-check-label .fa-moon {
+    color: #f1c40f;
+}
