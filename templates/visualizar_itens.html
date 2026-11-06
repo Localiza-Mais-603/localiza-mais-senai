@@ -52,10 +52,10 @@
 
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
                         <li class="dropdown-header text-center">
-                            <!-- Container com o avatar e o lápis -->
+
                             <div class="avatar-container d-inline-block position-relative">
                                 <img id="fotoPerfilHeader"
-                                    src="{{ usuario.avatar if usuario and usuario.avatar else 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix' }}"
+                                    src="{{ usuario.avatar if usuario.avatar else '/static/img/avatares/avatar_01.png' }}"
                                     alt="Foto de perfil de {{ usuario.nome }}" class="rounded-circle mb-2 border"
                                     style="width: 60px; height: 60px; object-fit: cover;">
 
@@ -883,91 +883,143 @@
         }
     </script>
 
-   <!-- MODAL DE SELEÇÃO DE AVATAR -->
-<div class="modal fade" id="modalEscolherAvatar" tabindex="-1" aria-labelledby="modalAvatarLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title fw-bold" id="modalAvatarLabel" style="color: #024873;">
-                    Escolha seu Avatar
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p class="text-muted mb-3">Clique no ícone que deseja usar no seu perfil:</p>
+    <!-- MODAL DE SELEÇÃO DE AVATAR -->
+    <div class="modal fade" id="modalEscolherAvatar" tabindex="-1" aria-labelledby="modalAvatarLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
 
-                <!-- Preenchida automaticamente pelo avatar.js -->
-                <div class="avatar-grid"></div>
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="modalAvatarLabel" style="color: #024873;">
+                        Escolha seu Avatar
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <img id="previewAvatar" src="" alt="Pré-visualização do avatar" class="avatar-preview mb-3">
+                    <div class="avatar-grid"></div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" id="btnSalvarAvatar" class="btn text-white text-uppercase fw-bold px-4"
+                            style="background-color: #F28705; width: auto; flex: none;" disabled>
+                            Salvar alterações
+                        </button>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
-</div>
+        <script>
+            const PASTA_AVATARES = '/static/img/avatares/';
+            const AVATAR_PADRAO = PASTA_AVATARES + 'avatar_01.png';
 
-    <script>
-    const DICEBEAR_BASE = 'https://api.dicebear.com/10.x';
-    const CORES_FUNDO = 'b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf';
+            const ARQUIVOS = [
+                'avatar_01.png', 'avatar_02.png', 'avatar_03.png', 'avatar_04.png',
+                'avatar_05.png', 'avatar_06.png', 'avatar_07.png'
+            ];
 
-    const AVATARES = [
-        { estilo: 'lorelei', seed: 'Sophia' },
-        { estilo: 'lorelei', seed: 'Lucas' },
-        { estilo: 'notionists', seed: 'Emma' },
-        { estilo: 'notionists', seed: 'Oliver' },
-        { estilo: 'personas', seed: 'Mia' },
-        { estilo: 'personas', seed: 'Noah' },
-        { estilo: 'toon-head', seed: 'Isabella' },
-        { estilo: 'toon-head', seed: 'Ethan' },
-        { estilo: 'adventurer', seed: 'Ava' },
-        { estilo: 'big-smile', seed: 'Logan' }
-    ];
+            const modalAvatarEl = document.getElementById('modalEscolherAvatar');
+            const fotoHeader = document.getElementById('fotoPerfilHeader');
+            const previewAvatar = document.getElementById('previewAvatar');
+            const btnSalvarAvatar = document.getElementById('btnSalvarAvatar');
+            const gradeAvatares = document.querySelector('#modalEscolherAvatar .avatar-grid');
 
-    function renderizarGradeAvatares() {
-        const grade = document.querySelector('#modalEscolherAvatar .avatar-grid');
-        if (!grade) return;
+            let avatarSalvo = null;      // avatar que o usuário tinha ao abrir o modal
+            let avatarEscolhido = null;  // avatar clicado, ainda não salvo
 
-        grade.innerHTML = '';
+            function marcarSelecionado(caminho) {
+                gradeAvatares.querySelectorAll('.avatar-opcao').forEach(img => {
+                    img.classList.toggle('selecionado', img.dataset.caminho === caminho);
+                });
+            }
 
-        AVATARES.forEach(({ estilo, seed }) => {
-            const img = document.createElement('img');
-            img.src = `${DICEBEAR_BASE}/${estilo}/svg?seed=${encodeURIComponent(seed)}&backgroundColor=${CORES_FUNDO}`;
-            img.alt = `Avatar ${seed}`;
-            img.className = 'avatar-opcao';
-            img.addEventListener('click', () => salvarAvatar(img.src));
-            grade.appendChild(img);
-        });
-    }
+            function selecionarAvatar(caminho) {
+                avatarEscolhido = caminho;
+                previewAvatar.src = caminho;   // pré-visualização no modal
+                fotoHeader.src = caminho;      // mostra já no cabeçalho
+                marcarSelecionado(caminho);
+                btnSalvarAvatar.disabled = false;
+            }
 
-    function abrirModalAvatar(event) {
-        if (event) event.stopPropagation();
-        const modalEl = document.getElementById('modalEscolherAvatar');
-        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-        modal.show();
-    }
+            function renderizarGradeAvatares() {
+                gradeAvatares.innerHTML = '';
 
-    function salvarAvatar(urlAvatar) {
-        const fotoHeader = document.getElementById('fotoPerfilHeader');
-        if (fotoHeader) {
-            fotoHeader.src = urlAvatar;
-        }
+                ARQUIVOS.forEach((arquivo, i) => {
+                    const caminho = PASTA_AVATARES + arquivo;
+                    const img = document.createElement('img');
+                    img.src = caminho;
+                    img.dataset.caminho = caminho;
+                    img.alt = `Avatar ${i + 1}`;
+                    img.className = 'avatar-opcao';
+                    img.addEventListener('click', () => selecionarAvatar(caminho));
+                    gradeAvatares.appendChild(img);
+                });
+            }
 
-        fetch('/atualizar-avatar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ avatar: urlAvatar })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.sucesso) {
-                    const modalEl = document.getElementById('modalEscolherAvatar');
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) modal.hide();
-                }
-            })
-            .catch(err => console.error('Erro ao salvar avatar:', err));
-    }
+            function abrirModalAvatar(event) {
+                if (event) event.stopPropagation();
 
-    renderizarGradeAvatares();
-</script>
+                avatarSalvo = fotoHeader.getAttribute('src');
+                avatarEscolhido = null;
+
+                previewAvatar.src = avatarSalvo;
+                marcarSelecionado(avatarSalvo);
+                btnSalvarAvatar.disabled = true;
+
+                bootstrap.Modal.getOrCreateInstance(modalAvatarEl).show();
+            }
+
+            function salvarAvatar() {
+                if (!avatarEscolhido) return;
+
+                btnSalvarAvatar.disabled = true;
+
+                fetch('/atualizar-avatar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ avatar: avatarEscolhido })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.sucesso) throw new Error('Falha ao salvar');
+
+                        avatarSalvo = avatarEscolhido;
+                        bootstrap.Modal.getInstance(modalAvatarEl).hide();
+                    })
+                    .catch(err => {
+                        console.error('Erro ao salvar avatar:', err);
+                        btnSalvarAvatar.disabled = false;
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao salvar',
+                            text: 'Não foi possível salvar o avatar. Tente novamente.',
+                            confirmButtonColor: '#F28705',
+                            target: modalAvatarEl
+                        });
+                    });
+            }
+
+            btnSalvarAvatar.addEventListener('click', salvarAvatar);
+
+            // Ao fechar o modal (Cancelar, X ou clique fora), volta para o avatar que estava salvo
+            modalAvatarEl.addEventListener('hidden.bs.modal', () => {
+                if (avatarSalvo) fotoHeader.src = avatarSalvo;
+                avatarEscolhido = null;
+            });
+
+            // Se a foto salva no banco não carregar (ex.: link antigo do DiceBear), usa o avatar padrão
+            (function () {
+                const usarPadrao = () => {
+                    if (!fotoHeader.src.endsWith(AVATAR_PADRAO)) fotoHeader.src = AVATAR_PADRAO;
+                };
+
+                fotoHeader.addEventListener('error', usarPadrao);
+                if (fotoHeader.complete && fotoHeader.naturalWidth === 0) usarPadrao();
+            })();
+
+            renderizarGradeAvatares();
+        </script>
 
 </body>
 

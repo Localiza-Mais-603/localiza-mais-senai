@@ -594,3 +594,28 @@ body.escuro .fechar-card {
   transform: scale(1.15);
   border-color: #024873;
 }
+
+
+.avatar-preview {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #F28705;
+    margin-bottom: 12px;
+}
+
+.avatar-opcao {
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.avatar-opcao:hover {
+    transform: scale(1.08);
+}
+
+.avatar-opcao.selecionado {
+    outline: 3px solid #F28705;
+    outline-offset: 2px;
+    transform: scale(1.08);
+}
