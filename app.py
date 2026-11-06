@@ -1,3 +1,4 @@
+from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
@@ -7,7 +8,7 @@ from model.excluir_item import excluir_itens
 from model.filtro import buscar_itens_filtrados
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
-from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias, cadastrar_categoria, cadastrar_item_encontrado, listar_destinos
+from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias, cadastrar_categoria, cadastrar_item_encontrado, listar_destinos, excluir_categoria
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
@@ -30,6 +31,58 @@ mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
 
+
+# Prazo (em dias) para retirada do item antes do descarte. Altere aqui se precisar.
+PRAZO_DESCARTE_DIAS = 90
+
+
+def calcular_prazo(item):
+    """Calcula o prazo de descarte do item a partir da data em que foi encontrado."""
+    data = item.get('data_encontrado')
+
+    if isinstance(data, datetime):
+        data = data.date()
+    elif isinstance(data, str) and data:
+        try:
+            data = datetime.strptime(data[:10], '%Y-%m-%d').date()
+        except ValueError:
+            data = None
+
+    if not data:
+        item['prazo_texto'] = ''
+        item['prazo_classe'] = ''
+        item['prazo_resumo'] = ''
+        return
+
+    limite = data + timedelta(days=PRAZO_DESCARTE_DIAS)
+    dias = (limite - date.today()).days
+    limite_txt = limite.strftime('%d/%m/%Y')
+
+    if dias < 0:
+        texto = 'Prazo encerrado'
+        classe = 'prazo-vencido'
+        resumo = f'encerrado em {limite_txt}'
+    else:
+        if dias == 0:
+            texto, restante = 'Descarte hoje', 'último dia'
+        elif dias == 1:
+            texto, restante = 'Descarte amanhã', '1 dia restante'
+        else:
+            texto, restante = f'Descarte em {dias} dias', f'{dias} dias restantes'
+
+        if dias <= 7:
+            classe = 'prazo-urgente'
+        elif dias <= 30:
+            classe = 'prazo-atencao'
+        else:
+            classe = 'prazo-ok'
+        resumo = f'até {limite_txt} ({restante})'
+
+    item['prazo_texto'] = texto
+    item['prazo_classe'] = classe
+    item['prazo_resumo'] = resumo
+
+
 def status_do_item(item):
     """Devolve o status do item em minúsculas, sem espaços (evita erro de maiúscula/minúscula)."""
     return (item.get('status') or '').strip().lower()
@@ -39,11 +92,6 @@ def somente_numeros(texto):
     """Remove pontos, traços e espaços (o CPF no banco tem só 11 números)."""
     return ''.join(c for c in (texto or '') if c.isdigit())
 
-
-EXTENSOES_PERMITIDAS = {"png", "jpg", "jpeg", "gif", "webp"}
-
-def arquivo_permitido(nome_arquivo):
-    return "." in nome_arquivo and nome_arquivo.rsplit(".", 1)[1].lower() in EXTENSOES_PERMITIDAS
 
 @app.route("/")
 def index():
@@ -69,8 +117,7 @@ def pag_login_aluno():
             return redirect(url_for("visualizar_itens"))
         else:
             erro = "E-mail ou senha incorretos!"
-    # Passa tipo='aluno' (ou 'usuario') no GET
-    return render_template("login.html", erro=erro, tipo='aluno')
+    return render_template("login.html", erro=erro, tipo='usuario')
 
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
@@ -93,43 +140,28 @@ def pag_cadastro():
 
 @app.route("/cadastro", methods=["POST"])
 def cadastro():
-
     cpf = somente_numeros(request.form["CPF"])
     nome = request.form["nome_completo"]
     curso = request.form["curso"]
     email = request.form["email"]
     senha = request.form["senha"]
-
     cadastrar_usuario(cpf, nome, curso, email, senha)
-
-    flash("Seu cadastro foi realizado com sucesso! Agora você já pode fazer login.", "success")
-
-    return redirect(url_for("pag_login_aluno"))
+    return redirect("/login/usuario")
 
 @app.route('/cadastro-coor', methods=['GET', 'POST'])
 def cadastro_coor():
-
     if request.method == 'POST':
-
         nome = request.form['nome_completo']
         cpf = somente_numeros(request.form['cpf'])
         email = request.form['email']
         senha = request.form['senha']
-
         cadastrar_coor(nome, cpf, email, senha)
-
-        flash("Seu cadastro foi realizado com sucesso! Agora você já pode fazer login.", "success")
-
-        return redirect(url_for('pag_login_coordenacao'))
-
+        return redirect('/login/setor/de/apoio')
     return render_template('cadastro_coordenacao.html')
+
 @app.route("/editar-item-cadastrado")
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
-
-@app.route("/itens_retirados")
-def pag_itens_retirados():
-    return render_template("itens_retirados.html")
 
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
@@ -175,14 +207,17 @@ def visualizar_itens():
         if status_do_item(item) not in ('arquivado', 'perdido')
     ]
 
-    # Adiciona o nome de quem publicou cada item
     for item in itens:
+        # Nome de quem publicou o item
         email_publicador = item.get('email')
         if email_publicador:
             publicador = buscar_usuario_por_email(email_publicador)
             item['publicado_nome'] = publicador['nome'] if publicador else ''
         else:
             item['publicado_nome'] = ''
+
+        # Prazo de retirada / descarte
+        calcular_prazo(item)
 
     categorias = listar_categorias()
     destinos = listar_destinos()
@@ -192,9 +227,9 @@ def visualizar_itens():
         itens=itens,
         usuario=usuario_atualizado,
         categorias=categorias,
-        destinos=destinos
+        destinos=destinos,
+        prazo_dias=PRAZO_DESCARTE_DIAS
     )
-
 
 @app.route("/adicionar/item")
 def pag_cadastrar_item_coor():
@@ -219,18 +254,6 @@ def registrar_itens_coordenacao():
 
     descricao = request.form.get("descricao")
     cpf_coordenador = session.get("usuario", {}).get("cpf")
-    nome_foto = None
-    foto = request.files.get("foto")
-
-    if foto and foto.filename != "":
-        if not arquivo_permitido(foto.filename):
-            flash("Formato de imagem inválido. Use PNG, JPG, JPEG, GIF ou WEBP.", "error")
-            return redirect(request.url)
-
-        nome_foto = secure_filename(foto.filename)
-        pasta_destino = os.path.join("static", "img_upload")
-        os.makedirs(pasta_destino, exist_ok=True)
-        foto.save(os.path.join(pasta_destino, nome_foto))
 
     cadastrar_item(
         item=item,
@@ -239,7 +262,7 @@ def registrar_itens_coordenacao():
         status="DISPONIVEL",
         id_categoria=id_categoria,
         local=local,
-        foto=nome_foto,
+        foto=None,
         email=None,
         cpf_coordenador=cpf_coordenador
     )
@@ -248,72 +271,50 @@ def registrar_itens_coordenacao():
 
 
 # PERDI ALGO: o aluno relata a perda e o relato vai só para a coordenação (aba Relatórios)
-@app.route("/registro/itens", methods=["POST"])
+@app.route("/registro/itens", methods=["GET", "POST"])
 def registrar_itens():
+    if request.method == "POST":
+        item = request.form.get("item")
+        id_categoria = request.form.get("categoria_id")
+        if not id_categoria or id_categoria.strip() == "":
+            id_categoria = None
+        else:
+            id_categoria = int(id_categoria)
+        local = request.form.get("local")
+        data_encontrado = request.form.get("data")
+        if data_encontrado == "":
+            data_encontrado = None
+        descricao = request.form.get("descricao")
+        email = session["usuario"].get("email")
+        nome_foto = None
+        foto = request.files.get("foto")
 
-    if session.get("perfil") != "aluno":
-        return redirect(url_for("pag_login_aluno"))
+        if foto and foto.filename != "":
+            nome_foto = secure_filename(foto.filename)
+            pasta_destino = os.path.join("static", "img_upload")
+            os.makedirs(pasta_destino, exist_ok=True)
+            caminho_completo = os.path.join(pasta_destino, nome_foto)
+            foto.save(caminho_completo)
 
-    item = request.form.get("item")
+        registrar_item_perdido(
+            item=item,
+            descricao=descricao,
+            data_encontrado=data_encontrado,
+            status="Perdido",
+            id_categoria=id_categoria,
+            local=local,
+            foto=nome_foto,
+            email=email,
+            cpf_coordenador=None
+        )
 
-    id_categoria = request.form.get("categoria_id")
+        flash("Seu relato foi enviado à coordenação!", "success")
 
-    if not id_categoria or id_categoria.strip() == "":
-        id_categoria = None
-    else:
-        id_categoria = int(id_categoria)
+        return redirect(url_for("visualizar_itens"))
 
-    local = request.form.get("local")
+    categorias = listar_categorias()
+    return render_template("registrar_item_perdido.html", categorias=categorias)
 
-    data_encontrado = request.form.get("data")
-
-    if not data_encontrado:
-        data_encontrado = None
-
-    descricao = request.form.get("descricao")
-
-    email = session["usuario"].get("email")
-
-    nome_foto = None
-    foto = request.files.get("foto")
-
-    if foto and foto.filename != "":
-
-        # Verifica se o arquivo é uma imagem permitida
-        if not arquivo_permitido(foto.filename):
-
-            flash(
-                "Arquivo inválido! Envie somente imagens PNG, JPG, JPEG, GIF ou WEBP.",
-                "error"
-            )
-
-            return redirect(url_for("visualizar_itens", erro_foto=1))
-
-        nome_foto = secure_filename(foto.filename)
-
-        pasta_destino = os.path.join("static", "img_upload")
-
-        os.makedirs(pasta_destino, exist_ok=True)
-
-        caminho_completo = os.path.join(pasta_destino, nome_foto)
-
-        foto.save(caminho_completo)
-
-    registrar_item_perdido(
-        item=item,
-        descricao=descricao,
-        data_encontrado=data_encontrado,
-        status="Perdido",
-        id_categoria=id_categoria,
-        local=local,
-        foto=nome_foto,
-        email=email,
-        cpf_coordenador=None
-    )
-
-    flash("Seu relato foi enviado à coordenação!", "success")
-
-    return redirect(url_for("visualizar_itens"))
 
 # ENCONTREI ALGO: o aluno cadastra o item achado e ele aparece na lista principal
 @app.route("/registro/itens/encontrado", methods=["POST"])
@@ -361,6 +362,18 @@ def api_cadastrar_categoria():
         "id_categoria": id_novo,
         "nome": nome.strip()
     })
+
+
+# Só a coordenação pode excluir categorias (os itens ficam sem categoria)
+@app.route("/excluir-categoria/<int:id_categoria>", methods=["POST"])
+def excluir_categoria_rota(id_categoria):
+    if session.get("perfil") != "coordenacao":
+        return redirect("/login/usuario")
+
+    excluir_categoria(id_categoria)
+    flash("Categoria excluída com sucesso!", "success")
+    return redirect(url_for("visualizar_itens"))
+
 
 @app.route("/recuperar-senha", methods=["GET", "POST"])
 def pag_recuperar_senha():
@@ -455,35 +468,23 @@ def desarquivar_item(id_item):
 
 @app.route("/relatorios-perda")
 def relatorios_perda():
-
-    # Apenas coordenação pode acessar
+    # Proteção: apenas coordenação pode acessar
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
     usuario_sessao = session.get("usuario")
     usuario_atualizado = None
-
     if usuario_sessao:
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
-    # Busca todos os itens cadastrados
+    # Apenas os relatos de "Perdi algo" (status Perdido)
     todos_itens = listar_todos()
+    itens_relatados = [item for item in todos_itens if status_do_item(item) == 'perdido']
 
-    # Inclui os itens perdidos e os encontrados
-    itens_relatados = [
-        item for item in todos_itens
-        if (
-            status_do_item(item) == 'perdido'
-            or item.get('destino_objeto')
-        )
-    ]
-
-    # Busca o nome de quem publicou
+    # Nome de quem relatou a perda (disponível como item.publicado_nome no template)
     for item in itens_relatados:
-
         email_publicador = item.get('email')
-
         if email_publicador:
             publicador = buscar_usuario_por_email(email_publicador)
             item['publicado_nome'] = publicador['nome'] if publicador else ''
