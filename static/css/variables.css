@@ -1,49 +1,68 @@
 :root {
-    /* Azul, laranja, branco e cinza */
-    --azul-principal: #0F4C75;
-    --azul-escuro: #0B3251;
-    --azul-hover: #1B6CA8;
+    /* --- PALETA DE CORES PRINCIPAL --- */
+    /* Substituído o azul antigo por tons de azul-marinho mais profundos e premium (estilo Slate/Tailwind) */
+    --azul-principal: #1E3A8A;   /* Azul royal institucional, transmite confiança */
+    --azul-escuro: #0F172A;      /* Azul-marinho quase preto, perfeito para textos e header */
+    --azul-hover: #2563EB;       /* Azul vibrante para estados de interação */
 
-    --laranja-principal: #E87A24;
-    --laranja-hover: #D06513;
+    /* Suavizado o laranja para uma tonalidade mais sofisticada (Coral/Tangerina) e menos "agressiva" */
+    --laranja-principal: #F97316; /* Laranja moderno, quente e acolhedor */
+    --laranja-hover: #EA580C;     /* Laranja mais profundo para o hover do botão */
 
+    /* --- SUPERFÍCIES --- */
     --branco: #FFFFFF;
-    --fundo-pagina: #F4F6F9;
+    --fundo-pagina: #F8FAFC;     /* Mudado de cinza puro para um cinza azulado muito leve, dá sensação de limpeza */
     --fundo-card: #FFFFFF;
 
-    /* Cinzas e textos */
-    --cinza-borda: #DCDCDC;
-    --cinza-suave: #E9ECEF;
-    --texto-principal: #0B3251;
-    --texto-secundario: #6C757D;
+    /* --- CINZAS, BORDAS E TEXTOS --- */
+    --cinza-borda: #E2E8F0;      /* Cinza mais sutil para não recortar os elementos de forma bruta */
+    --cinza-suave: #F1F5F9;      /* Perfeito para fundos de inputs e badges */
+    --texto-principal: #0F172A;  /* Mesma cor do azul-escuro, cria harmonia visual na leitura */
+    --texto-secundario: #64748B; /* Cinza azulado para descrições secundárias */
 
-    /* Cores de apoio (botões e chips) */
-    --cor-botao: #0B3251;
-    --cor-destaque: #0B3251;   /* títulos e links */
-    --perigo: #B3261E;
-    --sucesso: #17704A;
-    --alerta: #8A5300;
-    --fundo-overlay: rgba(8, 16, 30, 0.6);
+    /* --- STATUS E APOIO --- */
+    --cor-botao: #1E3A8A;
+    --cor-destaque: #2563EB;   
+    --perigo: #EF4444;           /* Tons de feedback mais vivos e modernos */
+    --sucesso: #10B981;
+    --alerta: #F59E0B;
+    --fundo-overlay: rgba(15, 23, 42, 0.6); /* Overlay baseado no azul-escuro para manter o tema */
 
-    /* Fonte, raios e sombra */
-    --fonte-principal: 'Chakra Petch', sans-serif;
-    --raio-borda: 6px;
-    --raio-card: 12px;
-    --sombra-card: 0 6px 18px rgba(0, 0, 0, 0.08);
+    /* --- TIPOGRAFIA, BORDAS E SOMBRAS --- */
+    /* 💡 SUGESTÃO CRÍTICA: Substituir 'Chakra Petch' por fontes sem serifa modernas e limpas.
+       'Inter' ou 'Plus Jakarta Sans' tiram totalmente a "cara de IA" e deixam o visual super profissional. */
+    --fonte-principal: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+    
+    /* Soft Corners: Aumentamos um pouco os raios de borda. Cantos mais arredondados dão aspecto amigável e atual */
+    --raio-borda: 10px;
+    --raio-card: 16px;
+    
+    /* Sombra mais difusa e leve (o segredo das interfaces modernas de alto nível) */
+    --sombra-card: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
 }
 
-/* Modo escuro: só trocamos as variáveis, o resto do CSS se adapta sozinho */
+/* --- MODO ESCURO REFINADO --- */
+/* Tons escuros lavados com azul (Midnight Dark), evitando o preto puro (#121212) que cansa os olhos */
 body.escuro {
-    --fundo-pagina: #121212;
-    --fundo-card: #1E1E1E;
-    --texto-principal: #E0E0E0;
-    --texto-secundario: #A0A0A0;
-    --cinza-borda: #333333;
-    --cinza-suave: #2A2A2A;
-    --cor-botao: #024873;
-    --cor-destaque: #38bdf8;
-    --perigo: #FF8A80;
-    --sucesso: #5FD39A;
-    --alerta: #F0B35A;
-    --sombra-card: 0 6px 18px rgba(0, 0, 0, 0.4);
+    --fundo-pagina: #0B0F19;
+    --fundo-card: #151D30;
+    
+    --azul-principal: #3B82F6;
+    --azul-escuro: #F8FAFC;      /* Inverte para a leitura ficar perfeita no escuro */
+    --azul-hover: #60A5FA;
+    
+    --texto-principal: #F8FAFC;
+    --texto-secundario: #94A3B8;
+    
+    --cinza-borda: #1E293B;
+    --cinza-suave: #222E45;
+    
+    --cor-botao: #3B82F6;
+    --cor-destaque: #38BDF8;
+    
+    --perigo: #F87171;
+    --sucesso: #34D399;
+    --alerta: #FBBF24;
+    
+    --sombra-card: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
 }

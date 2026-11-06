@@ -494,18 +494,18 @@ body.escuro .fechar-card {
     z-index: 1;
 }
 
+
+
 /* Estilo dos ícones */
 .switch-darkmode .icons i {
     font-size: 14px;
     transition: color 0.3s ease;
 }
-
 .switch-darkmode .fa-lightbulb {
-    color: #f39c12; /* Lâmpada amarela */
+    color: #f39c12; 
 }
-
 .switch-darkmode .fa-moon {
-    color: #7f8c8d; /* Lua cinzenta no modo claro */
+    color: #7f8c8d;
 }
 
 /* Círculo deslizante */
@@ -524,18 +524,13 @@ body.escuro .fechar-card {
 
 /* ESTADOS QUANDO O CHECKBOX ESTÁ MARCADO (MODO ESCURO) */
 
-/* Move o círculo para a direita */
 #switch-dark-mode:checked + .form-check-label .circle {
     transform: translateX(30px);
     background-color: #2c3e50;
 }
-
-/* Altera o fundo do botão */
 #switch-dark-mode:checked + .form-check-label .switch-darkmode {
     background-color: #1a252f;
 }
-
-/* Ajusta a cor da lua quando ativo */
 #switch-dark-mode:checked + .form-check-label .fa-moon {
     color: #f1c40f;
 }

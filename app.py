@@ -169,7 +169,7 @@ def visualizar_itens():
     else:
         itens = listar_todos()
 
-    # Esconde da tela principal: arquivados e relatos de perda (só a coordenação vê, em Relatórios)
+ 
     itens = [
         item for item in itens
         if status_do_item(item) not in ('arquivado', 'perdido')
@@ -247,7 +247,7 @@ def registrar_itens_coordenacao():
     return redirect(url_for("visualizar_itens"))
 
 
-# PERDI ALGO: o aluno relata a perda e o relato vai só para a coordenação (aba Relatórios)
+
 @app.route("/registro/itens", methods=["POST"])
 def registrar_itens():
 
