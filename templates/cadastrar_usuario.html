@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_usuario.css') }}">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_usuario.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Cadastro de usuário</title>
 </head>
 <body>
@@ -23,7 +25,6 @@
                     </label>
                </div>
         </div>
-        
     </nav>
 
     <form action="/cadastro" method="post">
@@ -33,7 +34,7 @@
         <input type="text" id="nome" name="nome_completo" required>
 
         <label for="CPF">CPF:</label>
-        <input type="text" id="CPF" name="CPF" required>
+        <input type="text" id="CPF" name="CPF" maxlength="14" placeholder="000.000.000-00" required>
 
         <label for="email">E-mail:</label>
         <input type="email" id="email" name="email" required>
@@ -50,11 +51,10 @@
             Já possui uma conta?
             <a href="{{ url_for('pag_login_aluno') }}?perfil=usuario">Logue.</a>
         </p>
-
     </form>
 
-
     <script src="/static/js/visualizar_itens.js"></script>
-
+    <!-- Script de validação e máscara de CPF -->
+    <script src="/static/js/validar_cpf.js"></script>
 </body>
 </html>
