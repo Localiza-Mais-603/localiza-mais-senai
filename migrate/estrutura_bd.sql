@@ -65,3 +65,9 @@ CREATE TABLE retirada (
 
     FOREIGN KEY (id_item) REFERENCES item (id_item)
 );
+
+-- TABELA DE OPÇÕES DE DESTINO (para o dropdown)
+CREATE TABLE destino_opcao (
+    id_destino INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    descricao VARCHAR(150) NOT NULL
+);
