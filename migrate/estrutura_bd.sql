@@ -1,13 +1,11 @@
 CREATE DATABASE IF NOT EXISTS db_localiza;
 USE db_localiza;
 
-
 -- TABELA DE CATEGORIAS
 CREATE TABLE categoria (
     id_categoria INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(50) NOT NULL
 );
-
 
 -- TABELA DE COORDENADORES (Setor de Apoio)
 CREATE TABLE coordenador (
@@ -18,7 +16,6 @@ CREATE TABLE coordenador (
     token_recuperacao VARCHAR(255) NULL
 );
 
-
 -- TABELA DE USUÁRIOS (Alunos)
 CREATE TABLE usuarios (
     email VARCHAR(200) NOT NULL PRIMARY KEY,
@@ -28,7 +25,6 @@ CREATE TABLE usuarios (
     senha VARCHAR(200) NOT NULL,
     token_recuperacao VARCHAR(255) NULL
 );
-
 
 -- TABELA DE ITENS (Perdidos / Encontrados)
 CREATE TABLE item (
@@ -44,12 +40,10 @@ CREATE TABLE item (
     id_categoria INT,
     destino_objeto VARCHAR(150) NULL,
 
-
     FOREIGN KEY (email) REFERENCES usuarios (email),
     FOREIGN KEY (cpf_coordenador) REFERENCES coordenador (cpf),
     FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria)
 );
-
 
 -- TABELA DE ITENS RETIRADOS
 CREATE TABLE retirada (
@@ -61,7 +55,6 @@ CREATE TABLE retirada (
     email_retirante VARCHAR(200) NULL,
     cpf_retirante VARCHAR(11) NULL,
     data_retirada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
 
     FOREIGN KEY (id_item) REFERENCES item (id_item)
 );
