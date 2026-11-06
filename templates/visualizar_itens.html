@@ -83,6 +83,12 @@
                             </span>
                         </li>
                         <li>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                data-bs-target="#modalCategorias">
+                                Gerenciar categorias
+                            </a>
+                        </li>
+                        <li>
                             <hr class="dropdown-divider">
                         </li>
                         {% endif %}
@@ -609,6 +615,67 @@
         </div>
     </div>
 
+    <!-- MODAL: GERENCIAR CATEGORIAS (COORDENAÇÃO) -->
+    {% if session.get('perfil') == 'coordenacao' %}
+    <div class="modal fade" id="modalCategorias" tabindex="-1"
+        aria-labelledby="tituloCategorias" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5 text-uppercase fw-bold" id="tituloCategorias">
+                        Gerenciar categorias
+                    </h2>
+
+                    <button type="button" class="btn-close"
+                        data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <p class="text-muted small mb-3">
+                        Ao excluir uma categoria, os itens dela continuam cadastrados, só ficam sem categoria.
+                    </p>
+
+                    {% if categorias %}
+                    <ul class="list-group">
+                        {% for categoria in categorias %}
+                        {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
+                        {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
+
+                        <li class="list-group-item d-flex align-items-center justify-content-between">
+                            <span>{{ cat_nome }}</span>
+
+                            <form action="{{ url_for('excluir_categoria_rota', id_categoria=cat_id) }}"
+                                method="POST" class="form-excluir-categoria"
+                                data-nome="{{ cat_nome }}">
+
+                                <button type="submit" class="btn btn-sm btn-danger fw-bold">
+                                    Excluir
+                                </button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-center text-muted mb-0">Nenhuma categoria cadastrada.</p>
+                    {% endif %}
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                        Fechar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- MODAL DE FILTROS -->
     <div class="grupo-filtro" id="janelaFiltro" role="dialog" aria-hidden="true">
 
@@ -869,6 +936,35 @@
         })();
     </script>
 
+    <!-- EXCLUIR CATEGORIA: CONFIRMAÇÃO -->
+    <script>
+        document.querySelectorAll('.form-excluir-categoria').forEach(form => {
+
+            form.addEventListener('submit', function (e) {
+
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Excluir a categoria "' + form.dataset.nome + '"?',
+                    text: 'Os itens dessa categoria continuarão cadastrados, mas ficarão sem categoria.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sim, excluir',
+                    cancelButtonText: 'Cancelar',
+                    target: document.getElementById('modalCategorias')
+                }).then((resultado) => {
+
+                    if (resultado.isConfirmed) form.submit();
+
+                });
+
+            });
+
+        });
+    </script>
+
     <!-- SWEETALERT APÓS CADASTRO / EDIÇÃO -->
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% for category, message in messages %}
@@ -900,7 +996,7 @@
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
                 cancelButtonColor: "#6c757d",
-                confirmButtonText: "Sim, sair",
+                confirmButtonText: "Sim, excluir",
                 cancelButtonText: "Cancelar"
 
             }).then((resultado) => {
