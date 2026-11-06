@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -15,6 +14,93 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Pílula de prazo (abre o SweetAlert explicativo) */
+        .chip-prazo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(242, 135, 5, 0.55);
+            background: rgba(242, 135, 5, 0.12);
+            color: inherit;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .chip-prazo:hover {
+            background: rgba(242, 135, 5, 0.22);
+            transform: translateY(-1px);
+        }
+
+        .chip-prazo svg { color: #F28705; }
+        .chip-prazo .fa-circle-info { opacity: 0.6; }
+
+        /* Barra e legenda dentro do SweetAlert */
+        .barra-prazo {
+            display: flex;
+            gap: 3px;
+            height: 10px;
+            margin-bottom: 16px;
+        }
+
+        .barra-prazo span { border-radius: 999px; }
+
+        .legenda-prazo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 16px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .legenda-prazo div {
+            display: grid;
+            grid-template-columns: 12px 1fr;
+            column-gap: 8px;
+            align-items: center;
+        }
+
+        .legenda-prazo i {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            grid-row: 1 / span 2;
+        }
+
+        .legenda-prazo b {
+            font-size: 0.9rem;
+            color: #222;
+        }
+
+        .legenda-prazo small {
+            grid-column: 2;
+            font-size: 0.78rem;
+            color: #666;
+        }
+
+        /* Selo de prazo nos cards */
+        .badge-prazo {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #fff;
+        }
+
+        .prazo-ok       { background-color: #2B7566; }
+        .prazo-atencao  { background-color: #F28705; }
+        .prazo-urgente  { background-color: #DC3545; }
+        .prazo-vencido  { background-color: #6c757d; }
+    </style>
 </head>
 
 <body>
@@ -243,6 +329,20 @@
         </section>
         {% endif %}
 
+        <!-- PÍLULA DE PRAZO (abre o SweetAlert explicativo) -->
+        <div class="container d-flex justify-content-center my-2">
+            <button type="button" class="chip-prazo" onclick="mostrarPrazo()"
+                aria-label="Ver como funciona o prazo de retirada dos itens">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                    viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                </svg>
+                <span>Prazo de retirada: <strong>{{ prazo_dias }} dias</strong></span>
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+            </button>
+        </div>
+
         <!-- FILTRO DE DATA -->
         <section class="item-data" aria-label="Filtro de datas">
             <label for="data">A partir de:</label>
@@ -267,12 +367,24 @@
                         data-status="{{ item.status }}"
                         data-publicado="{{ item.publicado_nome if item.publicado_nome else '' }}"
                         data-destino="{{ item.destino_objeto if item.destino_objeto else '' }}"
+                        data-prazo="{{ item.prazo_resumo if item.prazo_resumo else '' }}"
                         data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
                         onclick="abrirCard(this)">
 
                         <div class="card-corpo">
                             <h3 class="card-titulo">{{ item.item }}</h3>
                             <p class="card-text">{{ item.descricao }}</p>
+
+                            {% if item.prazo_texto %}
+                            <span class="badge-prazo {{ item.prazo_classe }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                    viewBox="0 0 16 16" aria-hidden="true">
+                                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                                </svg>
+                                {{ item.prazo_texto }}
+                            </span>
+                            {% endif %}
                         </div>
 
                         {% if session.get('perfil') == 'coordenacao' %}
@@ -331,6 +443,11 @@
             <p><strong>Local:</strong> <span id="modalLocal"></span></p>
             <p><strong>Data:</strong> <span id="modalData"></span></p>
             <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+
+            <p id="blocoPrazo" style="display: none;">
+                <strong>Prazo para retirada:</strong>
+                <span id="modalPrazo"></span>
+            </p>
 
             <p id="blocoDestino" style="display: none;">
                 <strong>O que fez com o objeto:</strong>
@@ -457,7 +574,6 @@
                             placeholder="Cor, marca, características..." required></textarea>
                     </div>
 
-                    <!-- CAMPO DE FOTO CORRIGIDO -->
                     <div class="mb-3">
                         <label for="perdFoto" class="form-label">Foto (opcional)</label>
 
@@ -719,7 +835,63 @@
     <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
     <script src="{{ url_for('static', filename='js/confirmaacoes.js') }}"></script>
 
-    <!-- PUBLICADO POR + DESTINO -->
+    <!-- PRAZO DE RETIRADA: SWEETALERT EXPLICATIVO -->
+    <script>
+        const PRAZO_DIAS = {{ prazo_dias }};
+
+        function mostrarPrazo() {
+
+            const trechoVerde = Math.max(PRAZO_DIAS - 30, 1);
+
+            Swal.fire({
+                title: 'Prazo de retirada',
+                width: 520,
+                confirmButtonText: 'Entendi',
+                confirmButtonColor: '#F28705',
+                html: `
+                    <p style="margin: 0 0 18px; color: #555; font-size: 0.95rem;">
+                        Todo item fica guardado por <strong>${PRAZO_DIAS} dias</strong>,
+                        contados a partir do dia em que foi encontrado.
+                    </p>
+
+                    <div class="barra-prazo">
+                        <span style="flex: ${trechoVerde}; background: #2B7566;"></span>
+                        <span style="flex: 23; background: #F28705;"></span>
+                        <span style="flex: 7; background: #DC3545;"></span>
+                    </div>
+
+                    <div class="legenda-prazo">
+                        <div>
+                            <i style="background: #2B7566;"></i>
+                            <b>Tranquilo</b>
+                            <small>mais de 30 dias</small>
+                        </div>
+                        <div>
+                            <i style="background: #F28705;"></i>
+                            <b>Atenção</b>
+                            <small>30 dias ou menos</small>
+                        </div>
+                        <div>
+                            <i style="background: #DC3545;"></i>
+                            <b>Última chamada</b>
+                            <small>7 dias ou menos</small>
+                        </div>
+                        <div>
+                            <i style="background: #6c757d;"></i>
+                            <b>Descartado</b>
+                            <small>após ${PRAZO_DIAS} dias</small>
+                        </div>
+                    </div>
+
+                    <p style="margin: 0; color: #555; font-size: 0.9rem;">
+                        Reconheceu o seu? Procure a coordenação para retirá-lo.
+                    </p>
+                `
+            });
+        }
+    </script>
+
+    <!-- PUBLICADO POR + DESTINO + PRAZO -->
     <script>
         (function () {
 
@@ -731,6 +903,7 @@
 
                 original(el);
 
+                // Publicado por
                 const nome = el.dataset.publicado;
                 const blocoPub = document.getElementById('blocoPublicador');
 
@@ -741,6 +914,7 @@
                     blocoPub.style.display = 'none';
                 }
 
+                // O que fez com o objeto
                 const destino = el.dataset.destino;
                 const blocoDest = document.getElementById('blocoDestino');
 
@@ -749,6 +923,17 @@
                     blocoDest.style.display = '';
                 } else {
                     blocoDest.style.display = 'none';
+                }
+
+                // Prazo para retirada
+                const prazo = el.dataset.prazo;
+                const blocoPrazo = document.getElementById('blocoPrazo');
+
+                if (prazo) {
+                    document.getElementById('modalPrazo').textContent = prazo;
+                    blocoPrazo.style.display = '';
+                } else {
+                    blocoPrazo.style.display = 'none';
                 }
 
             };
@@ -851,6 +1036,8 @@
 
             const form = document.getElementById("formPerdi");
             const campoFoto = document.getElementById("perdFoto");
+
+            if (!form || !campoFoto) return;
 
             const extensoesPermitidas = [
                 "png",
@@ -996,7 +1183,7 @@
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
                 cancelButtonColor: "#6c757d",
-                confirmButtonText: "Sim, excluir",
+                confirmButtonText: "Sim, sair",
                 cancelButtonText: "Cancelar"
 
             }).then((resultado) => {

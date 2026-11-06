@@ -1,3 +1,4 @@
+from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
@@ -28,6 +29,58 @@ app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.
 
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
+
+
+
+# Prazo (em dias) para retirada do item antes do descarte. Altere aqui se precisar.
+PRAZO_DESCARTE_DIAS = 90
+
+
+def calcular_prazo(item):
+    """Calcula o prazo de descarte do item a partir da data em que foi encontrado."""
+    data = item.get('data_encontrado')
+
+    if isinstance(data, datetime):
+        data = data.date()
+    elif isinstance(data, str) and data:
+        try:
+            data = datetime.strptime(data[:10], '%Y-%m-%d').date()
+        except ValueError:
+            data = None
+
+    if not data:
+        item['prazo_texto'] = ''
+        item['prazo_classe'] = ''
+        item['prazo_resumo'] = ''
+        return
+
+    limite = data + timedelta(days=PRAZO_DESCARTE_DIAS)
+    dias = (limite - date.today()).days
+    limite_txt = limite.strftime('%d/%m/%Y')
+
+    if dias < 0:
+        texto = 'Prazo encerrado'
+        classe = 'prazo-vencido'
+        resumo = f'encerrado em {limite_txt}'
+    else:
+        if dias == 0:
+            texto, restante = 'Descarte hoje', 'último dia'
+        elif dias == 1:
+            texto, restante = 'Descarte amanhã', '1 dia restante'
+        else:
+            texto, restante = f'Descarte em {dias} dias', f'{dias} dias restantes'
+
+        if dias <= 7:
+            classe = 'prazo-urgente'
+        elif dias <= 30:
+            classe = 'prazo-atencao'
+        else:
+            classe = 'prazo-ok'
+        resumo = f'até {limite_txt} ({restante})'
+
+    item['prazo_texto'] = texto
+    item['prazo_classe'] = classe
+    item['prazo_resumo'] = resumo
 
 
 def status_do_item(item):
@@ -154,14 +207,17 @@ def visualizar_itens():
         if status_do_item(item) not in ('arquivado', 'perdido')
     ]
 
-    # Adiciona o nome de quem publicou cada item
     for item in itens:
+        # Nome de quem publicou o item
         email_publicador = item.get('email')
         if email_publicador:
             publicador = buscar_usuario_por_email(email_publicador)
             item['publicado_nome'] = publicador['nome'] if publicador else ''
         else:
             item['publicado_nome'] = ''
+
+        # Prazo de retirada / descarte
+        calcular_prazo(item)
 
     categorias = listar_categorias()
     destinos = listar_destinos()
@@ -171,9 +227,9 @@ def visualizar_itens():
         itens=itens,
         usuario=usuario_atualizado,
         categorias=categorias,
-        destinos=destinos
+        destinos=destinos,
+        prazo_dias=PRAZO_DESCARTE_DIAS
     )
-
 
 @app.route("/adicionar/item")
 def pag_cadastrar_item_coor():
