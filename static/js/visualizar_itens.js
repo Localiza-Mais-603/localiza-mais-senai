@@ -131,3 +131,39 @@ function abrirModalEdicao(botao, idItem) {
 function fecharModalEdicao() {
     if (modalEdicao) modalEdicao.classList.remove("aberto");
 }
+
+
+
+// Exemplo se estiver usando JS para submeter os formulários
+document.querySelectorAll('.form-arquivar').forEach(form => {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const response = await fetch(form.action, { method: 'POST' });
+
+    if (response.ok) {
+      // Força o redirecionamento após salvar no banco
+      window.location.href = "/itens-arquivados"; 
+    }
+  });
+});
+
+
+function abrirModal(idItem) {
+    const modal = document.getElementById('modal-retirada');
+    const form = document.getElementById('form-retirada');
+    
+    // Define a rota com o ID do item
+    form.action = '/retirada/' + idItem;
+    
+    // Exibe o modal
+    modal.style.display = 'flex';
+}
+
+function fecharModal() {
+    const modal = document.getElementById('modal-retirada');
+    
+    // Esconde o modal
+    modal.style.display = 'none';
+}

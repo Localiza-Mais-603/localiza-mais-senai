@@ -11,6 +11,8 @@ from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
+
+from model.retirar_item import retirar_item
 import os
 from werkzeug.utils import secure_filename
 
@@ -503,5 +505,21 @@ def editar_item(id_item):
     return redirect(url_for("visualizar_itens"))
 
 
+
+@app.route("/retirada/<int:id_item>", methods=["POST"])
+def registrar_retirada(id_item):
+    # 1. Pega os dados enviados pelo formulário HTML
+    nome = request.form["nome"]
+    telefone = request.form["telefone"]
+    curso = request.form["curso"]
+    email = request.form.get("email", "")
+    cpf = request.form.get("cpf", "")
+
+    # 2. Chama a função do arquivo banco.py
+    retirar_item(id_item, nome, telefone, curso, email, cpf)
+
+    # 3. Vai direto para a página de itens arquivados
+    return redirect(url_for("itens_retirados"))
+    
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
