@@ -116,6 +116,10 @@ def cadastro_coor():
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
 
+@app.route("/itens_retirados")
+def pag_itens_retirados():
+    return render_template("itens_retirados.html")
+
 @app.route("/visualizar-perfil")
 def visualizar_perfil():
     usuario_sessao = session.get("usuario")
@@ -233,54 +237,72 @@ def registrar_itens_coordenacao():
 
 
 # PERDI ALGO: o aluno relata a perda e o relato vai só para a coordenação (aba Relatórios)
-@app.route("/registro/itens", methods=["GET", "POST"])
+@app.route("/registro/itens", methods=["POST"])
 def registrar_itens():
-    if request.method == "POST":
-        item = request.form.get("item")
-        id_categoria = request.form.get("categoria_id")
-        if not id_categoria or id_categoria.strip() == "":
-            id_categoria = None
-        else:
-            id_categoria = int(id_categoria)
-        local = request.form.get("local")
-        data_encontrado = request.form.get("data")
-        if data_encontrado == "":
-            data_encontrado = None
-        descricao = request.form.get("descricao")
-        email = session["usuario"].get("email")
-        nome_foto = None
-        foto = request.files.get("foto")
 
-        if foto and foto.filename != "":
-            if not arquivo_permitido(foto.filename):
-                flash("Formato de imagem inválido. Use PNG, JPG, JPEG, GIF ou WEBP.", "error")
-                return redirect(request.url)
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
 
-            nome_foto = secure_filename(foto.filename)
-            pasta_destino = os.path.join("static", "img_upload")
-            os.makedirs(pasta_destino, exist_ok=True)
-            caminho_completo = os.path.join(pasta_destino, nome_foto)
-            foto.save(caminho_completo)
+    item = request.form.get("item")
 
-        registrar_item_perdido(
-            item=item,
-            descricao=descricao,
-            data_encontrado=data_encontrado,
-            status="Perdido",
-            id_categoria=id_categoria,
-            local=local,
-            foto=nome_foto,
-            email=email,
-            cpf_coordenador=None
-        )
+    id_categoria = request.form.get("categoria_id")
 
-        flash("Seu relato foi enviado à coordenação!", "success")
+    if not id_categoria or id_categoria.strip() == "":
+        id_categoria = None
+    else:
+        id_categoria = int(id_categoria)
 
-        return redirect(url_for("visualizar_itens"))
+    local = request.form.get("local")
 
-    categorias = listar_categorias()
-    return render_template("registrar_item_perdido.html", categorias=categorias)
+    data_encontrado = request.form.get("data")
 
+    if not data_encontrado:
+        data_encontrado = None
+
+    descricao = request.form.get("descricao")
+
+    email = session["usuario"].get("email")
+
+    nome_foto = None
+    foto = request.files.get("foto")
+
+    if foto and foto.filename != "":
+
+        # Verifica se o arquivo é uma imagem permitida
+        if not arquivo_permitido(foto.filename):
+
+            flash(
+                "Arquivo inválido! Envie somente imagens PNG, JPG, JPEG, GIF ou WEBP.",
+                "error"
+            )
+
+            return redirect(url_for("visualizar_itens", erro_foto=1))
+
+        nome_foto = secure_filename(foto.filename)
+
+        pasta_destino = os.path.join("static", "img_upload")
+
+        os.makedirs(pasta_destino, exist_ok=True)
+
+        caminho_completo = os.path.join(pasta_destino, nome_foto)
+
+        foto.save(caminho_completo)
+
+    registrar_item_perdido(
+        item=item,
+        descricao=descricao,
+        data_encontrado=data_encontrado,
+        status="Perdido",
+        id_categoria=id_categoria,
+        local=local,
+        foto=nome_foto,
+        email=email,
+        cpf_coordenador=None
+    )
+
+    flash("Seu relato foi enviado à coordenação!", "success")
+
+    return redirect(url_for("visualizar_itens"))
 
 # ENCONTREI ALGO: o aluno cadastra o item achado e ele aparece na lista principal
 @app.route("/registro/itens/encontrado", methods=["POST"])
@@ -422,23 +444,35 @@ def desarquivar_item(id_item):
 
 @app.route("/relatorios-perda")
 def relatorios_perda():
-    # Proteção: apenas coordenação pode acessar
+
+    # Apenas coordenação pode acessar
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
     usuario_sessao = session.get("usuario")
     usuario_atualizado = None
+
     if usuario_sessao:
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
-    # Apenas os relatos de "Perdi algo" (status Perdido)
+    # Busca todos os itens cadastrados
     todos_itens = listar_todos()
-    itens_relatados = [item for item in todos_itens if status_do_item(item) == 'perdido']
 
-    # Nome de quem relatou a perda (disponível como item.publicado_nome no template)
+    # Inclui os itens perdidos e os encontrados
+    itens_relatados = [
+        item for item in todos_itens
+        if (
+            status_do_item(item) == 'perdido'
+            or item.get('destino_objeto')
+        )
+    ]
+
+    # Busca o nome de quem publicou
     for item in itens_relatados:
+
         email_publicador = item.get('email')
+
         if email_publicador:
             publicador = buscar_usuario_por_email(email_publicador)
             item['publicado_nome'] = publicador['nome'] if publicador else ''
