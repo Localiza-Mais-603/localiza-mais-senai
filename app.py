@@ -27,6 +27,11 @@ app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
+EXTENSOES_PERMITIDAS = {"png", "jpg", "jpeg", "gif", "webp"}
+
+def arquivo_permitido(nome_arquivo):
+    return "." in nome_arquivo and nome_arquivo.rsplit(".", 1)[1].lower() in EXTENSOES_PERMITIDAS
+
 @app.route("/")
 def index():
     return render_template("login.html")
@@ -107,43 +112,6 @@ def visualizar_perfil():
     usuario_atualizado = buscar_usuario_por_email(email)
     return render_template("visualizar_perfil.html", usuario=usuario_atualizado)
 
-# @app.route("/visualizar-itens", methods=["GET"])
-# def visualizar_itens():
-#     usuario_sessao = session.get("usuario")
-#     perfil = session.get("perfil")
-#     usuario_atualizado = None
-
-#     if usuario_sessao:
-#         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
-        
-#         if perfil == "coordenacao":
-#             conexao, cursor = conectar()
-#             cursor = conexao.cursor(dictionary=True)
-#             cursor.execute("SELECT * FROM coordenador WHERE email = %s", (email,))
-#             usuario_atualizado = cursor.fetchone()
-#             cursor.close()
-#             conexao.close()
-#         else:
-#             usuario_atualizado = buscar_usuario_por_email(email)
-
-#     categorias_ids = request.args.getlist("categoria")
-#     apenas_disponiveis = request.args.get("disponivel")
-#     categorias_ids = [c for c in categorias_ids if c.strip()]
-    
-#     if categorias_ids or apenas_disponiveis:
-#         itens = buscar_itens_filtrados(categorias_ids, apenas_disponiveis)
-#     else:
-#         itens = listar_todos()
-        
-#     categorias = listar_categorias()
-    
-#     return render_template(
-#         "visualizar_itens.html", 
-#         itens=itens, 
-#         usuario=usuario_atualizado, 
-#         categorias=categorias
-#     )
-
 @app.route("/visualizar-itens", methods=["GET"])
 def visualizar_itens():
     usuario_sessao = session.get("usuario")
@@ -204,13 +172,25 @@ def registrar_itens_coordenacao():
 
     local = request.form.get("local")
     
-    # Tratamento da data
+  
     data_encontrado = request.form.get("data")
     if not data_encontrado or not data_encontrado.strip():
         data_encontrado = None
 
     descricao = request.form.get("descricao")
     cpf_coordenador = session.get("usuario", {}).get("cpf")
+    nome_foto = None
+    foto = request.files.get("foto")
+
+    if foto and foto.filename != "":
+        if not arquivo_permitido(foto.filename):
+            flash("Formato de imagem inválido. Use PNG, JPG, JPEG, GIF ou WEBP.", "error")
+            return redirect(request.url)
+
+        nome_foto = secure_filename(foto.filename)
+        pasta_destino = os.path.join("static", "img_upload")
+        os.makedirs(pasta_destino, exist_ok=True)
+        foto.save(os.path.join(pasta_destino, nome_foto))
 
     cadastrar_item(
         item=item,
@@ -219,7 +199,7 @@ def registrar_itens_coordenacao():
         status="DISPONIVEL",
         id_categoria=id_categoria,
         local=local,
-        foto=None,
+        foto=nome_foto,
         email=None,
         cpf_coordenador=cpf_coordenador
     )
@@ -245,12 +225,15 @@ def registrar_itens():
         foto = request.files.get("foto")
 
         if foto and foto.filename != "":
+            if not arquivo_permitido(foto.filename):
+                flash("Formato de imagem inválido. Use PNG, JPG, JPEG, GIF ou WEBP.", "error")
+                return redirect(request.url)
+
             nome_foto = secure_filename(foto.filename)
             pasta_destino = os.path.join("static", "img_upload")
             os.makedirs(pasta_destino, exist_ok=True)
-            caminho_completo = os.path.join(pasta_destino, nome_foto)
-            foto.save(caminho_completo)
-            
+            foto.save(os.path.join(pasta_destino, nome_foto))
+                
             registrar_item_perdido(
             item=item,
             descricao=descricao,
@@ -365,20 +348,6 @@ def itens_arquivados():
             arquivados.append(item)
 
     return render_template("arquivar_itens_coor.html", itens=arquivados, usuario=usuario_atualizado)
-
-# ROTA: DESARQUIVAR ITEM (VOLTA O STATUS PARA 'Perdido')
-# @app.route('/desarquivar-item/<int:id_item>', methods=['POST'])
-# def desarquivar_item(id_item):
-#     if session.get('perfil') != 'coordenacao':
-#         return redirect('/login/usuario')
-
-#     try:
-#         from model.editar_item import atualizar_status_item
-#         atualizar_status_item(id_item, 'Perdido')
-#     except Exception as e:
-#         print("Erro ao desarquivar item:", e)
-
-#     return redirect(url_for('itens_arquivados'))
 
 @app.route('/desarquivar-item/<int:id_item>', methods=['POST'])
 def desarquivar_item(id_item):
