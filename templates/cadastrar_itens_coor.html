@@ -62,18 +62,20 @@
                 
                 <div class="campo-grupo">
                     <label for="data" class="rotulo">Data (opcional):</label>
-                    <input type="date" id="data" name="data" class="entrada-texto">
+                    <input type="date" id="data" name="data" class="entrada-texto"  accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp">
                 </div>
                 
+                 <div class="campo-grupo">
+                    <label for="foto" class="rotulo">Foto (opcional):</label>
+                    <input type="file" id="foto" name="foto" class="entrada-texto" accept="image/*">
+                </div>
+
                 <div class="campo-grupo">
                     <label for="descricao" class="rotulo">Descrição: *</label>
                     <textarea id="descricao" name="descricao" class="entrada-area-texto" required></textarea>
                 </div>
 
-                <div class="campo-grupo">
-                    <label for="foto" class="rotulo">Foto (opcional):</label>
-                    <input type="file" id="foto" name="foto" class="entrada-texto" accept="image/*">
-                </div>
+               
                                 
                 <div class="grupo-botoes">
                     <button type="submit" class="botao-submit">Enviar</button>

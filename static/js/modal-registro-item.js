@@ -123,3 +123,26 @@ if (mensagens) {
     });
 
 }
+
+const inputFoto = document.getElementById("foto");
+
+if (inputFoto) {
+    inputFoto.addEventListener("change", function () {
+        const arquivo = inputFoto.files[0];
+        if (!arquivo) return;
+
+        const tiposPermitidos = ["image/png", "image/jpeg", "image/gif", "image/webp"];
+        const tamanhoMaximo = 5 * 1024 * 1024; // 5 MB
+
+        if (!tiposPermitidos.includes(arquivo.type)) {
+            Swal.fire("Formato inválido!", "Envie apenas imagens PNG, JPG, GIF ou WEBP.", "error");
+            inputFoto.value = "";   // limpa o campo
+            return;
+        }
+
+        if (arquivo.size > tamanhoMaximo) {
+            Swal.fire("Arquivo muito grande!", "A imagem deve ter no máximo 5 MB.", "error");
+            inputFoto.value = "";
+        }
+    });
+}
