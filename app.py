@@ -7,12 +7,14 @@ from model.excluir_item import excluir_itens
 from model.filtro import buscar_itens_filtrados
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
 from dotenv import load_dotenv
-from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias, cadastrar_categoria
+from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar_categorias, cadastrar_categoria, cadastrar_item_encontrado, listar_destinos
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
 import os
 from werkzeug.utils import secure_filename
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "chciclete"
@@ -20,12 +22,28 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'  
-app.config['MAIL_PASSWORD'] = 'rffwsrozekhyezce'  
+app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.com')
 
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
+
+
+def status_do_item(item):
+    """Devolve o status do item em minúsculas, sem espaços (evita erro de maiúscula/minúscula)."""
+    return (item.get('status') or '').strip().lower()
+
+
+def somente_numeros(texto):
+    """Remove pontos, traços e espaços (o CPF no banco tem só 11 números)."""
+    return ''.join(c for c in (texto or '') if c.isdigit())
+
+
+EXTENSOES_PERMITIDAS = {"png", "jpg", "jpeg", "gif", "webp"}
+
+def arquivo_permitido(nome_arquivo):
+    return "." in nome_arquivo and nome_arquivo.rsplit(".", 1)[1].lower() in EXTENSOES_PERMITIDAS
 
 @app.route("/")
 def index():
@@ -40,53 +58,54 @@ def logout():
 @app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
     erro = None
-    sucesso = request.args.get("sucesso") 
+    sucesso = request.args.get("sucesso")
     if request.method == "POST":
         email = request.form["email"]
         senha = request.form["senha"]
         usuario = verificar_login_usuario(email, senha)
         if usuario:
-            session["usuario"] = usuario 
-            session["perfil"] = "aluno"  
-            return redirect(url_for("visualizar_itens"))  
+            session["usuario"] = usuario
+            session["perfil"] = "aluno"
+            return redirect(url_for("visualizar_itens"))
         else:
             erro = "E-mail ou senha incorretos!"
-    return render_template("login.html", erro=erro, tipo='usuario')
+    # Passa tipo='aluno' (ou 'usuario') no GET
+    return render_template("login.html", erro=erro, tipo='aluno')
 
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
     erro = None
     if request.method == "POST":
-        cpf = request.form["cpf"]
+        cpf = somente_numeros(request.form["cpf"])
         senha = request.form["senha"]
         coordenador = verificar_login_coor(cpf, senha)
         if coordenador:
-            session["usuario"] = coordenador 
-            session["perfil"] = "coordenacao"  
-            return redirect(url_for("visualizar_itens"))  
+            session["usuario"] = coordenador
+            session["perfil"] = "coordenacao"
+            return redirect(url_for("visualizar_itens"))
         else:
             erro = "CPF ou senha incorretos!"
-    return render_template("login.html", erro=erro, tipo = 'apoio' )
+    return render_template("login.html", erro=erro, tipo='apoio')
 
-@app.route("/cadastro/usuario") 
-def pag_cadastro(): 
-    return render_template("cadastrar_usuario.html") 
+@app.route("/cadastro/usuario")
+def pag_cadastro():
+    return render_template("cadastrar_usuario.html")
 
-@app.route("/cadastro", methods=["POST"]) 
-def cadastro(): 
-    cpf = request.form["CPF"] 
-    nome = request.form["nome_completo"] 
-    curso = request.form["curso"] 
-    email = request.form["email"] 
-    senha = request.form["senha"] 
-    cadastrar_usuario(cpf, nome, curso, email, senha) 
+@app.route("/cadastro", methods=["POST"])
+def cadastro():
+    cpf = somente_numeros(request.form["CPF"])
+    nome = request.form["nome_completo"]
+    curso = request.form["curso"]
+    email = request.form["email"]
+    senha = request.form["senha"]
+    cadastrar_usuario(cpf, nome, curso, email, senha)
     return redirect("/login/usuario")
 
 @app.route('/cadastro-coor', methods=['GET', 'POST'])
 def cadastro_coor():
     if request.method == 'POST':
         nome = request.form['nome_completo']
-        cpf = request.form['cpf']
+        cpf = somente_numeros(request.form['cpf'])
         email = request.form['email']
         senha = request.form['senha']
         cadastrar_coor(nome, cpf, email, senha)
@@ -110,42 +129,6 @@ def visualizar_perfil():
     usuario_atualizado = buscar_usuario_por_email(email)
     return render_template("visualizar_perfil.html", usuario=usuario_atualizado)
 
-# @app.route("/visualizar-itens", methods=["GET"])
-# def visualizar_itens():
-#     usuario_sessao = session.get("usuario")
-#     perfil = session.get("perfil")
-#     usuario_atualizado = None
-
-#     if usuario_sessao:
-#         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
-        
-#         if perfil == "coordenacao":
-#             conexao, cursor = conectar()
-#             cursor = conexao.cursor(dictionary=True)
-#             cursor.execute("SELECT * FROM coordenador WHERE email = %s", (email,))
-#             usuario_atualizado = cursor.fetchone()
-#             cursor.close()
-#             conexao.close()
-#         else:
-#             usuario_atualizado = buscar_usuario_por_email(email)
-
-#     categorias_ids = request.args.getlist("categoria")
-#     apenas_disponiveis = request.args.get("disponivel")
-#     categorias_ids = [c for c in categorias_ids if c.strip()]
-    
-#     if categorias_ids or apenas_disponiveis:
-#         itens = buscar_itens_filtrados(categorias_ids, apenas_disponiveis)
-#     else:
-#         itens = listar_todos()
-        
-#     categorias = listar_categorias()
-    
-#     return render_template(
-#         "visualizar_itens.html", 
-#         itens=itens, 
-#         usuario=usuario_atualizado, 
-#         categorias=categorias
-#     )
 
 @app.route("/visualizar-itens", methods=["GET"])
 def visualizar_itens():
@@ -155,7 +138,7 @@ def visualizar_itens():
 
     if usuario_sessao:
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
-        
+
         if perfil == "coordenacao":
             conexao, cursor = conectar()
             cursor = conexao.cursor(dictionary=True)
@@ -169,25 +152,36 @@ def visualizar_itens():
     categorias_ids = request.args.getlist("categoria")
     apenas_disponiveis = request.args.get("disponivel")
     categorias_ids = [c for c in categorias_ids if c.strip()]
-    
+
     if categorias_ids or apenas_disponiveis:
         itens = buscar_itens_filtrados(categorias_ids, apenas_disponiveis)
     else:
         itens = listar_todos()
 
-    # Remove os itens com status 'Arquivado' da tela principal
+    # Esconde da tela principal: arquivados e relatos de perda (só a coordenação vê, em Relatórios)
     itens = [
-        item for item in itens 
-        if (item.get('status') if isinstance(item, dict) else getattr(item, 'status', '')) != 'Arquivado'
+        item for item in itens
+        if status_do_item(item) not in ('arquivado', 'perdido')
     ]
-        
+
+    # Adiciona o nome de quem publicou cada item
+    for item in itens:
+        email_publicador = item.get('email')
+        if email_publicador:
+            publicador = buscar_usuario_por_email(email_publicador)
+            item['publicado_nome'] = publicador['nome'] if publicador else ''
+        else:
+            item['publicado_nome'] = ''
+
     categorias = listar_categorias()
-    
+    destinos = listar_destinos()
+
     return render_template(
-        "visualizar_itens.html", 
-        itens=itens, 
-        usuario=usuario_atualizado, 
-        categorias=categorias
+        "visualizar_itens.html",
+        itens=itens,
+        usuario=usuario_atualizado,
+        categorias=categorias,
+        destinos=destinos
     )
 
 
@@ -200,13 +194,13 @@ def pag_cadastrar_item_coor():
 @app.route("/cadastrar/item/salvar", methods=["POST"])
 def registrar_itens_coordenacao():
     item = request.form.get("item")
-    
+
     # Tratamento da categoria
     id_categoria = request.form.get("id_categoria")
     id_categoria = int(id_categoria) if id_categoria and id_categoria.strip() else None
 
     local = request.form.get("local")
-    
+
     # Tratamento da data
     data_encontrado = request.form.get("data")
     if not data_encontrado or not data_encontrado.strip():
@@ -214,6 +208,18 @@ def registrar_itens_coordenacao():
 
     descricao = request.form.get("descricao")
     cpf_coordenador = session.get("usuario", {}).get("cpf")
+    nome_foto = None
+    foto = request.files.get("foto")
+
+    if foto and foto.filename != "":
+        if not arquivo_permitido(foto.filename):
+            flash("Formato de imagem inválido. Use PNG, JPG, JPEG, GIF ou WEBP.", "error")
+            return redirect(request.url)
+
+        nome_foto = secure_filename(foto.filename)
+        pasta_destino = os.path.join("static", "img_upload")
+        os.makedirs(pasta_destino, exist_ok=True)
+        foto.save(os.path.join(pasta_destino, nome_foto))
 
     cadastrar_item(
         item=item,
@@ -222,56 +228,115 @@ def registrar_itens_coordenacao():
         status="DISPONIVEL",
         id_categoria=id_categoria,
         local=local,
-        foto=None,
+        foto=nome_foto,
         email=None,
         cpf_coordenador=cpf_coordenador
     )
 
     return redirect(url_for("visualizar_itens"))
 
-@app.route("/registro/itens", methods=["GET", "POST"])
+
+# PERDI ALGO: o aluno relata a perda e o relato vai só para a coordenação (aba Relatórios)
+@app.route("/registro/itens", methods=["POST"])
 def registrar_itens():
-    if request.method == "POST":
-        item = request.form.get("item")
-        id_categoria = request.form.get("categoria_id")
-        if not id_categoria or id_categoria.strip() == "":
-            id_categoria = None
-        else:
-            id_categoria = int(id_categoria)
-        local = request.form.get("local")
-        data_encontrado = request.form.get("data")  
-        if data_encontrado == "":
-            data_encontrado = None
-        descricao = request.form.get("descricao")
-        email = session["usuario"].get("email")
-        nome_foto = None
-        foto = request.files.get("foto")
 
-        if foto and foto.filename != "":
-            nome_foto = secure_filename(foto.filename)
-            pasta_destino = os.path.join("static", "img_upload")
-            os.makedirs(pasta_destino, exist_ok=True)
-            caminho_completo = os.path.join(pasta_destino, nome_foto)
-            foto.save(caminho_completo)
-            
-            registrar_item_perdido(
-            item=item,
-            descricao=descricao,
-            data_encontrado=data_encontrado,
-            status="Perdido",
-            id_categoria=id_categoria,
-            local=local,
-            foto=nome_foto,
-            email=email,
-            cpf_coordenador=None
-        )
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
 
-        flash("O item foi cadastrado com sucesso!", "success")
+    item = request.form.get("item")
 
-        return redirect(url_for("registrar_itens"))
-        
-    categorias = listar_categorias()
-    return render_template("registrar_item_perdido.html", categorias=categorias)
+    id_categoria = request.form.get("categoria_id")
+
+    if not id_categoria or id_categoria.strip() == "":
+        id_categoria = None
+    else:
+        id_categoria = int(id_categoria)
+
+    local = request.form.get("local")
+
+    data_encontrado = request.form.get("data")
+
+    if not data_encontrado:
+        data_encontrado = None
+
+    descricao = request.form.get("descricao")
+
+    email = session["usuario"].get("email")
+
+    nome_foto = None
+    foto = request.files.get("foto")
+
+    if foto and foto.filename != "":
+
+        # Verifica se o arquivo é uma imagem permitida
+        if not arquivo_permitido(foto.filename):
+
+            flash(
+                "Arquivo inválido! Envie somente imagens PNG, JPG, JPEG, GIF ou WEBP.",
+                "error"
+            )
+
+            return redirect(url_for("visualizar_itens", erro_foto=1))
+
+        nome_foto = secure_filename(foto.filename)
+
+        pasta_destino = os.path.join("static", "img_upload")
+
+        os.makedirs(pasta_destino, exist_ok=True)
+
+        caminho_completo = os.path.join(pasta_destino, nome_foto)
+
+        foto.save(caminho_completo)
+
+    registrar_item_perdido(
+        item=item,
+        descricao=descricao,
+        data_encontrado=data_encontrado,
+        status="Perdido",
+        id_categoria=id_categoria,
+        local=local,
+        foto=nome_foto,
+        email=email,
+        cpf_coordenador=None
+    )
+
+    flash("Seu relato foi enviado à coordenação!", "success")
+
+    return redirect(url_for("visualizar_itens"))
+
+# ENCONTREI ALGO: o aluno cadastra o item achado e ele aparece na lista principal
+@app.route("/registro/itens/encontrado", methods=["POST"])
+def registrar_item_encontrado():
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
+
+    item = request.form.get("item")
+    descricao = request.form.get("descricao")
+    id_categoria = int(request.form.get("id_categoria"))
+    local = request.form.get("local")
+    data_encontrado = request.form.get("data")
+
+    # o que a pessoa fez com o objeto -> coluna destino_objeto
+    destino_objeto = request.form.get("destino")
+    if destino_objeto == "outro":
+        destino_objeto = "Outro: " + request.form.get("destino_outro", "")
+
+    email = session["usuario"].get("email")
+
+    cadastrar_item_encontrado(
+        item=item,
+        descricao=descricao,
+        data_encontrado=data_encontrado,
+        id_categoria=id_categoria,
+        local=local,
+        email=email,
+        destino_objeto=destino_objeto
+    )
+
+    usuario = buscar_usuario_por_email(email)
+    flash(f"Achado publicado! Publicado por {usuario['nome']} ({usuario['email']})", "success")
+    return redirect(url_for("visualizar_itens"))
+
 
 @app.route("/api/categorias", methods=["POST"])
 def api_cadastrar_categoria():
@@ -281,8 +346,8 @@ def api_cadastrar_categoria():
         return jsonify({"sucesso": False, "mensagem": "Nome da categoria inválido."}), 400
     id_novo = cadastrar_categoria(nome.strip())
     return jsonify({
-        "sucesso": True, 
-        "id_categoria": id_novo, 
+        "sucesso": True,
+        "id_categoria": id_novo,
         "nome": nome.strip()
     })
 
@@ -360,28 +425,9 @@ def itens_arquivados():
         usuario_atualizado = buscar_usuario_por_email(email)
 
     todos_itens = listar_todos()
-    arquivados = []
-
-    for item in todos_itens:
-        status = item.get('status') if isinstance(item, dict) else getattr(item, 'status', '')
-        if status == 'Arquivado':
-            arquivados.append(item)
+    arquivados = [item for item in todos_itens if status_do_item(item) == 'arquivado']
 
     return render_template("arquivar_itens_coor.html", itens=arquivados, usuario=usuario_atualizado)
-
-# ROTA: DESARQUIVAR ITEM (VOLTA O STATUS PARA 'Perdido')
-# @app.route('/desarquivar-item/<int:id_item>', methods=['POST'])
-# def desarquivar_item(id_item):
-#     if session.get('perfil') != 'coordenacao':
-#         return redirect('/login/usuario')
-
-#     try:
-#         from model.editar_item import atualizar_status_item
-#         atualizar_status_item(id_item, 'Perdido')
-#     except Exception as e:
-#         print("Erro ao desarquivar item:", e)
-
-#     return redirect(url_for('itens_arquivados'))
 
 @app.route('/desarquivar-item/<int:id_item>', methods=['POST'])
 def desarquivar_item(id_item):
@@ -398,27 +444,44 @@ def desarquivar_item(id_item):
 
 @app.route("/relatorios-perda")
 def relatorios_perda():
-    # Proteção: apenas coordenação pode acessar
+
+    # Apenas coordenação pode acessar
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
     usuario_sessao = session.get("usuario")
     usuario_atualizado = None
+
     if usuario_sessao:
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
-    # Busca todos os itens e filtra apenas os relatórios com status "Perdido"
+    # Busca todos os itens cadastrados
     todos_itens = listar_todos()
+
+    # Inclui os itens perdidos e os encontrados
     itens_relatados = [
-        item for item in todos_itens 
-        if (isinstance(item, dict) and item.get("status") == "Perdido") 
-        or (hasattr(item, "status") and item.status == "Perdido")
+        item for item in todos_itens
+        if (
+            status_do_item(item) == 'perdido'
+            or item.get('destino_objeto')
+        )
     ]
 
+    # Busca o nome de quem publicou
+    for item in itens_relatados:
+
+        email_publicador = item.get('email')
+
+        if email_publicador:
+            publicador = buscar_usuario_por_email(email_publicador)
+            item['publicado_nome'] = publicador['nome'] if publicador else ''
+        else:
+            item['publicado_nome'] = ''
+
     return render_template(
-        "relatorios_perda.html", 
-        itens=itens_relatados, 
+        "relatorios_perda.html",
+        itens=itens_relatados,
         usuario=usuario_atualizado
     )
 
@@ -436,7 +499,9 @@ def editar_item(id_item):
 
     # Atualiza no banco sem alterar o status
     atualizar_item_no_banco(id_item, item_nome, descricao, local, data_encontrado)
-    
+
     return redirect(url_for("visualizar_itens"))
+
+
 if __name__ == "__main__":
-    app.run(debug=True, host = "0.0.0.0", port= 8080)
+    app.run(debug=True, host="0.0.0.0", port=8080)
