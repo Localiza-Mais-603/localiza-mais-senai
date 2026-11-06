@@ -128,7 +128,89 @@
     </div>
 
     <script src="/static/js/visualizar_itens.js"></script>
-    <script src="/static/js/validar_cpf.js"></script>
+    <!-- SWEETALERT -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+
+        <div class="mensagem-flash"
+             data-categoria="{{ category }}"
+             data-mensagem="{{ message | e }}"
+             hidden>
+        </div>
+
+    {% endfor %}
+{% endwith %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const mensagens = document.querySelectorAll(".mensagem-flash");
+
+        mensagens.forEach(function (elemento) {
+
+            const categoria = elemento.dataset.categoria;
+            const mensagem = elemento.dataset.mensagem;
+
+            if (categoria === "success") {
+
+                Swal.fire({
+                    title: "Cadastro realizado!",
+                    text: mensagem,
+                    icon: "success",
+                    confirmButtonText: "Continuar",
+                    confirmButtonColor: "#F28705"
+                });
+
+            }
+
+        });
+
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+
+        <div class="mensagem-flash"
+             data-categoria="{{ category }}"
+             data-mensagem="{{ message | e }}"
+             hidden>
+        </div>
+
+    {% endfor %}
+{% endwith %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const mensagens = document.querySelectorAll(".mensagem-flash");
+
+        mensagens.forEach(function (elemento) {
+
+            const categoria = elemento.dataset.categoria;
+            const mensagem = elemento.dataset.mensagem;
+
+            if (categoria === "success") {
+
+                Swal.fire({
+                    title: "Cadastro realizado!",
+                    text: mensagem,
+                    icon: "success",
+                    confirmButtonText: "Continuar",
+                    confirmButtonColor: "#F28705"
+                });
+
+            }
+
+        });
+
+    });
+</script>
 
 </body>
 

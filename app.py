@@ -93,25 +93,36 @@ def pag_cadastro():
 
 @app.route("/cadastro", methods=["POST"])
 def cadastro():
+
     cpf = somente_numeros(request.form["CPF"])
     nome = request.form["nome_completo"]
     curso = request.form["curso"]
     email = request.form["email"]
     senha = request.form["senha"]
+
     cadastrar_usuario(cpf, nome, curso, email, senha)
-    return redirect("/login/usuario")
+
+    flash("Seu cadastro foi realizado com sucesso! Agora você já pode fazer login.", "success")
+
+    return redirect(url_for("pag_login_aluno"))
 
 @app.route('/cadastro-coor', methods=['GET', 'POST'])
 def cadastro_coor():
+
     if request.method == 'POST':
+
         nome = request.form['nome_completo']
         cpf = somente_numeros(request.form['cpf'])
         email = request.form['email']
         senha = request.form['senha']
-        cadastrar_coor(nome, cpf, email, senha)
-        return redirect('/login/setor/de/apoio')
-    return render_template('cadastro_coordenacao.html')
 
+        cadastrar_coor(nome, cpf, email, senha)
+
+        flash("Seu cadastro foi realizado com sucesso! Agora você já pode fazer login.", "success")
+
+        return redirect(url_for('pag_login_coordenacao'))
+
+    return render_template('cadastro_coordenacao.html')
 @app.route("/editar-item-cadastrado")
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
