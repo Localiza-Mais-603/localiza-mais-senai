@@ -76,3 +76,13 @@ def listar_destinos():
     cursor.close()
     conexao.close()
     return destinos
+
+
+def excluir_categoria(id_categoria):
+    conexao, cursor = conectar()
+    # Os itens continuam existindo, só perdem a categoria
+    cursor.execute("UPDATE item SET id_categoria = NULL WHERE id_categoria = %s", (id_categoria,))
+    cursor.execute("DELETE FROM categoria WHERE id_categoria = %s", (id_categoria,))
+    conexao.commit()
+    cursor.close()
+    conexao.close()
