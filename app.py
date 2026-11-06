@@ -440,23 +440,35 @@ def desarquivar_item(id_item):
 
 @app.route("/relatorios-perda")
 def relatorios_perda():
-    # Proteção: apenas coordenação pode acessar
+
+    # Apenas coordenação pode acessar
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
     usuario_sessao = session.get("usuario")
     usuario_atualizado = None
+
     if usuario_sessao:
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
-    # Apenas os relatos de "Perdi algo" (status Perdido)
+    # Busca todos os itens cadastrados
     todos_itens = listar_todos()
-    itens_relatados = [item for item in todos_itens if status_do_item(item) == 'perdido']
 
-    # Nome de quem relatou a perda (disponível como item.publicado_nome no template)
+    # Inclui os itens perdidos e os encontrados
+    itens_relatados = [
+        item for item in todos_itens
+        if (
+            status_do_item(item) == 'perdido'
+            or item.get('destino_objeto')
+        )
+    ]
+
+    # Busca o nome de quem publicou
     for item in itens_relatados:
+
         email_publicador = item.get('email')
+
         if email_publicador:
             publicador = buscar_usuario_por_email(email_publicador)
             item['publicado_nome'] = publicador['nome'] if publicador else ''
