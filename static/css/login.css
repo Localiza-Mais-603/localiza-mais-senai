@@ -533,3 +533,291 @@ body.escuro .grupo-conteudo .btn-limpar {
 #switch-dark-mode:checked + .form-check-label .fa-moon {
     color: #f1c40f;
 }
+
+/* ==========================================================================
+   LAYOUT DIVIDIDO DA TELA DE LOGIN (painel da marca + formulário)
+   ========================================================================== */
+
+.layout-login {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 0.4fr 1fr;
+    overflow: auto;
+}
+
+/* ----- Painel esquerdo (marca) ----- */
+.painel-marca {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 40px 48px;
+    background: linear-gradient(150deg, var(--azul-escuro, #0B3251) 0%, #024873 100%);
+    color: #ffffff;
+}
+
+.marca-logo {
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: #ffffff;
+}
+
+.marca-logo span {
+    color: var(--laranja-principal, #E87A24);
+}
+
+.marca-slogan {
+    font-size: 1rem;
+    color: #e0f2fe;
+}
+
+.etiqueta-demo {
+    position: relative;
+    width: 100%;
+    max-width: 290px;
+    margin-top: 28px;
+    padding: 26px 22px 18px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    transform: rotate(-4deg);
+}
+
+.etiqueta-demo::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: var(--azul-escuro, #0B3251);
+    transform: translateX(-50%);
+}
+
+.etiqueta-codigo {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--azul-escuro, #0B3251);
+}
+
+.etiqueta-nome {
+    margin-top: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--azul-escuro, #0B3251);
+}
+
+.etiqueta-local {
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: var(--texto-secundario, #6C757D);
+}
+
+/* ----- Lado direito (formulário) ----- */
+.lado-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px 40px;
+}
+
+.lado-form .switch-group {
+    position: absolute;
+    top: 24px;
+    right: 25px;
+}
+
+/* Links "Esqueci minha senha" / "Cadastrar-se" lado a lado */
+.links-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.links-linha .link-secundario {
+    font-size: 0.85rem;
+    text-decoration: underline;
+}
+
+/* Caixa "Dados de exemplo para testar" */
+.dados-exemplo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 14px 16px;
+    border: 1px dashed var(--cinza-borda, #DCDCDC);
+    border-radius: var(--raio-borda, 6px);
+    font-size: 0.8rem;
+    color: var(--texto-secundario, #6C757D);
+}
+
+.dados-exemplo strong {
+    font-size: 0.8rem;
+    color: var(--azul-escuro, #0B3251);
+}
+
+.dados-exemplo .linha-exemplo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.dados-exemplo code {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    color: var(--texto-principal, #0B3251);
+}
+
+/* Botão com cara de link (Preencher / Restaurar) */
+.btn-link {
+    border: none;
+    background: none;
+    padding: 0;
+    color: var(--azul-principal, #0F4C75);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.btn-link:hover {
+    color: var(--laranja-hover, #D06513);
+}
+
+/* ----- Modo escuro: tela de login ----- */
+body.escuro .container-login {
+    background-color: #1e1e1e;
+    border: 1px solid #333333;
+    border-top: 5px solid #024873;
+}
+
+body.escuro .container-header h1 {
+    color: #ffffff;
+}
+
+body.escuro form label {
+    color: #dddddd;
+}
+
+body.escuro form input[type="text"],
+body.escuro form input[type="password"] {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444444;
+}
+
+body.escuro form input:focus {
+    border-color: #38bdf8;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+body.escuro .buttontab {
+    background-color: #2a2a2a;
+}
+
+body.escuro .tab-buttons {
+    color: #cccccc;
+}
+
+body.escuro .tab-buttons.active {
+    background-color: #024873;
+    color: #ffffff;
+}
+
+body.escuro .btn-entrar {
+    background-color: #024873;
+}
+
+body.escuro .btn-entrar:hover {
+    background-color: #1B6CA8;
+}
+
+body.escuro .link-secundario,
+body.escuro .btn-link {
+    color: #38bdf8;
+}
+
+body.escuro .dados-exemplo {
+    border-color: #444444;
+    color: #cccccc;
+}
+
+body.escuro .dados-exemplo strong,
+body.escuro .dados-exemplo code {
+    color: #ffffff;
+}
+
+body.escuro .erro-mensagem {
+    background-color: rgba(217, 83, 79, 0.12);
+    border-color: #D9534F;
+    color: #f75a68;
+}
+
+body.escuro .painel-marca {
+    background: linear-gradient(160deg, #0a1a2a 0%, #012e4a 100%);
+}
+
+body.escuro .etiqueta-demo {
+    background-color: #1e1e1e;
+    border: 1px solid #333333;
+}
+
+body.escuro .etiqueta-codigo,
+body.escuro .etiqueta-nome {
+    color: #38bdf8;
+}
+
+/* ----- Responsivo: empilha o painel da marca no topo ----- */
+@media (max-width: 800px) {
+    .layout-login {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+
+    .painel-marca {
+        padding: 28px 24px;
+    }
+
+    .marca-logo {
+        font-size: 2.6rem;
+    }
+
+    .etiqueta-demo {
+        display: none;
+    }
+
+    .lado-form {
+        justify-content: flex-start;
+        padding-top: 70px;
+    }
+}
+
+
+/* ==========================================================================
+   AJUSTES PARA O HTML COM <nav class="navbar transparente-header"> E <header class="container-header">
+   ========================================================================== */
+
+/* A navbar agora fica só no lado do formulário e não vira uma barra no modo escuro */
+body.escuro .lado-form .transparente-header {
+    background-color: transparent;
+    border-bottom: none;
+}
+
+/* O seletor "body.escuro header" também pegava o cabeçalho dos formulários */
+body.escuro .container-header {
+    background-color: transparent;
+    border-bottom: none;
+}
