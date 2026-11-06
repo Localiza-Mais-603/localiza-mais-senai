@@ -159,6 +159,15 @@
                     <span class="badge mt-3 text-white" style="background-color: #F28705; font-size: 0.9rem;">Status: {{
                         item.status }}</span>
                 </div>
+
+                <div class="card-botoes-acao mt-3" onclick="event.stopPropagation()">
+                    <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
+                          method="POST"
+                          class="form-acao form-excluir">
+                        <button type="submit" class="btn-excluir-card">Excluir</button>
+                    </form>
+                </div>
+
             </article>
             {% endfor %}
             {% else %}
@@ -238,8 +247,9 @@
             modal.setAttribute('aria-hidden', 'true');
         }
     </script>
-
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/static/js/visualizar_itens.js"></script>
+    <script src="/static/js/excluir_Itens.js"></script>
 </body>
 
 </html>
