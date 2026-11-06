@@ -513,6 +513,34 @@ def editar_item(id_item):
 
     return redirect(url_for("visualizar_itens"))
 
+@app.route('/solicitar_item/<int:id_item>', methods=['POST'])
+def solicitar_item(id_item):
+    usuario_sessao = session.get("usuario")
+    if not usuario_sessao or session.get('perfil') != 'aluno':
+        flash('Faça login como aluno para solicitar um item.', 'warning')
+        return redirect(url_for('pag_login_aluno'))
+    
+    id_aluno = usuario_sessao.get('id_usuario') if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    
+    try:
+        conexao, cursor = conectar()
+        
+        cursor.execute("""
+            UPDATE itens 
+            SET aluno_reivindicante_id = %s 
+            WHERE id_item = %s
+        """, (id_aluno, id_item))
+        
+        conexao.commit()
+        cursor.close()
+        conexao.close()
+
+        flash('Solicitação enviada com sucesso! Compareça à coordenação.', 'success')
+    except Exception as e:
+        print("Erro ao solicitar item:", e)
+        flash('Ocorreu um erro ao processar sua solicitação.', 'danger')
+
+    return redirect(url_for('visualizar_itens'))
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

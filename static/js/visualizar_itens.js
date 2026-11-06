@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!nomeItem || !descricaoItem) {
                 event.preventDefault();
-                
+
                 Swal.fire({
                     title: 'Atenção!',
                     text: 'Por favor, preencha os campos obrigatórios: Nome do Item e Descrição.',
@@ -83,11 +83,18 @@ function Filtrar() {
 function abrirCard(card) {
     if (!modal) return;
 
+    const itemId = card.dataset.id;
+
     document.getElementById("modalTitulo").textContent = card.dataset.item || "";
     document.getElementById("modalDescricao").textContent = card.dataset.descricao || "";
     document.getElementById("modalLocal").textContent = card.dataset.local || "Não informado";
     document.getElementById("modalData").textContent = card.dataset.data && card.dataset.data !== "None" ? card.dataset.data : "Não informada";
-    document.getElementById("modalStatus").textContent = card.dataset.status || "Não informado";
+
+    // Atualiza o action do form do modal
+    const formModalSolicitar = document.getElementById("formModalSolicitar");
+    if (formModalSolicitar && itemId) {
+        formModalSolicitar.action = `/solicitar_item/${itemId}`;
+    }
 
     const modalFoto = document.getElementById("modalFoto");
     const foto = card.dataset.foto;
@@ -109,6 +116,31 @@ function abrirCard(card) {
 
     modal.classList.add("aberto");
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".form-solicitar-item").forEach(form => {
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const currentForm = this;
+
+            Swal.fire({
+                title: 'Reivindicar item?',
+                text: 'Você confirma que este item é seu? A coordenação será notificada.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#024873',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sim, é meu!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    currentForm.submit();
+                }
+            });
+        });
+    });
+});
 
 function fecharCard() {
     if (modal) modal.classList.remove("aberto");

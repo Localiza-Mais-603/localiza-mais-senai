@@ -26,3 +26,10 @@ INSERT INTO db_localiza.item (item, local, data_encontrado, descricao, cpf_coord
 VALUES ('óculos', 'biblioteca', '2026-10-09', 'óculos rosa', '23465478921', 'perdido', 1, NULL);
 INSERT INTO db_localiza.item (item, local, data_encontrado, descricao, email, status, id_categoria, destino_objeto) 
 VALUES ('garrafinha', 'refeitório', '2026-10-09', 'Garrafinha azul', 'felizsnts@gmail.com', 'perdido', 1, 'Ainda estou com o objeto e vou levar à coordenação.');
+
+-- Insere 3 itens cadastrados pela coordenação na tabela 'item'
+INSERT INTO db_localiza.item (item, local, data_encontrado, descricao, email, cpf_coordenador, status, id_categoria, destino_objeto) 
+VALUES 
+('Calculadora Científica', 'Laboratório de Informática', '2026-11-04', 'Calculadora Casio fx-82MS cinza, encontrada em cima da bancada 03.', NULL, '23465478921', 'DISPONIVEL', 1, NULL),
+('Jaleco Escolar', 'Bloco Administrativo', '2026-11-05', 'Jaleco branco de laboratório tamanho M, com bordado do curso.', NULL, '23465478921', 'DISPONIVEL', 2, NULL),
+('Fone de Ouvido Bluetooth', 'Auditório Principal', '2026-11-06', 'Caixinha de carregamento de fone sem fio modelo TWS branco.', NULL, '23465478921', 'DISPONIVEL', 1, NULL);
