@@ -64,7 +64,7 @@
                 
                 <div class="campo-grupo">
                     <label for="foto" class="rotulo">Foto (opcional):</label>
-                    <input type="file" id="foto" name="foto" class="entrada-texto">
+                    <input type="file" id="foto" name="foto" class="entrada-texto" accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp">
                 </div>
                 
                 <div class="campo-grupo">
@@ -100,7 +100,6 @@
 </script>
 
 <script src="{{ url_for('static', filename='js/modal-registro-item.js') }}"></script>
-<script src="{{ url_for('static', filename='js/registrar_item.js') }}"></script>
 <script src="/static/js/visualizar_itens.js"></script>
 </body>
 </html>
