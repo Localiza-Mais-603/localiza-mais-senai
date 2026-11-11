@@ -390,6 +390,10 @@
                         {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
 
+                            <button type="button" class="btn-retirar-card" onclick="abrirModalRetirar('{{ item.id_item }}', '{{ item.item }}')">
+                                Retirar
+                            </button>
+                            
                             <button type="button" class="btn-editar-card"
                                 onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
                                 Editar
