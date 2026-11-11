@@ -514,6 +514,29 @@ def editar_item(id_item):
 
     return redirect(url_for("visualizar_itens"))
 
+@app.route("/retirar-item", methods=["POST"])
+def retirar_item():
+    if session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_aluno"))
+
+    id_item = request.form.get("id_item")
+    nome_retirante = request.form.get("nome_retirante")
+    email_retirante = request.form.get("email_retirante")
+
+    try:
+        from model.editar_item import atualizar_status_item # Ou sua função de atualização de BD
+        # Atualiza o status no Banco de Dados para 'RETIRADO'
+        # Dica: Se seu BD tiver colunas para nome e email do retirante, passe-os aqui!
+        atualizar_status_item(id_item, 'RETIRADO')
+        
+        flash(f"Item retirado por {nome_retirante} ({email_retirante}) com sucesso!", "success")
+    except Exception as e:
+        print("Erro ao registrar retirada:", e)
+        flash("Erro ao registrar retirada do item.", "error")
+
+    # Redireciona para a página de Retirados ou principal
+    return redirect(url_for("visualizar_itens"))
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

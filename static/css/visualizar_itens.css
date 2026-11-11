@@ -375,6 +375,25 @@ body {
   transition: background-color 0.2s;
 }
 
+
+.btn-retirar-card {
+  background-color: #2B7566 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-transform: none
+}
+
+.btn-retirar-card:hover {
+  background-color: #1e5247 !important;
+}
+
 /* MODO ESCURO (body.escuro) */
 body.escuro {
   background-color: #121212;

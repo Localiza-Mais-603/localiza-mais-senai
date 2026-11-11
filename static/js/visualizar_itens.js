@@ -131,3 +131,54 @@ function abrirModalEdicao(botao, idItem) {
 function fecharModalEdicao() {
     if (modalEdicao) modalEdicao.classList.remove("aberto");
 }
+
+// ABRIR MODAL DE RETIRADA
+function abrirModalRetirar(idItem, nomeItem) {
+    const modal = document.getElementById('modalRetirarItem');
+    document.getElementById('retirarIdItem').value = idItem;
+    document.getElementById('nomeItemRetirada').textContent = nomeItem;
+    document.getElementById('nomeRetirante').value = '';
+    document.getElementById('emailRetirante').value = '';
+    
+    if (modal) {
+        modal.classList.add('aberto');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modalRetirar = document.getElementById('modalRetirarItem');
+    const btnFecharRetirar = document.getElementById('btnFecharRetirar');
+    const btnCancelarRetirar = document.getElementById('btnCancelarRetirar');
+    const formRetirar = document.getElementById('formRetirar');
+
+    // Fechar Modal
+    if (btnFecharRetirar && modalRetirar) {
+        btnFecharRetirar.addEventListener('click', () => modalRetirar.classList.remove('aberto'));
+    }
+    if (btnCancelarRetirar && modalRetirar) {
+        btnCancelarRetirar.addEventListener('click', () => modalRetirar.classList.remove('aberto'));
+    }
+
+    // Confirmação SweetAlert antes de enviar
+    if (formRetirar) {
+        formRetirar.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Finalizar Retirada?',
+                text: 'O item será marcado como RETIRADO e movido para a tela de Retirados.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#2B7566',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sim, registrar',
+                cancelButtonText: 'Cancelar',
+                target: document.getElementById('modalRetirarItem')
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formRetirar.submit();
+                }
+            });
+        });
+    }
+});
