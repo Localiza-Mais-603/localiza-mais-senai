@@ -460,7 +460,7 @@ def editar_item(id_item):
 
 @app.route("/meu-historico")
 def meu_historico():
-    # Só aluno logado acessa
+
     if session.get("perfil") != "aluno":
         return redirect(url_for("pag_login_aluno"))
 
@@ -468,7 +468,7 @@ def meu_historico():
     email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
     usuario_atualizado = buscar_usuario_por_email(email)
 
-    # Filtra pelo e-mail da SESSÃO (nunca por parâmetro da URL)
+
     todos_itens = listar_todos()
     meus_itens = [
         item for item in todos_itens
