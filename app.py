@@ -204,7 +204,7 @@ def visualizar_itens():
     # Esconde da tela principal: arquivados e relatos de perda (só a coordenação vê, em Relatórios)
     itens = [
         item for item in itens
-        if status_do_item(item) not in ('arquivado', 'perdido')
+        if status_do_item(item) not in ('arquivado', 'perdido', 'retirado')
     ]
 
     for item in itens:
@@ -524,19 +524,36 @@ def retirar_item():
     email_retirante = request.form.get("email_retirante")
 
     try:
-        from model.editar_item import atualizar_status_item # Ou sua função de atualização de BD
-        # Atualiza o status no Banco de Dados para 'RETIRADO'
-        # Dica: Se seu BD tiver colunas para nome e email do retirante, passe-os aqui!
-        atualizar_status_item(id_item, 'RETIRADO')
+        from model.editar_item import registrar_retirada_bd  # importe sua função atualizada
         
-        flash(f"Item retirado por {nome_retirante} ({email_retirante}) com sucesso!", "success")
+        # Salva o status RETIRADO e os dados de quem retirou no BD
+        registrar_retirada_bd(id_item, nome_retirante, email_retirante)
+        
+        flash(f"Item retirado por {nome_retirante} com sucesso!", "success")
     except Exception as e:
         print("Erro ao registrar retirada:", e)
         flash("Erro ao registrar retirada do item.", "error")
 
-    # Redireciona para a página de Retirados ou principal
+    # Redireciona de volta para a lista de itens (o item sumirá da lista principal)
     return redirect(url_for("visualizar_itens"))
 
+@app.route("/itens_retirados")
+def itens_retirados():
+    # Proteção: Apenas a coordenação pode aceder
+    if session.get('perfil') != 'coordenacao':
+        return redirect(url_for('pag_login_aluno'))
+
+    usuario_sessao = session.get("usuario")
+    usuario_atualizado = None
+    if usuario_sessao:
+        email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+        usuario_atualizado = buscar_usuario_por_email(email)
+
+    # Procura todos os itens e filtra apenas os que têm status 'retirado'
+    todos_itens = listar_todos()
+    retirados = [item for item in todos_itens if status_do_item(item) == 'retirado']
+
+    return render_template("itens_retirados.html", itens=retirados, usuario=usuario_atualizado)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
