@@ -131,3 +131,34 @@ function abrirModalEdicao(botao, idItem) {
 function fecharModalEdicao() {
     if (modalEdicao) modalEdicao.classList.remove("aberto");
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modalCadastrar = document.getElementById('modalCadastrarItem');
+    const btnAbrirCadastrar = document.getElementById('btnAbrirCadastrar'); // certifique-se de definir id="btnAbrirCadastrar" no card/botão da página
+    const btnFecharCadastrar = document.getElementById('btnFecharCadastrar');
+    const btnCancelarCadastrar = document.getElementById('btnCancelarCadastrar');
+
+    // Abrir o Modal de Cadastro
+    if (btnAbrirCadastrar && modalCadastrar) {
+        btnAbrirCadastrar.addEventListener('click', function (e) {
+            e.preventDefault();
+            modalCadastrar.classList.add('aberto');
+        });
+    }
+
+    // Fechar pelo botão X
+    if (btnFecharCadastrar && modalCadastrar) {
+        btnFecharCadastrar.addEventListener('click', function () {
+            modalCadastrar.classList.remove('aberto');
+        });
+    }
+
+    // Fechar pelo botão Cancelar
+    if (btnCancelarCadastrar && modalCadastrar) {
+        btnCancelarCadastrar.addEventListener('click', function () {
+            modalCadastrar.classList.remove('aberto');
+        });
+    }
+
+    
+});
