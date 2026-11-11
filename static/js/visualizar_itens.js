@@ -131,3 +131,25 @@ function abrirModalEdicao(botao, idItem) {
 function fecharModalEdicao() {
     if (modalEdicao) modalEdicao.classList.remove("aberto");
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const btnFechar = document.getElementById('btnFecharFiltro');
+    const janelaFiltro = document.getElementById('janelaFiltro');
+    const btnAbrir = document.getElementById('btnAbrir');
+
+    // Função para abrir o filtro
+    if (btnAbrir && janelaFiltro) {
+        btnAbrir.addEventListener('click', function () {
+            janelaFiltro.classList.add('aberto');
+            janelaFiltro.style.display = ''; // Limpa qualquer inline style anterior
+        });
+    }
+
+    // Função para fechar o filtro
+    if (btnFechar && janelaFiltro) {
+        btnFechar.addEventListener('click', function () {
+            janelaFiltro.classList.remove('aberto');
+            janelaFiltro.style.display = ''; // Limpa o estilo inline para não bloquear reaberturas
+        });
+    }
+});

@@ -797,15 +797,9 @@
 
         <form action="{{ url_for('visualizar_itens') }}" method="GET" class="grupo-conteudo">
 
+            <button type="button" class="fechar-filtro" id="btnFecharFiltro" aria-label="Fechar filtro">&times;</button>
+
             <h3>Categorias</h3>
-
-            <label>
-                <input type="checkbox" name="disponivel" value="1"
-                    {% if request.args.get('disponivel') %}checked{% endif %}>
-                Disponível
-            </label>
-
-            <h3>Sub-Categorias</h3>
 
             {% for categoria in categorias %}
             {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
