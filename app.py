@@ -231,10 +231,7 @@ def visualizar_itens():
         prazo_dias=PRAZO_DESCARTE_DIAS
     )
 
-@app.route("/adicionar/item")
-def pag_cadastrar_item_coor():
-    categorias_bd = listar_categorias()
-    return render_template("cadastrar_itens_coor.html", categorias=categorias_bd)
+
 
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])
@@ -267,6 +264,8 @@ def registrar_itens_coordenacao():
         cpf_coordenador=cpf_coordenador
     )
 
+    flash("Item cadastrado com sucesso!", "success")
+    
     return redirect(url_for("visualizar_itens"))
 
 
@@ -513,6 +512,25 @@ def editar_item(id_item):
     atualizar_item_no_banco(id_item, item_nome, descricao, local, data_encontrado)
 
     return redirect(url_for("visualizar_itens"))
+
+@app.route("/meu-historico")
+def meu_historico():
+
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
+
+    usuario_sessao = session.get("usuario")
+    email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    usuario_atualizado = buscar_usuario_por_email(email)
+
+
+    todos_itens = listar_todos()
+    meus_itens = [
+        item for item in todos_itens
+        if (item.get("email") if isinstance(item, dict) else getattr(item, "email", None)) == email
+    ]
+
+    return render_template("historico_usuario.html", itens=meus_itens, usuario=usuario_atualizado)
 
 
 if __name__ == "__main__":

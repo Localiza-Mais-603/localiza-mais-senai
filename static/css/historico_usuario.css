@@ -1,0 +1,200 @@
+:root {
+    --hist-azul: #024873;
+    --hist-laranja: #F28705;
+    --hist-fundo-card: #ffffff;
+    --hist-borda: #d9e2e8;
+    --hist-texto: #2b3a44;
+    --hist-texto-suave: #5f6f7a;
+}
+ 
+body.escuro {
+    --hist-azul: #6ab7e6;
+    --hist-fundo-card: #1b2831;
+    --hist-borda: #32434f;
+    --hist-texto: #e6edf2;
+    --hist-texto-suave: #a9b8c2;
+}
+ 
+ 
+/* ---------- Menu de perfil simples (substitui o dropdown) ---------- */
+ 
+.perfil-usuario {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: 'Chakra Petch', sans-serif;
+}
+ 
+.perfil-nome {
+    padding: 8px 16px;
+    background-color: #024873;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+ 
+.perfil-sair {
+    color: #c0392b;
+    font-weight: 600;
+    text-decoration: none;
+}
+ 
+.perfil-sair:hover {
+    text-decoration: underline;
+}
+ 
+ 
+/* ---------- Cabeçalho da seção ---------- */
+ 
+.cabecalho-historico {
+    max-width: 1140px;
+    margin: 24px auto 0;
+    padding: 0 24px;
+    font-family: 'Chakra Petch', sans-serif;
+}
+ 
+.cabecalho-historico .link-voltar {
+    display: inline-block;
+    margin-bottom: 14px;
+    padding: 8px 16px;
+    background-color: #024873;
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+ 
+.cabecalho-historico .link-voltar:hover {
+    background-color: #013a5c;
+}
+ 
+.cabecalho-historico .titulo-secao-itens {
+    margin: 0;
+    color: var(--hist-azul);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+ 
+ 
+/* ---------- Lista de cards ---------- */
+ 
+.lista-historico {
+    max-width: 1140px;
+    margin: 24px auto 48px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    font-family: 'Chakra Petch', sans-serif;
+}
+ 
+.card-historico {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: var(--hist-fundo-card);
+    border: 1px solid var(--hist-borda);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    color: var(--hist-texto);
+}
+ 
+.card-historico-foto {
+    display: block;
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+ 
+.card-historico-corpo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 16px;
+}
+ 
+.card-historico-titulo {
+    margin: 0 0 8px;
+    color: var(--hist-azul);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+ 
+.card-historico-descricao {
+    margin: 0 0 12px;
+    color: var(--hist-texto-suave);
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+ 
+.card-historico-info {
+    margin: 0 0 4px;
+    font-size: 0.9rem;
+    color: var(--hist-texto-suave);
+}
+ 
+.card-historico-info strong {
+    color: var(--hist-texto);
+}
+ 
+.card-historico-status {
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 6px 12px;
+    background-color: var(--hist-laranja);
+    color: #ffffff;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+ 
+/* Espaço entre as informações e o status */
+.card-historico-info + .card-historico-status {
+    margin-top: 14px;
+}
+ 
+ 
+/* ---------- Estado vazio ---------- */
+ 
+.historico-vazio {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 32px 0;
+    text-align: center;
+    color: var(--hist-texto-suave);
+    font-size: 1rem;
+}
+ 
+ 
+/* ---------- Acessibilidade ---------- */
+ 
+.cabecalho-historico .link-voltar:focus-visible,
+.perfil-sair:focus-visible {
+    outline: 3px solid var(--hist-laranja);
+    outline-offset: 2px;
+}
+ 
+ 
+/* ---------- Telas pequenas ---------- */
+ 
+@media (max-width: 576px) {
+    .cabecalho-historico,
+    .lista-historico {
+        padding: 0 16px;
+    }
+ 
+    .cabecalho-historico .titulo-secao-itens {
+        font-size: 1.25rem;
+    }
+ 
+    .perfil-usuario {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+}

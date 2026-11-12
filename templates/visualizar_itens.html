@@ -127,7 +127,7 @@
                 </div>
 
                 {% if session.get('perfil') == 'coordenacao' %}
-                <button type="button" onclick="window.location.href='/adicionar/item'">Cadastrar item</button>
+                <button type="button" id="btnAbrirCadastrar" class="btn-abrir">Cadastrar item</button>
                 {% endif %}
 
                 {% if usuario %}
@@ -158,6 +158,14 @@
                                 Curso: {{ usuario.curso if usuario.curso else 'Não informado' }}
                             </span>
                         </li>
+
+                        <!-- NOVO ITEM: Adicionado o link para o Histórico -->
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('meu_historico') }}">
+                                Meu histórico
+                            </a>
+                        </li>
+                        
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -425,6 +433,68 @@
         </section>
 
     </main>
+
+
+    <!-- MODAL CADASTRAR ITEM -->
+    <div class="grupo-filtro" id="modalCadastrarItem" role="dialog" aria-hidden="true">
+
+        <div class="grupo-conteudo modal-cadastro-container">
+            
+            <button type="button" class="fechar-filtro" id="btnFecharCadastrar" aria-label="Fechar modal">&times;</button>
+    
+            <h2 class="subtitulo-modal">Cadastrar Novo Item</h2>
+    
+            <form action="/cadastrar/item/salvar" method="POST" enctype="multipart/form-data" class="form-modal-custom">
+    
+                <div class="campo-grupo">
+                    <label for="item" class="rotulo">Item perdido *</label>
+                    <input type="text" id="item" name="item" class="entrada-texto" required placeholder="Ex: Chaveiro, Carteira...">
+                </div>
+    
+                <div class="campo-grupo">
+                    <label for="categoria" class="rotulo">Categoria *</label>
+                    <div class="categoria-group-inline">
+                        <select id="categoria" name="id_categoria" class="entrada-texto" required>
+                            <option value="" disabled selected>Selecione uma categoria...</option>
+                            {% for cat in categorias %}
+                                {% set cat_id = cat.id_categoria if cat.id_categoria is defined else (cat.id if cat.id is defined else cat[0]) %}
+                                {% set cat_nome = cat.nome if cat.nome is defined else cat[1] %}
+                                <option value="{{ cat_id }}">{{ cat_nome }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" id="btn-abrir-modal" class="btn-add-cat-inline" title="Cadastrar nova categoria">Adicionar Categoria</button>
+                    </div>
+                </div>
+                                
+                <div class="campo-grupo">
+                    <label for="local" class="rotulo">Local (opcional)</label>
+                    <input type="text" id="local" name="local" class="entrada-texto" placeholder="Ex: Bloco B, Refeitório">
+                </div>
+                
+                <div class="campo-grupo">
+                    <label for="data" class="rotulo">Data (opcional)</label>
+                    <input type="date" id="data" name="data" class="entrada-texto">
+                </div>
+                
+                <div class="campo-grupo">
+                    <label for="foto" class="rotulo">Foto (opcional)</label>
+                    <input type="file" id="foto" name="foto" class="entrada-texto" accept="image/*">
+                </div>
+    
+                <div class="campo-grupo">
+                    <label for="descricao" class="rotulo">Descrição *</label>
+                    <textarea id="descricao" name="descricao" class="entrada-area-texto" rows="3" required placeholder="Detalhes sobre o objeto..."></textarea>
+                </div>
+                                
+                <div class="grupo-botoes-modal">
+                    <button type="button" class="btn-modal-cancelar" id="btnCancelarCadastrar">Cancelar</button>
+                    <button type="submit" class="btn-modal-submit">Salvar Item</button>
+                </div>
+    
+            </form>
+    
+        </div>
+    </div>
 
     <!-- MODAL DE DETALHES -->
     <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true">
@@ -828,6 +898,7 @@
     <script src="/static/js/visualizar_itens.js"></script>
     <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
     <script src="{{ url_for('static', filename='js/confirmaacoes.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modal-registro-item.js') }}"></script>
 
     <!-- PRAZO DE RETIRADA: SWEETALERT EXPLICATIVO -->
     <script>
