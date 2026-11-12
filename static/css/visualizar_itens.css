@@ -83,9 +83,156 @@ body {
   color: #024873;
 }
 
-.card-relatar-item .texto-sub-card {
-  color: #6c757d;
+/* CARDS DE AÇÃO DO ALUNO (PERDI ALGO / ENCONTREI ALGO) */
+.lp-hero-actions {
+  max-width: 1040px;
+  margin: 8px auto 22px;
+  padding: 0 12px;
 }
+
+.lp-hero-subtitle {
+  text-align: center;
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 20px;
+}
+
+.lp-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.lp-action-card {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(2, 72, 115, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.3s ease;
+}
+
+.lp-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(2, 72, 115, 0.12);
+}
+
+.lp-card-lost:hover {
+  border-color: rgba(242, 135, 5, 0.6);
+}
+
+.lp-card-found:hover {
+  border-color: rgba(2, 72, 115, 0.45);
+}
+
+.lp-card-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.lp-icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lp-icon-lost {
+  background-color: #fff4e6;
+  color: #F28705;
+}
+
+.lp-icon-found {
+  background-color: #e6f0f7;
+  color: #024873;
+}
+
+.lp-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lp-card-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lp-eyebrow-lost {
+  color: #F28705;
+}
+
+.lp-eyebrow-found {
+  color: #024873;
+}
+
+.lp-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #024873;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.lp-card-desc {
+  margin: 3px 0 0;
+  font-size: 0.88rem;
+  color: #6c757d;
+  line-height: 1.35;
+}
+
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.lp-btn:active {
+  transform: scale(0.98);
+}
+
+.lp-btn-lost {
+  background-color: #F28705;
+  box-shadow: 0 4px 12px rgba(242, 135, 5, 0.28);
+}
+
+.lp-btn-lost:hover {
+  background-color: #d67400;
+}
+
+.lp-btn-found {
+  background-color: #024873;
+  box-shadow: 0 4px 12px rgba(2, 72, 115, 0.24);
+}
+
+.lp-btn-found:hover {
+  background-color: #013657;
+}
+
 
 /* FILTRO DE DATAS */
 .item-data {
@@ -352,17 +499,30 @@ body {
   color: #444444;
 }
 
-.btn-fechar {
+.fechar-filtro {
   position: absolute;
   top: 15px;
-  right: 15px;
-  background: none;
-  border: none;
+  right: 18px;
+  background: transparent !important;
+  border: none !important;
+  outline: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #666666;
   cursor: pointer;
-  font-size: 1.1rem;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.grupo-conteudo button:not(.btn-fechar) {
+.fechar-filtro:hover {
+  color: #024873;
+  transform: scale(1.1);
+}
+
+/* REGRA PARA OS BOTÕES DE AÇÃO (EX: APLICAR FILTRO) */
+.grupo-conteudo button:not(.fechar-filtro) {
   margin-top: 15px;
   padding: 12px;
   background-color: #024873;
@@ -394,93 +554,291 @@ body {
   background-color: #1e5247 !important;
 }
 
+
+.btn-retirar-card {
+  background-color: #2B7566 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-transform: none
+}
+
+.btn-retirar-card:hover {
+  background-color: #1e5247 !important;
+}
+
+/* MODAL CADASTRAR ITEM - LARGURA E ALINHAMENTO */
+.modal-cadastro-container {
+  max-width: 480px !important;
+  width: 92% !important;
+  padding: 28px !important;
+}
+
+.categoria-group-inline {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.categoria-group-inline select {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Ajuste no input de arquivo para não quebrar o layout */
+.form-modal-custom input[type="file"].entrada-texto {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
+/* AJUSTE PARA O MODO ESCURO */
+body.escuro .fechar-filtro {
+  color: #ffffff;
+}
+
+body.escuro .fechar-filtro:hover {
+  color: #F28705;
+}
 /* MODO ESCURO (body.escuro) */
 body.escuro {
   background-color: #121212;
   color: #ffffff;
 }
 
-body.escuro .navbar,
-body.escuro .item-data {
+body.escuro .modal-cadastro-container .fechar-filtro:hover {
+  color: #F28705 !important;
+}
+.modal-cadastro-container .fechar-filtro:hover {
+  color: #024873;
+}
+
+body.escuro .lp-hero-subtitle {
+  color: #cbd5e1;
+}
+
+body.escuro .lp-action-card {
   background-color: #1e1e1e;
+  border-color: #333333;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+body.escuro .lp-card-lost:hover {
+  border-color: #F28705;
+}
+
+body.escuro .lp-card-found:hover {
+  border-color: #38bdf8;
+}
+
+body.escuro .lp-icon-lost {
+  background-color: rgba(242, 135, 5, 0.16);
+  color: #F28705;
+}
+
+body.escuro .lp-icon-found {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+body.escuro .lp-eyebrow-found {
+  color: #38bdf8;
+}
+
+body.escuro .lp-card-title {
   color: #ffffff;
+}
+
+body.escuro .lp-card-desc {
+  color: #a0a0a0;
 }
 
 body.escuro .card-relatar-item,
 body.escuro div.card-relatar-item {
   background-color: #024873 !important;
-  border-color: #38bdf8 !important;
-}
-
-body.escuro .card-relatar-item .icone-busca-container {
-  background-color: #012e4a !important;
-}
-
-body.escuro .card-relatar-item .icone-busca-container svg {
-  fill: #38bdf8 !important;
-  color: #38bdf8 !important;
-}
-
-body.escuro .card-relatar-item .titulo-card {
-  color: #ffffff !important;
-}
-
-body.escuro .card-relatar-item .texto-sub-card {
-  color: #e0f2fe !important;
-}
-
-body.escuro .card {
-  background-color: #1e1e1e;
-  border-top-color: #024873;
-  border-color: #333333;
-}
-
-body.escuro .card-titulo {
+  border-color: #38bdf8 !important;}
+.subtitulo-modal {
   color: #024873;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
 }
 
-body.escuro .card-text {
-  color: #cccccc;
+/* Formulário e Campos */
+.form-modal-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-body.escuro .item-data input[type="date"] {
-  background-color: #2a2a2a;
-  color: #ffffff;
+.form-modal-custom .campo-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: left;
+}
+
+.form-modal-custom .rotulo {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #024873;
+  text-transform: uppercase;
+}
+
+.form-modal-custom .entrada-texto,
+.form-modal-custom .entrada-area-texto {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.form-modal-custom .entrada-texto:focus,
+.form-modal-custom .entrada-area-texto:focus {
   border-color: #024873;
 }
 
-body.escuro .grupo-conteudo {
-  background-color: #1e1e1e;
+/* Grupo da Categoria + Botão "Adicionar Categoria" */
+.categoria-group-inline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.categoria-group-inline select {
+  flex: 1;
+}
+
+.btn-add-cat-inline {
+  background-color: #024873 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 4px;
+  padding: 9px 12px !important;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+  margin: 0 !important;
+}
+
+.btn-add-cat-inline:hover {
+  background-color: #012e4a !important;
+}
+
+/* Botões Inferiores */
+.grupo-botoes-modal {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.btn-modal-cancelar {
+  background: transparent !important;
+  border: 1px solid #6c757d !important;
+  color: #6c757d !important;
+  padding: 9px 18px !important;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  margin: 0 !important;
+}
+
+.btn-modal-cancelar:hover {
+  background-color: #6c757d !important;
+  color: #ffffff !important;
+}
+
+.btn-modal-submit {
+  background-color: #024873 !important;
+  border: none !important;
+  color: #ffffff !important;
+  padding: 9px 20px !important;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  margin: 0 !important;
+}
+
+.btn-modal-submit:hover {
+  background-color: #F28705 !important;
+}
+
+/* Ajustes no Modo Escuro */
+body.escuro .subtitulo-modal,
+body.escuro .form-modal-custom .rotulo {
   color: #ffffff;
 }
 
-body.escuro .grupo-conteudo h3,
-body.escuro .item-data label {
+body.escuro .form-modal-custom .entrada-texto,
+body.escuro .form-modal-custom .entrada-area-texto {
+  background-color: #2a2a2a;
+  border-color: #444444;
+  color: #ffffff;
+}
+
+.fechar-filtro {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #222222;
+  transition: color 0.2s ease;
+}
+
+.fechar-filtro:hover {
   color: #024873;
 }
 
-body.escuro .grupo-conteudo label {
-  color: #dddddd;
-}
+body.escuro .fechar-filtro {
+  color: #ffffff;}
 
-body.escuro .card-destaque {
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
-
-body.escuro .card-destaque p {
-  color: #dddddd;
-}
-
-body.escuro .fechar-card {
-  color: #ffffff;
-}
-
+  
 /* RESPONSIVIDADE */
 @media (max-width: 600px) {
   .itens-card {
     grid-template-columns: 1fr;
     padding: 12px;
+  }
+}
+
+@media (max-width: 960px) {
+  .lp-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 540px) {
+  .lp-action-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lp-btn {
+    width: 100%;
   }
 }
 

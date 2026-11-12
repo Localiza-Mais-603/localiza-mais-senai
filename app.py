@@ -231,44 +231,52 @@ def visualizar_itens():
         prazo_dias=PRAZO_DESCARTE_DIAS
     )
 
-@app.route("/adicionar/item")
-def pag_cadastrar_item_coor():
-    categorias_bd = listar_categorias()
-    return render_template("cadastrar_itens_coor.html", categorias=categorias_bd)
+
 
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])
 def registrar_itens_coordenacao():
+    if session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
     item = request.form.get("item")
 
     # Tratamento da categoria
     id_categoria = request.form.get("id_categoria")
     id_categoria = int(id_categoria) if id_categoria and id_categoria.strip() else None
 
-    local = request.form.get("local")
-
-    # Tratamento da data
+    # Tratamento da data de chegada
     data_encontrado = request.form.get("data")
     if not data_encontrado or not data_encontrado.strip():
-        data_encontrado = None
+        data_encontrado = date.today().strftime('%Y-%m-%d')
 
-    descricao = request.form.get("descricao")
+    # Tratamento e salvamento da foto
+    nome_foto = None
+    foto = request.files.get("foto")
+    if foto and foto.filename != "":
+        nome_seguro = secure_filename(foto.filename)
+        prefixo = datetime.now().strftime("%Y%m%d%H%M%S_")
+        nome_foto = prefixo + nome_seguro
+        pasta_destino = os.path.join("static", "img_upload")
+        os.makedirs(pasta_destino, exist_ok=True)
+        foto.save(os.path.join(pasta_destino, nome_foto))
+
     cpf_coordenador = session.get("usuario", {}).get("cpf")
 
     cadastrar_item(
         item=item,
-        descricao=descricao,
+        descricao="",
         data_encontrado=data_encontrado,
         status="DISPONIVEL",
         id_categoria=id_categoria,
-        local=local,
-        foto=None,
+        local=None,
+        foto=nome_foto,
         email=None,
         cpf_coordenador=cpf_coordenador
     )
 
+    flash("Item cadastrado com sucesso!", "success")
     return redirect(url_for("visualizar_itens"))
-
 
 # PERDI ALGO: o aluno relata a perda e o relato vai só para a coordenação (aba Relatórios)
 @app.route("/registro/itens", methods=["GET", "POST"])
@@ -513,6 +521,25 @@ def editar_item(id_item):
     atualizar_item_no_banco(id_item, item_nome, descricao, local, data_encontrado)
 
     return redirect(url_for("visualizar_itens"))
+
+@app.route("/meu-historico")
+def meu_historico():
+
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
+
+    usuario_sessao = session.get("usuario")
+    email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    usuario_atualizado = buscar_usuario_por_email(email)
+
+
+    todos_itens = listar_todos()
+    meus_itens = [
+        item for item in todos_itens
+        if (item.get("email") if isinstance(item, dict) else getattr(item, "email", None)) == email
+    ]
+
+    return render_template("historico_usuario.html", itens=meus_itens, usuario=usuario_atualizado)
 
 @app.route("/retirar-item", methods=["POST"])
 def retirar_item():

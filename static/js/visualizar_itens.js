@@ -83,11 +83,33 @@ function Filtrar() {
 function abrirCard(card) {
     if (!modal) return;
 
+    const ehCoordenacao = card.dataset.coordenacao === "true";
+    const blocoDescricao = document.getElementById("blocoDescricao");
+    const blocoLocal = document.getElementById("blocoLocal");
+    const blocoStatus = document.getElementById("blocoStatus"); // <-- 1. ADICIONADO
+
     document.getElementById("modalTitulo").textContent = card.dataset.item || "";
-    document.getElementById("modalDescricao").textContent = card.dataset.descricao || "";
-    document.getElementById("modalLocal").textContent = card.dataset.local || "Não informado";
     document.getElementById("modalData").textContent = card.dataset.data && card.dataset.data !== "None" ? card.dataset.data : "Não informada";
-    document.getElementById("modalStatus").textContent = card.dataset.status || "Não informado";
+    // <-- 2. REMOVIDA A LINHA DO modalStatus QUE FICAVA AQUI
+
+    if (ehCoordenacao) {
+        if (blocoDescricao) blocoDescricao.style.display = "none";
+        if (blocoLocal) blocoLocal.style.display = "none";
+        if (blocoStatus) blocoStatus.style.display = "none"; // <-- 3. ADICIONADO (esconde na coordenação)
+    } else {
+        if (blocoDescricao) {
+            blocoDescricao.style.display = "";
+            document.getElementById("modalDescricao").textContent = card.dataset.descricao || "Não informada";
+        }
+        if (blocoLocal) {
+            blocoLocal.style.display = "";
+            document.getElementById("modalLocal").textContent = card.dataset.local && card.dataset.local !== "None" ? card.dataset.local : "Não informado";
+        }
+        if (blocoStatus) { // <-- 3. ADICIONADO (mostra nos itens dos alunos)
+            blocoStatus.style.display = "";
+            document.getElementById("modalStatus").textContent = card.dataset.status || "Não informado";
+        }
+    }
 
     const modalFoto = document.getElementById("modalFoto");
     const foto = card.dataset.foto;
@@ -132,6 +154,111 @@ function fecharModalEdicao() {
     if (modalEdicao) modalEdicao.classList.remove("aberto");
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    const btnFechar = document.getElementById('btnFecharFiltro');
+    const janelaFiltro = document.getElementById('janelaFiltro');
+    const btnAbrir = document.getElementById('btnAbrir');
+
+    // Função para abrir o filtro
+    if (btnAbrir && janelaFiltro) {
+        btnAbrir.addEventListener('click', function () {
+            janelaFiltro.classList.add('aberto');
+            janelaFiltro.style.display = ''; // Limpa qualquer inline style anterior
+        });
+    }
+
+    // Função para fechar o filtro
+    if (btnFechar && janelaFiltro) {
+        btnFechar.addEventListener('click', function () {
+            janelaFiltro.classList.remove('aberto');
+            janelaFiltro.style.display = ''; // Limpa o estilo inline para não bloquear reaberturas
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modalCadastrar = document.getElementById('modalCadastrarItem');
+    const btnAbrirCadastrar = document.getElementById('btnAbrirCadastrar');
+    const btnFecharCadastrar = document.getElementById('btnFecharCadastrar');
+    const btnCancelarCadastrar = document.getElementById('btnCancelarCadastrar');
+    const btnAddCatModal = document.getElementById('btn-abrir-modal');
+    const formCadastrar = document.getElementById('formCadastrarItem');
+
+    // 1. Abrir Modal e preencher data de hoje automaticamente
+    if (btnAbrirCadastrar && modalCadastrar) {
+        btnAbrirCadastrar.addEventListener('click', function () {
+            if (formCadastrar) formCadastrar.reset();
+
+            const campoData = document.getElementById('cadData');
+            if (campoData) {
+                const hoje = new Date();
+                hoje.setMinutes(hoje.getMinutes() - hoje.getTimezoneOffset());
+                campoData.value = hoje.toISOString().slice(0, 10);
+            }
+
+            modalCadastrar.classList.add('aberto');
+        });
+    }
+
+    // 2. Fechar no botão X ou Cancelar
+    if (btnFecharCadastrar && modalCadastrar) {
+        btnFecharCadastrar.addEventListener('click', () => modalCadastrar.classList.remove('aberto'));
+    }
+    if (btnCancelarCadastrar && modalCadastrar) {
+        btnCancelarCadastrar.addEventListener('click', () => modalCadastrar.classList.remove('aberto'));
+    }
+
+    // 3. Fechar ao clicar fora da caixa branca
+    if (modalCadastrar) {
+        modalCadastrar.addEventListener('click', function (e) {
+            if (e.target === modalCadastrar) {
+                modalCadastrar.classList.remove('aberto');
+            }
+        });
+    }
+
+    // 5. Validação da foto e Confirmação com SweetAlert antes de salvar
+    if (formCadastrar) {
+        formCadastrar.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Validação de extensão da foto
+            const campoFoto = document.getElementById('cadFoto');
+            const extensoesPermitidas = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
+
+            if (campoFoto && campoFoto.files.length > 0) {
+                const extensao = campoFoto.files[0].name.split('.').pop().toLowerCase();
+                if (!extensoesPermitidas.includes(extensao)) {
+                    campoFoto.value = '';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Arquivo inválido!',
+                        text: 'Selecione somente imagens PNG, JPG, JPEG, GIF ou WEBP.',
+                        confirmButtonColor: '#F28705',
+                        target: modalCadastrar
+                    });
+                    return;
+                }
+            }
+
+            Swal.fire({
+                title: 'Confirmar Cadastro?',
+                text: 'Tem certeza de que deseja salvar este item no sistema?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#024873',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sim, cadastrar',
+                cancelButtonText: 'Cancelar',
+                target: modalCadastrar
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formCadastrar.submit();
+                }
+            });
+        });
+    }
+});
 // ABRIR MODAL DE RETIRADA
 function abrirModalRetirar(idItem, nomeItem) {
     const modal = document.getElementById('modalRetirarItem');

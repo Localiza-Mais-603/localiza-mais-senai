@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Histórico - Localiza+</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/visualizar_itens.css">
+    <link rel="stylesheet" href="/static/css/historico_usuario.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar transparente-header">
+
+            <div class="container-fluido">
+                <h1>LOCALIZA+</h1>
+            </div>
+
+            <div class="itens-central">
+
+                <!-- Botão de tema claro/escuro (usa AlterarTema() do visualizar_itens.js) -->
+                <div class="form-check form-check-inline switch-group">
+                    <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
+                    <label class="form-check-label" for="switch-dark-mode">
+                        <div class="switch-darkmode">
+                            <div class="icons">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <i class="fa-solid fa-moon"></i>
+                            </div>
+                            <div class="circle"></div>
+                        </div>
+                    </label>
+                </div>
+
+                {% if usuario %}
+                <div class="dropdown">
+                    <button class="botao-formulario dropdown-toggle" type="button" id="dropdownMenuPerfil"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ usuario.nome }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
+                        <li class="dropdown-header text-center">
+                            <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
+                            <small class="text-muted">{{ usuario.email }}</small>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <span class="dropdown-item">
+                                Curso: {{ usuario.curso if usuario.curso else 'Não informado' }}
+                            </span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">Sair</a>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
+
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="cabecalho-historico">
+            <a href="{{ url_for('visualizar_itens') }}" class="link-voltar">← Voltar</a>
+            <h2 class="titulo-secao-itens">ITENS PERDIDOS RELATADOS</h2>
+        </section>
+
+        <section class="lista-historico" aria-label="Itens que você relatou">
+
+            {% if itens %}
+            {% for item in itens %}
+            <article class="card-historico"
+                     style="cursor: pointer;"
+                     data-item="{{ item.item }}"
+                     data-descricao="{{ item.descricao }}"
+                     data-local="{{ item.local if item.local else '' }}"
+                     data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
+                     data-status="{{ item.status }}"
+                     data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                     onclick="abrirCard(this)">
+
+
+                <div class="card-historico-corpo">
+                    <h3 class="card-historico-titulo">{{ item.item }}</h3>
+
+                    <p class="card-historico-descricao">{{ item.descricao }}</p>
+
+                    <p class="card-historico-info">
+                        <strong>Local:</strong>
+                        {{ item.local if item.local else 'Não informado' }}
+                    </p>
+
+                    <p class="card-historico-info">
+                        <strong>Data:</strong>
+                        {{ item.data_encontrado if item.data_encontrado else 'Não informada' }}
+                    </p>
+
+                    <span class="card-historico-status">Status: {{ item.status }}</span>
+                </div>
+
+            </article>
+            {% endfor %}
+            {% else %}
+            <p class="historico-vazio">Você ainda não relatou nenhum item.</p>
+            {% endif %}
+            
+
+        </section>
+
+    </main>
+    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true">
+        <article class="card-destaque" onclick="event.stopPropagation()">
+
+            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">
+                X
+            </button>
+
+            <h2 id="modalTitulo"></h2>
+
+            <img id="modalFoto" src="" alt="Foto do item selecionado"
+                class="modal-foto" style="display: none;">
+
+            <p><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
+            <p><strong>Local:</strong> <span id="modalLocal"></span></p>
+            <p><strong>Data:</strong> <span id="modalData"></span></p>
+            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+
+        </article>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/visualizar_itens.js"></script>
+</body>
+
+</html>
