@@ -1,7 +1,7 @@
 from datetime import date, datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from database.conexao import conectar
 from model.cadastro import cadastrar_usuario, cadastrar_coor
 from model.excluir_item import excluir_itens
@@ -13,13 +13,15 @@ from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
 import os
+import re
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv, find_dotenv
 
-load_dotenv()
+load_dotenv(find_dotenv())
 
 app = Flask(__name__)
 app.secret_key = "chciclete"
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_SERVER'] = '://gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
@@ -29,6 +31,10 @@ app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.
 
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
+
+def validar_formato_email(email):
+    padrao = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return bool(email and re.match(padrao, email))
 
 
 
@@ -380,18 +386,31 @@ def pag_recuperar_senha():
     erro = None
     sucesso = None
     if request.method == "POST":
-        email = request.form.get("email")
+        email = request.form.get("email", "").strip().lower()
+
+        if not validar_formato_email(email):
+            erro = "Digite um endereço de e-mail válido."
+            return render_template('recuperar-senha.html', erro=erro, sucesso=sucesso)
+
         token_gerado = gerador_de_token.dumps(email, salt='recuperar-senha-salt')
         try:
             salvar_token_recuperacao(email, token_gerado)
             link_recuperacao = url_for('pag_nova_senha', token=token_gerado, _external=True)
+            print("\n LINK DE TESTE:", link_recuperacao, "\n") # <--- Adicione temporariamente
+
             msg = Message(
                 subject="Localiza+ - Recuperação de Senha",
                 recipients=[email]
             )
-            msg.body = f"Olá!\n\nPara redefinir sua senha no Localiza+, clique no link abaixo:\n\n{link_recuperacao}\n\nSe você não solicitou essa alteração, ignore este e-mail."
+            msg.body = (
+                f"Olá!\n\n"
+                f"Para redefinir sua senha no Localiza+, clique no link abaixo (válido por 30 minutos):\n\n"
+                f"{link_recuperacao}\n\n"
+                f"Se você não solicitou essa alteração, ignore este e-mail."
+            )
             mail.send(msg)
-            sucesso = "E-mail enviado!"
+
+            sucesso = "E-mail enviado! Verifique sua caixa de entrada e o spam."
         except ValueError as e_validacao:
             erro = str(e_validacao)
         except Exception as e:
@@ -402,18 +421,33 @@ def pag_recuperar_senha():
 @app.route("/nova-senha/<token>", methods=["GET", "POST"])
 def pag_nova_senha(token):
     erro = None
+    try:
+        
+        gerador_de_token.loads(token, salt='recuperar-senha-salt', max_age=1800)
+    except (SignatureExpired, BadSignature):
+        return "<h3>Link inválido ou expirado! Solicite uma nova recuperação.</h3>", 400
+
     usuario_valido = verificar_token_valido(token)
     if not usuario_valido:
-        return "<h3>Link inválido ou expirado!</h3>", 400
+        return "<h3>Este link já foi utilizado ou é inválido!</h3>", 400
+
     if request.method == "POST":
-        nova_senha = request.form.get("nova_senha")
-        confirmar_senha = request.form.get("confirmar_senha")
+        nova_senha = request.form.get("nova_senha", "")
+        confirmar_senha = request.form.get("confirmar_senha", "")
+        if len(nova_senha) < 6:
+            erro = "A senha deve ter pelo menos 6 caracteres."
+            return render_template('nova-senha.html', erro=erro, token=token)
         if nova_senha != confirmar_senha:
             erro = "As senhas não coincidem! Tente novamente."
             return render_template('nova-senha.html', erro=erro, token=token)
+
         atualizar_senha_por_token(token, nova_senha)
         return redirect(url_for('pag_login_aluno', sucesso="Senha alterada com sucesso! Faça seu login."))
+
     return render_template('nova-senha.html', erro=erro, token=token)
+
+
+
 
 @app.route('/excluir-item/<int:id_item>', methods=['POST'])
 def excluir_item(id_item):
