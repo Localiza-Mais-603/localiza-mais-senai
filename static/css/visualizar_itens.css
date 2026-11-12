@@ -936,3 +936,9 @@ body.escuro .fechar-filtro {
 #switch-dark-mode:checked + .form-check-label .fa-moon {
     color: #f1c40f;
 }
+
+
+.itens-card .card-corpo .badge-prazo {
+  background-color: #E87A24;
+  color: #ffffff;
+}
