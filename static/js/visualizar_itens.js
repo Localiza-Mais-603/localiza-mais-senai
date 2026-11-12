@@ -131,3 +131,37 @@ function abrirModalEdicao(botao, idItem) {
 function fecharModalEdicao() {
     if (modalEdicao) modalEdicao.classList.remove("aberto");
 }
+
+function abrirCardHistorico(elemento) {
+    const titulo = elemento.dataset.item || 'Sem título';
+    const descricao = elemento.dataset.descricao || 'Sem descrição';
+    const local = elemento.dataset.local || 'Não informado';
+    const data = elemento.dataset.data || 'Não informada';
+    const status = elemento.dataset.status || 'Não informado';
+    const fotoUrl = elemento.dataset.foto;
+
+    document.getElementById('histModalTitulo').textContent = titulo;
+    document.getElementById('histModalDescricao').textContent = descricao;
+    document.getElementById('histModalLocal').textContent = local;
+    document.getElementById('histModalData').textContent = data;
+    document.getElementById('histModalStatus').textContent = status;
+
+    const imgEl = document.getElementById('histModalFoto');
+    if (fotoUrl && fotoUrl.trim() !== '') {
+        imgEl.src = fotoUrl;
+        imgEl.style.display = 'block';
+    } else {
+        imgEl.src = '';
+        imgEl.style.display = 'none';
+    }
+
+    const modal = document.getElementById('modalHistorico');
+    modal.classList.add('active'); // ou estilo correspondente (ex: modal.style.display = 'flex')
+    modal.setAttribute('aria-hidden', 'false');
+}
+
+function fecharModalHistorico() {
+    const modal = document.getElementById('modalHistorico');
+    modal.classList.remove('active'); // ou modal.style.display = 'none'
+    modal.setAttribute('aria-hidden', 'true');
+}

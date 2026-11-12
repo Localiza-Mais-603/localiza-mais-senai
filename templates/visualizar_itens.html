@@ -158,6 +158,14 @@
                                 Curso: {{ usuario.curso if usuario.curso else 'Não informado' }}
                             </span>
                         </li>
+
+                        <!-- NOVO ITEM: Adicionado o link para o Histórico -->
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('meu_historico') }}">
+                                Meu histórico
+                            </a>
+                        </li>
+                        
                         <li>
                             <hr class="dropdown-divider">
                         </li>

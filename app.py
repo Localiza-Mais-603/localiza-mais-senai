@@ -514,6 +514,25 @@ def editar_item(id_item):
 
     return redirect(url_for("visualizar_itens"))
 
+@app.route("/meu-historico")
+def meu_historico():
+
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
+
+    usuario_sessao = session.get("usuario")
+    email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    usuario_atualizado = buscar_usuario_por_email(email)
+
+
+    todos_itens = listar_todos()
+    meus_itens = [
+        item for item in todos_itens
+        if (item.get("email") if isinstance(item, dict) else getattr(item, "email", None)) == email
+    ]
+
+    return render_template("historico_usuario.html", itens=meus_itens, usuario=usuario_atualizado)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
