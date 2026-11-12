@@ -588,19 +588,7 @@ def itens_retirados():
 
     return render_template("itens_retirados.html", itens=retirados, usuario=usuario_atualizado)
 
-@app.route("/devolver-item/<int:id_item>", methods=["POST"])
-def devolver_item(id_item):
-    if session.get("perfil") != "coordenacao":
-        return redirect(url_for("pag_login_coordenacao"))
 
-    try:
-        devolver_item_bd(id_item)
-        flash("Item devolvido para a lista de disponíveis com sucesso!", "success")
-    except Exception as e:
-        print("Erro ao devolver item:", e)
-        flash("Erro ao devolver o item.", "error")
-
-    return redirect(url_for("itens_retirados"))
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
