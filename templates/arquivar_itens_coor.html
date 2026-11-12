@@ -119,61 +119,57 @@
 
                 <li style="list-style: none;">
 
-                    <article class="card"
-                        style="width: 20rem;"
-                        data-categoria="{{ item.id_categoria }}"
-                        data-item="{{ item.item }}"
-                        data-descricao="{{ item.descricao }}"
-                        data-local="{{ item.local if item.local else '' }}"
-                        data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
-                        data-status="{{ item.status }}"
-                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}">
+                  <article class="card"
+                    style="width: 20rem;"
+                    data-categoria="{{ item.id_categoria }}"
+                    data-item="{{ item.item }}"
+                    data-descricao="{{ item.descricao if item.descricao else '' }}"
+                    data-local="{{ item.local if item.local else '' }}"
+                    data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
+                    data-status="{{ item.status }}"
+                    data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                    data-coordenacao="{{ 'true' if item.cpf_coordenador else 'false' }}"
+                    onclick="abrirCard(this)">
 
-                        <div class="card-corpo">
+                    <div class="card-corpo">
+                        <h3 class="card-titulo">
+                            {{ item.item }}
+                        </h3>
 
-                            <h3 class="card-titulo">
-                                {{ item.item }}
-                            </h3>
+                        <p class="card-text">
+                            {{ item.descricao }}
+                        </p>
+                    </div>
 
-                            <p class="card-text">
-                                {{ item.descricao }}
-                            </p>
+                    {% if session.get('perfil') == 'coordenacao' %}
+                    <div class="card-botoes-acao" onclick="event.stopPropagation()">
 
-                        </div>
+                        <!-- FORMULÁRIO PARA DESARQUIVAR -->
+                        <form action="{{ url_for('desarquivar_item', id_item=item.id_item) }}"
+                            method="POST"
+                            class="form-acao form-desarquivar"
+                            onclick="event.stopPropagation()">
 
+                            <button type="submit" class="btn-editar-card">
+                                Desarquivar
+                            </button>
+                        </form>
 
-                        {% if session.get('perfil') == 'coordenacao' %}
+                        <!-- FORMULÁRIO PARA EXCLUIR -->
+                        <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
+                            method="POST"
+                            class="form-acao form-excluir"
+                            onclick="event.stopPropagation()">
 
-                        <div class="card-botoes-acao">
+                            <button type="submit" class="btn-excluir-card">
+                                Excluir
+                            </button>
+                        </form>
 
-                            <!-- FORMULÁRIO PARA DESARQUIVAR -->
-                            <form action="{{ url_for('desarquivar_item', id_item=item.id_item) }}"
-                                method="POST"
-                                class="form-acao form-desarquivar">
+                    </div>
+                    {% endif %}
 
-                                <button type="submit" class="btn-editar-card">
-                                    Desarquivar
-                                </button>
-
-                            </form>
-
-
-                            <!-- FORMULÁRIO PARA EXCLUIR -->
-                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
-                                method="POST"
-                                class="form-acao form-excluir">
-
-                                <button type="submit" class="btn-excluir-card">
-                                    Excluir
-                                </button>
-
-                            </form>
-
-                        </div>
-
-                        {% endif %}
-
-                    </article>
+                </article>
 
                 </li>
 
@@ -197,41 +193,41 @@
 
 
     <!-- MODAL DE DETALHES -->
-    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true">
+    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCard()">
 
-        <article class="card-destaque">
+    <article class="card-destaque" onclick="event.stopPropagation()">
 
-            <button class="fechar-card" type="button" id="btnFecharCard" aria-label="Fechar modal">
-                X
-            </button>
+        <button class="fechar-card" type="button" id="btnFecharCard" onclick="fecharCard()" aria-label="Fechar modal">
+            X
+        </button>
 
-            <h2 id="modalTitulo"></h2>
+        <h2 id="modalTitulo"></h2>
 
-            <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none;">
+        <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none;">
 
-            <p>
-                <strong>Descrição:</strong>
-                <span id="modalDescricao"></span>
-            </p>
+        <p id="blocoDescricao">
+            <strong>Descrição:</strong>
+            <span id="modalDescricao"></span>
+        </p>
 
-            <p>
-                <strong>Local:</strong>
-                <span id="modalLocal"></span>
-            </p>
+        <p id="blocoLocal">
+            <strong>Local:</strong>
+            <span id="modalLocal"></span>
+        </p>
 
-            <p>
-                <strong>Data:</strong>
-                <span id="modalData"></span>
-            </p>
+        <p>
+            <strong>Data:</strong>
+            <span id="modalData"></span>
+        </p>
 
-            <p>
-                <strong>Status:</strong>
-                <span id="modalStatus"></span>
-            </p>
+        <p id="blocoStatus">
+            <strong>Status:</strong>
+            <span id="modalStatus"></span>
+        </p>
 
-        </article>
+    </article>
 
-    </div>
+</div>
 
 
     <!-- SCRIPTS -->

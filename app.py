@@ -236,38 +236,47 @@ def visualizar_itens():
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])
 def registrar_itens_coordenacao():
+    if session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
     item = request.form.get("item")
 
     # Tratamento da categoria
     id_categoria = request.form.get("id_categoria")
     id_categoria = int(id_categoria) if id_categoria and id_categoria.strip() else None
 
-    local = request.form.get("local")
-
-    # Tratamento da data
+    # Tratamento da data de chegada
     data_encontrado = request.form.get("data")
     if not data_encontrado or not data_encontrado.strip():
-        data_encontrado = None
+        data_encontrado = date.today().strftime('%Y-%m-%d')
 
-    descricao = request.form.get("descricao")
+    # Tratamento e salvamento da foto
+    nome_foto = None
+    foto = request.files.get("foto")
+    if foto and foto.filename != "":
+        nome_seguro = secure_filename(foto.filename)
+        prefixo = datetime.now().strftime("%Y%m%d%H%M%S_")
+        nome_foto = prefixo + nome_seguro
+        pasta_destino = os.path.join("static", "img_upload")
+        os.makedirs(pasta_destino, exist_ok=True)
+        foto.save(os.path.join(pasta_destino, nome_foto))
+
     cpf_coordenador = session.get("usuario", {}).get("cpf")
 
     cadastrar_item(
         item=item,
-        descricao=descricao,
+        descricao="",
         data_encontrado=data_encontrado,
         status="DISPONIVEL",
         id_categoria=id_categoria,
-        local=local,
-        foto=None,
+        local=None,
+        foto=nome_foto,
         email=None,
         cpf_coordenador=cpf_coordenador
     )
 
     flash("Item cadastrado com sucesso!", "success")
-    
     return redirect(url_for("visualizar_itens"))
-
 
 # PERDI ALGO: o aluno relata a perda e o relato vai só para a coordenação (aba Relatórios)
 @app.route("/registro/itens", methods=["GET", "POST"])

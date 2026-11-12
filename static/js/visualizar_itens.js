@@ -83,11 +83,33 @@ function Filtrar() {
 function abrirCard(card) {
     if (!modal) return;
 
+    const ehCoordenacao = card.dataset.coordenacao === "true";
+    const blocoDescricao = document.getElementById("blocoDescricao");
+    const blocoLocal = document.getElementById("blocoLocal");
+    const blocoStatus = document.getElementById("blocoStatus"); // <-- 1. ADICIONADO
+
     document.getElementById("modalTitulo").textContent = card.dataset.item || "";
-    document.getElementById("modalDescricao").textContent = card.dataset.descricao || "";
-    document.getElementById("modalLocal").textContent = card.dataset.local || "Não informado";
     document.getElementById("modalData").textContent = card.dataset.data && card.dataset.data !== "None" ? card.dataset.data : "Não informada";
-    document.getElementById("modalStatus").textContent = card.dataset.status || "Não informado";
+    // <-- 2. REMOVIDA A LINHA DO modalStatus QUE FICAVA AQUI
+
+    if (ehCoordenacao) {
+        if (blocoDescricao) blocoDescricao.style.display = "none";
+        if (blocoLocal) blocoLocal.style.display = "none";
+        if (blocoStatus) blocoStatus.style.display = "none"; // <-- 3. ADICIONADO (esconde na coordenação)
+    } else {
+        if (blocoDescricao) {
+            blocoDescricao.style.display = "";
+            document.getElementById("modalDescricao").textContent = card.dataset.descricao || "Não informada";
+        }
+        if (blocoLocal) {
+            blocoLocal.style.display = "";
+            document.getElementById("modalLocal").textContent = card.dataset.local && card.dataset.local !== "None" ? card.dataset.local : "Não informado";
+        }
+        if (blocoStatus) { // <-- 3. ADICIONADO (mostra nos itens dos alunos)
+            blocoStatus.style.display = "";
+            document.getElementById("modalStatus").textContent = card.dataset.status || "Não informado";
+        }
+    }
 
     const modalFoto = document.getElementById("modalFoto");
     const foto = card.dataset.foto;
@@ -160,29 +182,33 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnFecharCadastrar = document.getElementById('btnFecharCadastrar');
     const btnCancelarCadastrar = document.getElementById('btnCancelarCadastrar');
     const btnAddCatModal = document.getElementById('btn-abrir-modal');
+    const formCadastrar = document.getElementById('formCadastrarItem');
 
-    // 1. Abrir Modal ao clicar em "Cadastrar item" no topo
+    // 1. Abrir Modal e preencher data de hoje automaticamente
     if (btnAbrirCadastrar && modalCadastrar) {
         btnAbrirCadastrar.addEventListener('click', function () {
+            if (formCadastrar) formCadastrar.reset();
+
+            const campoData = document.getElementById('cadData');
+            if (campoData) {
+                const hoje = new Date();
+                hoje.setMinutes(hoje.getMinutes() - hoje.getTimezoneOffset());
+                campoData.value = hoje.toISOString().slice(0, 10);
+            }
+
             modalCadastrar.classList.add('aberto');
         });
     }
 
-    // 2. Fechar no botão X
+    // 2. Fechar no botão X ou Cancelar
     if (btnFecharCadastrar && modalCadastrar) {
-        btnFecharCadastrar.addEventListener('click', function () {
-            modalCadastrar.classList.remove('aberto');
-        });
+        btnFecharCadastrar.addEventListener('click', () => modalCadastrar.classList.remove('aberto'));
     }
-
-    // 3. Fechar no botão Cancelar
     if (btnCancelarCadastrar && modalCadastrar) {
-        btnCancelarCadastrar.addEventListener('click', function () {
-            modalCadastrar.classList.remove('aberto');
-        });
+        btnCancelarCadastrar.addEventListener('click', () => modalCadastrar.classList.remove('aberto'));
     }
 
-    // 4. Fechar ao clicar fora da caixa branca (no fundo escuro)
+    // 3. Fechar ao clicar fora da caixa branca
     if (modalCadastrar) {
         modalCadastrar.addEventListener('click', function (e) {
             if (e.target === modalCadastrar) {
@@ -191,20 +217,29 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 5. Botão "Adicionar Categoria" dentro do modal de cadastro
-    if (btnAddCatModal) {
-        btnAddCatModal.addEventListener('click', function () {
-            if (typeof adicionarCategoria === 'function') {
-                adicionarCategoria('categoria', 'modalCadastrarItem');
-            }
-        });
-    }
-
-    // 6. Confirmação com SweetAlert antes de salvar
-    const formCadastrar = modalCadastrar ? modalCadastrar.querySelector('form') : null;
+    // 5. Validação da foto e Confirmação com SweetAlert antes de salvar
     if (formCadastrar) {
         formCadastrar.addEventListener('submit', function (e) {
             e.preventDefault();
+
+            // Validação de extensão da foto
+            const campoFoto = document.getElementById('cadFoto');
+            const extensoesPermitidas = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
+
+            if (campoFoto && campoFoto.files.length > 0) {
+                const extensao = campoFoto.files[0].name.split('.').pop().toLowerCase();
+                if (!extensoesPermitidas.includes(extensao)) {
+                    campoFoto.value = '';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Arquivo inválido!',
+                        text: 'Selecione somente imagens PNG, JPG, JPEG, GIF ou WEBP.',
+                        confirmButtonColor: '#F28705',
+                        target: modalCadastrar
+                    });
+                    return;
+                }
+            }
 
             Swal.fire({
                 title: 'Confirmar Cadastro?',
