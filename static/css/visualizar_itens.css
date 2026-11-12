@@ -30,11 +30,13 @@ body {
   font-weight: 900;
   color: #024873;
   letter-spacing: 1px;
+  margin: 0;
 }
 
 .itens-central {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 14px;
 }
 
 .itens-central button,
@@ -237,11 +239,13 @@ body {
 /* FILTRO DE DATAS */
 .item-data {
   display: flex;
+  justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 20px;
+  margin: 10px auto 12px;
   color: #333333;
-  padding: 15px 20px;
+  padding: 10px 20px;
   border-radius: 6px;
   font-weight: bold;
 }
@@ -842,6 +846,22 @@ body.escuro .fechar-filtro {
   }
 }
 
+/* Alinhamento do switch de tema com o perfil no cabeçalho */
+.switch-group {
+    display: flex;
+    align-items: center;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: auto;
+}
+
+.switch-group .form-check-label {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    cursor: pointer;
+}
+
 /* Esconde o checkbox nativo do Bootstrap */
 .switch-group .form-check-input {
     display: none;
@@ -877,8 +897,8 @@ body.escuro .fechar-filtro {
     transition: color 0.3s ease;
 }
 
-.switch-darkmode .fa-lightbulb {
-    color: #f39c12; /* Lâmpada amarela */
+.switch-darkmode .fa-sun {
+    color: #f39c12; /* Sol amarelo */
 }
 
 .switch-darkmode .fa-moon {
@@ -916,5 +936,3 @@ body.escuro .fechar-filtro {
 #switch-dark-mode:checked + .form-check-label .fa-moon {
     color: #f1c40f;
 }
-
-
