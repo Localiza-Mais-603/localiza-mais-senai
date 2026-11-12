@@ -535,6 +535,30 @@ body {
   transition: background-color 0.2s;
 }
 
+/* MODAL CADASTRAR ITEM - LARGURA E ALINHAMENTO */
+.modal-cadastro-container {
+  max-width: 480px !important;
+  width: 92% !important;
+  padding: 28px !important;
+}
+
+.categoria-group-inline {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.categoria-group-inline select {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Ajuste no input de arquivo para não quebrar o layout */
+.form-modal-custom input[type="file"].entrada-texto {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+}
+
 /* AJUSTE PARA O MODO ESCURO */
 body.escuro .fechar-filtro {
   color: #ffffff;
@@ -599,7 +623,7 @@ body.escuro .lp-card-desc {
 body.escuro .card-relatar-item,
 body.escuro div.card-relatar-item {
   background-color: #024873 !important;
-  border-color: #38bdf8 !important;
+  border-color: #38bdf8 !important;}
 .subtitulo-modal {
   color: #024873;
   font-size: 1.25rem;
