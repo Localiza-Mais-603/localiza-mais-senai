@@ -8,12 +8,11 @@
     <title>Itens Retirados - LOCALIZA+</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/visualizar_itens.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visualizar_itens.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
@@ -43,55 +42,39 @@
                 </div>
 
                 {% if usuario %}
-
                 <div class="dropdown">
-
                     <button class="botao-formulario dropdown-toggle" type="button" id="dropdownMenuPerfil"
                         data-bs-toggle="dropdown" aria-expanded="false">
-
                         {{ usuario.nome }}
-
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
-
                         <li class="dropdown-header text-center">
-
                             <img src="https://placehold.co/60" alt="Foto de perfil de {{ usuario.nome }}"
                                 class="rounded-circle mb-2" style="width: 50px; height: 50px;">
-
                             <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
-
                             <small class="text-muted">{{ usuario.email }}</small>
-
                         </li>
-
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-
                         <li>
                             <a class="dropdown-item text-danger" href="/logout">
                                 Sair
                             </a>
                         </li>
-
                     </ul>
-
                 </div>
-
                 {% endif %}
 
             </div>
         </nav>
     </header>
 
-
     <!-- CONTEÚDO PRINCIPAL -->
     <main>
 
         <div class="container my-2">
-
             <a href="/visualizar-itens" class="btn-abrir mb-3 text-decoration-none d-inline-block">
                 ← Voltar
             </a>
@@ -102,9 +85,7 @@
             <p class="text-muted fs-6">
                 Itens entregues a quem os procurou, com os dados de quem retirou.
             </p>
-
         </div>
-
 
         <!-- LISTA DE ITENS RETIRADOS -->
         <section aria-label="Itens retirados">
@@ -119,15 +100,16 @@
                         style="width: 20rem;"
                         data-categoria="{{ item.id_categoria }}"
                         data-item="{{ item.item }}"
-                        data-descricao="{{ item.descricao }}"
+                        data-descricao="{{ item.descricao if item.descricao else '' }}"
                         data-local="{{ item.local if item.local else '' }}"
                         data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
                         data-status="{{ item.status }}"
-                        data-retirado-por="{{ item.retirado_por if item.retirado_por else '' }}"
-                        data-cpf-retirou="{{ item.cpf_retirou if item.cpf_retirou else '' }}"
-                        data-curso-retirou="{{ item.curso_retirou if item.curso_retirou else '' }}"
-                        data-data-retirada="{{ item.data_retirada if item.data_retirada else '' }}"
-                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}">
+                        data-publicado="{{ item.nome_usuario if item.nome_usuario else '' }}"
+                        data-retirante="{{ item.nome_retirante if item.nome_retirante else 'Não informado' }}"
+                        data-email-retirante="{{ item.email_retirante if item.email_retirante else 'Não informado' }}"
+                        data-data-retirada="{{ item.data_retirada_fmt if item.data_retirada_fmt else 'Não informada' }}"
+                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                        onclick="abrirCard(this)">
 
                         <div class="card-corpo">
 
@@ -135,42 +117,31 @@
                                 {{ item.item }}
                             </h3>
 
+                            {% if item.descricao %}
                             <p class="card-text">
                                 {{ item.descricao }}
                             </p>
+                            {% endif %}
 
-                            {% if item.retirado_por %}
-                            <div class="card-retirada-info p-2 mt-2 bg-light rounded text-start fs-7">
-                                <strong>Retirado por:</strong> {{ item.retirado_por }}<br>
-                                {% if item.data_retirada %}
-                                <small class="text-muted">Em: {{ item.data_retirada }}</small>
+                            {% if item.nome_retirante %}
+                            <div class="card-retirada-info p-2 mt-2 bg-light rounded text-start" style="font-size: 0.85rem; color: #333;">
+                                <strong>Retirado por:</strong> {{ item.nome_retirante }}<br>
+                                {% if item.data_retirada_fmt %}
+                                <small class="text-muted">Em: {{ item.data_retirada_fmt }}</small>
                                 {% endif %}
                             </div>
                             {% endif %}
 
                         </div>
 
-
                         {% if session.get('perfil') == 'coordenacao' %}
-
-                        <div class="card-botoes-acao">
-
-                            <!-- FORMULÁRIO PARA DEVOLVER À LISTA -->
-                            <form action="{{ url_for('devolver_item', id_item=item.id_item) }}"
-                                method="POST"
-                                class="form-acao form-devolver">
-
-                                <button type="submit" class="btn-editar-card">
-                                    Devolver à lista
-                                </button>
-
-                            </form>
-
+                        <div class="card-botoes-acao" onclick="event.stopPropagation()">
 
                             <!-- FORMULÁRIO PARA EXCLUIR -->
                             <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
                                 method="POST"
-                                class="form-acao form-excluir">
+                                class="form-acao form-excluir"
+                                onclick="event.stopPropagation()">
 
                                 <button type="submit" class="btn-excluir-card">
                                     Excluir
@@ -179,7 +150,6 @@
                             </form>
 
                         </div>
-
                         {% endif %}
 
                     </article>
@@ -189,11 +159,9 @@
                 {% else %}
 
                 <div class="col-12 text-center py-5">
-
                     <p class="text-muted fs-6">
                         Nenhum item retirado no momento.
                     </p>
-
                 </div>
 
                 {% endfor %}
@@ -204,13 +172,12 @@
 
     </main>
 
-
     <!-- MODAL DE DETALHES -->
-    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true">
+    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCard()">
 
-        <article class="card-destaque">
+        <article class="card-destaque" onclick="event.stopPropagation()">
 
-            <button class="fechar-card" type="button" id="btnFecharCard" aria-label="Fechar modal">
+            <button class="fechar-card" type="button" id="btnFecharCard" onclick="fecharCard()" aria-label="Fechar modal">
                 X
             </button>
 
@@ -218,19 +185,24 @@
 
             <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none;">
 
-            <p>
+            <p id="blocoDescricao">
                 <strong>Descrição:</strong>
                 <span id="modalDescricao"></span>
             </p>
 
-            <p>
+            <p id="blocoLocal">
                 <strong>Local onde foi encontrado:</strong>
                 <span id="modalLocal"></span>
             </p>
 
-            <p>
+            <p id="blocoData">
                 <strong>Data de achado:</strong>
                 <span id="modalData"></span>
+            </p>
+
+            <p id="blocoPublicador" style="display: none;">
+                <strong>Publicado por:</strong>
+                <span id="modalPublicador"></span>
             </p>
 
             <p>
@@ -238,7 +210,11 @@
                 <span id="modalStatus"></span>
             </p>
 
-            <hr>
+            <hr style="margin: 14px 0;">
+
+            <h3 style="font-size: 1rem; font-weight: 800; color: #024873; text-transform: uppercase; margin-bottom: 10px;">
+                Dados da Retirada
+            </h3>
 
             <p>
                 <strong>Retirado por:</strong>
@@ -246,13 +222,8 @@
             </p>
 
             <p>
-                <strong>CPF do retirante:</strong>
-                <span id="modalCpfRetirou"></span>
-            </p>
-
-            <p>
-                <strong>Curso / Setor:</strong>
-                <span id="modalCursoRetirou"></span>
+                <strong>E-mail do retirante:</strong>
+                <span id="modalEmailRetirante"></span>
             </p>
 
             <p>
@@ -264,13 +235,19 @@
 
     </div>
 
+    <!-- MENSAGENS FLASH OCULTAS PARA O JS LER -->
+    <div id="flash-messages" style="display: none;"
+        data-messages='{{ get_flashed_messages(with_categories=true) | tojson }}'>
+    </div>
 
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="/static/js/visualizar_itens.js"></script>
-    <script src="/static/js/confirmaacoes.js"></script>
+    <script src="{{ url_for('static', filename='js/visualizar_itens.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/confirmaacoes.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/itens_retirados.js') }}"></script>
 
 </body>
 
