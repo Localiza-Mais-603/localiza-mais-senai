@@ -83,9 +83,156 @@ body {
   color: #024873;
 }
 
-.card-relatar-item .texto-sub-card {
-  color: #6c757d;
+/* CARDS DE AÇÃO DO ALUNO (PERDI ALGO / ENCONTREI ALGO) */
+.lp-hero-actions {
+  max-width: 1040px;
+  margin: 8px auto 22px;
+  padding: 0 12px;
 }
+
+.lp-hero-subtitle {
+  text-align: center;
+  color: #475569;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 20px;
+}
+
+.lp-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.lp-action-card {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 14px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(2, 72, 115, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.3s ease;
+}
+
+.lp-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(2, 72, 115, 0.12);
+}
+
+.lp-card-lost:hover {
+  border-color: rgba(242, 135, 5, 0.6);
+}
+
+.lp-card-found:hover {
+  border-color: rgba(2, 72, 115, 0.45);
+}
+
+.lp-card-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.lp-icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lp-icon-lost {
+  background-color: #fff4e6;
+  color: #F28705;
+}
+
+.lp-icon-found {
+  background-color: #e6f0f7;
+  color: #024873;
+}
+
+.lp-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lp-card-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lp-eyebrow-lost {
+  color: #F28705;
+}
+
+.lp-eyebrow-found {
+  color: #024873;
+}
+
+.lp-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #024873;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.lp-card-desc {
+  margin: 3px 0 0;
+  font-size: 0.88rem;
+  color: #6c757d;
+  line-height: 1.35;
+}
+
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.lp-btn:active {
+  transform: scale(0.98);
+}
+
+.lp-btn-lost {
+  background-color: #F28705;
+  box-shadow: 0 4px 12px rgba(242, 135, 5, 0.28);
+}
+
+.lp-btn-lost:hover {
+  background-color: #d67400;
+}
+
+.lp-btn-found {
+  background-color: #024873;
+  box-shadow: 0 4px 12px rgba(2, 72, 115, 0.24);
+}
+
+.lp-btn-found:hover {
+  background-color: #013657;
+}
+
 
 /* FILTRO DE DATAS */
 .item-data {
@@ -387,6 +534,46 @@ body.escuro .item-data {
   color: #ffffff;
 }
 
+body.escuro .lp-hero-subtitle {
+  color: #cbd5e1;
+}
+
+body.escuro .lp-action-card {
+  background-color: #1e1e1e;
+  border-color: #333333;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+body.escuro .lp-card-lost:hover {
+  border-color: #F28705;
+}
+
+body.escuro .lp-card-found:hover {
+  border-color: #38bdf8;
+}
+
+body.escuro .lp-icon-lost {
+  background-color: rgba(242, 135, 5, 0.16);
+  color: #F28705;
+}
+
+body.escuro .lp-icon-found {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+body.escuro .lp-eyebrow-found {
+  color: #38bdf8;
+}
+
+body.escuro .lp-card-title {
+  color: #ffffff;
+}
+
+body.escuro .lp-card-desc {
+  color: #a0a0a0;
+}
+
 body.escuro .card-relatar-item,
 body.escuro div.card-relatar-item {
   background-color: #024873 !important;
@@ -462,6 +649,23 @@ body.escuro .fechar-card {
   .itens-card {
     grid-template-columns: 1fr;
     padding: 12px;
+  }
+}
+
+@media (max-width: 960px) {
+  .lp-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 540px) {
+  .lp-action-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lp-btn {
+    width: 100%;
   }
 }
 
