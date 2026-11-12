@@ -12,6 +12,7 @@ from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
+from model.retirada_itens import registrar_retirada_bd
 import os
 from werkzeug.utils import secure_filename
 
@@ -553,7 +554,7 @@ def retirar_item():
     try:
         from model.editar_item import registrar_retirada_bd  # importe sua função atualizada
         
-        # Salva o status RETIRADO e os dados de quem retirou no BD
+       
         registrar_retirada_bd(id_item, nome_retirante, email_retirante)
         
         flash(f"Item retirado por {nome_retirante} com sucesso!", "success")
@@ -561,12 +562,11 @@ def retirar_item():
         print("Erro ao registrar retirada:", e)
         flash("Erro ao registrar retirada do item.", "error")
 
-    # Redireciona de volta para a lista de itens (o item sumirá da lista principal)
-    return redirect(url_for("visualizar_itens"))
+   
+    return redirect(url_for("itens_retirados"))
 
 @app.route("/itens_retirados")
 def itens_retirados():
-    # Proteção: Apenas a coordenação pode aceder
     if session.get('perfil') != 'coordenacao':
         return redirect(url_for('pag_login_aluno'))
 
@@ -576,11 +576,12 @@ def itens_retirados():
         email = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
         usuario_atualizado = buscar_usuario_por_email(email)
 
-    # Procura todos os itens e filtra apenas os que têm status 'retirado'
     todos_itens = listar_todos()
-    retirados = [item for item in todos_itens if status_do_item(item) == 'retirado']
+    retirados = [
+        item for item in todos_itens
+        if (status_do_item(item) or '').strip().lower() == 'retirado'
+    ]
 
     return render_template("itens_retirados.html", itens=retirados, usuario=usuario_atualizado)
-
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

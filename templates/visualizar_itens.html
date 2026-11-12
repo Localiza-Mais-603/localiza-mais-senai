@@ -441,38 +441,6 @@
 
     </main>
 
-    <!-- MODAL: REGISTRAR RETIRADA DO ITEM -->
-    <div class="grupo-filtro" id="modalRetirarItem" role="dialog" aria-hidden="true">
-        <div class="grupo-conteudo modal-cadastro-container modal-retirar-container">
-            
-            <button type="button" class="fechar-filtro" id="btnFecharRetirar" aria-label="Fechar modal">&times;</button>
-    
-            <h2 class="subtitulo-modal">Registrar Retirada</h2>
-            <p class="subtitulo-item-retirada">Item a retirar: <strong id="nomeItemRetirada"></strong></p>
-    
-            <form id="formRetirar" action="/retirar-item" method="POST" class="form-modal-custom">
-                
-                <input type="hidden" id="retirarIdItem" name="id_item">
-    
-                <div class="campo-grupo">
-                    <label for="nomeRetirante" class="rotulo">Nome de quem retirou *</label>
-                    <input type="text" id="nomeRetirante" name="nome_retirante" class="entrada-texto" required placeholder="Ex: João da Silva">
-                </div>
-    
-                <div class="campo-grupo">
-                    <label for="emailRetirante" class="rotulo">E-mail do retirante *</label>
-                    <input type="email" id="emailRetirante" name="email_retirante" class="entrada-texto" required placeholder="Ex: joao@email.com">
-                </div>
-    
-                <div class="grupo-botoes-modal">
-                    <button type="button" class="btn-modal-cancelar" id="btnCancelarRetirar">Cancelar</button>
-                    <button type="submit" class="btn-modal-submit btn-modal-retirar">Confirmar Retirada</button>
-                </div>
-    
-            </form>
-    
-        </div>
-    </div>
 
     <!-- MODAL: REGISTRAR RETIRADA DO ITEM -->
     <div class="grupo-filtro" id="modalRetirarItem" role="dialog" aria-hidden="true">

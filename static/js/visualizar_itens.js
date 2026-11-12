@@ -259,14 +259,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
 // ABRIR MODAL DE RETIRADA
 function abrirModalRetirar(idItem, nomeItem) {
     const modal = document.getElementById('modalRetirarItem');
-    document.getElementById('retirarIdItem').value = idItem;
-    document.getElementById('nomeItemRetirada').textContent = nomeItem;
-    document.getElementById('nomeRetirante').value = '';
-    document.getElementById('emailRetirante').value = '';
-    
+    const inputId = document.getElementById('retirarIdItem');
+    const spanNome = document.getElementById('nomeItemRetirada');
+    const inputNome = document.getElementById('nomeRetirante');
+    const inputEmail = document.getElementById('emailRetirante');
+
+    if (inputId) inputId.value = idItem;
+    if (spanNome) spanNome.textContent = nomeItem;
+    if (inputNome) inputNome.value = '';
+    if (inputEmail) inputEmail.value = '';
+
     if (modal) {
         modal.classList.add('aberto');
     }
@@ -278,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnCancelarRetirar = document.getElementById('btnCancelarRetirar');
     const formRetirar = document.getElementById('formRetirar');
 
-    // Fechar Modal
+    // Fechar Modal no X ou Cancelar
     if (btnFecharRetirar && modalRetirar) {
         btnFecharRetirar.addEventListener('click', () => modalRetirar.classList.remove('aberto'));
     }
@@ -286,10 +292,30 @@ document.addEventListener('DOMContentLoaded', function () {
         btnCancelarRetirar.addEventListener('click', () => modalRetirar.classList.remove('aberto'));
     }
 
+    // Fechar ao clicar fora da caixa branca
+    if (modalRetirar) {
+        modalRetirar.addEventListener('click', function (e) {
+            if (e.target === modalRetirar) {
+                modalRetirar.classList.remove('aberto');
+            }
+        });
+    }
+
     // Confirmação SweetAlert antes de enviar
     if (formRetirar) {
         formRetirar.addEventListener('submit', function (e) {
             e.preventDefault();
+
+            const idItem = document.getElementById('retirarIdItem').value;
+            if (!idItem) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro interno',
+                    text: 'ID do item não identificado. Feche o modal e tente novamente.',
+                    confirmButtonColor: '#F28705'
+                });
+                return;
+            }
 
             Swal.fire({
                 title: 'Finalizar Retirada?',
@@ -299,11 +325,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 confirmButtonColor: '#2B7566',
                 cancelButtonColor: '#6c757d',
                 confirmButtonText: 'Sim, registrar',
-                cancelButtonText: 'Cancelar',
-                target: document.getElementById('modalRetirarItem')
+                cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    formRetirar.submit();
+                    HTMLFormElement.prototype.submit.call(formRetirar);
                 }
             });
         });

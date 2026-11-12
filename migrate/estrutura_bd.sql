@@ -64,3 +64,8 @@ CREATE TABLE destino_opcao (
     id_destino INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     descricao VARCHAR(150) NOT NULL
 );
+
+ALTER TABLE item
+ADD COLUMN nome_retirante VARCHAR(150) NULL,
+ADD COLUMN email_retirante VARCHAR(150) NULL,
+ADD COLUMN data_retirada DATETIME NULL;
