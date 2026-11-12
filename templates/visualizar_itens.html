@@ -552,7 +552,7 @@
                 <div class="mb-3">
                     <label for="editDescricao">Descrição</label>
                     <textarea id="editDescricao" name="descricao" class="form-control"
-                        maxlength="255" required></textarea>
+                        maxlength="255" minlength="16" required></textarea>
                 </div>
 
                 <div class="mb-3">
@@ -640,7 +640,7 @@
                     <div class="mb-3">
                         <label for="perdDescricao" class="form-label">Descrição</label>
                         <textarea id="perdDescricao" name="descricao"
-                            class="form-control" rows="3" maxlength="255"
+                            class="form-control" rows="3" minlength="16" maxlength="255"
                             placeholder="Cor, marca, características..." required></textarea>
                     </div>
 
@@ -709,7 +709,7 @@
                     <div class="mb-3">
                         <label for="encDescricao" class="form-label">Descrição do objeto</label>
                         <textarea id="encDescricao" name="descricao"
-                            class="form-control" rows="2" maxlength="255"
+                            class="form-control" rows="2" maxlength="255" minlength="16"
                             placeholder="Cor, marca, características..." required></textarea>
                     </div>
 
@@ -730,7 +730,7 @@
                         <label for="encCategoria" class="form-label">O que é</label>
 
                         <select id="encCategoria" name="id_categoria"
-                            class="form-select select-categoria" required>
+                            class="form-select select-categoria"  required>
 
                             <option value="">Selecione uma categoria</option>
 
