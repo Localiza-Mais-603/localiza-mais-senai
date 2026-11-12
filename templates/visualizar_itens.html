@@ -201,67 +201,69 @@
     <main>
 
         {% if session.get('perfil') == 'aluno' %}
-        <section class="container my-3 d-flex flex-wrap justify-content-center gap-3"
-            aria-label="Relatar item perdido ou encontrado">
+        <section class="lp-hero-actions" aria-label="Relatar item perdido ou encontrado">
+            <p class="lp-hero-subtitle">
+                Registre itens perdidos ou devolva algo que você encontrou de forma rápida e segura.
+            </p>
 
-            <!-- PERDI ALGO -->
-            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border card-relatar-item"
-                style="flex: 1 1 320px; max-width: 480px;">
+            <div class="lp-cards-grid">
+                <!-- CARD 1: PERDI ALGO -->
+                <div class="lp-action-card lp-card-lost">
+                    <div class="lp-card-left">
+                        <div class="lp-icon-box lp-icon-lost" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
 
-                <div class="d-flex align-items-center gap-3">
-                    <div class="icone-busca-container"
-                        style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            viewBox="0 0 16 16">
-                            <path
-                                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                        <div class="lp-card-info">
+                            <span class="lp-card-eyebrow lp-eyebrow-lost">SOLICITAR BUSCA</span>
+                            <h2 class="lp-card-title">PERDI ALGO</h2>
+                            <p class="lp-card-desc">
+                                Perdeu um item? Publique aqui.
+                            </p>
+                        </div>
+                    </div>
+
+                    <button type="button" class="lp-btn lp-btn-lost"
+                        data-bs-toggle="modal" data-bs-target="#modalPerdi">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
-                    </div>
-
-                    <div>
-                        <h2 class="fw-bold m-0 titulo-card" style="font-size: 1.1rem; text-transform: uppercase;">
-                            Perdi Algo
-                        </h2>
-                        <small class="texto-sub-card">Perdeu um item? Publique aqui!</small>
-                    </div>
+                        Relatar Perda
+                    </button>
                 </div>
 
-                <button type="button" class="btn fw-bold px-3 py-2 text-white text-uppercase"
-                    style="background-color: #F28705; border-radius: 6px; font-size: 0.85rem;"
-                    data-bs-toggle="modal" data-bs-target="#modalPerdi">
-                    Relatar item
-                </button>
-            </div>
+                <!-- CARD 2: ENCONTREI ALGO -->
+                <div class="lp-action-card lp-card-found">
+                    <div class="lp-card-left">
+                        <div class="lp-icon-box lp-icon-found" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
 
-            <!-- ENCONTREI ALGO -->
-            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 shadow-sm border card-relatar-item"
-                style="flex: 1 1 320px; max-width: 480px;">
+                        <div class="lp-card-info">
+                            <span class="lp-card-eyebrow lp-eyebrow-found">DEVOLUÇÃO </span>
+                            <h2 class="lp-card-title">ENCONTREI ALGO</h2>
+                            <p class="lp-card-desc">
+                                Achou um item? Publique aqui.
+                            </p>
+                        </div>
+                    </div>
 
-                <div class="d-flex align-items-center gap-3">
-                    <div class="icone-busca-container"
-                        style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="M20 6 9 17l-5-5" />
+                    <button type="button" class="lp-btn lp-btn-found"
+                        data-bs-toggle="modal" data-bs-target="#modalEncontrei">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
-                    </div>
-
-                    <div>
-                        <h2 class="fw-bold m-0 titulo-card" style="font-size: 1.1rem; text-transform: uppercase;">
-                            Encontrei Algo
-                        </h2>
-                        <small class="texto-sub-card">Achou um item? Publique aqui!</small>
-                    </div>
+                        Relatar Achado
+                    </button>
                 </div>
-
-                <button type="button" class="btn fw-bold px-3 py-2 text-white text-uppercase"
-                    style="background-color: #F28705; border-radius: 6px; font-size: 0.85rem;"
-                    data-bs-toggle="modal" data-bs-target="#modalEncontrei">
-                    Relatar item
-                </button>
             </div>
-
         </section>
         {% endif %}
 
