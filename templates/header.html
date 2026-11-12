@@ -1,0 +1,203 @@
+{% if session.get('perfil') %}
+{% set rota = request.path %}
+
+<div class="lz-overlay" id="lzOverlay"></div>
+
+<aside class="lz-painel" id="lzPainel" aria-label="Menu principal">
+
+    <div class="lz-cabecalho">
+        <button type="button" class="lz-fechar" id="lzFechar" aria-label="Fechar menu">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+
+        <div class="lz-marca">LOCALIZA+</div>
+
+        <div class="lz-usuario">
+            <span class="lz-avatar">{{ usuario.nome[0]|upper if usuario and usuario.nome else '?' }}</span>
+            <div>
+                <strong>{{ usuario.nome if usuario and usuario.nome else 'Bem-vindo' }}</strong>
+                <small>{{ 'Coordenação' if session.get('perfil') == 'coordenacao' else 'Aluno' }}</small>
+            </div>
+        </div>
+    </div>
+
+    <nav class="lz-nav">
+
+        <a class="lz-item {{ 'ativo' if rota == url_for('visualizar_itens') else '' }}"
+            href="{{ url_for('visualizar_itens') }}">
+            <i class="fa-solid fa-house" aria-hidden="true"></i><span>Início</span>
+        </a>
+
+        {% if session.get('perfil') == 'aluno' %}
+
+        <p class="lz-secao">Relatar</p>
+
+        <a class="lz-item" href="{{ url_for('visualizar_itens') }}?abrir=perdi" data-abrir="perdi">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Perdi algo</span>
+        </a>
+
+        <a class="lz-item" href="{{ url_for('visualizar_itens') }}?abrir=encontrei" data-abrir="encontrei">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i><span>Encontrei algo</span>
+        </a>
+
+        {% elif session.get('perfil') == 'coordenacao' %}
+
+        <p class="lz-secao">Gestão</p>
+
+        <a class="lz-item {{ 'ativo' if rota == url_for('pag_cadastrar_item_coor') else '' }}"
+            href="{{ url_for('pag_cadastrar_item_coor') }}">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i><span>Cadastrar item</span>
+        </a>
+
+        <a class="lz-item {{ 'ativo' if rota == url_for('relatorios_perda') else '' }}"
+            href="{{ url_for('relatorios_perda') }}">
+            <i class="fa-solid fa-file-lines" aria-hidden="true"></i><span>Relatórios</span>
+        </a>
+
+        <a class="lz-item {{ 'ativo' if rota == '/itens_retirados' else '' }}"
+            href="/itens_retirados">
+            <i class="fa-solid fa-hand-holding" aria-hidden="true"></i><span>Retirados</span>
+        </a>
+
+        <a class="lz-item {{ 'ativo' if rota == url_for('itens_arquivados') else '' }}"
+            href="{{ url_for('itens_arquivados') }}">
+            <i class="fa-solid fa-box-archive" aria-hidden="true"></i><span>Arquivados</span>
+        </a>
+
+        <a class="lz-item" href="{{ url_for('visualizar_itens') }}?abrir=categorias" data-abrir="categorias">
+            <i class="fa-solid fa-tags" aria-hidden="true"></i><span>Gerenciar categorias</span>
+        </a>
+
+        {% endif %}
+
+        <p class="lz-secao">Informações</p>
+
+        <a class="lz-item" href="{{ url_for('visualizar_itens') }}?abrir=prazo" data-abrir="prazo">
+            <i class="fa-solid fa-hourglass-half" aria-hidden="true"></i><span>Prazo de retirada</span>
+        </a>
+
+    </nav>
+
+    <div class="lz-rodape">
+
+        {% if session.get('perfil') == 'aluno' %}
+        <a class="lz-item {{ 'ativo' if rota == url_for('visualizar_perfil') else '' }}"
+            href="{{ url_for('visualizar_perfil') }}">
+            <i class="fa-solid fa-user" aria-hidden="true"></i><span>Meu perfil</span>
+        </a>
+        {% endif %}
+
+        <a class="lz-item sair" href="{{ url_for('logout') }}" id="lzSair">
+            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i><span>Sair</span>
+        </a>
+
+    </div>
+</aside>
+
+<script>
+    (function () {
+
+        const painel = document.getElementById('lzPainel');
+        const overlay = document.getElementById('lzOverlay');
+        const botao = document.getElementById('lzMenuBtn');
+
+        if (!painel || !overlay || !botao) return;
+
+        function abrir() {
+            painel.classList.add('aberto');
+            overlay.classList.add('aberto');
+            botao.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('lzFechar').focus();
+        }
+
+        function fechar(devolverFoco) {
+            painel.classList.remove('aberto');
+            overlay.classList.remove('aberto');
+            botao.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+            if (devolverFoco) botao.focus();
+        }
+
+        botao.addEventListener('click', abrir);
+        overlay.addEventListener('click', () => fechar(true));
+        document.getElementById('lzFechar').addEventListener('click', () => fechar(true));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && painel.classList.contains('aberto')) fechar(true);
+        });
+
+        // Ações que abrem janelas da tela de itens (só funcionam nessa página)
+        function modal(id) {
+            return {
+                disponivel: () => !!document.getElementById(id) && !!window.bootstrap,
+                executar: () => bootstrap.Modal
+                    .getOrCreateInstance(document.getElementById(id))
+                    .show()
+            };
+        }
+
+        const acoes = {
+            perdi: modal('modalPerdi'),
+            encontrei: modal('modalEncontrei'),
+            categorias: modal('modalCategorias'),
+            prazo: {
+                disponivel: () => typeof window.mostrarPrazo === 'function',
+                executar: () => window.mostrarPrazo()
+            }
+        };
+
+        // Se a janela existe nesta página, abre direto; senão, o link leva à tela de itens
+        painel.querySelectorAll('[data-abrir]').forEach((link) => {
+            link.addEventListener('click', (e) => {
+
+                const acao = acoes[link.dataset.abrir];
+
+                if (acao && acao.disponivel()) {
+                    e.preventDefault();
+                    fechar(false);
+                    setTimeout(() => acao.executar(), 300);
+                }
+            });
+        });
+
+        // Chegou de outra página com ?abrir=...: abre a janela automaticamente
+        window.addEventListener('load', () => {
+
+            const pedido = new URLSearchParams(window.location.search).get('abrir');
+
+            if (pedido && acoes[pedido] && acoes[pedido].disponivel()) {
+                acoes[pedido].executar();
+                history.replaceState(null, '', window.location.pathname);
+            }
+        });
+
+        // Sair com confirmação
+        document.getElementById('lzSair').addEventListener('click', (e) => {
+
+            e.preventDefault();
+            fechar(false);
+
+            const destino = e.currentTarget.href;
+
+            if (window.Swal) {
+                Swal.fire({
+                    title: 'Deseja sair da sua conta?',
+                    text: 'Você precisará fazer login novamente para acessar o sistema.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sim, sair',
+                    cancelButtonText: 'Cancelar'
+                }).then((resultado) => {
+                    if (resultado.isConfirmed) window.location.href = destino;
+                });
+            } else if (confirm('Deseja sair da sua conta?')) {
+                window.location.href = destino;
+            }
+        });
+
+    })();
+</script>
+{% endif %}
