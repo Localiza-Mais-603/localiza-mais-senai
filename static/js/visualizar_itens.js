@@ -153,3 +153,74 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const modalCadastrar = document.getElementById('modalCadastrarItem');
+    const btnAbrirCadastrar = document.getElementById('btnAbrirCadastrar');
+    const btnFecharCadastrar = document.getElementById('btnFecharCadastrar');
+    const btnCancelarCadastrar = document.getElementById('btnCancelarCadastrar');
+    const btnAddCatModal = document.getElementById('btn-abrir-modal');
+
+    // 1. Abrir Modal ao clicar em "Cadastrar item" no topo
+    if (btnAbrirCadastrar && modalCadastrar) {
+        btnAbrirCadastrar.addEventListener('click', function () {
+            modalCadastrar.classList.add('aberto');
+        });
+    }
+
+    // 2. Fechar no botão X
+    if (btnFecharCadastrar && modalCadastrar) {
+        btnFecharCadastrar.addEventListener('click', function () {
+            modalCadastrar.classList.remove('aberto');
+        });
+    }
+
+    // 3. Fechar no botão Cancelar
+    if (btnCancelarCadastrar && modalCadastrar) {
+        btnCancelarCadastrar.addEventListener('click', function () {
+            modalCadastrar.classList.remove('aberto');
+        });
+    }
+
+    // 4. Fechar ao clicar fora da caixa branca (no fundo escuro)
+    if (modalCadastrar) {
+        modalCadastrar.addEventListener('click', function (e) {
+            if (e.target === modalCadastrar) {
+                modalCadastrar.classList.remove('aberto');
+            }
+        });
+    }
+
+    // 5. Botão "Adicionar Categoria" dentro do modal de cadastro
+    if (btnAddCatModal) {
+        btnAddCatModal.addEventListener('click', function () {
+            if (typeof adicionarCategoria === 'function') {
+                adicionarCategoria('categoria', 'modalCadastrarItem');
+            }
+        });
+    }
+
+    // 6. Confirmação com SweetAlert antes de salvar
+    const formCadastrar = modalCadastrar ? modalCadastrar.querySelector('form') : null;
+    if (formCadastrar) {
+        formCadastrar.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Confirmar Cadastro?',
+                text: 'Tem certeza de que deseja salvar este item no sistema?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#024873',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sim, cadastrar',
+                cancelButtonText: 'Cancelar',
+                target: modalCadastrar
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formCadastrar.submit();
+                }
+            });
+        });
+    }
+});
