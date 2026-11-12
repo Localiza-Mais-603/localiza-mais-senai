@@ -58,15 +58,21 @@
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
 
                         <li class="dropdown-header text-center">
-
                             <img src="https://placehold.co/60" alt="Foto de perfil de {{ usuario.nome }}"
                                 class="rounded-circle mb-2" style="width: 50px; height: 50px;">
-
                             <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
-
                             <small class="text-muted">{{ usuario.email }}</small>
+                        </li>   <!-- o cabeçalho fecha aqui -->
 
+                        <li>
+                            <hr class="dropdown-divider">
                         </li>
+
+                        {% if session.get('perfil') == 'aluno' %}
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('meu_historico') }}">Meu histórico</a>
+                        </li>
+                        {% endif %}
 
                         <li>
                             <hr class="dropdown-divider">
