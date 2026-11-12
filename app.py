@@ -26,6 +26,8 @@ app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.com')
 
+
+
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
