@@ -12,7 +12,7 @@ from model.cadastrar_itens import cadastrar_item, registrar_item_perdido, listar
 from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
-from model.retirada_itens import registrar_retirada_bd
+from model.retirada_itens import registrar_retirada_bd, devolver_item_bd
 import os
 from werkzeug.utils import secure_filename
 
@@ -552,17 +552,12 @@ def retirar_item():
     email_retirante = request.form.get("email_retirante")
 
     try:
-        from model.editar_item import registrar_retirada_bd  # importe sua função atualizada
-        
-       
         registrar_retirada_bd(id_item, nome_retirante, email_retirante)
-        
         flash(f"Item retirado por {nome_retirante} com sucesso!", "success")
     except Exception as e:
         print("Erro ao registrar retirada:", e)
         flash("Erro ao registrar retirada do item.", "error")
 
-   
     return redirect(url_for("itens_retirados"))
 
 @app.route("/itens_retirados")
@@ -582,6 +577,30 @@ def itens_retirados():
         if (status_do_item(item) or '').strip().lower() == 'retirado'
     ]
 
+    for item in retirados:
+        dt_ret = item.get('data_retirada')
+        if isinstance(dt_ret, datetime):
+            item['data_retirada_fmt'] = dt_ret.strftime('%d/%m/%Y às %H:%M')
+        elif isinstance(dt_ret, str) and dt_ret:
+            item['data_retirada_fmt'] = dt_ret
+        else:
+            item['data_retirada_fmt'] = 'Não informada'
+
     return render_template("itens_retirados.html", itens=retirados, usuario=usuario_atualizado)
+
+@app.route("/devolver-item/<int:id_item>", methods=["POST"])
+def devolver_item(id_item):
+    if session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
+    try:
+        devolver_item_bd(id_item)
+        flash("Item devolvido para a lista de disponíveis com sucesso!", "success")
+    except Exception as e:
+        print("Erro ao devolver item:", e)
+        flash("Erro ao devolver o item.", "error")
+
+    return redirect(url_for("itens_retirados"))
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

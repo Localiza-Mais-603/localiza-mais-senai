@@ -8,99 +8,13 @@
     <title>Visualizar Itens</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/visualizar_itens.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visualizar_itens.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/prazos.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-    <style>
-        /* Pílula de prazo (abre o SweetAlert explicativo) */
-        .chip-prazo {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            border-radius: 999px;
-            border: 1px solid rgba(242, 135, 5, 0.55);
-            background: rgba(242, 135, 5, 0.12);
-            color: inherit;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: transform 0.15s ease, background 0.15s ease;
-        }
-
-        .chip-prazo:hover {
-            background: rgba(242, 135, 5, 0.22);
-            transform: translateY(-1px);
-        }
-
-        .chip-prazo svg { color: #F28705; }
-        .chip-prazo .fa-circle-info { opacity: 0.6; }
-
-        /* Barra e legenda dentro do SweetAlert */
-        .barra-prazo {
-            display: flex;
-            gap: 3px;
-            height: 10px;
-            margin-bottom: 16px;
-        }
-
-        .barra-prazo span { border-radius: 999px; }
-
-        .legenda-prazo {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px 16px;
-            margin-bottom: 18px;
-            text-align: left;
-        }
-
-        .legenda-prazo div {
-            display: grid;
-            grid-template-columns: 12px 1fr;
-            column-gap: 8px;
-            align-items: center;
-        }
-
-        .legenda-prazo i {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            grid-row: 1 / span 2;
-        }
-
-        .legenda-prazo b {
-            font-size: 0.9rem;
-            color: #222;
-        }
-
-        .legenda-prazo small {
-            grid-column: 2;
-            font-size: 0.78rem;
-            color: #666;
-        }
-
-        /* Selo de prazo nos cards */
-        .badge-prazo {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 10px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            line-height: 1.2;
-            color: #fff;
-        }
-
-        .prazo-ok       { background-color: #2B7566; }
-        .prazo-atencao  { background-color: #F28705; }
-        .prazo-urgente  { background-color: #DC3545; }
-        .prazo-vencido  { background-color: #6c757d; }
-    </style>
 </head>
 
 <body>
@@ -159,13 +73,12 @@
                             </span>
                         </li>
 
-                        <!-- NOVO ITEM: Adicionado o link para o Histórico -->
                         <li>
                             <a class="dropdown-item" href="{{ url_for('meu_historico') }}">
                                 Meu histórico
                             </a>
                         </li>
-                        
+
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -188,7 +101,7 @@
                         {% endif %}
 
                         <li>
-                            <a class="dropdown-item text-danger" href="#" onclick="confirmarLogout(event)">Sair</a>
+                            <a class="dropdown-item text-danger" href="#" id="btnLogout">Sair</a>
                         </li>
                     </ul>
                 </div>
@@ -247,7 +160,7 @@
                         </div>
 
                         <div class="lp-card-info">
-                            <span class="lp-card-eyebrow lp-eyebrow-found">DEVOLUÇÃO </span>
+                            <span class="lp-card-eyebrow lp-eyebrow-found">DEVOLUÇÃO</span>
                             <h2 class="lp-card-title">ENCONTREI ALGO</h2>
                             <p class="lp-card-desc">
                                 Achou um item? Publique aqui.
@@ -339,16 +252,17 @@
         </section>
         {% endif %}
 
-        <!-- PÍLULA DE PRAZO (abre o SweetAlert explicativo) -->
+        <!-- PÍLULA DE PRAZO -->
         <div class="container d-flex justify-content-center my-2">
-            <button type="button" class="chip-prazo" onclick="mostrarPrazo()"
+            <button type="button" id="btnPrazoRetirada" class="chip-prazo"
+                data-prazo-dias="{{ prazo_dias | default(90) }}"
                 aria-label="Ver como funciona o prazo de retirada dos itens">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
                     viewBox="0 0 16 16" aria-hidden="true">
                     <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
                     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
                 </svg>
-                <span>Prazo de retirada: <strong>{{ prazo_dias }} dias</strong></span>
+                <span>Prazo de retirada: <strong>{{ prazo_dias | default(90) }} dias</strong></span>
                 <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
             </button>
         </div>
@@ -365,7 +279,7 @@
             <ul class="itens-card">
 
                 {% for item in itens %}
-                {% if item.status|lower != 'perdido' %}
+                {% if item.status|lower not in ['perdido', 'retirado', 'arquivado'] %}
                 <li style="list-style: none;">
 
                     <article class="card" style="width: 20rem;"
@@ -401,7 +315,10 @@
                         {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
 
-                            <button type="button" class="btn-retirar-card" onclick="abrirModalRetirar('{{ item.id_item }}', '{{ item.item }}')">
+                            <button type="button" class="btn-retirar-card"
+                                data-id="{{ item.id_item }}"
+                                data-nome="{{ item.item }}"
+                                onclick="abrirModalRetirar(this.dataset.id, this.dataset.nome)">
                                 Retirar
                             </button>
 
@@ -441,57 +358,54 @@
 
     </main>
 
-
     <!-- MODAL: REGISTRAR RETIRADA DO ITEM -->
     <div class="grupo-filtro" id="modalRetirarItem" role="dialog" aria-hidden="true">
         <div class="grupo-conteudo modal-cadastro-container modal-retirar-container">
-            
+
             <button type="button" class="fechar-filtro" id="btnFecharRetirar" aria-label="Fechar modal">&times;</button>
-    
+
             <h2 class="subtitulo-modal">Registrar Retirada</h2>
             <p class="subtitulo-item-retirada">Item a retirar: <strong id="nomeItemRetirada"></strong></p>
-    
+
             <form id="formRetirar" action="/retirar-item" method="POST" class="form-modal-custom">
-                
+
                 <input type="hidden" id="retirarIdItem" name="id_item">
-    
+
                 <div class="campo-grupo">
                     <label for="nomeRetirante" class="rotulo">Nome de quem retirou *</label>
                     <input type="text" id="nomeRetirante" name="nome_retirante" class="entrada-texto" required placeholder="Ex: João da Silva">
                 </div>
-    
+
                 <div class="campo-grupo">
                     <label for="emailRetirante" class="rotulo">E-mail do retirante *</label>
                     <input type="email" id="emailRetirante" name="email_retirante" class="entrada-texto" required placeholder="Ex: joao@email.com">
                 </div>
-    
+
                 <div class="grupo-botoes-modal">
                     <button type="button" class="btn-modal-cancelar" id="btnCancelarRetirar">Cancelar</button>
                     <button type="submit" class="btn-modal-submit btn-modal-retirar">Confirmar Retirada</button>
                 </div>
-    
+
             </form>
-    
+
         </div>
     </div>
 
-
-    <!-- MODAL CADASTRAR ITEM -->
+    <!-- MODAL: CADASTRAR ITEM -->
     <div class="grupo-filtro" id="modalCadastrarItem" role="dialog" aria-hidden="true">
-
         <div class="grupo-conteudo modal-cadastro-container">
-            
+
             <button type="button" class="fechar-filtro" id="btnFecharCadastrar" aria-label="Fechar modal">&times;</button>
-    
+
             <h2 class="subtitulo-modal">Cadastrar Novo Item</h2>
-    
+
             <form id="formCadastrarItem" action="/cadastrar/item/salvar" method="POST" enctype="multipart/form-data" class="form-modal-custom">
-    
+
                 <div class="campo-grupo">
                     <label for="cadItem" class="rotulo">Nome do item *</label>
                     <input type="text" id="cadItem" name="item" class="entrada-texto" maxlength="50" required placeholder="Ex: Chaveiro, Carteira...">
                 </div>
-    
+
                 <div class="campo-grupo">
                     <label for="cadCategoria" class="rotulo">Categoria *</label>
                     <div class="categoria-group-inline">
@@ -503,32 +417,35 @@
                                 <option value="{{ cat_id }}">{{ cat_nome }}</option>
                             {% endfor %}
                         </select>
-                        <button type="button" class="btn-add-cat-inline" onclick="adicionarCategoria('cadCategoria', 'modalCadastrarItem')" title="Cadastrar nova categoria">
+                        <button type="button" class="btn-add-cat-inline"
+                            data-select-id="cadCategoria"
+                            data-modal-id="modalCadastrarItem"
+                            title="Cadastrar nova categoria">
                             Adicionar Categoria
                         </button>
                     </div>
                 </div>
 
-
                 <div class="campo-grupo">
                     <label for="cadData" class="rotulo">Data em que o item chegou *</label>
                     <input type="date" id="cadData" name="data" class="entrada-texto" required>
                 </div>
-                
+
                 <div class="campo-grupo">
                     <label for="cadFoto" class="rotulo">Foto (opcional)</label>
                     <input type="file" id="cadFoto" name="foto" class="entrada-texto" accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp">
                 </div>
-                                
+
                 <div class="grupo-botoes-modal">
                     <button type="button" class="btn-modal-cancelar" id="btnCancelarCadastrar">Cancelar</button>
                     <button type="submit" class="btn-modal-submit">Salvar Item</button>
                 </div>
-    
+
             </form>
-    
+
         </div>
     </div>
+
     <!-- MODAL DE DETALHES -->
     <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true">
         <article class="card-destaque" onclick="event.stopPropagation()">
@@ -545,7 +462,6 @@
             <p id="blocoDescricao"><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
             <p id="blocoLocal"><strong>Local:</strong> <span id="modalLocal"></span></p>
             <p><strong>Data:</strong> <span id="modalData"></span></p>
-          
 
             <p id="blocoPrazo" style="display: none;">
                 <strong>Prazo para retirada:</strong>
@@ -643,7 +559,7 @@
                             <option value="">Selecione uma categoria</option>
 
                             {% for categoria in categorias %}
-                            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
+                            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
                             {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
 
                             <option value="{{ cat_id }}">{{ cat_nome }}</option>
@@ -651,9 +567,10 @@
 
                         </select>
 
-                        <button type="button" class="btn btn-sm mt-2 text-white fw-bold text-uppercase"
+                        <button type="button" class="btn btn-sm mt-2 text-white fw-bold text-uppercase btn-add-cat-inline"
                             style="background-color: #024873;"
-                            onclick="adicionarCategoria('perdCategoria', 'modalPerdi')">
+                            data-select-id="perdCategoria"
+                            data-modal-id="modalPerdi">
                             Adicionar categoria
                         </button>
                     </div>
@@ -768,7 +685,7 @@
                             <option value="">Selecione uma categoria</option>
 
                             {% for categoria in categorias %}
-                            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
+                            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
                             {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
 
                             <option value="{{ cat_id }}">{{ cat_nome }}</option>
@@ -776,9 +693,10 @@
 
                         </select>
 
-                        <button type="button" class="btn btn-sm mt-2 text-white fw-bold text-uppercase"
+                        <button type="button" class="btn btn-sm mt-2 text-white fw-bold text-uppercase btn-add-cat-inline"
                             style="background-color: #024873;"
-                            onclick="adicionarCategoria('encCategoria', 'modalEncontrei')">
+                            data-select-id="encCategoria"
+                            data-modal-id="modalEncontrei">
                             Adicionar categoria
                         </button>
                     </div>
@@ -787,7 +705,7 @@
                         <legend class="form-label fs-6">O que fez com o objeto</legend>
 
                         {% for destino in destinos %}
-                        {% set dest_id = destino.id_destino if destino.id_destino is defined else destino[0] %}
+                        {% set dest_id = destino.id_destino if destino.id_destino is defined else (destino.id if destino.id is defined else destino[0]) %}
                         {% set dest_txt = destino.descricao if destino.descricao is defined else destino[1] %}
 
                         <div class="form-check mb-2">
@@ -860,7 +778,7 @@
                     {% if categorias %}
                     <ul class="list-group">
                         {% for categoria in categorias %}
-                        {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
+                        {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
                         {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
 
                         <li class="list-group-item d-flex align-items-center justify-content-between">
@@ -905,7 +823,7 @@
             <h3>Categorias</h3>
 
             {% for categoria in categorias %}
-            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else categoria[0] %}
+            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
             {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
 
             <label>
@@ -924,408 +842,20 @@
         </form>
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- MENSAGENS FLASH DO FLASK -->
+    <div id="flash-messages" style="display: none;"
+        data-messages='{{ get_flashed_messages(with_categories=true) | tojson }}'>
+    </div>
+
+    <!-- SCRIPTS EXTERNOS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="/static/js/visualizar_itens.js"></script>
+    <script src="{{ url_for('static', filename='js/visualizar_itens.js') }}"></script>
     <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
     <script src="{{ url_for('static', filename='js/confirmaacoes.js') }}"></script>
     <script src="{{ url_for('static', filename='js/modal-registro-item.js') }}"></script>
-
-    <!-- PRAZO DE RETIRADA: SWEETALERT EXPLICATIVO -->
-    <script>
-        const PRAZO_DIAS = {{ prazo_dias }};
-
-        function mostrarPrazo() {
-
-            const trechoVerde = Math.max(PRAZO_DIAS - 30, 1);
-
-            Swal.fire({
-                title: 'Prazo de retirada',
-                width: 520,
-                confirmButtonText: 'Entendi',
-                confirmButtonColor: '#F28705',
-                html: `
-                    <p style="margin: 0 0 18px; color: #555; font-size: 0.95rem;">
-                        Todo item fica guardado por <strong>${PRAZO_DIAS} dias</strong>,
-                        contados a partir do dia em que foi encontrado.
-                    </p>
-
-                    <div class="barra-prazo">
-                        <span style="flex: ${trechoVerde}; background: #2B7566;"></span>
-                        <span style="flex: 23; background: #F28705;"></span>
-                        <span style="flex: 7; background: #DC3545;"></span>
-                    </div>
-
-                    <div class="legenda-prazo">
-                        <div>
-                            <i style="background: #2B7566;"></i>
-                            <b>Tranquilo</b>
-                            <small>mais de 30 dias</small>
-                        </div>
-                        <div>
-                            <i style="background: #F28705;"></i>
-                            <b>Atenção</b>
-                            <small>30 dias ou menos</small>
-                        </div>
-                        <div>
-                            <i style="background: #DC3545;"></i>
-                            <b>Última chamada</b>
-                            <small>7 dias ou menos</small>
-                        </div>
-                        <div>
-                            <i style="background: #6c757d;"></i>
-                            <b>Descartado</b>
-                            <small>após ${PRAZO_DIAS} dias</small>
-                        </div>
-                    </div>
-
-                    <p style="margin: 0; color: #555; font-size: 0.9rem;">
-                        Reconheceu o seu? Procure a coordenação para retirá-lo.
-                    </p>
-                `
-            });
-        }
-    </script>
-
-    <!-- PUBLICADO POR + DESTINO + PRAZO -->
-    <script>
-        (function () {
-
-            const original = window.abrirCard;
-
-            if (typeof original !== 'function') return;
-
-            window.abrirCard = function (el) {
-
-                original(el);
-
-                // Publicado por
-                const nome = el.dataset.publicado;
-                const blocoPub = document.getElementById('blocoPublicador');
-
-                if (nome) {
-                    document.getElementById('modalPublicador').textContent = nome;
-                    blocoPub.style.display = '';
-                } else {
-                    blocoPub.style.display = 'none';
-                }
-
-                // O que fez com o objeto
-                const destino = el.dataset.destino;
-                const blocoDest = document.getElementById('blocoDestino');
-
-                if (destino) {
-                    document.getElementById('modalDestino').textContent = destino;
-                    blocoDest.style.display = '';
-                } else {
-                    blocoDest.style.display = 'none';
-                }
-
-                // Prazo para retirada
-                const prazo = el.dataset.prazo;
-                const blocoPrazo = document.getElementById('blocoPrazo');
-
-                if (prazo) {
-                    document.getElementById('modalPrazo').textContent = prazo;
-                    blocoPrazo.style.display = '';
-                } else {
-                    blocoPrazo.style.display = 'none';
-                }
-
-            };
-
-        })();
-    </script>
-
-    <!-- ADICIONAR CATEGORIA -->
-    <script>
-        async function adicionarCategoria(selectId, modalId) {
-
-            const resultado = await Swal.fire({
-                title: 'Adicionar categoria',
-                input: 'text',
-                inputLabel: 'Nome da categoria',
-                inputAttributes: { maxlength: 50 },
-                showCancelButton: true,
-                confirmButtonText: 'Adicionar',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#F28705',
-                target: document.getElementById(modalId),
-
-                inputValidator: (valor) => {
-                    if (!valor || !valor.trim()) {
-                        return 'Digite o nome da categoria';
-                    }
-                }
-            });
-
-            if (!resultado.isConfirmed) return;
-
-            try {
-
-                const resp = await fetch('/api/categorias', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nome: resultado.value.trim() })
-                });
-
-                const dados = await resp.json();
-
-                if (!resp.ok || !dados.sucesso) {
-                    throw new Error(dados.mensagem || 'Erro');
-                }
-
-                document.querySelectorAll('.select-categoria').forEach(sel => {
-                    sel.add(new Option(dados.nome, dados.id_categoria));
-                });
-
-                document.getElementById(selectId).value = dados.id_categoria;
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Categoria adicionada!',
-                    confirmButtonColor: '#F28705',
-                    target: document.getElementById(modalId)
-                });
-
-            } catch (erro) {
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro ao adicionar',
-                    text: 'Não foi possível adicionar a categoria. Tente novamente.',
-                    confirmButtonColor: '#F28705',
-                    target: document.getElementById(modalId)
-                });
-
-            }
-        }
-    </script>
-
-    <!-- PERDI ALGO: COMPORTAMENTO DO MODAL -->
-    <script>
-        (function () {
-
-            const modalEl = document.getElementById('modalPerdi');
-
-            if (!modalEl) return;
-
-            const form = modalEl.querySelector('form');
-
-            modalEl.addEventListener('show.bs.modal', () => {
-
-                form.reset();
-
-                const d = new Date();
-                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-
-                document.getElementById('perdQuando').value = d.toISOString().slice(0, 10);
-
-            });
-
-        })();
-    </script>
-
-    <!-- VALIDAÇÃO DA FOTO E SWEETALERT -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            const form = document.getElementById("formPerdi");
-            const campoFoto = document.getElementById("perdFoto");
-
-            if (!form || !campoFoto) return;
-
-            const extensoesPermitidas = [
-                "png",
-                "jpg",
-                "jpeg",
-                "gif",
-                "webp"
-            ];
-
-            form.addEventListener("submit", function (event) {
-
-                if (campoFoto.files.length > 0) {
-
-                    const arquivo = campoFoto.files[0];
-
-                    const extensao = arquivo.name.split(".").pop().toLowerCase();
-
-                    if (!extensoesPermitidas.includes(extensao)) {
-
-                        event.preventDefault();
-
-                        campoFoto.value = "";
-
-                        Swal.fire({
-                            icon: "error",
-                            title: "Arquivo inválido!",
-                            text: "Selecione somente imagens PNG, JPG, JPEG, GIF ou WEBP.",
-                            confirmButtonColor: "#F28705",
-                            target: document.getElementById("modalPerdi")
-                        });
-
-                    }
-
-                }
-
-            });
-
-        });
-    </script>
-
-    <!-- ENCONTREI ALGO: COMPORTAMENTO DO MODAL -->
-    <script>
-        (function () {
-
-            const modalEl = document.getElementById('modalEncontrei');
-
-            if (!modalEl) return;
-
-            const form = modalEl.querySelector('form');
-            const outro = document.getElementById('encOutro');
-
-            modalEl.addEventListener('show.bs.modal', () => {
-
-                form.reset();
-
-                outro.classList.add('d-none');
-                outro.required = false;
-
-                const d = new Date();
-                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-
-                document.getElementById('encQuando').value = d.toISOString().slice(0, 10);
-
-            });
-
-            form.querySelectorAll('input[name="destino"]').forEach(r => {
-
-                r.addEventListener('change', () => {
-
-                    const selecionado = form.querySelector('input[name="destino"]:checked');
-
-                    const isOutro = selecionado && selecionado.value === 'outro';
-
-                    outro.classList.toggle('d-none', !isOutro);
-                    outro.required = isOutro;
-
-                    if (isOutro) outro.focus();
-
-                });
-
-            });
-
-        })();
-    </script>
-
-    <!-- EXCLUIR CATEGORIA: CONFIRMAÇÃO -->
-    <script>
-        document.querySelectorAll('.form-excluir-categoria').forEach(form => {
-
-            form.addEventListener('submit', function (e) {
-
-                e.preventDefault();
-
-                Swal.fire({
-                    title: 'Excluir a categoria "' + form.dataset.nome + '"?',
-                    text: 'Os itens dessa categoria continuarão cadastrados, mas ficarão sem categoria.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Sim, excluir',
-                    cancelButtonText: 'Cancelar',
-                    target: document.getElementById('modalCategorias')
-                }).then((resultado) => {
-
-                    if (resultado.isConfirmed) form.submit();
-
-                });
-
-            });
-
-        });
-    </script>
-
-    <!-- SWEETALERT APÓS CADASTRO / EDIÇÃO -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-
-        {% if category == 'success' %}
-        <script>
-            Swal.fire({
-                title: "Sucesso!",
-                text: {{ message | tojson }},
-                icon: "success",
-                confirmButtonColor: "#F28705"
-            });
-        </script>
-        {% endif %}
-
-    {% endfor %}
-{% endwith %}
-
-    <!-- SWEETALERT DE LOGOUT -->
-    <script>
-        function confirmarLogout(event) {
-
-            event.preventDefault();
-
-            Swal.fire({
-                title: "Deseja sair da sua conta?",
-                text: "Você precisará fazer login novamente para acessar o sistema.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#6c757d",
-                confirmButtonText: "Sim, sair",
-                cancelButtonText: "Cancelar"
-
-            }).then((resultado) => {
-
-                if (resultado.isConfirmed) {
-                    window.location.href = "/logout";
-                }
-
-            });
-
-        }
-    </script>
-
-    <script>
-  const inputData = document.getElementById("data");
-  const cards = document.querySelectorAll(".itens-card > li");
-
-  function filtrar() {
-    const dataFiltro = inputData.value; // Ex: "2026-11-15"
-
-    cards.forEach((li) => {
-      // Pega a data do card (garanta que esteja YYYY-MM-DD ou DD/MM/YYYY)
-      let dataItem = li.querySelector(".card").dataset.data;
-
-      // Se vier DD/MM/YYYY do banco, inverte para YYYY-MM-DD
-      if (dataItem.includes("/")) {
-        dataItem = dataItem.split("/").reverse().join("-");
-      }
-
-      // Se o filtro estiver vazio OU a data do item for menor/igual à data escolhida:
-      // Ex: Perdi dia 19. Se escolho dia 15 -> 19 <= 15 (Falso, esconde!)
-      // Ex: Perdi dia 19. Se escolho dia 20 -> 19 <= 20 (Verdadeiro, mostra!)
-      if (!dataFiltro || dataItem >= dataFiltro) {
-        li.style.display = "";
-      } else {
-        li.style.display = "none";
-      }
-    });
-  }
-
-  inputData.addEventListener("change", filtrar);
-  filtrar(); // Roda assim que a página abre
-</script>
-    
+    <script src="{{ url_for('static', filename='js/visualizar_itens_extra.js') }}"></script>
 
 </body>
 </html>
