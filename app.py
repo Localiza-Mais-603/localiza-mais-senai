@@ -231,10 +231,7 @@ def visualizar_itens():
         prazo_dias=PRAZO_DESCARTE_DIAS
     )
 
-@app.route("/adicionar/item")
-def pag_cadastrar_item_coor():
-    categorias_bd = listar_categorias()
-    return render_template("cadastrar_itens_coor.html", categorias=categorias_bd)
+
 
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])
@@ -267,6 +264,8 @@ def registrar_itens_coordenacao():
         cpf_coordenador=cpf_coordenador
     )
 
+    flash("Item cadastrado com sucesso!", "success")
+    
     return redirect(url_for("visualizar_itens"))
 
 

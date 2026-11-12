@@ -132,36 +132,33 @@ function fecharModalEdicao() {
     if (modalEdicao) modalEdicao.classList.remove("aberto");
 }
 
-function abrirCardHistorico(elemento) {
-    const titulo = elemento.dataset.item || 'Sem título';
-    const descricao = elemento.dataset.descricao || 'Sem descrição';
-    const local = elemento.dataset.local || 'Não informado';
-    const data = elemento.dataset.data || 'Não informada';
-    const status = elemento.dataset.status || 'Não informado';
-    const fotoUrl = elemento.dataset.foto;
+document.addEventListener('DOMContentLoaded', function () {
+    const modalCadastrar = document.getElementById('modalCadastrarItem');
+    const btnAbrirCadastrar = document.getElementById('btnAbrirCadastrar'); // certifique-se de definir id="btnAbrirCadastrar" no card/botão da página
+    const btnFecharCadastrar = document.getElementById('btnFecharCadastrar');
+    const btnCancelarCadastrar = document.getElementById('btnCancelarCadastrar');
 
-    document.getElementById('histModalTitulo').textContent = titulo;
-    document.getElementById('histModalDescricao').textContent = descricao;
-    document.getElementById('histModalLocal').textContent = local;
-    document.getElementById('histModalData').textContent = data;
-    document.getElementById('histModalStatus').textContent = status;
-
-    const imgEl = document.getElementById('histModalFoto');
-    if (fotoUrl && fotoUrl.trim() !== '') {
-        imgEl.src = fotoUrl;
-        imgEl.style.display = 'block';
-    } else {
-        imgEl.src = '';
-        imgEl.style.display = 'none';
+    // Abrir o Modal de Cadastro
+    if (btnAbrirCadastrar && modalCadastrar) {
+        btnAbrirCadastrar.addEventListener('click', function (e) {
+            e.preventDefault();
+            modalCadastrar.classList.add('aberto');
+        });
     }
 
-    const modal = document.getElementById('modalHistorico');
-    modal.classList.add('active'); // ou estilo correspondente (ex: modal.style.display = 'flex')
-    modal.setAttribute('aria-hidden', 'false');
-}
+    // Fechar pelo botão X
+    if (btnFecharCadastrar && modalCadastrar) {
+        btnFecharCadastrar.addEventListener('click', function () {
+            modalCadastrar.classList.remove('aberto');
+        });
+    }
 
-function fecharModalHistorico() {
-    const modal = document.getElementById('modalHistorico');
-    modal.classList.remove('active'); // ou modal.style.display = 'none'
-    modal.setAttribute('aria-hidden', 'true');
-}
+    // Fechar pelo botão Cancelar
+    if (btnCancelarCadastrar && modalCadastrar) {
+        btnCancelarCadastrar.addEventListener('click', function () {
+            modalCadastrar.classList.remove('aberto');
+        });
+    }
+
+    
+});
