@@ -354,7 +354,7 @@
         <!-- FILTRO DE DATA -->
         <section class="item-data" aria-label="Filtro de datas">
             <label for="data">A partir de:</label>
-            <input type="date" id="data" name="data" value="2026-09-25">
+            <input type="date" id="data" name="data">
             <button type="button" class="btn-abrir" id="btnAbrir">Filtros</button>
         </section>
 
@@ -1261,6 +1261,38 @@
 
         }
     </script>
+
+    <script>
+  const inputData = document.getElementById("data");
+  const cards = document.querySelectorAll(".itens-card > li");
+
+  function filtrar() {
+    const dataFiltro = inputData.value; // Ex: "2026-11-15"
+
+    cards.forEach((li) => {
+      // Pega a data do card (garanta que esteja YYYY-MM-DD ou DD/MM/YYYY)
+      let dataItem = li.querySelector(".card").dataset.data;
+
+      // Se vier DD/MM/YYYY do banco, inverte para YYYY-MM-DD
+      if (dataItem.includes("/")) {
+        dataItem = dataItem.split("/").reverse().join("-");
+      }
+
+      // Se o filtro estiver vazio OU a data do item for menor/igual à data escolhida:
+      // Ex: Perdi dia 19. Se escolho dia 15 -> 19 <= 15 (Falso, esconde!)
+      // Ex: Perdi dia 19. Se escolho dia 20 -> 19 <= 20 (Verdadeiro, mostra!)
+      if (!dataFiltro || dataItem >= dataFiltro) {
+        li.style.display = "";
+      } else {
+        li.style.display = "none";
+      }
+    });
+  }
+
+  inputData.addEventListener("change", filtrar);
+  filtrar(); // Roda assim que a página abre
+</script>
+    
 
 </body>
 </html>
