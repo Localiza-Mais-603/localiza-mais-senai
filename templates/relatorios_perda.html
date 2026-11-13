@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/visualizar_itens.css">
     <link rel="stylesheet" href="/static/css/relatorio.css">
+    <link rel="stylesheet" href="/static/css/menu-coordenacao.css">
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,16 +61,13 @@
     </style>
 </head>
 
-<body>
+<body class="{% if session.get('perfil') == 'coordenacao' %}pagina-coordenacao{% endif %}">
 
 
 
     <!-- Navbar simples para navegação (Opcional, caso não tenha um base.html) -->
     <header>
         <nav class="navbar transparente-header">
-            <div class="container-fluido">
-                <h1>LOCALIZA+ </h1>
-            </div>
 
             <div class="itens-central">
                 <div class="form-check form-check-inline switch-group">
@@ -110,6 +109,9 @@
         </nav>
     </header>
 
+    <!-- MENU DA COORDENAÇÃO -->
+    {% include 'menu_coordenacao.html' %}
+
     <main>
         <div class="container-fluido px-4 my-2">
             <a href="{{ url_for('visualizar_itens') }}" class="btn-abrir mb-3 text-decoration-none d-inline-block"
@@ -119,6 +121,7 @@
 
             <h2 class="titulo-secao-itens" style="margin-left: 10px;">
                 RELATÓRIOS DE ITENS PERDIDOS
+            </h2>
            
         </div>
         <!-- Container dos Cards -->
@@ -179,7 +182,6 @@
             {% endif %}
 
 
-        </div>
         </div>
     </main>
 
@@ -247,7 +249,8 @@
             modal.setAttribute('aria-hidden', 'true');
         }
     </script>
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/static/js/visualizar_itens.js"></script>
     <script src="/static/js/excluir_Itens.js"></script>
 </body>

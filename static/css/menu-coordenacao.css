@@ -1,0 +1,178 @@
+
+/* SIDEBAR LOCALIZA+ */
+
+.menu-coord {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 250px;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #024873;
+    font-family: "Chakra Petch", sans-serif;
+
+    box-shadow: 3px 0 12px rgba(0,0,0,0.12);
+    z-index: 1100;
+}
+
+/* IDENTIDADE VISUAL */
+
+.menu-coord__brand {
+    padding: 30px 20px 25px;
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+}
+
+.menu-coord__brand h1 {
+    margin: 0;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.menu-coord__brand h1 span {
+    color: #F28705;
+}
+
+.menu-coord__brand p {
+    margin: 5px 0 0;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+}
+
+/* CONTEÚDO */
+
+.menu-coord__conteudo {
+    padding: 25px 14px;
+}
+
+.menu-coord__secao {
+    display: block;
+    color: rgba(255,255,255,0.55);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 0 10px;
+    margin-bottom: 15px;
+}
+
+.menu-coord__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-coord__links li {
+    margin-bottom: 9px;
+}
+
+.menu-coord__link {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    padding: 14px 12px;
+
+    border-radius: 7px;
+
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    text-transform: uppercase;
+
+    font-size: 0.92rem;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.menu-coord__link i {
+    width: 23px;
+    text-align: center;
+    font-size: 1.05rem;
+}
+
+.menu-coord__link:hover {
+    background: rgba(255,255,255,0.13);
+    color: #fff;
+}
+
+.menu-coord__link.ativo {
+    background: #F28705;
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+/* RODAPÉ */
+
+.menu-coord__rodape {
+    margin-top: auto;
+    padding: 20px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: rgba(255,255,255,0.7);
+    font-size: 0.78rem;
+}
+
+/* CONTEÚDO DAS PÁGINAS */
+
+.pagina-coordenacao main {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+}
+
+/* CABEÇALHO SUPERIOR */
+
+.pagina-coordenacao header {
+    margin-left: 250px;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 767px) {
+
+    .menu-coord {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: auto;
+    }
+
+    .menu-coord__brand {
+        padding: 15px 20px;
+    }
+
+    .menu-coord__brand h1 {
+        font-size: 1.7rem;
+    }
+
+    .menu-coord__conteudo {
+        padding: 15px;
+    }
+
+    .menu-coord__links {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .menu-coord__rodape {
+        display: none;
+    }
+
+    .pagina-coordenacao main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .pagina-coordenacao header {
+        margin-left: 0;
+    }
+}
