@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from database.conexao import conectar
-from model.cadastro import cadastrar_usuario, cadastrar_coor
+from model.cadastro import cadastrar_usuario, cadastrar_coor, existe_coordenador
 from model.excluir_item import excluir_itens
 from model.filtro import buscar_itens_filtrados
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
@@ -132,6 +132,8 @@ def pag_login_aluno():
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
     erro = None
+    ja_tem_coor = existe_coordenador()
+
     if request.method == "POST":
         cpf = somente_numeros(request.form["cpf"])
         senha = request.form["senha"]
@@ -142,7 +144,8 @@ def pag_login_coordenacao():
             return redirect(url_for("visualizar_itens"))
         else:
             erro = "CPF ou senha incorretos!"
-    return render_template("login.html", erro=erro, tipo='apoio')
+
+    return render_template("login.html", erro=erro, tipo='apoio', ja_tem_coor=ja_tem_coor)
 
 @app.route("/cadastro/usuario")
 def pag_cadastro():
@@ -160,15 +163,27 @@ def cadastro():
 
 @app.route('/cadastro-coor', methods=['GET', 'POST'])
 def cadastro_coor():
+    ja_tem_coor = existe_coordenador()
+
+    # Se já existe coordenador no banco, só quem já está logado como coordenação pode acessar
+    if ja_tem_coor and session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
     if request.method == 'POST':
         nome = request.form['nome_completo']
         cpf = somente_numeros(request.form['cpf'])
         email = request.form['email']
         senha = request.form['senha']
         cadastrar_coor(nome, cpf, email, senha)
-        return redirect('/login/setor/de/apoio')
-    return render_template('cadastro_coordenacao.html')
 
+        if not ja_tem_coor:
+            flash("Coordenador principal cadastrado com sucesso! Faça seu login.", "success")
+            return redirect(url_for('pag_login_coordenacao'))
+        else:
+            flash("Novo coordenador cadastrado com sucesso!", "success")
+            return redirect(url_for('visualizar_itens'))
+
+    return render_template('cadastro_coordenacao.html', primeiro_cadastro=not ja_tem_coor)
 @app.route("/editar-item-cadastrado")
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")

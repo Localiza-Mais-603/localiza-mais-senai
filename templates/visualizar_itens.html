@@ -95,6 +95,18 @@
                                 Gerenciar categorias
                             </a>
                         </li>
+
+                        <li>
+                            <a class="dropdown-item" href="{{ url_for('cadastro_coor') }}">
+                                Cadastrar coordenador
+                            </a>
+                        </li>
+
+
+                        {% elif session.get('perfil') == 'coordenacao' %}
+
+                        
+
                         <li>
                             <hr class="dropdown-divider">
                         </li>
