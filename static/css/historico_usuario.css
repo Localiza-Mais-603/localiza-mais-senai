@@ -170,6 +170,39 @@ body.escuro {
     font-size: 1rem;
 }
  
+
+.card-historico-status,
+.btn-excluir-relato {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 38px;
+    border-radius: 6px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.btn-excluir-relato {
+    gap: 6px;
+    background-color: #dc3545;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-excluir-relato:hover {
+    background-color: #b02a37;
+    transform: translateY(-2px);
+}
+
+.btn-excluir-relato:active {
+    transform: translateY(0);
+}
  
 /* ---------- Acessibilidade ---------- */
  

@@ -320,66 +320,85 @@ body {
   margin-bottom: 12px;
 }
 
-/* BOTÕES DE AÇÃO DA COORDENAÇÃO (EDITAR, ARQUIVAR, EXCLUIR) */
+/* BOTÕES DE AÇÃO DA COORDENAÇÃO (RETIRAR, EDITAR, ARQUIVAR, EXCLUIR) */
 .itens-card .card-botoes-acao {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
   padding: 0 16px 16px;
   margin-top: auto;
   width: 100%;
 }
 
-.btn-editar-card,
-.btn-arquivar-card,
-.btn-excluir-card {
-  flex: 1;
-  border: none;
-  padding: 7px 4px;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
-  display: inline-block;
+.itens-card .form-acao {
+  display: flex;
+  margin: 0;
+  width: 100%;
 }
 
-/* EDITAR (VERDE) */
+.btn-acao-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 10px 2px;
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btn-acao-card svg {
+  flex-shrink: 0;
+  stroke: #ffffff;
+}
+
+.btn-acao-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-acao-card:active {
+  transform: translateY(0);
+}
+
+/* RETIRAR (VERDE) */
+.btn-retirar-card {
+  background-color: #059669;
+}
+.btn-retirar-card:hover {
+  background-color: #047857;
+}
+
+/* EDITAR (AZUL) */
 .btn-editar-card {
-  background-color: #297464;
-  color: #ffffff !important;
+  background-color: #2b7bba;
 }
 .btn-editar-card:hover {
-  background-color: #1f574b;
+  background-color: #236599;
 }
 
-/* ARQUIVAR (LARANJA/AMARELO) */
+/* ARQUIVAR (LARANJA) */
 .btn-arquivar-card {
-  background-color: #F28705;
-  color: #ffffff !important;
+  background-color: #f3921f;
 }
 .btn-arquivar-card:hover {
-  background-color: #d67400;
+  background-color: #d97e12;
 }
 
 /* EXCLUIR (VERMELHO) */
 .btn-excluir-card {
-  background-color: #dc3545;
-  color: #ffffff !important;
+  background-color: #e03c3e;
 }
 .btn-excluir-card:hover {
-  background-color: #c82333;
-}
-
-.itens-card .form-acao {
-  flex: 1;
-  display: flex;
-  margin: 0;
-}
-
-.itens-card .form-acao button {
-  width: 100%;
+  background-color: #c52e30;
 }
 
 /* MODAL DE DETALHES */
@@ -539,43 +558,6 @@ body {
   transition: background-color 0.2s;
 }
 
-
-.btn-retirar-card {
-  background-color: #2B7566 !important;
-  color: #ffffff !important;
-  border: none !important;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  text-transform: none
-}
-
-.btn-retirar-card:hover {
-  background-color: #1e5247 !important;
-}
-
-
-.btn-retirar-card {
-  background-color: #2B7566 !important;
-  color: #ffffff !important;
-  border: none !important;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  text-transform: none
-}
-
-.btn-retirar-card:hover {
-  background-color: #1e5247 !important;
-}
 
 /* MODAL CADASTRAR ITEM - LARGURA E ALINHAMENTO */
 .modal-cadastro-container {
@@ -937,9 +919,55 @@ body.escuro .fechar-filtro {
 #switch-dark-mode:checked + .form-check-label .fa-moon {
     color: #f1c40f;
 }
+.form-reivindicar {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(2, 72, 115, 0.12);
+}
 
+.btn-item-meu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 14px;
+    background-color: transparent;
+    color: #024873;
+    border: 2px solid #024873;
+    border-radius: 999px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease,
+                transform 0.15s ease, box-shadow 0.2s ease;
+}
 
-.itens-card .card-corpo .badge-prazo {
-  background-color: #E87A24;
-  color: #ffffff;
+.btn-item-meu i {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+}
+
+.btn-item-meu:hover {
+    background-color: #024873;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(2, 72, 115, 0.25);
+}
+
+.btn-item-meu:hover i {
+    transform: scale(1.15);
+}
+
+.btn-item-meu:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.btn-item-meu:focus-visible {
+    outline: 3px solid rgba(2, 72, 115, 0.35);
+    outline-offset: 2px;
 }

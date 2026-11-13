@@ -2,13 +2,15 @@ import calendar
 import os
 import socket
 from datetime import date, datetime, timedelta
+import socket
+
 from pathlib import Path
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 from database.conexao import conectar
-from model.cadastro import cadastrar_usuario, cadastrar_coor
+from model.cadastro import cadastrar_usuario, cadastrar_coor, existe_coordenador
 from model.excluir_item import excluir_itens
 from model.filtro import buscar_itens_filtrados
 from model.login import verificar_login_coor, verificar_login_usuario, salvar_token_recuperacao, verificar_token_valido, atualizar_senha_por_token
@@ -19,12 +21,15 @@ from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
 from model.retirada_itens import registrar_retirada_bd, devolver_item_bd
 from werkzeug.utils import secure_filename
+from pathlib import Path
+load_dotenv(Path(__file__).resolve().parent / ".env")
+
 
 # Se o Gmail não responder em 15s, dá erro em vez de ficar carregando para sempre
 socket.setdefaulttimeout(15)
 
 # Carrega o .env que está na mesma pasta deste arquivo
-load_dotenv(Path(__file__).resolve().parent / ".env")
+print("MAIL_PASSWORD carregada?", bool(os.getenv("MAIL_PASSWORD"))Path(__file__).resolve().parent / ".env")
 
 app = Flask(__name__)
 app.secret_key = "chciclete"
@@ -33,21 +38,19 @@ app.secret_key = "chciclete"
 # Use UMA das combinações abaixo (a que funcionou no seu computador):
 # Combinação 1: porta 587 com TLS
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-# Combinação 2: porta 465 com SSL (se a sua for esta, comente as 3 linhas acima e use estas)
-# app.config['MAIL_PORT'] = 465
-# app.config['MAIL_USE_TLS'] = False
-# app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'giovannacarraro436@gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'giovannacarraro436@gmail.com')
 
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
-
+app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.com')
 # ====== PRAZOS DE DESCARTE ======
 PRAZO_DESCARTE_MESES = 6        # prazo padrão: 6 meses
 PRAZO_MARMITA_DIAS = 7          # marmitas (perecíveis): 7 dias
@@ -70,6 +73,10 @@ def e_marmita(item, nomes_categorias):
     texto = f"{item.get('item') or ''} {item.get('descricao') or ''} {nome_categoria}".lower()
     return 'marmit' in texto
 
+
+socket.setdefaulttimeout(15)
+
+socket.setdefaulttimeout(15)
 
 def calcular_prazo(item, eh_marmita=False):
     """Calcula o prazo de descarte do item a partir da data em que foi encontrado."""
@@ -166,6 +173,8 @@ def pag_login_aluno():
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
     erro = None
+    ja_tem_coor = existe_coordenador()
+
     if request.method == "POST":
         cpf = somente_numeros(request.form["cpf"])
         senha = request.form["senha"]
@@ -176,7 +185,8 @@ def pag_login_coordenacao():
             return redirect(url_for("visualizar_itens"))
         else:
             erro = "CPF ou senha incorretos!"
-    return render_template("login.html", erro=erro, tipo='apoio')
+
+    return render_template("login.html", erro=erro, tipo='apoio', ja_tem_coor=ja_tem_coor)
 
 @app.route("/cadastro/usuario")
 def pag_cadastro():
@@ -194,15 +204,27 @@ def cadastro():
 
 @app.route('/cadastro-coor', methods=['GET', 'POST'])
 def cadastro_coor():
+    ja_tem_coor = existe_coordenador()
+
+    # Se já existe coordenador no banco, só quem já está logado como coordenação pode acessar
+    if ja_tem_coor and session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
     if request.method == 'POST':
         nome = request.form['nome_completo']
         cpf = somente_numeros(request.form['cpf'])
         email = request.form['email']
         senha = request.form['senha']
         cadastrar_coor(nome, cpf, email, senha)
-        return redirect('/login/setor/de/apoio')
-    return render_template('cadastro_coordenacao.html')
 
+        if not ja_tem_coor:
+            flash("Coordenador principal cadastrado com sucesso! Faça seu login.", "success")
+            return redirect(url_for('pag_login_coordenacao'))
+        else:
+            flash("Novo coordenador cadastrado com sucesso!", "success")
+            return redirect(url_for('visualizar_itens'))
+
+    return render_template('cadastro_coordenacao.html', primeiro_cadastro=not ja_tem_coor)
 @app.route("/editar-item-cadastrado")
 def pag_editar_item_cadastrado():
     return render_template("editar-item-cadastrado.html")
@@ -705,6 +727,80 @@ def devolver_item(id_item):
         flash("Erro ao devolver o item.", "error")
 
     return redirect(url_for("itens_retirados"))
+
+@app.route('/excluir-meu-relato/<int:id_item>', methods=['POST'])
+def excluir_meu_relato(id_item):
+    if session.get('perfil') != 'aluno':
+        return redirect(url_for('pag_login_aluno'))
+
+    usuario_sessao = session.get("usuario")
+    email_logado = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    todos_itens = listar_todos()
+    item_pertence_ao_usuario = any(
+        item.get("id_item") == id_item and item.get("email") == email_logado
+        for item in todos_itens
+    )
+
+    if item_pertence_ao_usuario:
+        excluir_itens(id_item)
+        flash("Relato excluído com sucesso!", "success")
+    else:
+        flash("Você não tem permissão para excluir este relato.", "error")
+
+    return redirect(url_for('meu_historico'))
+
+
+
+@app.route("/reivindicar-item/<int:id_item>", methods=["POST"])
+def reivindicar_item(id_item):
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
+
+    usuario_sessao = session.get("usuario")
+    email_aluno = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    aluno = buscar_usuario_por_email(email_aluno)
+
+    # Procura o item pelo id (usa a mesma função que a tela principal já usa)
+    item = next((i for i in listar_todos() if i.get("id_item") == id_item), None)
+
+    if not aluno or not item:
+        flash("Não foi possível localizar o item.", "error")
+        return redirect(url_for("visualizar_itens"))
+
+    # E-mail da coordenação: usa o do .env (EMAIL_COORDENACAO) e, se não existir, usa este padrão
+    email_coordenacao = os.getenv("EMAIL_COORDENACAO", "localizamaisararaquara@gmail.com")
+    destinatarios = [email_coordenacao]
+
+    data = item.get("data_encontrado")
+    data_txt = data.strftime("%d/%m/%Y") if hasattr(data, "strftime") else (data or "não informada")
+
+    try:
+        msg = Message(
+            subject=f"Localiza+ - Solicitação de item: {item['item']}",
+            recipients=destinatarios,
+            reply_to=aluno["email"]  # a coordenação responde direto para o aluno
+        )
+        msg.body = (
+            f"Olá, coordenação!\n\n"
+            f"O aluno {aluno['nome']} (e-mail: {aluno['email']}"
+            f"{', curso: ' + aluno['curso'] if aluno.get('curso') else ''}) "
+            f"informou que o item abaixo é dele e solicitou a retirada.\n\n"
+            f"Item: {item['item']}\n"
+            f"Descrição: {item.get('descricao') or 'não informada'}\n"
+            f"Local: {item.get('local') or 'não informado'}\n"
+            f"Data: {data_txt}\n\n"
+            f"Entre em contato com o aluno para confirmar que o item é dele e combinar a retirada.\n\n"
+            f"-- Sistema Localiza+"
+        )
+        mail.send(msg)
+        flash("Solicitação enviada! A coordenação entrará em contato com você.", "success")
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print("ERRO REIVINDICAR:", type(e).__name__, e)
+        flash(f"Erro: {type(e).__name__} - {e}", "error")
+
+    return redirect(url_for("visualizar_itens"))
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)
