@@ -22,7 +22,7 @@
     
 </head>
 
-<body>
+<body class="{% if session.get('perfil') == 'coordenacao' %}pagina-coordenacao{% endif %}">
 
     <!-- CABEÇALHO -->
     <header>

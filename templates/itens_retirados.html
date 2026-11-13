@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="{% if session.get('perfil') == 'coordenacao' %}pagina-coordenacao{% endif %}">
 
     <!-- CABEÇALHO -->
     <header>

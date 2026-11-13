@@ -1,41 +1,59 @@
-{# Menu de navegação exclusivo da coordenação.
-   Salvar em: templates/menu_coordenacao.html
-   Uso: {% include 'menu_coordenacao.html' %} logo depois do </header> #}
 
 {% if session.get('perfil') == 'coordenacao' %}
-{% set menu_itens = [
-    ('/visualizar-itens', 'Itens',      'fa-box-open'),
-    ('/relatorios-perda', 'Relatórios', 'fa-file-lines'),
-    ('/itens_retirados',  'Retirados',  'fa-hand-holding'),
-    ('/itens-arquivados', 'Arquivados', 'fa-box-archive')
-] %}
 
 <nav class="menu-coord" aria-label="Menu da coordenação">
-    
-    <div class="menu-coord__inner">
 
-        <!-- Botão que aparece só no celular -->
-        <button class="menu-coord__toggle" type="button"
-            data-bs-toggle="collapse" data-bs-target="#menuCoordLinks"
-            aria-controls="menuCoordLinks" aria-expanded="false"
-            aria-label="Abrir menu da coordenação">
-            <i class="fa-solid fa-bars" aria-hidden="true"></i>
-            <span>Menu</span>
-        </button>
+    <div class="menu-coord__brand">
+        <h1>LOCALIZA<span>+</span></h1>
+        <p>GESTÃO DE ACHADOS E PERDIDOS</p>
+    </div>
 
-        <ul class="menu-coord__links collapse" id="menuCoordLinks">
-            {% for href, texto, icone in menu_itens %}
+    <div class="menu-coord__conteudo">
+
+        <span class="menu-coord__secao">MENU PRINCIPAL</span>
+
+        <ul class="menu-coord__links">
+
             <li>
-                <a href="{{ href }}"
-                    class="menu-coord__link {% if request.path == href %}ativo{% endif %}"
-                    {% if request.path == href %}aria-current="page"{% endif %}>
-                    <i class="fa-solid {{ icone }}" aria-hidden="true"></i>
-                    <span>{{ texto }}</span>
+                <a href="/visualizar-itens"
+                    class="menu-coord__link {% if request.path == '/visualizar-itens' %}ativo{% endif %}">
+                    <i class="fa-solid fa-box-open"></i>
+                    <span>Itens</span>
                 </a>
             </li>
-            {% endfor %}
-        </ul>
 
+            <li>
+                <a href="/relatorios-perda"
+                    class="menu-coord__link {% if request.path == '/relatorios-perda' %}ativo{% endif %}">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Relatórios</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/itens_retirados"
+                    class="menu-coord__link {% if request.path == '/itens_retirados' %}ativo{% endif %}">
+                    <i class="fa-solid fa-hand-holding"></i>
+                    <span>Retirados</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="/itens-arquivados"
+                    class="menu-coord__link {% if request.path == '/itens-arquivados' %}ativo{% endif %}">
+                    <i class="fa-solid fa-box-archive"></i>
+                    <span>Arquivados</span>
+                </a>
+            </li>
+
+        </ul>
     </div>
+
+    <div class="menu-coord__rodape">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Área administrativa</span>
+    </div>
+
 </nav>
+
 {% endif %}

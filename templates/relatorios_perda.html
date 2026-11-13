@@ -61,16 +61,13 @@
     </style>
 </head>
 
-<body>
+<body class="{% if session.get('perfil') == 'coordenacao' %}pagina-coordenacao{% endif %}">
 
 
 
     <!-- Navbar simples para navegação (Opcional, caso não tenha um base.html) -->
     <header>
         <nav class="navbar transparente-header">
-            <div class="container-fluido">
-                <h1>LOCALIZA+ </h1>
-            </div>
 
             <div class="itens-central">
                 <div class="form-check form-check-inline switch-group">
