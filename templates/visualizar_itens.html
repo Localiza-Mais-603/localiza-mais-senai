@@ -312,36 +312,61 @@
                             {% endif %}
                         </div>
 
-                        {% if session.get('perfil') == 'coordenacao' %}
+                       {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
 
-                            <button type="button" class="btn-retirar-card"
+                            <button type="button" class="btn-acao-card btn-retirar-card"
                                 data-id="{{ item.id_item }}"
                                 data-nome="{{ item.item }}"
                                 onclick="abrirModalRetirar(this.dataset.id, this.dataset.nome)">
-                                Retirar
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M11 11V7a2 2 0 0 1 2-2h5"/>
+                                    <polyline points="15 2 18 5 15 8"/>
+                                    <path d="M3 14h3v6H3z"/>
+                                    <path d="M6 15h4.5a1.5 1.5 0 0 1 1.5 1.5v0a1.5 1.5 0 0 1-1.5 1.5H9"/>
+                                    <path d="M6 19h7.5l4.2-2.5a1.4 1.4 0 0 0-1.4-2.4L12 16.5"/>
+                                </svg>
+                                <span>Retirar</span>
                             </button>
 
-                            <button type="button" class="btn-editar-card"
+                            <button type="button" class="btn-acao-card btn-editar-card"
                                 onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
-                                Editar
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                    <path d="m15 5 4 4"/>
+                                </svg>
+                                <span>Editar</span>
                             </button>
 
                             <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}"
                                 method="POST" class="form-acao form-arquivar"
                                 onclick="event.stopPropagation()">
-
-                                <button type="submit" class="btn-arquivar-card">
-                                    Arquivar
+                                <button type="submit" class="btn-acao-card btn-arquivar-card">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <rect width="20" height="5" x="2" y="3" rx="1"/>
+                                        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+                                        <path d="M10 12h4"/>
+                                    </svg>
+                                    <span>Arquivar</span>
                                 </button>
                             </form>
 
                             <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
                                 method="POST" class="form-acao form-excluir"
                                 onclick="event.stopPropagation()">
-
-                                <button type="submit" class="btn-excluir-card">
-                                    Excluir
+                                <button type="submit" class="btn-acao-card btn-excluir-card">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M3 6h18"/>
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                        <line x1="10" x2="10" y1="11" y2="17"/>
+                                        <line x1="14" x2="14" y1="11" y2="17"/>
+                                    </svg>
+                                    <span>Excluir</span>
                                 </button>
                             </form>
 
