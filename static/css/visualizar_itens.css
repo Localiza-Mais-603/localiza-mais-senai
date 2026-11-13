@@ -69,20 +69,110 @@ body {
   color: #ffffff !important;
 }
 
-/* CARDS DE ATALHO DO TOPO */
-.card-relatar-item {
+/* CARDS DE ATALHO DO TOPO (PAINEL DA COORDENAÇÃO) */
+.card-painel-coord {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 100%;
+  padding: 16px;
   background-color: #ffffff;
-  border-color: #dee2e6 !important;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.card-relatar-item .icone-busca-container {
-  background-color: #e6f0f7;
-  color: #024873;
+.card-painel-coord:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.09);
 }
 
-.card-relatar-item .titulo-card {
-  color: #024873;
+.card-coord-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.icone-coord-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.titulo-card-coord {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #1e293b;
+}
+
+.btn-acessar-coord {
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-acessar-coord:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* RELATÓRIOS (AZUL - COMBINA COM EDITAR) */
+.card-coord-relatorios:hover {
+  border-color: #2b7bba;
+}
+.card-coord-relatorios .icone-coord-container {
+  background-color: #e6f2fa;
+  color: #2b7bba;
+}
+.card-coord-relatorios .btn-acessar-coord {
+  background-color: #2b7bba;
+}
+.card-coord-relatorios .btn-acessar-coord:hover {
+  background-color: #236599;
+}
+
+/* RETIRADOS (VERDE - COMBINA COM RETIRAR) */
+.card-coord-retirados:hover {
+  border-color: #059669;
+}
+.card-coord-retirados .icone-coord-container {
+  background-color: #e6f7f1;
+  color: #059669;
+}
+.card-coord-retirados .btn-acessar-coord {
+  background-color: #059669;
+}
+.card-coord-retirados .btn-acessar-coord:hover {
+  background-color: #047857;
+}
+
+/* ARQUIVADOS (LARANJA - COMBINA COM ARQUIVAR) */
+.card-coord-arquivados:hover {
+  border-color: #f3921f;
+}
+.card-coord-arquivados .icone-coord-container {
+  background-color: #fef4e6;
+  color: #f3921f;
+}
+.card-coord-arquivados .btn-acessar-coord {
+  background-color: #f3921f;
+}
+.card-coord-arquivados .btn-acessar-coord:hover {
+  background-color: #d97e12;
 }
 
 /* CARDS DE AÇÃO DO ALUNO (PERDI ALGO / ENCONTREI ALGO) */
@@ -644,10 +734,7 @@ body.escuro .lp-card-desc {
   color: #a0a0a0;
 }
 
-body.escuro .card-relatar-item,
-body.escuro div.card-relatar-item {
-  background-color: #024873 !important;
-  border-color: #38bdf8 !important;}
+
 .subtitulo-modal {
   color: #024873;
   font-size: 1.25rem;
@@ -799,9 +886,6 @@ body.escuro .form-modal-custom .entrada-area-texto {
   color: #024873;
 }
 
-body.escuro .fechar-filtro {
-  color: #ffffff;}
-
   
 /* RESPONSIVIDADE */
 @media (max-width: 600px) {
@@ -923,4 +1007,110 @@ body.escuro .fechar-filtro {
 .itens-card .card-corpo .badge-prazo {
   background-color: #E87A24;
   color: #ffffff;
+}
+
+/*MODO ESCURO COMPLETO (SEM SOBREPOSIÇÃO) */
+body.escuro {
+  background-color: #121212;
+  color: #f1f5f9;
+}
+
+/* Topo e Navbar */
+body.escuro .navbar {
+  border-bottom-color: #2b7bba;
+}
+
+body.escuro .navbar h1 {
+  color: #60a5fa;
+}
+
+/* Cards de atalho da Coordenação (Relatórios, Retirados, Arquivados) */
+body.escuro .card-painel-coord {
+  background-color: #1e1e1e;
+  border-color: #333333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+body.escuro .titulo-card-coord {
+  color: #f1f5f9;
+}
+
+body.escuro .card-coord-relatorios .icone-coord-container {
+  background-color: rgba(43, 123, 186, 0.2);
+  color: #60a5fa;
+}
+
+body.escuro .card-coord-retirados .icone-coord-container {
+  background-color: rgba(5, 150, 105, 0.2);
+  color: #34d399;
+}
+
+body.escuro .card-coord-arquivados .icone-coord-container {
+  background-color: rgba(243, 146, 31, 0.2);
+  color: #fbbf24;
+}
+
+/* Filtro de Data */
+body.escuro .item-data {
+  color: #cbd5e1;
+}
+
+body.escuro .item-data label {
+  color: #60a5fa;
+}
+
+body.escuro .item-data input[type="date"] {
+  background-color: #1e1e1e;
+  border-color: #333333;
+  color: #f1f5f9;
+  color-scheme: dark;
+}
+
+body.escuro .item-data input[type="date"]:focus {
+  border-color: #60a5fa;
+}
+
+/* Cards dos Itens Registrados */
+body.escuro .itens-card .card {
+  background-color: #1e1e1e;
+  border-color: #333333;
+  border-top-color: #2b7bba;
+  color: #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+body.escuro .itens-card .card-titulo {
+  color: #60a5fa;
+}
+
+body.escuro .itens-card .card-text {
+  color: #cbd5e1;
+}
+
+/* Modais (Detalhes, Edição, Filtros e Cadastro) */
+body.escuro .card-destaque,
+body.escuro .grupo-conteudo {
+  background-color: #1e1e1e;
+  border-top-color: #2b7bba;
+  color: #f1f5f9;
+}
+
+body.escuro .card-destaque h2,
+body.escuro .grupo-conteudo h3 {
+  color: #60a5fa;
+  border-bottom-color: #333333;
+}
+
+body.escuro .card-destaque p,
+body.escuro .card-destaque label,
+body.escuro .grupo-conteudo label {
+  color: #cbd5e1;
+}
+
+body.escuro .fechar-card {
+  color: #f1f5f9;
+}
+
+body.escuro .fechar-card:hover {
+  color: #60a5fa;
 }
