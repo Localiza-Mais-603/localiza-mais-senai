@@ -26,3 +26,13 @@ def cadastrar_coor(nome, cpf, email, senha):
 
     cursor.close()
     conexao.close()
+
+def existe_coordenador():
+    conexao, cursor = conectar()
+    cursor.execute("SELECT COUNT(*) FROM coordenador")
+    resultado = cursor.fetchone()
+    cursor.close()
+    conexao.close()
+
+    total = resultado[0] if isinstance(resultado, tuple) else list(resultado.values())[0]
+    return total > 0
