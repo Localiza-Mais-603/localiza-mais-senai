@@ -1,4 +1,6 @@
 from datetime import date, datetime, timedelta
+import socket
+
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
@@ -15,15 +17,18 @@ from model.editar_item import atualizar_item_no_banco
 from model.retirada_itens import registrar_retirada_bd, devolver_item_bd
 import os
 from werkzeug.utils import secure_filename
+from pathlib import Path
+load_dotenv(Path(__file__).resolve().parent / ".env")
 
-load_dotenv()
+
+print("MAIL_PASSWORD carregada?", bool(os.getenv("MAIL_PASSWORD")))
 
 app = Flask(__name__)
 app.secret_key = "chciclete"
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.com')
@@ -31,11 +36,15 @@ app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
-
+app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.com')
 
 # Prazo (em dias) para retirada do item antes do descarte. Altere aqui se precisar.
 PRAZO_DESCARTE_DIAS = 90
 
+
+socket.setdefaulttimeout(15)
 
 def calcular_prazo(item):
     """Calcula o prazo de descarte do item a partir da data em que foi encontrado."""
@@ -622,6 +631,59 @@ def excluir_meu_relato(id_item):
         flash("Você não tem permissão para excluir este relato.", "error")
 
     return redirect(url_for('meu_historico'))
+
+
+
+@app.route("/reivindicar-item/<int:id_item>", methods=["POST"])
+def reivindicar_item(id_item):
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
+
+    usuario_sessao = session.get("usuario")
+    email_aluno = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    aluno = buscar_usuario_por_email(email_aluno)
+
+    # Procura o item pelo id (usa a mesma função que a tela principal já usa)
+    item = next((i for i in listar_todos() if i.get("id_item") == id_item), None)
+
+    if not aluno or not item:
+        flash("Não foi possível localizar o item.", "error")
+        return redirect(url_for("visualizar_itens"))
+
+    # E-mail da coordenação: usa o do .env (EMAIL_COORDENACAO) e, se não existir, usa este padrão
+    email_coordenacao = os.getenv("EMAIL_COORDENACAO", "localizamaisararaquara@gmail.com")
+    destinatarios = [email_coordenacao]
+
+    data = item.get("data_encontrado")
+    data_txt = data.strftime("%d/%m/%Y") if hasattr(data, "strftime") else (data or "não informada")
+
+    try:
+        msg = Message(
+            subject=f"Localiza+ - Solicitação de item: {item['item']}",
+            recipients=destinatarios,
+            reply_to=aluno["email"]  # a coordenação responde direto para o aluno
+        )
+        msg.body = (
+            f"Olá, coordenação!\n\n"
+            f"O aluno {aluno['nome']} (e-mail: {aluno['email']}"
+            f"{', curso: ' + aluno['curso'] if aluno.get('curso') else ''}) "
+            f"informou que o item abaixo é dele e solicitou a retirada.\n\n"
+            f"Item: {item['item']}\n"
+            f"Descrição: {item.get('descricao') or 'não informada'}\n"
+            f"Local: {item.get('local') or 'não informado'}\n"
+            f"Data: {data_txt}\n\n"
+            f"Entre em contato com o aluno para confirmar que o item é dele e combinar a retirada.\n\n"
+            f"-- Sistema Localiza+"
+        )
+        mail.send(msg)
+        flash("Solicitação enviada! A coordenação entrará em contato com você.", "success")
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        print("ERRO REIVINDICAR:", type(e).__name__, e)
+        flash(f"Erro: {type(e).__name__} - {e}", "error")
+
+    return redirect(url_for("visualizar_itens"))
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8080)

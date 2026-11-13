@@ -918,9 +918,55 @@ body.escuro .fechar-filtro {
 #switch-dark-mode:checked + .form-check-label .fa-moon {
     color: #f1c40f;
 }
+.form-reivindicar {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(2, 72, 115, 0.12);
+}
 
+.btn-item-meu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 14px;
+    background-color: transparent;
+    color: #024873;
+    border: 2px solid #024873;
+    border-radius: 999px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease,
+                transform 0.15s ease, box-shadow 0.2s ease;
+}
 
-.itens-card .card-corpo .badge-prazo {
-  background-color: #E87A24;
-  color: #ffffff;
+.btn-item-meu i {
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+}
+
+.btn-item-meu:hover {
+    background-color: #024873;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(2, 72, 115, 0.25);
+}
+
+.btn-item-meu:hover i {
+    transform: scale(1.15);
+}
+
+.btn-item-meu:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.btn-item-meu:focus-visible {
+    outline: 3px solid rgba(2, 72, 115, 0.35);
+    outline-offset: 2px;
 }
