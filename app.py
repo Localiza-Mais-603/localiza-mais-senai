@@ -3,6 +3,7 @@ import os
 import socket
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from mysql.connector.errors import IntegrityError
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
@@ -34,6 +35,7 @@ from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
 from model.retirada_itens import registrar_retirada_bd, devolver_item_bd
+from model.gerenciar import listar_todos_coordenadores, buscar_coor_por_cpf, atualizar_coor, deletar_coor
 
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
@@ -260,57 +262,108 @@ def pag_cadastro():
 
 @app.route("/cadastro", methods=["POST"])
 def cadastro():
-
     cpf = somente_numeros(request.form["CPF"])
-    nome = request.form["nome_completo"]
+    nome = request.form["nome_completo"].strip()
     curso = request.form["curso"]
-    email = request.form["email"]
+    email = request.form["email"].strip()
     senha = request.form["senha"]
 
-    cadastrar_usuario(cpf, nome, curso, email, senha)
+    try:
+        cadastrar_usuario(cpf, nome, curso, email, senha)
+    except IntegrityError:
+        flash("CPF ou e-mail já cadastrado.", "danger")
+        return redirect("/cadastro")
 
     return redirect("/login/usuario")
 
 
 @app.route('/cadastro-coor', methods=['GET', 'POST'])
 def cadastro_coor():
-
     ja_tem_coor = existe_coordenador()
 
     if ja_tem_coor and session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
     if request.method == 'POST':
-
-        nome = request.form['nome_completo']
+        nome = request.form['nome_completo'].strip()
         cpf = somente_numeros(request.form['cpf'])
-        email = request.form['email']
+        email = request.form['email'].strip()
         senha = request.form['senha']
 
-        cadastrar_coor(nome, cpf, email, senha)
+        try:
+            cadastrar_coor(nome, cpf, email, senha)
+        except IntegrityError:
+            flash("Já existe um coordenador cadastrado com este CPF ou e-mail.", "danger")
+            return redirect(url_for('cadastro_coor'))
 
         if not ja_tem_coor:
-
-            flash(
-                "Coordenador principal cadastrado com sucesso! Faça seu login.",
-                "success"
-            )
-
+            flash("Coordenador principal cadastrado com sucesso! Faça seu login.", "success")
             return redirect(url_for('pag_login_coordenacao'))
-
         else:
-
-            flash(
-                "Novo coordenador cadastrado com sucesso!",
-                "success"
-            )
-
-            return redirect(url_for('visualizar_itens'))
+            flash("Novo coordenador cadastrado com sucesso!", "success")
+            return redirect(url_for('gerenciar_coordenadores'))
 
     return render_template(
         'cadastro_coordenacao.html',
         primeiro_cadastro=not ja_tem_coor
     )
+
+
+@app.route('/gerenciar-coordenadores')
+def gerenciar_coordenadores():
+    if session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
+    coordenadores = listar_todos_coordenadores()
+    return render_template('gerenciamento_coor.html', coordenadores=coordenadores)
+
+
+@app.route('/editar-coor/<cpf>', methods=['GET', 'POST'])
+def editar_coor(cpf):
+    if session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
+    cpf = somente_numeros(cpf)
+
+    if request.method == 'POST':
+        nome = request.form['nome_completo']
+        email = request.form['email']
+        nova_senha = request.form.get('senha')
+
+        try:
+            atualizar_coor(cpf, nome, email, nova_senha)
+            flash("Dados do coordenador atualizados com sucesso!", "success")
+            return redirect(url_for('gerenciar_coordenadores'))
+        except IntegrityError:
+            flash("Este e-mail já está em uso por outro coordenador.", "danger")
+            return redirect(url_for('editar_coor', cpf=cpf))
+
+    coordenador = buscar_coor_por_cpf(cpf)
+    if not coordenador:
+        flash("Coordenador não encontrado.", "danger")
+        return redirect(url_for('gerenciar_coordenadores'))
+
+    return render_template('editar_coordenacao.html', coordenador=coordenador)
+
+
+@app.route('/remover-coor/<cpf>', methods=['POST'])
+def remover_coor(cpf):
+    if session.get("perfil") != "coordenacao":
+        return redirect(url_for("pag_login_coordenacao"))
+
+    cpf = somente_numeros(cpf)
+    cpf_logado = somente_numeros(session.get("cpf", ""))
+
+    if cpf_logado == cpf:
+        flash("Você não pode remover o seu próprio usuário enquanto está logado.", "danger")
+        return redirect(url_for('gerenciar_coordenadores'))
+
+    if deletar_coor(cpf):
+        flash("Coordenador removido com sucesso! Os itens vinculados foram mantidos.", "success")
+    else:
+        flash("Coordenador não encontrado ou já removido.", "danger")
+
+    return redirect(url_for('gerenciar_coordenadores'))
 
 
 @app.route("/editar-item-cadastrado")
@@ -338,6 +391,9 @@ def visualizar_perfil():
         "visualizar_perfil.html",
         usuario=usuario_atualizado
     )
+
+
+@app.route
 
 
 # ===== VISUALIZAR ITENS =====
