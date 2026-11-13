@@ -82,3 +82,30 @@ document.addEventListener('submit', function (event) {
     }
 });
 
+function confirmarExclusao(event, form) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: 'Você não poderá reverter a exclusão deste relato!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+}
+
+function mostrarAlertaFlash(categoria, mensagem) {
+    Swal.fire({
+        icon: categoria === 'success' ? 'success' : 'error',
+        title: mensagem,
+        timer: 2500,
+        showConfirmButton: false
+    });
+}

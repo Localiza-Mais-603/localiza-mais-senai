@@ -611,6 +611,27 @@ def devolver_item(id_item):
 
     return redirect(url_for("itens_retirados"))
 
+@app.route('/excluir-meu-relato/<int:id_item>', methods=['POST'])
+def excluir_meu_relato(id_item):
+    if session.get('perfil') != 'aluno':
+        return redirect(url_for('pag_login_aluno'))
+
+    usuario_sessao = session.get("usuario")
+    email_logado = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    todos_itens = listar_todos()
+    item_pertence_ao_usuario = any(
+        item.get("id_item") == id_item and item.get("email") == email_logado
+        for item in todos_itens
+    )
+
+    if item_pertence_ao_usuario:
+        excluir_itens(id_item)
+        flash("Relato excluído com sucesso!", "success")
+    else:
+        flash("Você não tem permissão para excluir este relato.", "error")
+
+    return redirect(url_for('meu_historico'))
+
 
 
 @app.route("/reivindicar-item/<int:id_item>", methods=["POST"])
