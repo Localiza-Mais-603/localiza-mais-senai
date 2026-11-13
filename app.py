@@ -1,4 +1,9 @@
+import calendar
+import os
+import socket
 from datetime import date, datetime, timedelta
+from pathlib import Path
+
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
@@ -13,31 +18,60 @@ from model.listar_itens import listar_todos
 from model.visualizar_perfil import buscar_usuario_por_email
 from model.editar_item import atualizar_item_no_banco
 from model.retirada_itens import registrar_retirada_bd, devolver_item_bd
-import os
 from werkzeug.utils import secure_filename
 
-load_dotenv()
+# Se o Gmail não responder em 15s, dá erro em vez de ficar carregando para sempre
+socket.setdefaulttimeout(15)
+
+# Carrega o .env que está na mesma pasta deste arquivo
+load_dotenv(Path(__file__).resolve().parent / ".env")
 
 app = Flask(__name__)
 app.secret_key = "chciclete"
+
+# ====== CONFIGURAÇÃO DE E-MAIL ======
+# Use UMA das combinações abaixo (a que funcionou no seu computador):
+# Combinação 1: porta 587 com TLS
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = 'localizamaisararaquara@gmail.com'
+# Combinação 2: porta 465 com SSL (se a sua for esta, comente as 3 linhas acima e use estas)
+# app.config['MAIL_PORT'] = 465
+# app.config['MAIL_USE_TLS'] = False
+# app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'giovannacarraro436@gmail.com'
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'localizamaisararaquara@gmail.com')
+app.config['MAIL_DEFAULT_SENDER'] = ('Localiza+', 'giovannacarraro436@gmail.com')
 
 mail = Mail(app)
 gerador_de_token = URLSafeTimedSerializer(app.secret_key)
 
 
+# ====== PRAZOS DE DESCARTE ======
+PRAZO_DESCARTE_MESES = 6        # prazo padrão: 6 meses
+PRAZO_MARMITA_DIAS = 7          # marmitas (perecíveis): 7 dias
+PRAZO_REDUZIDO_DIAS = None      # falta de espaço: coloque um número (ex.: 60) para reduzir o prazo de TODOS os itens; None = desligado
+PRAZO_DESCARTE_DIAS = PRAZO_DESCARTE_MESES * 30  # só para o chip/modal que usam "prazo_dias"
 
-# Prazo (em dias) para retirada do item antes do descarte. Altere aqui se precisar.
-PRAZO_DESCARTE_DIAS = 90
+
+def somar_meses(data, meses):
+    """Soma meses de calendário a uma data (ex.: 31/08 + 6 meses = 28/02 ou 29/02)."""
+    mes = data.month - 1 + meses
+    ano = data.year + mes // 12
+    mes = mes % 12 + 1
+    ultimo_dia = calendar.monthrange(ano, mes)[1]
+    return date(ano, mes, min(data.day, ultimo_dia))
 
 
-def calcular_prazo(item):
+def e_marmita(item, nomes_categorias):
+    """Marmita se o nome, a descrição ou a categoria do item tiver 'marmit' (marmita, marmitex...)."""
+    nome_categoria = nomes_categorias.get(str(item.get('id_categoria')), '')
+    texto = f"{item.get('item') or ''} {item.get('descricao') or ''} {nome_categoria}".lower()
+    return 'marmit' in texto
+
+
+def calcular_prazo(item, eh_marmita=False):
     """Calcula o prazo de descarte do item a partir da data em que foi encontrado."""
     data = item.get('data_encontrado')
 
@@ -55,7 +89,16 @@ def calcular_prazo(item):
         item['prazo_resumo'] = ''
         return
 
-    limite = data + timedelta(days=PRAZO_DESCARTE_DIAS)
+    # Prazo padrão (6 meses) ou prazo curto das marmitas
+    if eh_marmita:
+        limite = data + timedelta(days=PRAZO_MARMITA_DIAS)
+    else:
+        limite = somar_meses(data, PRAZO_DESCARTE_MESES)
+
+    # Falta de espaço: se ligado, usa o prazo reduzido quando ele for mais curto
+    if PRAZO_REDUZIDO_DIAS:
+        limite = min(limite, data + timedelta(days=PRAZO_REDUZIDO_DIAS))
+
     dias = (limite - date.today()).days
     limite_txt = limite.strftime('%d/%m/%Y')
 
@@ -208,6 +251,16 @@ def visualizar_itens():
         if status_do_item(item) not in ('arquivado', 'perdido', 'retirado')
     ]
 
+    categorias = listar_categorias()
+    destinos = listar_destinos()
+
+    # Mapa id -> nome da categoria (usado para identificar marmitas)
+    nomes_categorias = {}
+    for cat in categorias:
+        cat_id = cat.get('id_categoria', cat.get('id')) if isinstance(cat, dict) else cat[0]
+        cat_nome = cat.get('nome') if isinstance(cat, dict) else cat[1]
+        nomes_categorias[str(cat_id)] = cat_nome or ''
+
     for item in itens:
         # Nome de quem publicou o item
         email_publicador = item.get('email')
@@ -217,11 +270,8 @@ def visualizar_itens():
         else:
             item['publicado_nome'] = ''
 
-        # Prazo de retirada / descarte
-        calcular_prazo(item)
-
-    categorias = listar_categorias()
-    destinos = listar_destinos()
+        # Prazo de retirada / descarte (6 meses; marmitas têm prazo curto)
+        calcular_prazo(item, e_marmita(item, nomes_categorias))
 
     return render_template(
         "visualizar_itens.html",
@@ -229,10 +279,11 @@ def visualizar_itens():
         usuario=usuario_atualizado,
         categorias=categorias,
         destinos=destinos,
-        prazo_dias=PRAZO_DESCARTE_DIAS
+        prazo_dias=PRAZO_DESCARTE_DIAS,
+        prazo_meses=PRAZO_DESCARTE_MESES,
+        prazo_marmita_dias=PRAZO_MARMITA_DIAS,
+        prazo_reduzido_dias=PRAZO_REDUZIDO_DIAS
     )
-
-
 
 
 @app.route("/cadastrar/item/salvar", methods=["POST"])
@@ -559,6 +610,59 @@ def retirar_item():
         flash("Erro ao registrar retirada do item.", "error")
 
     return redirect(url_for("itens_retirados"))
+
+
+# ESSE ITEM É MEU: o aluno solicita o item e a coordenação recebe um e-mail
+@app.route("/reivindicar-item/<int:id_item>", methods=["POST"])
+def reivindicar_item(id_item):
+    if session.get("perfil") != "aluno":
+        return redirect(url_for("pag_login_aluno"))
+
+    usuario_sessao = session.get("usuario")
+    email_aluno = usuario_sessao.get("email") if isinstance(usuario_sessao, dict) else usuario_sessao[0]
+    aluno = buscar_usuario_por_email(email_aluno)
+
+    # Procura o item pelo id (usa a mesma função que a tela principal já usa)
+    item = next((i for i in listar_todos() if i.get("id_item") == id_item), None)
+
+    if not aluno or not item:
+        flash("Não foi possível localizar o item.", "error")
+        return redirect(url_for("visualizar_itens"))
+
+    # E-mail da coordenação: usa o do .env (EMAIL_COORDENACAO) e, se não existir, usa este padrão
+    email_coordenacao = os.getenv("EMAIL_COORDENACAO", "giovannacarraro436@gmail.com")
+    destinatarios = [email_coordenacao]
+
+    data = item.get("data_encontrado")
+    data_txt = data.strftime("%d/%m/%Y") if hasattr(data, "strftime") else (data or "não informada")
+
+    try:
+        msg = Message(
+            subject=f"Localiza+ - Solicitação de item: {item['item']}",
+            recipients=destinatarios,
+            reply_to=aluno["email"]  # a coordenação responde direto para o aluno
+        )
+        msg.body = (
+            f"Olá, coordenação!\n\n"
+            f"O aluno {aluno['nome']} (e-mail: {aluno['email']}"
+            f"{', curso: ' + aluno['curso'] if aluno.get('curso') else ''}) "
+            f"informou que o item abaixo é dele e solicitou a retirada.\n\n"
+            f"Item: {item['item']}\n"
+            f"Descrição: {item.get('descricao') or 'não informada'}\n"
+            f"Local: {item.get('local') or 'não informado'}\n"
+            f"Data: {data_txt}\n\n"
+            f"Entre em contato com o aluno para confirmar que o item é dele e combinar a retirada.\n\n"
+            f"-- Sistema Localiza+"
+        )
+        mail.send(msg)
+        flash("Solicitação enviada! A coordenação entrará em contato com você.", "success")
+    except Exception:
+        import traceback
+        traceback.print_exc()
+        flash("Não foi possível enviar a solicitação agora. Tente novamente.", "error")
+
+    return redirect(url_for("visualizar_itens"))
+
 
 @app.route("/itens_retirados")
 def itens_retirados():
