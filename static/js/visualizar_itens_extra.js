@@ -1,22 +1,49 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // 1. PÍLULA DE PRAZO (SWEETALERT EXPLICATIVO)
+        // 1. PÍLULA DE PRAZO (SWEETALERT EXPLICATIVO)
     const btnPrazo = document.getElementById('btnPrazoRetirada');
     if (btnPrazo) {
         btnPrazo.addEventListener('click', function () {
-            const PRAZO_DIAS = Number(btnPrazo.dataset.prazoDias) || 90;
+            const PRAZO_DIAS = Number(btnPrazo.dataset.prazoDias) || 180;
+            const PRAZO_MESES = Number(btnPrazo.dataset.prazoMeses) || 6;
+            const PRAZO_MARMITA = Number(btnPrazo.dataset.prazoMarmita) || 0;
+            const PRAZO_REDUZIDO = Number(btnPrazo.dataset.prazoReduzido) || 0;
             const trechoVerde = Math.max(PRAZO_DIAS - 30, 1);
+
+            // Aviso das exceções (marmitas e falta de espaço)
+            let excecoes = '';
+
+            if (PRAZO_MARMITA) {
+                excecoes += `
+                    <li><strong>Marmitas:</strong> ficam guardadas por apenas
+                    <strong>${PRAZO_MARMITA} ${PRAZO_MARMITA === 1 ? 'dia' : 'dias'}</strong>,
+                    por serem perecíveis.</li>`;
+            }
+
+            if (PRAZO_REDUZIDO) {
+                excecoes += `
+                    <li><strong>Falta de espaço:</strong> no momento, o prazo foi reduzido para
+                    <strong>${PRAZO_REDUZIDO} dias</strong> porque o espaço de armazenamento está cheio.</li>`;
+            } else {
+                excecoes += `
+                    <li><strong>Falta de espaço:</strong> se o espaço de armazenamento ficar cheio,
+                    o prazo poderá ser reduzido.</li>`;
+            }
 
             Swal.fire({
                 title: 'Prazo de retirada',
-                width: 520,
+                width: 540,
                 confirmButtonText: 'Entendi',
                 confirmButtonColor: '#F28705',
                 html: `
-                    <p style="margin: 0 0 18px; color: #555; font-size: 0.95rem;">
-                        Todo item fica guardado por <strong>${PRAZO_DIAS} dias</strong>,
-                        contados a partir do dia em que foi encontrado.
+                    <p style="margin: 0 0 14px; color: #555; font-size: 0.95rem;">
+                        Os itens ficam disponíveis por <strong>${PRAZO_MESES} meses</strong>,
+                        contados a partir do dia em que foram encontrados.
                     </p>
+
+                    <ul style="margin: 0 0 18px; padding-left: 18px; text-align: left; color: #555; font-size: 0.9rem;">
+                        ${excecoes}
+                    </ul>
 
                     <div class="barra-prazo">
                         <span style="flex: ${trechoVerde}; background: #2B7566;"></span>
@@ -43,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div>
                             <i style="background: #6c757d;"></i>
                             <b>Descartado</b>
-                            <small>após ${PRAZO_DIAS} dias</small>
+                            <small>após o prazo</small>
                         </div>
                     </div>
 
@@ -54,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-
     // 2. EXTENSÃO DO MODAL DE DETALHES (PUBLICADO POR + DESTINO + PRAZO)
     const originalAbrirCard = window.abrirCard;
     if (typeof originalAbrirCard === 'function') {
