@@ -1,10 +1,11 @@
 /* RESET E MODO CLARO (PADRÃO) */
-* {
+*{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Chakra Petch', sans-serif;
 }
+
 
 body {
   background-color: #ffffff;
@@ -12,6 +13,7 @@ body {
   padding: 20px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 
 /* NAVBAR (TOPO) */
 .navbar {
@@ -25,6 +27,7 @@ body {
   border-bottom: 4px solid #024873;
 }
 
+
 .navbar h1 {
   font-size: 1.6rem;
   font-weight: 900;
@@ -32,6 +35,7 @@ body {
   letter-spacing: 1px;
   margin: 0;
 }
+
 
 .itens-central {
   display: flex;
@@ -113,10 +117,12 @@ body {
   color: #024873 !important;
 }
 
+
 .botao-voltar:hover {
   background-color: #024873 !important;
   color: #ffffff !important;
 }
+
 
 /* CARDS DE ATALHO DO TOPO */
 .card-relatar-item {
@@ -125,14 +131,17 @@ body {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
+
 .card-relatar-item .icone-busca-container {
   background-color: #e6f0f7;
   color: #024873;
 }
 
+
 .card-relatar-item .titulo-card {
   color: #024873;
 }
+
 
 /* CARDS DE AÇÃO DO ALUNO (PERDI ALGO / ENCONTREI ALGO) */
 .lp-hero-actions {
@@ -140,6 +149,7 @@ body {
   margin: 8px auto 22px;
   padding: 0 12px;
 }
+
 
 .lp-hero-subtitle {
   text-align: center;
@@ -149,11 +159,13 @@ body {
   margin: 0 0 20px;
 }
 
+
 .lp-cards-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
+
 
 .lp-action-card {
   background-color: #ffffff;
@@ -168,18 +180,22 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.3s ease;
 }
 
+
 .lp-action-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(2, 72, 115, 0.12);
 }
 
+
 .lp-card-lost:hover {
   border-color: rgba(242, 135, 5, 0.6);
 }
 
+
 .lp-card-found:hover {
   border-color: rgba(2, 72, 115, 0.45);
 }
+
 
 .lp-card-left {
   display: flex;
@@ -187,6 +203,7 @@ body {
   gap: 16px;
   min-width: 0;
 }
+
 
 .lp-icon-box {
   width: 50px;
@@ -198,21 +215,25 @@ body {
   flex-shrink: 0;
 }
 
+
 .lp-icon-lost {
   background-color: #fff4e6;
   color: #F28705;
 }
+
 
 .lp-icon-found {
   background-color: #e6f0f7;
   color: #024873;
 }
 
+
 .lp-card-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
+
 
 .lp-card-eyebrow {
   font-size: 0.72rem;
@@ -221,13 +242,16 @@ body {
   text-transform: uppercase;
 }
 
+
 .lp-eyebrow-lost {
   color: #F28705;
 }
 
+
 .lp-eyebrow-found {
   color: #024873;
 }
+
 
 .lp-card-title {
   margin: 0;
@@ -238,12 +262,14 @@ body {
   text-transform: uppercase;
 }
 
+
 .lp-card-desc {
   margin: 3px 0 0;
   font-size: 0.88rem;
   color: #6c757d;
   line-height: 1.35;
 }
+
 
 .lp-btn {
   display: inline-flex;
@@ -262,27 +288,34 @@ body {
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
+
 .lp-btn:active {
   transform: scale(0.98);
 }
+
 
 .lp-btn-lost {
   background-color: #F28705;
   box-shadow: 0 4px 12px rgba(242, 135, 5, 0.28);
 }
 
+
 .lp-btn-lost:hover {
   background-color: #d67400;
 }
+
 
 .lp-btn-found {
   background-color: #024873;
   box-shadow: 0 4px 12px rgba(2, 72, 115, 0.24);
 }
 
+
 .lp-btn-found:hover {
   background-color: #013657;
 }
+
+
 
 
 /* FILTRO DE DATAS */
@@ -299,9 +332,11 @@ body {
   font-weight: bold;
 }
 
+
 .item-data label {
   color: #024873;
 }
+
 
 .item-data input[type="date"] {
   padding: 8px 12px;
@@ -312,6 +347,7 @@ body {
   color: #333333;
 }
 
+
 /* LISTA DE CARDS DOS ITENS */
 .itens-card {
   display: grid;
@@ -321,6 +357,7 @@ body {
   padding: 20px;
   list-style: none;
 }
+
 
 .itens-card .card {
   width: 100% !important;
@@ -344,15 +381,18 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 }
 
+
 .itens-card .card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
 }
 
+
 .itens-card .card-corpo {
   flex: 0 0 auto;
   padding: 16px;
 }
+
 
 .itens-card .card-titulo {
   font-size: 1.2rem;
@@ -362,12 +402,14 @@ body {
   text-transform: uppercase;
 }
 
+
 .itens-card .card-text {
   font-size: 0.95rem;
   color: #444444;
   line-height: 1.4;
   margin-bottom: 12px;
 }
+
 
 /* BOTÕES DE AÇÃO DA COORDENAÇÃO (RETIRAR, EDITAR, ARQUIVAR, EXCLUIR) */
 .itens-card .card-botoes-acao {
@@ -379,11 +421,13 @@ body {
   width: 100%;
 }
 
+
 .itens-card .form-acao {
   display: flex;
   margin: 0;
   width: 100%;
 }
+
 
 .btn-acao-card {
   width: 100%;
@@ -404,19 +448,23 @@ body {
   transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 
+
 .btn-acao-card svg {
   flex-shrink: 0;
   stroke: #ffffff;
 }
+
 
 .btn-acao-card:hover {
   transform: translateY(-1px);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
+
 .btn-acao-card:active {
   transform: translateY(0);
 }
+
 
 /* RETIRAR (VERDE) */
 .btn-retirar-card {
@@ -426,6 +474,7 @@ body {
   background-color: #047857;
 }
 
+
 /* EDITAR (AZUL) */
 .btn-editar-card {
   background-color: #2b7bba;
@@ -433,6 +482,7 @@ body {
 .btn-editar-card:hover {
   background-color: #236599;
 }
+
 
 /* ARQUIVAR (LARANJA) */
 .btn-arquivar-card {
@@ -442,6 +492,7 @@ body {
   background-color: #d97e12;
 }
 
+
 /* EXCLUIR (VERMELHO) */
 .btn-excluir-card {
   background-color: #e03c3e;
@@ -449,6 +500,7 @@ body {
 .btn-excluir-card:hover {
   background-color: #c52e30;
 }
+
 
 /* MODAL DE DETALHES */
 .modal-card {
@@ -464,9 +516,11 @@ body {
   z-index: 1000;
 }
 
+
 .modal-card.aberto {
   display: flex;
 }
+
 
 .card-destaque {
   position: relative;
@@ -479,6 +533,7 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
+
 .card-destaque h2 {
   color: #024873;
   font-size: 1.3rem;
@@ -487,11 +542,13 @@ body {
   margin-bottom: 20px;
 }
 
+
 .card-destaque p {
   color: #444444;
   font-size: 0.95rem;
   margin-bottom: 10px;
 }
+
 
 .modal-foto {
   display: block;
@@ -503,6 +560,7 @@ body {
   border-radius: 8px;
   background-color: #f5f5f5;
 }
+
 
 .fechar-card {
   position: absolute;
@@ -516,9 +574,11 @@ body {
   font-weight: bold;
 }
 
+
 .fechar-card:hover {
   color: #024873;
 }
+
 
 /* JANELA DE FILTROS */
 .grupo-filtro {
@@ -534,9 +594,11 @@ body {
   z-index: 1000;
 }
 
+
 .grupo-filtro.aberto {
   display: flex;
 }
+
 
 .grupo-conteudo {
   background-color: #ffffff;
@@ -553,6 +615,7 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
 }
 
+
 .grupo-conteudo h3 {
   font-size: 1.1rem;
   color: #024873;
@@ -562,6 +625,7 @@ body {
   padding-bottom: 4px;
 }
 
+
 .grupo-conteudo label {
   display: flex;
   align-items: center;
@@ -570,6 +634,7 @@ body {
   font-weight: 600;
   color: #444444;
 }
+
 
 .fechar-filtro {
   position: absolute;
@@ -588,10 +653,12 @@ body {
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
+
 .fechar-filtro:hover {
   color: #024873;
   transform: scale(1.1);
 }
+
 
 /* REGRA PARA OS BOTÕES DE AÇÃO (EX: APLICAR FILTRO) */
 .grupo-conteudo button:not(.fechar-filtro) {
@@ -608,6 +675,8 @@ body {
 }
 
 
+
+
 /* MODAL CADASTRAR ITEM - LARGURA E ALINHAMENTO */
 .modal-cadastro-container {
   max-width: 480px !important;
@@ -615,16 +684,19 @@ body {
   padding: 28px !important;
 }
 
+
 .categoria-group-inline {
   display: flex;
   gap: 8px;
   align-items: stretch;
 }
 
+
 .categoria-group-inline select {
   flex: 1;
   min-width: 0;
 }
+
 
 /* Ajuste no input de arquivo para não quebrar o layout */
 .form-modal-custom input[type="file"].entrada-texto {
@@ -632,10 +704,12 @@ body {
   font-size: 0.85rem;
 }
 
+
 /* AJUSTE PARA O MODO ESCURO */
 body.escuro .fechar-filtro {
   color: #ffffff;
 }
+
 
 body.escuro .fechar-filtro:hover {
   color: #F28705;
@@ -646,6 +720,7 @@ body.escuro {
   color: #ffffff;
 }
 
+
 body.escuro .modal-cadastro-container .fechar-filtro:hover {
   color: #F28705 !important;
 }
@@ -653,9 +728,11 @@ body.escuro .modal-cadastro-container .fechar-filtro:hover {
   color: #024873;
 }
 
+
 body.escuro .lp-hero-subtitle {
   color: #cbd5e1;
 }
+
 
 body.escuro .lp-action-card {
   background-color: #1e1e1e;
@@ -663,35 +740,43 @@ body.escuro .lp-action-card {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
+
 body.escuro .lp-card-lost:hover {
   border-color: #F28705;
 }
 
+
 body.escuro .lp-card-found:hover {
   border-color: #38bdf8;
 }
+
 
 body.escuro .lp-icon-lost {
   background-color: rgba(242, 135, 5, 0.16);
   color: #F28705;
 }
 
+
 body.escuro .lp-icon-found {
   background-color: rgba(56, 189, 248, 0.15);
   color: #38bdf8;
 }
 
+
 body.escuro .lp-eyebrow-found {
   color: #38bdf8;
 }
+
 
 body.escuro .lp-card-title {
   color: #ffffff;
 }
 
+
 body.escuro .lp-card-desc {
   color: #a0a0a0;
 }
+
 
 body.escuro .card-relatar-item,
 body.escuro div.card-relatar-item {
@@ -707,12 +792,14 @@ body.escuro div.card-relatar-item {
   padding-bottom: 8px;
 }
 
+
 /* Formulário e Campos */
 .form-modal-custom {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
+
 
 .form-modal-custom .campo-grupo {
   display: flex;
@@ -721,12 +808,14 @@ body.escuro div.card-relatar-item {
   text-align: left;
 }
 
+
 .form-modal-custom .rotulo {
   font-size: 0.85rem;
   font-weight: 700;
   color: #024873;
   text-transform: uppercase;
 }
+
 
 .form-modal-custom .entrada-texto,
 .form-modal-custom .entrada-area-texto {
@@ -738,10 +827,12 @@ body.escuro div.card-relatar-item {
   outline: none;
 }
 
+
 .form-modal-custom .entrada-texto:focus,
 .form-modal-custom .entrada-area-texto:focus {
   border-color: #024873;
 }
+
 
 /* Grupo da Categoria + Botão "Adicionar Categoria" */
 .categoria-group-inline {
@@ -750,9 +841,11 @@ body.escuro div.card-relatar-item {
   align-items: center;
 }
 
+
 .categoria-group-inline select {
   flex: 1;
 }
+
 
 .btn-add-cat-inline {
   background-color: #024873 !important;
@@ -769,9 +862,11 @@ body.escuro div.card-relatar-item {
   margin: 0 !important;
 }
 
+
 .btn-add-cat-inline:hover {
   background-color: #012e4a !important;
 }
+
 
 /* Botões Inferiores */
 .grupo-botoes-modal {
@@ -782,6 +877,7 @@ body.escuro div.card-relatar-item {
   padding-top: 10px;
   border-top: 1px solid #f0f0f0;
 }
+
 
 .btn-modal-cancelar {
   background: transparent !important;
@@ -796,10 +892,12 @@ body.escuro div.card-relatar-item {
   margin: 0 !important;
 }
 
+
 .btn-modal-cancelar:hover {
   background-color: #6c757d !important;
   color: #ffffff !important;
 }
+
 
 .btn-modal-submit {
   background-color: #024873 !important;
@@ -814,9 +912,11 @@ body.escuro div.card-relatar-item {
   margin: 0 !important;
 }
 
+
 .btn-modal-submit:hover {
   background-color: #F28705 !important;
 }
+
 
 /* Ajustes no Modo Escuro */
 body.escuro .subtitulo-modal,
@@ -824,12 +924,14 @@ body.escuro .form-modal-custom .rotulo {
   color: #ffffff;
 }
 
+
 body.escuro .form-modal-custom .entrada-texto,
 body.escuro .form-modal-custom .entrada-area-texto {
   background-color: #2a2a2a;
   border-color: #444444;
   color: #ffffff;
 }
+
 
 .fechar-filtro {
   position: absolute;
@@ -844,12 +946,15 @@ body.escuro .form-modal-custom .entrada-area-texto {
   transition: color 0.2s ease;
 }
 
+
 .fechar-filtro:hover {
   color: #024873;
 }
 
+
 body.escuro .fechar-filtro {
   color: #ffffff;}
+
 
   
 /* RESPONSIVIDADE */
@@ -860,11 +965,13 @@ body.escuro .fechar-filtro {
   }
 }
 
+
 @media (max-width: 960px) {
   .lp-cards-grid {
     grid-template-columns: 1fr;
   }
 }
+
 
 @media (max-width: 540px) {
   .lp-action-card {
@@ -872,10 +979,12 @@ body.escuro .fechar-filtro {
     align-items: stretch;
   }
 
+
   .lp-btn {
     width: 100%;
   }
 }
+
 
 /* Alinhamento do switch de tema com o perfil no cabeçalho */
 .switch-group {
@@ -886,6 +995,7 @@ body.escuro .fechar-filtro {
     min-height: auto;
 }
 
+
 .switch-group .form-check-label {
     display: flex;
     align-items: center;
@@ -893,10 +1003,12 @@ body.escuro .fechar-filtro {
     cursor: pointer;
 }
 
+
 /* Esconde o checkbox nativo do Bootstrap */
 .switch-group .form-check-input {
     display: none;
 }
+
 
 /* Container principal do botão */
 .switch-darkmode {
@@ -912,6 +1024,7 @@ body.escuro .fechar-filtro {
     transition: background-color 0.3s ease;
 }
 
+
 /* Container flexível para alinhar os dois ícones lado a lado */
 .switch-darkmode .icons {
     display: flex;
@@ -922,19 +1035,23 @@ body.escuro .fechar-filtro {
     z-index: 1;
 }
 
+
 /* Estilo dos ícones */
 .switch-darkmode .icons i {
     font-size: 14px;
     transition: color 0.3s ease;
 }
 
+
 .switch-darkmode .fa-sun {
     color: #f39c12; /* Sol amarelo */
 }
 
+
 .switch-darkmode .fa-moon {
     color: #7f8c8d; /* Lua cinzenta no modo claro */
 }
+
 
 /* Círculo deslizante */
 .switch-darkmode .circle {
@@ -950,7 +1067,9 @@ body.escuro .fechar-filtro {
     z-index: 2;
 }
 
+
 /* ESTADOS QUANDO O CHECKBOX ESTÁ MARCADO (MODO ESCURO) */
+
 
 /* Move o círculo para a direita */
 #switch-dark-mode:checked + .form-check-label .circle {
@@ -958,10 +1077,12 @@ body.escuro .fechar-filtro {
     background-color: #2c3e50;
 }
 
+
 /* Altera o fundo do botão */
 #switch-dark-mode:checked + .form-check-label .switch-darkmode {
     background-color: #1a252f;
 }
+
 
 /* Ajusta a cor da lua quando ativo */
 #switch-dark-mode:checked + .form-check-label .fa-moon {
@@ -972,6 +1093,7 @@ body.escuro .fechar-filtro {
     padding-top: 14px;
     border-top: 1px solid rgba(2, 72, 115, 0.12);
 }
+
 
 .btn-item-meu {
     display: flex;
@@ -994,10 +1116,12 @@ body.escuro .fechar-filtro {
                 transform 0.15s ease, box-shadow 0.2s ease;
 }
 
+
 .btn-item-meu i {
     font-size: 0.9rem;
     transition: transform 0.2s ease;
 }
+
 
 .btn-item-meu:hover {
     background-color: #024873;
@@ -1006,14 +1130,17 @@ body.escuro .fechar-filtro {
     box-shadow: 0 4px 10px rgba(2, 72, 115, 0.25);
 }
 
+
 .btn-item-meu:hover i {
     transform: scale(1.15);
 }
+
 
 .btn-item-meu:active {
     transform: translateY(0);
     box-shadow: none;
 }
+
 
 .btn-item-meu:focus-visible {
     outline: 3px solid rgba(2, 72, 115, 0.35);
