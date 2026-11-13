@@ -39,7 +39,6 @@ body {
   gap: 14px;
 }
 
-.itens-central button,
 .btn-abrir {
   padding: 9px 18px;
   border: 2px solid #024873;
@@ -53,10 +52,60 @@ body {
   transition: all 0.2s ease;
 }
 
-.itens-central button:hover,
 .btn-abrir:hover {
   background-color: #ffffff;
   color: #024873;
+}
+
+/* BOTÃO DE PERFIL QUADRADO */
+.btn-perfil-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 14px 5px 6px;
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 4px;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-perfil-pill:hover,
+.btn-perfil-pill:focus {
+  border-color: #024873;
+  box-shadow: 0 2px 8px rgba(2, 72, 115, 0.12);
+}
+
+.perfil-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background-color: #e2e8f0;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.perfil-avatar svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.perfil-avatar-grande {
+  width: 48px;
+  height: 48px;
+}
+
+.perfil-nome {
+  letter-spacing: 0.4px;
 }
 
 .botao-voltar {
@@ -969,4 +1018,41 @@ body.escuro .fechar-filtro {
 .btn-item-meu:focus-visible {
     outline: 3px solid rgba(2, 72, 115, 0.35);
     outline-offset: 2px;
+}
+
+/* MODO ESCURO - BOTÃO DE PERFIL */
+body.escuro .btn-perfil-pill {
+  background-color: #1e1e1e;
+  border-color: #3f3f46;
+  color: #f1f5f9;
+}
+
+body.escuro .btn-perfil-pill:hover,
+body.escuro .btn-perfil-pill:focus {
+  border-color: #60a5fa;
+  background-color: #27272a;
+}
+
+body.escuro .perfil-avatar {
+  background-color: #2d333b;
+  color: #94a3b8;
+}
+
+body.escuro .dropdown-menu {
+  background-color: #1e1e1e;
+  border-color: #333333;
+  color: #f1f5f9;
+}
+
+body.escuro .dropdown-item {
+  color: #e2e8f0;
+}
+
+body.escuro .dropdown-item:hover {
+  background-color: #27272a;
+  color: #ffffff;
+}
+
+body.escuro .dropdown-divider {
+  border-color: #333333;
 }
