@@ -1,0 +1,75 @@
+/* Menu da coordenação
+   Salvar em: static/css/menu_coordenacao.css */
+
+.menu-coord {
+    background-color: #024873;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    font-family: "Chakra Petch", sans-serif;
+}
+
+.menu-coord__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* Botão do celular */
+.menu-coord__toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 0;
+    background: none;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.menu-coord__links {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 8px;
+}
+
+.menu-coord__link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.menu-coord__link:hover,
+.menu-coord__link:focus-visible {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+.menu-coord__link.ativo {
+    background-color: #F28705;
+    color: #fff;
+}
+
+/* Telas maiores: menu sempre visível, em linha */
+@media (min-width: 768px) {
+    .menu-coord__toggle {
+        display: none;
+    }
+
+    .menu-coord__links.collapse:not(.show),
+    .menu-coord__links {
+        display: flex;
+        gap: 6px;
+        padding: 8px 0;
+    }
+}
