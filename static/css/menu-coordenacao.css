@@ -1,29 +1,29 @@
-
 /* SIDEBAR LOCALIZA+ */
-
 .menu-coord {
     position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
-
     width: 250px;
-
     display: flex;
     flex-direction: column;
-
     background: #024873;
     font-family: "Chakra Petch", sans-serif;
-
     box-shadow: 3px 0 12px rgba(0,0,0,0.12);
-    z-index: 1100;
+    z-index: 1040; /* Abaixo dos modais do Bootstrap (1055) */
+    transition: transform 0.3s ease;
 }
 
 /* IDENTIDADE VISUAL */
-
 .menu-coord__brand {
     padding: 30px 20px 25px;
     border-bottom: 1px solid rgba(255,255,255,0.18);
+}
+
+.brand-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .menu-coord__brand h1 {
@@ -46,9 +46,9 @@
 }
 
 /* CONTEÚDO */
-
 .menu-coord__conteudo {
     padding: 25px 14px;
+    overflow-y: auto;
 }
 
 .menu-coord__secao {
@@ -75,18 +75,13 @@
     display: flex;
     align-items: center;
     gap: 13px;
-
     padding: 14px 12px;
-
     border-radius: 7px;
-
     color: rgba(255,255,255,0.85);
     text-decoration: none;
     text-transform: uppercase;
-
     font-size: 0.92rem;
     font-weight: 600;
-
     transition: 0.2s ease;
 }
 
@@ -108,71 +103,104 @@
 }
 
 /* RODAPÉ */
-
 .menu-coord__rodape {
     margin-top: auto;
     padding: 20px;
     border-top: 1px solid rgba(255,255,255,0.18);
-
     display: flex;
     align-items: center;
     gap: 10px;
-
     color: rgba(255,255,255,0.7);
     font-size: 0.78rem;
 }
 
-/* CONTEÚDO DAS PÁGINAS */
-
-.pagina-coordenacao main {
+/* CONTEÚDO DAS PÁGINAS (DESKTOP) */
+.pagina-coordenacao main,
+.pagina-coordenacao header {
     margin-left: 250px;
     width: calc(100% - 250px);
 }
 
-/* CABEÇALHO SUPERIOR */
-
-.pagina-coordenacao header {
-    margin-left: 250px;
+/* BOTÕES MOBILE (ESCONDIDOS NO DESKTOP) */
+.btn-menu-mobile,
+.btn-fechar-mobile,
+.menu-overlay {
+    display: none;
 }
 
-/* RESPONSIVIDADE */
-
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE & TABLETS)
+   ========================================================================== */
 @media (max-width: 767px) {
-
+    /* Esconde a sidebar fora do ecrã por padrão */
     .menu-coord {
-        position: relative;
-        width: 100%;
-        height: auto;
-        min-height: auto;
+        transform: translateX(-100%);
+        width: 260px;
+        z-index: 1050;
     }
 
-    .menu-coord__brand {
-        padding: 15px 20px;
+    /* Mostra quando a classe .aberto for adicionada pelo JS */
+    .menu-coord.aberto {
+        transform: translateX(0);
     }
 
-    .menu-coord__brand h1 {
-        font-size: 1.7rem;
-    }
-
-    .menu-coord__conteudo {
-        padding: 15px;
-    }
-
-    .menu-coord__links {
+    /* Botão hambúrguer no canto superior esquerdo */
+    .btn-menu-mobile {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 14px;
+        left: 14px;
+        width: 42px;
+        height: 42px;
+        background-color: #024873;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        z-index: 1030;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
 
-    .menu-coord__rodape {
+    /* Botão X dentro do menu */
+    .btn-fechar-mobile {
+        display: block;
+        background: transparent;
+        border: none;
+        color: #ffffff;
+        font-size: 1.4rem;
+        cursor: pointer;
+    }
+
+    /* Fundo escuro atrás do menu aberto */
+    .menu-overlay {
         display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1045;
     }
 
-    .pagina-coordenacao main {
-        margin-left: 0;
-        width: 100%;
+    .menu-overlay.ativo {
+        display: block;
     }
 
+    /* Libera a largura total para o conteúdo e cabeçalho */
+    .pagina-coordenacao main,
     .pagina-coordenacao header {
         margin-left: 0;
+        width: 100%;
     }
+
 }
+
+
+.btn-menu-mobile {
+        top: 16px;
+        left: 10px;
+        width: 34px;
+        height: 34px;
+        font-size: 1rem;
+    }

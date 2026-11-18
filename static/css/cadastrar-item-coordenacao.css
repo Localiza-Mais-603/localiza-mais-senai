@@ -408,3 +408,46 @@ body.escuro .botao-cancelar:hover {
 #switch-dark-mode:checked + .form-check-label .fa-moon {
     color: #f1c40f;
 }
+
+@media (max-width: 600px) {
+    /* 1. Evita que a navbar absoluta atropele o card em telas menores */
+    body {
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 16px;
+    }
+
+    .navbar {
+        position: static; /* Deixa de flutuar e passa a ocupar seu próprio espaço no topo */
+        padding: 0 0 20px 0;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .itens-central {
+        gap: 8px;
+    }
+
+    .itens-central button {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+
+    /* 2. Dá mais espaço interno para o formulário respirar */
+    .card-principal {
+        padding: 24px 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .titulo-principal {
+        font-size: 20px;
+    }
+
+    /* 3. Previne zoom indesejado no iOS ao focar nos campos */
+    .entrada-texto,
+    .entrada-area-texto,
+    select.entrada-texto {
+        font-size: 16px;
+    }
+}
+
