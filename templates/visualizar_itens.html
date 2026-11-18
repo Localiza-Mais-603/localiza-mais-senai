@@ -540,14 +540,35 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="perdItem" class="form-label">Nome do item</label>
+                        <label for="perdItem" class="form-label">Item perdido *</label>
                         <input type="text" id="perdItem" name="item"
                             class="form-control" maxlength="50"
                             placeholder="Ex: Garrafa azul" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="perdCategoria" class="form-label">Categoria</label>
+                        <label for="perdDescricao" class="form-label">Detalhes e características *</label>
+                        <textarea id="perdDescricao" name="descricao"
+                            class="form-control" rows="3" maxlength="255"
+                            placeholder="Cor, marca, características..." required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="perdOnde" class="form-label">Provável local onde perdeu</label>
+                        <input type="text" id="perdOnde" name="local"
+                            class="form-control" maxlength="50"
+                            placeholder="Ex: Bloco B, Cantina">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="perdQuando" class="form-label">
+                            Data aproximada da perda <span class="text-muted fw-normal">(opcional)</span>
+                        </label>
+                        <input type="date" id="perdQuando" name="data" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="perdCategoria" class="form-label">Categoria do item *</label>
 
                         <select id="perdCategoria" name="categoria_id"
                             class="form-select select-categoria" required>
@@ -571,27 +592,10 @@
                         </button>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="perdOnde" class="form-label">Onde perdeu</label>
-                        <input type="text" id="perdOnde" name="local"
-                            class="form-control" maxlength="50"
-                            placeholder="Ex: Bloco B, Cantina">
-                    </div>
+                    
 
                     <div class="mb-3">
-                        <label for="perdQuando" class="form-label">Quando perdeu</label>
-                        <input type="date" id="perdQuando" name="data" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="perdDescricao" class="form-label">Descrição</label>
-                        <textarea id="perdDescricao" name="descricao"
-                            class="form-control" rows="3" maxlength="255"
-                            placeholder="Cor, marca, características..." required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="perdFoto" class="form-label">Foto (opcional)</label>
+                        <label for="perdFoto" class="form-label">Foto de referência <span class="text-muted fw-normal">(opcional)</span></label>
 
                         <input type="file"
                             id="perdFoto"
@@ -646,34 +650,34 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="encItemNome" class="form-label">Qual é o objeto</label>
+                        <label for="encItemNome" class="form-label">Item encontrado *</label>
                         <input type="text" id="encItemNome" name="item"
                             class="form-control" maxlength="50"
                             placeholder="Ex: Chave azul, Garrafa preta" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encDescricao" class="form-label">Descrição do objeto</label>
+                        <label for="encDescricao" class="form-label">Detalhes e características *</label>
                         <textarea id="encDescricao" name="descricao"
                             class="form-control" rows="2" maxlength="255"
                             placeholder="Cor, marca, características..." required></textarea>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encOnde" class="form-label">Onde encontrou</label>
+                        <label for="encOnde" class="form-label">Local onde foi encontrado *</label>
                         <input type="text" id="encOnde" name="local"
                             class="form-control" maxlength="50"
                             placeholder="Ex: Bloco B, Sala 204, Cantina" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encQuando" class="form-label">Quando encontrou</label>
+                        <label for="encQuando" class="form-label">Data em que foi encontrado *</label>
                         <input type="date" id="encQuando" name="data"
                             class="form-control" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encCategoria" class="form-label">O que é</label>
+                        <label for="encCategoria" class="form-label">Categoria do item *</label>
 
                         <select id="encCategoria" name="id_categoria"
                             class="form-select select-categoria" required>
@@ -698,7 +702,7 @@
                     </div>
 
                     <fieldset>
-                        <legend class="form-label fs-6">O que fez com o objeto</legend>
+                        <legend class="form-label fs-6">Onde o item está guardado agora? *</legend>
 
                         {% for destino in destinos %}
                         {% set dest_id = destino.id_destino if destino.id_destino is defined else (destino.id if destino.id is defined else destino[0]) %}
