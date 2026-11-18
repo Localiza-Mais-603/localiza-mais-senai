@@ -79,21 +79,19 @@
     <main>
 
         <div class="container my-2">
-            <a href="/visualizar-itens" class="btn-abrir mb-3 text-decoration-none d-inline-block">
-                ← Voltar
-            </a>
 
             <h2 class="titulo-secao-itens">
                 ITENS RETIRADOS
             </h2>
-            <p class="text-muted fs-6">
+           <p class="text-muted small mb-0 subtitulo-secao">
                 Itens entregues a quem os procurou, com os dados de quem retirou.
             </p>
         </div>
 
-        <!-- LISTA DE ITENS RETIRADOS -->
+       <!-- LISTA DE ITENS RETIRADOS -->
         <section aria-label="Itens retirados">
 
+            {% if itens %}
             <ul class="itens-card">
 
                 {% for item in itens %}
@@ -131,7 +129,7 @@
                             <div class="card-retirada-info p-2 mt-2 bg-light rounded text-start" style="font-size: 0.85rem; color: #333;">
                                 <strong>Retirado por:</strong> {{ item.nome_retirante }}<br>
                                 {% if item.data_retirada_fmt %}
-                                <small class="text-muted">Em: {{ item.data_retirada_fmt }}</small>
+                                <small class="text-muted">Data da retirada: {{ item.data_retirada_fmt }}</small>
                                 {% endif %}
                             </div>
                             {% endif %}
@@ -148,7 +146,7 @@
                                 onclick="event.stopPropagation()">
 
                                 <button type="submit" class="btn-excluir-card">
-                                    Excluir
+                                    Remover registro
                                 </button>
 
                             </form>
@@ -160,17 +158,22 @@
 
                 </li>
 
-                {% else %}
-
-                <div class="col-12 text-center py-5">
-                    <p class="text-muted fs-6">
-                        Nenhum item retirado no momento.
-                    </p>
-                </div>
-
                 {% endfor %}
 
             </ul>
+            {% else %}
+    
+                <div class="px-4">
+                <div class="text-center py-5 px-3 my-4 border rounded-3 bg-light w-100">
+                    <i class="fa-solid fa-hand-holding-heart fa-2x mb-2" style="color: #024873;"></i>
+                    <h3 class="h5 fw-bold mb-1" style="color: #024873;">Nenhum item retirado ainda</h3>
+                    <p class="text-muted small mb-0">
+                        Quando um objeto for devolvido ao dono e a retirada for registrada, o histórico aparecerá aqui.
+                    </p>
+                </div>
+            </div>
+    
+            {% endif %}
 
         </section>
 
