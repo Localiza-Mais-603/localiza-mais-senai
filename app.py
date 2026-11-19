@@ -325,12 +325,28 @@ def gerenciar_coordenadores():
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
+    usuario_sessao = session.get("usuario")
+    usuario_atualizado = None
+    if usuario_sessao:
+        email = (
+            usuario_sessao.get("email")
+            if isinstance(usuario_sessao, dict)
+            else usuario_sessao[0]
+        )
+        conexao, cursor = conectar()
+        cursor = conexao.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM coordenador WHERE email = %s", (email,))
+        usuario_atualizado = cursor.fetchone()
+        cursor.close()
+        conexao.close()
+
     coordenadores = listar_todos_coordenadores()
     categorias = listar_categorias()
     return render_template(
         "gerenciamento_coor.html",
         coordenadores=coordenadores,
-        categorias=categorias
+        categorias=categorias,
+        usuario=usuario_atualizado
     )
 
 
@@ -1341,7 +1357,6 @@ def formatar_data_br(valor):
             pass
     return texto
 
-
 # ===== INICIAR SERVIDOR =====
 
 if __name__ == "__main__":
@@ -1350,3 +1365,5 @@ if __name__ == "__main__":
         host="0.0.0.0",
         port=8080
     )
+
+    

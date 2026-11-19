@@ -1,127 +1,121 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerenciar Coordenadores - Localiza+</title>
+<main class="container py-4">
 
-  <!-- 1. Bootstrap 5 CSS (Necessário para o modal do menu e componentes) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- 2. FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- 3. Seus CSS (sempre depois do Bootstrap para poderem sobrescrever o padrão) -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/menu-coordenacao.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/gerenciar.css') }}">
-</head>
-<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          {% set alert_type = 'danger' if category in ['danger', 'error'] else 'success' %}
+          <div class="alert alert-{{ alert_type }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
-  <div class="layout-admin">
-    
-    <!-- Menu Lateral -->
-    {% include 'menu_coordenacao.html' %}
-
-    <!-- Área Principal à Direita -->
-    <div class="conteudo-principal">
-      
-      <!-- Barra superior (Dark Mode) - Agora fechada corretamente! -->
-      <div class="itens-central">
-        <div class="form-check form-check-inline switch-group">
-          <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
-          <label class="form-check-label" for="switch-dark-mode">
-            <div class="switch-darkmode">
-              <div class="icons">
-                <i class="fa-solid fa-sun"></i>
-                <i class="fa-solid fa-moon"></i>
-              </div>
-              <div class="circle"></div>
-            </div>
-          </label>
-        </div>
+    <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <div>
+        <h1 class="h3 fw-bold text-uppercase mb-1">Gerenciar Coordenadores</h1>
+        <p class="text-muted mb-0">Cadastre, atualize ou remova os coordenadores do sistema.</p>
       </div>
 
-      <!-- Conteúdo da Página -->
-      <main class="container py-4">
-
-        <!-- Mensagens Flash -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              {% set alert_type = 'danger' if category in ['danger', 'error'] else 'success' %}
-              <div class="alert alert-{{ alert_type }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-              </div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-
-        <!-- Cabeçalho da Seção -->
-        <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-          <div>
-            <h1 class="h3 fw-bold text-uppercase mb-1">Gerenciar Coordenadores</h1>
-            <p class="text-muted mb-0">Cadastre, atualize ou remova os coordenadores do sistema.</p>
-          </div>
-          
-          <!-- Ajuste o href abaixo para a sua rota de cadastro, se houver -->
-          <a href="/cadastrar-coordenador" class="btn btn-primary fw-semibold">
-            <i class="fa-solid fa-plus me-1"></i> Novo Coordenador
-          </a>
-        </div>
-
-        <!-- Tabela -->
-        <div class="table-card card border-0 shadow-sm">
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th style="width: 45%;">Coordenador</th>
-                  <th style="width: 25%;">CPF</th>
-                  <th style="width: 30%; text-align: right;">Ações</th>
-                </tr>
-              </thead>
-              <tbody id="tabela-corpo">
-                {% for coord in coordenadores %}
-                <tr class="linha-coord">
-                  <td>
-                    <strong class="coord-name d-block">{{ coord.nome }}</strong>
-                    <span class="coord-email text-muted small">{{ coord.email }}</span>
-                  </td>
-                  <td class="coord-cpf">{{ coord.cpf }}</td>
-                  <td class="actions-cell text-end">
-                    <a href="{{ url_for('editar_coor', cpf=coord.cpf) }}" class="btn btn-sm btn-outline-primary me-1">
-                      <i class="fa-solid fa-pen"></i> Editar
-                    </a>
-                    
-                    <form action="{{ url_for('remover_coor', cpf=coord.cpf) }}" method="POST" class="form-remover d-inline" data-nome="{{ coord.nome }}">
-                      <button type="submit" class="btn btn-sm btn-danger">
-                        <i class="fa-solid fa-trash"></i> Remover
-                      </button>
-                    </form>
-                  </td>
-                </tr>
-                {% else %}
-                <tr>
-                  <td colspan="3" class="text-center text-muted py-4">
-                    Nenhum coordenador cadastrado.
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      </main>
+      <a href="{{ url_for('cadastro_coor') }}" class="btn btn-primary fw-semibold">
+        <i class="fa-solid fa-plus me-1"></i> Novo Coordenador
+      </a>
     </div>
-  </div>
 
-  <!-- Bootstrap 5 JS Bundle (Necessário para abrir o modal de categorias e fechar alertas) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Seu JS -->
-  <script src="{{ url_for('static', filename='js/gerenciar.js') }}"></script>
-  
-</body>
-</html>
+    <!-- SEÇÃO: EDITAR COORDENADOR -->
+    <section id="secao-editar-coor" class="card border-0 shadow-sm mb-4 d-none" aria-label="Editar coordenador">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h2 class="h5 fw-bold text-uppercase mb-1">Editar Coordenador</h2>
+            <p class="text-muted small mb-0">Atualize os dados do coordenador selecionado.</p>
+          </div>
+          <button type="button" class="btn-close" id="btnFecharEdicaoCoor" aria-label="Fechar seção de edição"></button>
+        </div>
+
+        <form id="formEditarCoor" action="" method="POST">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="editCoorCpf" class="form-label fw-semibold">CPF</label>
+              <input type="text" id="editCoorCpf" class="form-control" disabled readonly>
+            </div>
+
+            <div class="col-md-4">
+              <label for="editCoorNome" class="form-label fw-semibold">Nome completo *</label>
+              <input type="text" id="editCoorNome" name="nome" class="form-control" maxlength="120" required>
+            </div>
+
+            <div class="col-md-4">
+              <label for="editCoorEmail" class="form-label fw-semibold">E-mail *</label>
+              <input type="email" id="editCoorEmail" name="email" class="form-control" maxlength="120" required>
+            </div>
+
+            <div class="col-12">
+              <label for="editCoorSenha" class="form-label fw-semibold">Nova senha (opcional)</label>
+              <input type="password" id="editCoorSenha" name="senha" class="form-control"
+                     placeholder="Deixe em branco para manter a senha atual">
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="button" class="btn btn-outline-secondary" id="btnCancelarEdicaoCoor">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary fw-semibold">
+              <i class="fa-solid fa-floppy-disk me-1"></i> Salvar Alterações
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- TABELA DE COORDENADORES -->
+    <div class="table-card card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 45%;">Coordenador</th>
+              <th style="width: 25%;">CPF</th>
+              <th style="width: 30%; text-align: right;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-corpo">
+            {% for coord in coordenadores %}
+            <tr class="linha-coord">
+              <td>
+                <strong class="coord-name d-block">{{ coord.nome }}</strong>
+                <span class="coord-email text-muted small">{{ coord.email }}</span>
+              </td>
+              <td class="coord-cpf">{{ coord.cpf }}</td>
+              <td class="actions-cell text-end">
+                <button type="button"
+                        class="btn btn-sm btn-outline-primary me-1 btn-editar-coor"
+                        data-cpf="{{ coord.cpf }}"
+                        data-nome="{{ coord.nome }}"
+                        data-email="{{ coord.email }}"
+                        data-action="{{ url_for('editar_coor', cpf=coord.cpf) }}">
+                  <i class="fa-solid fa-pen"></i> Editar
+                </button>
+
+                <form action="{{ url_for('remover_coor', cpf=coord.cpf) }}" method="POST" class="form-remover d-inline" data-nome="{{ coord.nome }}">
+                  <button type="submit" class="btn btn-sm btn-danger">
+                    <i class="fa-solid fa-trash"></i> Remover
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="3" class="text-center text-muted py-4">
+                Nenhum coordenador cadastrado.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
