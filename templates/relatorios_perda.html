@@ -142,9 +142,9 @@
     </main>
 
     <!-- Estrutura do Modal Ampliado -->
-    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCardRelatorio()">
+    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCard()">
         <article class="card-destaque p-4" onclick="event.stopPropagation()">
-            <button class="fechar-card" type="button" onclick="fecharCardRelatorio()" aria-label="Fechar modal">×</button>
+            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">×</button>
 
             <h3 id="modalTitulo" class="mb-3 fw-bold" style="color: #024873; text-transform: uppercase;"></h3>
 
@@ -166,7 +166,6 @@
                     class="badge bg-warning text-dark"></span></p>
         </article>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/static/js/visualizar_itens.js"></script>

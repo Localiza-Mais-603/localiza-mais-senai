@@ -90,28 +90,47 @@ function abrirCard(card) {
     const ehCoordenacao = card.dataset.coordenacao === "true";
     const blocoDescricao = document.getElementById("blocoDescricao");
     const blocoLocal = document.getElementById("blocoLocal");
-    const blocoStatus = document.getElementById("blocoStatus"); // <-- 1. ADICIONADO
+    const blocoStatus = document.getElementById("blocoStatus");
 
-    document.getElementById("modalTitulo").textContent = card.dataset.item || "";
-    document.getElementById("modalData").textContent = card.dataset.data && card.dataset.data !== "None" ? card.dataset.data : "Não informada";
-    // <-- 2. REMOVIDA A LINHA DO modalStatus QUE FICAVA AQUI
+    const modalTitulo = document.getElementById("modalTitulo");
+    const modalData = document.getElementById("modalData");
+    const modalDescricao = document.getElementById("modalDescricao");
+    const modalLocal = document.getElementById("modalLocal");
+    const modalStatus = document.getElementById("modalStatus");
+    const modalNome = document.getElementById("modalNome");
+    const modalEmail = document.getElementById("modalEmail");
+
+    if (modalTitulo) modalTitulo.textContent = card.dataset.item || "";
+    if (modalData) {
+        modalData.textContent = card.dataset.data && card.dataset.data !== "None"
+            ? card.dataset.data
+            : "Não informada";
+    }
+
+    // Preenche Relatado por e E-mail (usado na tela de Relatórios)
+    if (modalNome) modalNome.textContent = card.dataset.nome || "Desconhecido";
+    if (modalEmail) modalEmail.textContent = card.dataset.email || "Não informado";
 
     if (ehCoordenacao) {
         if (blocoDescricao) blocoDescricao.style.display = "none";
         if (blocoLocal) blocoLocal.style.display = "none";
-        if (blocoStatus) blocoStatus.style.display = "none"; // <-- 3. ADICIONADO (esconde na coordenação)
+        if (blocoStatus) blocoStatus.style.display = "none";
     } else {
-        if (blocoDescricao) {
-            blocoDescricao.style.display = "";
-            document.getElementById("modalDescricao").textContent = card.dataset.descricao || "Não informada";
+        if (blocoDescricao) blocoDescricao.style.display = "";
+        if (modalDescricao) {
+            modalDescricao.textContent = card.dataset.descricao || "Não informada";
         }
-        if (blocoLocal) {
-            blocoLocal.style.display = "";
-            document.getElementById("modalLocal").textContent = card.dataset.local && card.dataset.local !== "None" ? card.dataset.local : "Não informado";
+
+        if (blocoLocal) blocoLocal.style.display = "";
+        if (modalLocal) {
+            modalLocal.textContent = card.dataset.local && card.dataset.local !== "None"
+                ? card.dataset.local
+                : "Não informado";
         }
-        if (blocoStatus) { // <-- 3. ADICIONADO (mostra nos itens dos alunos)
-            blocoStatus.style.display = "";
-            document.getElementById("modalStatus").textContent = card.dataset.status || "Não informado";
+
+        if (blocoStatus) blocoStatus.style.display = "";
+        if (modalStatus) {
+            modalStatus.textContent = card.dataset.status || "Não informado";
         }
     }
 
@@ -133,11 +152,16 @@ function abrirCard(card) {
         }
     }
 
+    modal.style.display = "";
     modal.classList.add("aberto");
+    modal.setAttribute("aria-hidden", "false");
 }
 
 function fecharCard() {
-    if (modal) modal.classList.remove("aberto");
+    if (!modal) return;
+    modal.classList.remove("aberto");
+    modal.style.display = "";
+    modal.setAttribute("aria-hidden", "true");
 }
 
 // Funções do Modal de Edição
