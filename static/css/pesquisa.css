@@ -1,0 +1,161 @@
+/* ===== Barra de pesquisa de itens ===== */
+.pesq-secao {
+    display: flex;
+    justify-content: center;
+    padding: 18px 16px 0;
+}
+
+.pesq-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 640px;
+    margin: 0;
+    padding: 10px 18px;
+    border: 1.5px solid rgba(128, 128, 128, 0.4);
+    border-radius: 999px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pesq-form:focus-within {
+    border-color: #F28705;
+    box-shadow: 0 0 0 4px rgba(242, 135, 5, 0.15);
+}
+
+.pesq-form > .fa-magnifying-glass {
+    color: #F28705;
+    font-size: 1.05rem;
+}
+
+.pesq-campo {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    box-shadow: none;
+}
+
+.pesq-campo::placeholder { color: inherit; opacity: 0.55; }
+.pesq-campo::-webkit-search-cancel-button { display: none; }
+
+.pesq-limpar {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(128, 128, 128, 0.22);
+    color: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.pesq-limpar:hover { background: rgba(128, 128, 128, 0.38); }
+.pesq-limpar[hidden] { display: none; }
+
+.pesq-atalho {
+    flex: none;
+    padding: 1px 8px;
+    border: 1px solid rgba(128, 128, 128, 0.45);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.75rem;
+    opacity: 0.6;
+}
+
+.pesq-form:focus-within .pesq-atalho { display: none; }
+
+.pesq-contador {
+    min-height: 1.3em;
+    margin: 8px 0 0;
+    text-align: center;
+    font-size: 0.82rem;
+    opacity: 0.7;
+}
+/* Aviso quando a pesquisa não encontra nada */
+.pesq-vazio {
+    max-width: 520px;
+    margin: 20px auto 40px;
+    padding: 32px 24px;
+    border: 1px dashed rgba(128, 128, 128, 0.45);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.pesq-vazio[hidden] { display: none; }
+
+.pesq-vazio-icone {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: rgba(242, 135, 5, 0.14);
+    color: #F28705;
+    font-size: 1.6rem;
+}
+
+.pesq-vazio-titulo {
+    margin: 0 0 8px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.pesq-vazio-sub {
+    margin: 0 0 6px;
+    font-size: 0.9rem;
+    opacity: 0.75;
+}
+
+.pesq-vazio-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.pesq-btn {
+    padding: 10px 20px;
+    border: 1.5px solid rgba(128, 128, 128, 0.5);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.pesq-btn:hover {
+    background: rgba(128, 128, 128, 0.15);
+    transform: translateY(-1px);
+}
+
+.pesq-btn-main {
+    border-color: #F28705;
+    background: #F28705;
+    color: #fff;
+}
+
+.pesq-btn-main:hover { background: #d97604; }
+
+/* Item escondido pela pesquisa (não mexe no style que outros scripts usam) */
+.pesq-oculto { display: none !important; }
+
+@media (max-width: 600px) {
+    .pesq-atalho { display: none; }
+}
