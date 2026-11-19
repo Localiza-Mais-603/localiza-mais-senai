@@ -321,7 +321,7 @@ def gerenciar_coordenadores():
     coordenadores = listar_todos_coordenadores()
     categorias = listar_categorias()
     return render_template(
-        "gerenciar_coordenadores.html",
+        "gerenciamento_coor.html",
         coordenadores=coordenadores,
         categorias=categorias
     )
