@@ -1,19 +1,29 @@
-
 {% if session.get('perfil') == 'coordenacao' %}
 
-<nav class="menu-coord" aria-label="Menu da coordenação">
+<!-- Botão Hambúrguer (só aparece no mobile) -->
+<button class="btn-menu-mobile" id="btnMenuMobile" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+</button>
+
+<!-- Fundo escuro ao abrir o menu no mobile -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<nav class="menu-coord" id="menuCoord" aria-label="Menu da coordenação">
 
     <div class="menu-coord__brand">
-        <h1>LOCALIZA<span>+</span></h1>
+        <div class="brand-topo">
+            <h1>LOCALIZA<span>+</span></h1>
+            <button class="btn-fechar-mobile" id="btnFecharMobile" aria-label="Fechar menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
         <p>GESTÃO DE ACHADOS E PERDIDOS</p>
     </div>
 
     <div class="menu-coord__conteudo">
-
         <span class="menu-coord__secao">MENU PRINCIPAL</span>
 
         <ul class="menu-coord__links">
-
             <li>
                 <a href="/visualizar-itens"
                     class="menu-coord__link {% if request.path == '/visualizar-itens' %}ativo{% endif %}">
@@ -21,7 +31,6 @@
                     <span>Itens</span>
                 </a>
             </li>
-
             <li>
                 <a href="/relatorios-perda"
                     class="menu-coord__link {% if request.path == '/relatorios-perda' %}ativo{% endif %}">
@@ -29,7 +38,6 @@
                     <span>Relatórios</span>
                 </a>
             </li>
-
             <li>
                 <a href="/itens_retirados"
                     class="menu-coord__link {% if request.path == '/itens_retirados' %}ativo{% endif %}">
@@ -37,7 +45,6 @@
                     <span>Retirados</span>
                 </a>
             </li>
-
             <li>
                 <a href="/itens-arquivados"
                     class="menu-coord__link {% if request.path == '/itens-arquivados' %}ativo{% endif %}">
@@ -45,7 +52,6 @@
                     <span>Arquivados</span>
                 </a>
             </li>
-
         </ul>
     </div>
 
@@ -55,5 +61,23 @@
     </div>
 
 </nav>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnAbrir = document.getElementById("btnMenuMobile");
+        const btnFechar = document.getElementById("btnFecharMobile");
+        const menu = document.getElementById("menuCoord");
+        const overlay = document.getElementById("menuOverlay");
+
+        function toggleMenu() {
+            menu.classList.toggle("aberto");
+            overlay.classList.toggle("ativo");
+        }
+
+        if (btnAbrir) btnAbrir.addEventListener("click", toggleMenu);
+        if (btnFechar) btnFechar.addEventListener("click", toggleMenu);
+        if (overlay) overlay.addEventListener("click", toggleMenu);
+    });
+</script>
 
 {% endif %}

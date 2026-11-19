@@ -525,7 +525,8 @@ div.prazo-centralizado {
 
 
 /* MODAL DE DETALHES */
-.modal-card {
+.modal-card,
+.grupo-filtro {
   position: fixed;
   top: 0;
   left: 0;
@@ -1025,31 +1026,43 @@ body.escuro .btn-perfil-pill {
   color: #f1f5f9;
 }
 
-body.escuro .btn-perfil-pill:hover,
-body.escuro .btn-perfil-pill:focus {
-  border-color: #60a5fa;
-  background-color: #27272a;
-}
+  body {
+    padding: 10px;
+  }
 
-body.escuro .perfil-avatar {
-  background-color: #2d333b;
-  color: #94a3b8;
-}
+  /* Barra superior da COORDENAÇÃO */
+  .pagina-coordenacao .navbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 6px 0 12px 40px;
+    margin-bottom: 16px;
+    min-height: 44px;
+    width: 100%;
+  }
 
-body.escuro .dropdown-menu {
-  background-color: #1e1e1e;
-  border-color: #333333;
-  color: #f1f5f9;
-}
+  /* Barra superior do ALUNO (LOCALIZA+ à esquerda + botões à direita na mesma linha) */
+  body:not(.pagina-coordenacao) .navbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 0 12px 0;
+    margin-bottom: 16px;
+    min-height: 44px;
+    width: 100%;
+  }
 
-body.escuro .dropdown-item {
-  color: #e2e8f0;
-}
+  body:not(.pagina-coordenacao) .navbar .container-fluido {
+    flex-shrink: 0;
+  }
 
-body.escuro .dropdown-item:hover {
-  background-color: #27272a;
-  color: #ffffff;
-}
+  body:not(.pagina-coordenacao) .navbar h1 {
+    font-size: 1.25rem;
+    white-space: nowrap;
+  }
 
 body.escuro .dropdown-divider {
   border-color: #333333;
