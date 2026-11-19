@@ -76,7 +76,6 @@
             </h2>
         </div>
 
-        <!-- Container dos Cards -->
         <div class="d-flex flex-wrap gap-4 justify-content-center mt-4">
 
             {% if itens %}
@@ -85,14 +84,14 @@
             <article class="card p-3 shadow-sm border card-clicavel"
                 style="width: 20rem; border-radius: 8px; cursor: pointer;"
                 data-item="{{ item.item }}"
-                data-descricao="{{ item.descricao }}"
+                data-descricao="{{ item.descricao if item.descricao else 'Sem descrição.' }}"
                 data-local="{{ item.local if item.local else 'Não informado' }}"
                 data-data="{{ item.data_encontrado | data_br if item.data_encontrado else 'Não informada' }}"
                 data-status="{{ item.status }}"
                 data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
                 data-email="{{ item.email if item.email else 'Não informado' }}"
                 data-nome="{{ nome_relator }}"
-                onclick="abrirCard(this)">
+                onclick="abrirCardRelatorio(this)">
 
                 <div class="card-corpo">
                     <h3 class="card-titulo fw-bold mb-2"
@@ -126,7 +125,9 @@
                     <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
                           method="POST"
                           class="form-acao form-excluir">
-                        <button type="submit" class="btn-excluir-card">Excluir</button>
+                        <button type="submit" class="btn-excluir-card" title="Excluir relatório">
+                            <i class="fa-solid fa-trash"></i> Excluir
+                        </button>
                     </form>
                 </div>
 
@@ -144,9 +145,9 @@
     </main>
 
     <!-- Estrutura do Modal Ampliado -->
-    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCard()">
+    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCardRelatorio()">
         <article class="card-destaque p-4" onclick="event.stopPropagation()">
-            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">×</button>
+            <button class="fechar-card" type="button" onclick="fecharCardRelatorio()" aria-label="Fechar modal">×</button>
 
             <h3 id="modalTitulo" class="mb-3 fw-bold" style="color: #024873; text-transform: uppercase;"></h3>
 
@@ -157,7 +158,7 @@
 
             <!-- Nome e e-mail no modal -->
             <div class="bg-light p-3 rounded mb-3 border">
-                <p class="mb-0"><strong>Relatado por:</strong> <span id="modalNome" class="text-primary"></span></p>
+                <p class="mb-0"><strong>Relatado por:</strong> <span id="modalNome" class="text-muted"></span></p>
                 <p class="mb-0"><strong>E-mail de contato:</strong> <span id="modalEmail" class="text-muted"></span></p>
             </div>
 
@@ -171,9 +172,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ url_for('static', filename='js/visualizar_itens.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/relatorios_perda.js') }}"></script>
+    <script src="/static/js/visualizar_itens.js"></script>
+    <script src="/static/js/excluir_Itens.js"></script>
+    <script src="/static/js/relatorio_perda.js"></script>
 </body>
 
 </html>

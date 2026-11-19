@@ -1,36 +1,48 @@
-function abrirCard(elemento) {
-    document.getElementById('modalTitulo').innerText = elemento.getAttribute('data-item') || 'Item';
-    document.getElementById('modalDescricao').innerText = elemento.getAttribute('data-descricao') || 'Sem descrição.';
-    document.getElementById('modalLocal').innerText = elemento.getAttribute('data-local') || 'Não informado';
-    document.getElementById('modalData').innerText = elemento.getAttribute('data-data') || 'Não informada';
-    document.getElementById('modalStatus').innerText = elemento.getAttribute('data-status') || '';
+function abrirCardRelatorio(elemento) {
+    const modal = document.getElementById('modalCard');
+    if (!modal) return;
 
-    document.getElementById('modalEmail').innerText = elemento.getAttribute('data-email') || 'Não informado';
-    document.getElementById('modalNome').innerText = elemento.getAttribute('data-nome') || 'Desconhecido';
+    const setTexto = (id, valor) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = valor;
+    };
 
-    const foto = elemento.getAttribute('data-foto');
+    setTexto('modalTitulo', elemento.dataset.item || 'Item');
+    setTexto('modalNome', elemento.dataset.nome || 'Desconhecido');
+    setTexto('modalEmail', elemento.dataset.email || 'Não informado');
+    setTexto('modalDescricao', elemento.dataset.descricao || 'Sem descrição.');
+    setTexto('modalLocal', elemento.dataset.local || 'Não informado');
+    setTexto('modalData', elemento.dataset.data || 'Não informada');
+    setTexto('modalStatus', elemento.dataset.status || 'Perdido');
+
+    const foto = elemento.dataset.foto;
     const imgElement = document.getElementById('modalFoto');
-    if (foto && foto !== "None" && foto !== "") {
-        imgElement.src = foto;
-        imgElement.style.display = 'block';
-    } else {
-        imgElement.style.display = 'none';
-        imgElement.src = '';
+    if (imgElement) {
+        if (foto && foto !== 'None' && foto.trim() !== '') {
+            imgElement.src = foto;
+            imgElement.style.display = 'block';
+        } else {
+            imgElement.removeAttribute('src');
+            imgElement.style.display = 'none';
+        }
     }
 
-    const modal = document.getElementById('modalCard');
+    modal.classList.add('aberto');
     modal.style.display = 'flex';
     modal.setAttribute('aria-hidden', 'false');
 }
 
-function fecharCard() {
+function fecharCardRelatorio() {
     const modal = document.getElementById('modalCard');
+    if (!modal) return;
+
+    modal.classList.remove('aberto');
     modal.style.display = 'none';
     modal.setAttribute('aria-hidden', 'true');
 }
 
 document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape') {
-        fecharCard();
+        fecharCardRelatorio();
     }
 });
