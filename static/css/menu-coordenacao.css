@@ -10,7 +10,7 @@
     background: #024873;
     font-family: "Chakra Petch", sans-serif;
     box-shadow: 3px 0 12px rgba(0,0,0,0.12);
-    z-index: 1040; /* Abaixo dos modais do Bootstrap (1055) */
+    z-index: 1000; /* Fica atrás de todos os modais (1050+) */
     transition: transform 0.3s ease;
 }
 
