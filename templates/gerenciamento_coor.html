@@ -2,102 +2,125 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerenciar Coordenadores - Localiza+</title>
-  <!-- Ícones FontAwesome usados no menu lateral -->
+
+  <!-- 1. Bootstrap 5 CSS (Necessário para o modal do menu e componentes) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- 2. FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="/static/css/menu-coordenacao.css">
-  <link rel="stylesheet" href="/static/css/gerenciar.css">
+  
+  <!-- 3. Seus CSS (sempre depois do Bootstrap para poderem sobrescrever o padrão) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/menu-coordenacao.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/gerenciar.css') }}">
 </head>
 <body>
 
-  <div class="layout-admin" style="display: flex; min-height: 100vh;">
+  <div class="layout-admin">
     
-    <!-- 1. Menu Lateral (substitua pelo caminho exato do seu arquivo de menu, ex: 'includes/menu_coord.html') -->
+    <!-- Menu Lateral -->
     {% include 'menu_coordenacao.html' %}
 
-    <!-- 2. Área Principal à Direita -->
-    <div class="conteudo-principal" style="flex: 1; display: flex; flex-direction: column;">
+    <!-- Área Principal à Direita -->
+    <div class="conteudo-principal">
       
-    <div class="itens-central">
-                <div class="form-check form-check-inline switch-group">
-                    <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
-                    <label class="form-check-label" for="switch-dark-mode">
-                        <div class="switch-darkmode">
-                            <div class="icons">
-                                <i class="fa-solid fa-sun"></i>
-                                <i class="fa-solid fa-moon"></i>
-                            </div>
-                            <div class="circle"></div>
-                        </div>
-                    </label>
-                </div>
+      <!-- Barra superior (Dark Mode) - Agora fechada corretamente! -->
+      <div class="itens-central">
+        <div class="form-check form-check-inline switch-group">
+          <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
+          <label class="form-check-label" for="switch-dark-mode">
+            <div class="switch-darkmode">
+              <div class="icons">
+                <i class="fa-solid fa-sun"></i>
+                <i class="fa-solid fa-moon"></i>
+              </div>
+              <div class="circle"></div>
+            </div>
+          </label>
+        </div>
+      </div>
 
       <!-- Conteúdo da Página -->
-      <main class="container" style="padding: 25px 35px; flex: 1;">
-    
+      <main class="container py-4">
 
         <!-- Mensagens Flash -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
-              {% set is_error = category in ['danger', 'error'] %}
-              <div class="alert alert-{{ category }}" style="padding: 12px 16px; border-radius: 8px; margin-bottom: 18px; background: {{ '#fee2e2' if is_error else '#dcfce7' }}; color: {{ '#991b1b' if is_error else '#166534' }}; border: 1px solid {{ '#fca5a5' if is_error else '#86efac' }};">
+              {% set alert_type = 'danger' if category in ['danger', 'error'] else 'success' %}
+              <div class="alert alert-{{ alert_type }} alert-dismissible fade show" role="alert">
                 {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
               </div>
             {% endfor %}
           {% endif %}
         {% endwith %}
 
         <!-- Cabeçalho da Seção -->
-        <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
           <div>
-            <h1 style="text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 5px 0;">GERENCIAR COORDENADORES</h1>
-            <p style="margin: 0; color: #64748b;">Cadastre, atualize ou remova os coordenadores do sistema.</p>
+            <h1 class="h3 fw-bold text-uppercase mb-1">Gerenciar Coordenadores</h1>
+            <p class="text-muted mb-0">Cadastre, atualize ou remova os coordenadores do sistema.</p>
           </div>
+          
+          <!-- Ajuste o href abaixo para a sua rota de cadastro, se houver -->
+          <a href="/cadastrar-coordenador" class="btn btn-primary fw-semibold">
+            <i class="fa-solid fa-plus me-1"></i> Novo Coordenador
+          </a>
         </div>
 
-
         <!-- Tabela -->
-        <div class="table-card" style="background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); overflow: hidden;">
-          <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-              <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; text-align: left;">
-                <th style="width: 50%; padding: 14px 16px;">Coordenador</th>
-                <th style="width: 25%; padding: 14px 16px;">CPF</th>
-                <th style="width: 25%; padding: 14px 16px; text-align: right;">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="tabela-corpo">
-              {% for coord in coordenadores %}
-              <tr class="linha-coord" style="border-bottom: 1px solid #f1f5f9;">
-                <td style="padding: 14px 16px;">
-                  <strong class="coord-name" style="display: block; color: #0b4a7d;">{{ coord.nome }}</strong>
-                  <span class="coord-email" style="font-size: 13px; color: #64748b;">{{ coord.email }}</span>
-                </td>
-                <td class="coord-cpf" style="padding: 14px 16px;">{{ coord.cpf }}</td>
-                <td class="actions-cell" style="padding: 14px 16px; text-align: right;">
-                  <a href="{{ url_for('editar_coor', cpf=coord.cpf) }}" class="btn-outline" style="padding: 6px 12px; border: 1px solid #0b4a7d; color: #0b4a7d; border-radius: 5px; text-decoration: none; font-size: 13px; margin-right: 6px;">Editar</a>
-                  
-                  <form action="{{ url_for('remover_coor', cpf=coord.cpf) }}" method="POST" class="form-remover" data-nome="{{ coord.nome }}" style="display:inline;">
-                    <button type="submit" class="btn-outline btn-danger" style="padding: 6px 12px; background: #dc2626; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 13px;">Remover</button>
-                  </form>
-                </td>
-              </tr>
-              {% else %}
-              <tr>
-                <td colspan="3" style="text-align: center; color: #64748b; padding: 30px;">
-                  Nenhum coordenador cadastrado.
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+        <div class="table-card card border-0 shadow-sm">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 45%;">Coordenador</th>
+                  <th style="width: 25%;">CPF</th>
+                  <th style="width: 30%; text-align: right;">Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabela-corpo">
+                {% for coord in coordenadores %}
+                <tr class="linha-coord">
+                  <td>
+                    <strong class="coord-name d-block">{{ coord.nome }}</strong>
+                    <span class="coord-email text-muted small">{{ coord.email }}</span>
+                  </td>
+                  <td class="coord-cpf">{{ coord.cpf }}</td>
+                  <td class="actions-cell text-end">
+                    <a href="{{ url_for('editar_coor', cpf=coord.cpf) }}" class="btn btn-sm btn-outline-primary me-1">
+                      <i class="fa-solid fa-pen"></i> Editar
+                    </a>
+                    
+                    <form action="{{ url_for('remover_coor', cpf=coord.cpf) }}" method="POST" class="form-remover d-inline" data-nome="{{ coord.nome }}">
+                      <button type="submit" class="btn btn-sm btn-danger">
+                        <i class="fa-solid fa-trash"></i> Remover
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="3" class="text-center text-muted py-4">
+                    Nenhum coordenador cadastrado.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
 
       </main>
     </div>
   </div>
 
+  <!-- Bootstrap 5 JS Bundle (Necessário para abrir o modal de categorias e fechar alertas) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Seu JS -->
   <script src="{{ url_for('static', filename='js/gerenciar.js') }}"></script>
   
 </body>

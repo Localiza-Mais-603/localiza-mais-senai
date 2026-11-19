@@ -309,61 +309,64 @@ def cadastro_coor():
     )
 
 
-@app.route('/gerenciar-coordenadores')
+# ===== GERENCIAR COORDENADORES =====
+
+@app.route("/gerenciar-coordenadores")
 def gerenciar_coordenadores():
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
     coordenadores = listar_todos_coordenadores()
-    return render_template('gerenciamento_coor.html', coordenadores=coordenadores)
+    categorias = listar_categorias()
+    return render_template(
+        "gerenciar_coordenadores.html",
+        coordenadores=coordenadores,
+        categorias=categorias
+    )
 
 
-@app.route('/editar-coor/<cpf>', methods=['GET', 'POST'])
+@app.route("/editar-coor/<cpf>", methods=["GET", "POST"])
 def editar_coor(cpf):
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
-    cpf = somente_numeros(cpf)
-
-    if request.method == 'POST':
-        nome = request.form['nome_completo']
-        email = request.form['email']
-        nova_senha = request.form.get('senha')
-
-        try:
-            atualizar_coor(cpf, nome, email, nova_senha)
-            flash("Dados do coordenador atualizados com sucesso!", "success")
-            return redirect(url_for('gerenciar_coordenadores'))
-        except IntegrityError:
-            flash("Este e-mail já está em uso por outro coordenador.", "danger")
-            return redirect(url_for('editar_coor', cpf=cpf))
-
     coordenador = buscar_coor_por_cpf(cpf)
+
     if not coordenador:
         flash("Coordenador não encontrado.", "danger")
-        return redirect(url_for('gerenciar_coordenadores'))
+        return redirect(url_for("gerenciar_coordenadores"))
 
-    return render_template('editar_coordenacao.html', coordenador=coordenador)
+    if request.method == "POST":
+        nome = request.form.get("nome", "").strip()
+        email = request.form.get("email", "").strip()
+        senha = request.form.get("senha", "").strip()
+
+        try:
+            atualizar_coor(cpf, nome, email, senha if senha else None)
+            flash("Coordenador atualizado com sucesso!", "success")
+            return redirect(url_for("gerenciar_coordenadores"))
+        except IntegrityError:
+            flash("Este e-mail já está em uso por outro coordenador.", "danger")
+
+    return render_template(
+        "editar_coordenador.html",
+        coordenador=coordenador,
+        categorias=listar_categorias()
+    )
 
 
-@app.route('/remover-coor/<cpf>', methods=['POST'])
+@app.route("/remover-coor/<cpf>", methods=["POST"])
 def remover_coor(cpf):
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
 
-    cpf = somente_numeros(cpf)
-    cpf_logado = somente_numeros(session.get("cpf", ""))
+    try:
+        deletar_coor(cpf)
+        flash("Coordenador removido com sucesso!", "success")
+    except IntegrityError:
+        flash("Não é possível remover este coordenador pois existem itens vinculados a ele.", "danger")
 
-    if cpf_logado == cpf:
-        flash("Você não pode remover o seu próprio usuário enquanto está logado.", "danger")
-        return redirect(url_for('gerenciar_coordenadores'))
-
-    if deletar_coor(cpf):
-        flash("Coordenador removido com sucesso! Os itens vinculados foram mantidos.", "success")
-    else:
-        flash("Coordenador não encontrado ou já removido.", "danger")
-
-    return redirect(url_for('gerenciar_coordenadores'))
+    return redirect(url_for("gerenciar_coordenadores"))
 
 
 @app.route("/editar-item-cadastrado")
@@ -391,9 +394,6 @@ def visualizar_perfil():
         "visualizar_perfil.html",
         usuario=usuario_atualizado
     )
-
-
-@app.route
 
 
 # ===== VISUALIZAR ITENS =====
@@ -562,9 +562,19 @@ def registrar_itens_coordenacao():
             os.path.join(pasta_destino, nome_foto)
         )
 
-    cpf_coordenador = session.get(
-        "usuario", {}
-    ).get("cpf")
+    usuario_sessao = session.get("usuario")
+
+    cpf_coordenador = (
+        usuario_sessao.get("cpf")
+        or usuario_sessao.get("CPF")
+        or usuario_sessao.get("cpf_coordenador")
+        if isinstance(usuario_sessao, dict)
+        else (usuario_sessao[0] if usuario_sessao else None)
+    )
+
+    if not cpf_coordenador:
+        flash("Sessão inválida: CPF do coordenador não encontrado. Faça login novamente.", "danger")
+        return redirect(url_for("pag_login_coordenacao"))
 
     cadastrar_item(
         item=item,
@@ -735,7 +745,7 @@ def excluir_categoria_rota(id_categoria):
 
     flash("Categoria excluída com sucesso!", "success")
 
-    return redirect(url_for("visualizar_itens"))
+    return redirect(request.referrer or url_for("visualizar_itens"))
 
 
 # ===== RECUPERAÇÃO DE SENHA =====
@@ -910,7 +920,8 @@ def itens_arquivados():
     return render_template(
         "arquivar_itens_coor.html",
         itens=arquivados,
-        usuario=usuario_atualizado
+        usuario=usuario_atualizado,
+        categorias=listar_categorias()
     )
 
 
@@ -984,7 +995,8 @@ def relatorios_perda():
     return render_template(
         "relatorios_perda.html",
         itens=itens_relatados,
-        usuario=usuario_atualizado
+        usuario=usuario_atualizado,
+        categorias=listar_categorias()
     )
 
 
@@ -1229,7 +1241,8 @@ def itens_retirados():
     return render_template(
         "itens_retirados.html",
         itens=retirados,
-        usuario=usuario_atualizado
+        usuario=usuario_atualizado,
+        categorias=listar_categorias()
     )
 
 

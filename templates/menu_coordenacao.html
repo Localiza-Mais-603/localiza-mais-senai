@@ -1,4 +1,3 @@
-
 {% if session.get('perfil') == 'coordenacao' %}
 
 <nav class="menu-coord" aria-label="Menu da coordenação">
@@ -46,7 +45,17 @@
                 </a>
             </li>
 
-             <li>
+            <li>
+                <a href="#" 
+                   class="menu-coord__link" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#modalCategorias">
+                    <i class="fa-solid fa-tags"></i>
+                    <span>Categorias</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="/gerenciar-coordenadores"
                     class="menu-coord__link {% if request.path == '/gerenciar-coordenadores' %}ativo{% endif %}">
                     <i class="fa-solid fa-box-archive"></i>
@@ -63,5 +72,57 @@
     </div>
 
 </nav>
+
+<div class="modal fade" id="modalCategorias" tabindex="-1" aria-labelledby="tituloCategorias" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title fs-5 text-uppercase fw-bold" id="tituloCategorias">
+                    Gerenciar categorias
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="text-muted small mb-3">
+                    Ao excluir uma categoria, os itens dela continuam cadastrados, só ficam sem categoria.
+                </p>
+
+                {% if categorias %}
+                <ul class="list-group">
+                    {% for categoria in categorias %}
+                    {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
+                    {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
+
+                    <li class="list-group-item d-flex align-items-center justify-content-between">
+                        <span>{{ cat_nome }}</span>
+
+                        <form action="{{ url_for('excluir_categoria_rota', id_categoria=cat_id) }}"
+                            method="POST" class="form-excluir-categoria" data-nome="{{ cat_nome }}">
+                            <button type="submit" class="btn btn-sm btn-danger fw-bold">
+                                Excluir
+                            </button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-center text-muted mb-0">Nenhuma categoria cadastrada.</p>
+                {% endif %}
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Fechar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/visualizar_itens_extra.js"></script>
+
 
 {% endif %}
