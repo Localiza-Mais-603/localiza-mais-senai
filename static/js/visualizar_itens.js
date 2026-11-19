@@ -1,17 +1,21 @@
 function AlterarTema() {
-    document.body.classList.toggle("escuro");
+    const switchDark = document.getElementById("switch-dark-mode");
+    const modoEscuroAtivo = switchDark
+        ? switchDark.checked
+        : !document.body.classList.contains("escuro");
 
-    const modoEscuroAtivo = document.body.classList.contains("escuro");
+    document.body.classList.toggle("escuro", modoEscuroAtivo);
     localStorage.setItem("tema", modoEscuroAtivo ? "escuro" : "claro");
 }
 
 (function carregarTemaSalvo() {
     const temaSalvo = localStorage.getItem("tema");
+    const switchDark = document.getElementById("switch-dark-mode");
+    const ativarEscuro = temaSalvo === "escuro";
 
-    if (temaSalvo === "escuro") {
-        document.body.classList.add("escuro");
-    } else if (temaSalvo === "claro") {
-        document.body.classList.remove("escuro");
+    document.body.classList.toggle("escuro", ativarEscuro);
+    if (switchDark) {
+        switchDark.checked = ativarEscuro;
     }
 })();
 
@@ -143,7 +147,12 @@ function abrirModalEdicao(botao, idItem) {
     document.getElementById("editItem").value = card.dataset.item || "";
     document.getElementById("editDescricao").value = card.dataset.descricao || "";
     document.getElementById("editLocal").value = card.dataset.local !== "None" ? card.dataset.local : "";
-    document.getElementById("editData").value = card.dataset.data !== "None" ? card.dataset.data : "";
+
+    let dataValor = card.dataset.data && card.dataset.data !== "None" ? card.dataset.data : "";
+    if (dataValor.includes("/")) {
+        dataValor = dataValor.split("/").reverse().join("-");
+    }
+    document.getElementById("editData").value = dataValor;
 
     document.getElementById("formEdicao").action = `/atualizar-item/${idItem}`;
 

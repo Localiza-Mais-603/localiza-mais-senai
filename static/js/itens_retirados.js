@@ -1,3 +1,15 @@
+function formatarDataBrJS(valor) {
+    if (!valor || valor === 'None' || valor === 'Não informada') {
+        return valor || '';
+    }
+    const texto = String(valor).trim();
+    if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
+        const [ano, mes, dia] = texto.slice(0, 10).split('-');
+        return `${dia}/${mes}/${ano}`;
+    }
+    return texto;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     // 1. Extensão da função abrirCard para preencher dados da retirada
     const originalAbrirCard = window.abrirCard;
@@ -26,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('blocoLocal').style.display = local ? '' : 'none';
         document.getElementById('modalLocal').textContent = local;
 
-        const dataEnc = el.dataset.data;
+        const dataEnc = formatarDataBrJS(el.dataset.data);
         document.getElementById('blocoData').style.display = dataEnc ? '' : 'none';
         document.getElementById('modalData').textContent = dataEnc;
 

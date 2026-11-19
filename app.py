@@ -44,6 +44,8 @@ app = Flask(__name__)
 app.secret_key = "chciclete"
 
 
+
+
 # ===== CONFIGURAÇÃO DE E-MAIL =====
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -1254,6 +1256,21 @@ def excluir_meu_relato(id_item):
         )
 
     return redirect(url_for('meu_historico'))
+
+@app.template_filter('data_br')
+def formatar_data_br(valor):
+    """Converte datas (date, datetime ou string YYYY-MM-DD) para DD/MM/AAAA."""
+    if not valor:
+        return ''
+    if isinstance(valor, (date, datetime)):
+        return valor.strftime('%d/%m/%Y')
+    texto = str(valor).strip()
+    if len(texto) >= 10 and texto[4] == '-' and texto[7] == '-':
+        try:
+            return datetime.strptime(texto[:10], '%Y-%m-%d').strftime('%d/%m/%Y')
+        except ValueError:
+            pass
+    return texto
 
 
 # ===== INICIAR SERVIDOR =====
