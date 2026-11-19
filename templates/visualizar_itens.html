@@ -267,7 +267,7 @@
                     <article class="card" style="width: 20rem;" data-categoria="{{ item.id_categoria }}"
                         data-item="{{ item.item }}" data-descricao="{{ item.descricao if item.descricao else '' }}"
                         data-local="{{ item.local if item.local else '' }}"
-                        data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
+                        data-data="{{ item.data_encontrado | data_br if item.data_encontrado else '' }}"
                         data-status="{{ item.status }}"
                         data-publicado="{{ item.publicado_nome if item.publicado_nome else '' }}"
                         data-destino="{{ item.destino_objeto if item.destino_objeto else '' }}"
@@ -395,9 +395,8 @@
                 </div>
 
                 <div class="campo-grupo">
-                    <label for="emailRetirante" class="rotulo">E-mail do retirante *</label>
-                    <input type="email" id="emailRetirante" name="email_retirante" class="entrada-texto"
-                        placeholder="Ex: joao@email.com">
+                    <label for="emailRetirante" class="rotulo">E-mail: *</label>
+                    <input type="email" id="emailRetirante" name="email_retirante" class="entrada-texto" placeholder="Ex: joao@email.com">
                 </div>
 
                 <div class="grupo-botoes-modal">
@@ -423,9 +422,8 @@
                 class="form-modal-custom">
 
                 <div class="campo-grupo">
-                    <label for="cadItem" class="rotulo">Nome do item *</label>
-                    <input type="text" id="cadItem" name="item" class="entrada-texto" maxlength="50" required
-                        placeholder="Ex: Chaveiro, Carteira...">
+                    <label for="cadItem" class="rotulo">Item *</label>
+                    <input type="text" id="cadItem" name="item" class="entrada-texto" maxlength="50" required placeholder="Ex: Chaveiro, Carteira...">
                 </div>
 
                 <div class="campo-grupo">
@@ -448,7 +446,7 @@
                 </div>
 
                 <div class="campo-grupo">
-                    <label for="cadData" class="rotulo">Data em que o item chegou *</label>
+                    <label for="cadData" class="rotulo">Data de entrada *</label>
                     <input type="date" id="cadData" name="data" class="entrada-texto" required>
                 </div>
 
@@ -459,8 +457,8 @@
                 </div>
 
                 <div class="grupo-botoes-modal">
-                    <button type="button" class="btn-modal-cancelar" id="btnCancelarCadastrar">Cancelar</button>
-                    <button type="submit" class="btn-modal-submit">Salvar Item</button>
+                    <button type="button" class="btn-modal-cancelar" id="btnCancelarCadastrar">CANCELAR</button>
+                    <button type="submit" class="btn-modal-submit">CADASTRAR</button>
                 </div>
 
             </form>
@@ -560,13 +558,35 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="perdItem" class="form-label">Nome do item</label>
-                        <input type="text" id="perdItem" name="item" class="form-control" maxlength="50"
+                        <label for="perdItem" class="form-label">Item *</label>
+                        <input type="text" id="perdItem" name="item"
+                            class="form-control" maxlength="50"
                             placeholder="Ex: Garrafa azul" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="perdCategoria" class="form-label">Categoria</label>
+                        <label for="perdDescricao" class="form-label">Detalhes e características *</label>
+                        <textarea id="perdDescricao" name="descricao"
+                            class="form-control" rows="3" maxlength="255"
+                            placeholder="Cor, marca, características..." required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="perdOnde" class="form-label">Local </label>
+                        <input type="text" id="perdOnde" name="local"
+                            class="form-control" maxlength="50"
+                            placeholder="Ex: Bloco B, Cantina">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="perdQuando" class="form-label">
+                            Data  <span class="text-muted fw-normal">(opcional)</span>
+                        </label>
+                        <input type="date" id="perdQuando" name="data" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="perdCategoria" class="form-label">Categoria *</label>
 
                         <select id="perdCategoria" name="categoria_id" class="form-select select-categoria" required>
 
@@ -590,25 +610,10 @@
                         </button>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="perdOnde" class="form-label">Onde perdeu</label>
-                        <input type="text" id="perdOnde" name="local" class="form-control" maxlength="50"
-                            placeholder="Ex: Bloco B, Cantina">
-                    </div>
+                    
 
                     <div class="mb-3">
-                        <label for="perdQuando" class="form-label">Quando perdeu</label>
-                        <input type="date" id="perdQuando" name="data" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="perdDescricao" class="form-label">Descrição</label>
-                        <textarea id="perdDescricao" name="descricao" class="form-control" rows="3" maxlength="255"
-                            placeholder="Cor, marca, características..." required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="perdFoto" class="form-label">Foto (opcional)</label>
+                        <label for="perdFoto" class="form-label">Foto de referência <span class="text-muted fw-normal">(opcional)</span></label>
 
                         <input type="file" id="perdFoto" name="foto" class="form-control"
                             accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp">
@@ -622,13 +627,14 @@
 
                 <div class="modal-footer">
 
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Cancelar
+                    <button type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                        CANCELAR
                     </button>
 
                     <button type="submit" class="btn text-white text-uppercase fw-bold"
                         style="background-color:  #17704A;">
-                        Relatar item
+                        CADASTRAR
                     </button>
 
                 </div>
@@ -655,30 +661,34 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="encItemNome" class="form-label">Qual é o objeto</label>
-                        <input type="text" id="encItemNome" name="item" class="form-control" maxlength="50"
+                        <label for="encItemNome" class="form-label">Item *</label>
+                        <input type="text" id="encItemNome" name="item"
+                            class="form-control" maxlength="50"
                             placeholder="Ex: Chave azul, Garrafa preta" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encDescricao" class="form-label">Descrição do objeto</label>
-                        <textarea id="encDescricao" name="descricao" class="form-control" rows="2" maxlength="255"
+                        <label for="encDescricao" class="form-label">Detalhes e características *</label>
+                        <textarea id="encDescricao" name="descricao"
+                            class="form-control" rows="2" maxlength="255"
                             placeholder="Cor, marca, características..." required></textarea>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encOnde" class="form-label">Onde encontrou</label>
-                        <input type="text" id="encOnde" name="local" class="form-control" maxlength="50"
+                        <label for="encOnde" class="form-label">Local *</label>
+                        <input type="text" id="encOnde" name="local"
+                            class="form-control" maxlength="50"
                             placeholder="Ex: Bloco B, Sala 204, Cantina" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encQuando" class="form-label">Quando encontrou</label>
-                        <input type="date" id="encQuando" name="data" class="form-control" required>
+                        <label for="encQuando" class="form-label">Data *</label>
+                        <input type="date" id="encQuando" name="data"
+                            class="form-control" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encCategoria" class="form-label">O que é</label>
+                        <label for="encCategoria" class="form-label">Categoria *</label>
 
                         <select id="encCategoria" name="id_categoria" class="form-select select-categoria" required>
 
@@ -702,47 +712,18 @@
                         </button>
                     </div>
 
-                    <fieldset>
-                        <legend class="form-label fs-6">O que fez com o objeto</legend>
-
-                        {% for destino in destinos %}
-                        {% set dest_id = destino.id_destino if destino.id_destino is defined else (destino.id if
-                        destino.id is defined else destino[0]) %}
-                        {% set dest_txt = destino.descricao if destino.descricao is defined else destino[1] %}
-
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="destino" id="dest{{ dest_id }}"
-                                value="{{ dest_txt }}" required>
-
-                            <label class="form-check-label" for="dest{{ dest_id }}">
-                                {{ dest_txt }}
-                            </label>
-                        </div>
-                        {% endfor %}
-
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="destino" id="destOutro" value="outro"
-                                required>
-
-                            <label class="form-check-label" for="destOutro">Outro</label>
-                        </div>
-
-                        <input type="text" id="encOutro" name="destino_outro" class="form-control d-none"
-                            maxlength="140" placeholder="Escreva o que você fez com o objeto"
-                            aria-label="O que você fez com o objeto">
-                    </fieldset>
-
                 </div>
 
                 <div class="modal-footer">
 
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Cancelar
+                    <button type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                        CANCELAR
                     </button>
 
                     <button type="submit" class="btn text-white text-uppercase fw-bold"
                         style="background-color:  #17704A;">
-                        Publicar achado
+                        PUBLICAR
                     </button>
 
                 </div>
@@ -843,6 +824,7 @@
     <div id="flash-messages" style="display: none;"
         data-messages='{{ get_flashed_messages(with_categories=true) | tojson }}'>
     </div>
+
 
     <!-- SCRIPTS EXTERNOS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

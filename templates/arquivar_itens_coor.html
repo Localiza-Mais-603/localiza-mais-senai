@@ -8,18 +8,14 @@
     <title>Itens Arquivados - LOCALIZA+</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/visualizar_itens.css">
-    <link rel="stylesheet" href="/static/css/menu-coordenacao.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visualizar_itens.css') }}">
+    <link rel="stylesheet" href="/static/css/arquivar_itens.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu-coordenacao.css') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap"
-
-        rel="stylesheet">
-
-    
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body class="{% if session.get('perfil') == 'coordenacao' %}pagina-coordenacao{% endif %}">
@@ -45,17 +41,14 @@
                             <div class="circle"></div>
                         </div>
                     </label>
-               </div>
+                </div>
 
                 {% if usuario %}
-
                 <div class="dropdown">
 
                     <button class="botao-formulario dropdown-toggle" type="button" id="dropdownMenuPerfil"
                         data-bs-toggle="dropdown" aria-expanded="false">
-
                         {{ usuario.nome }}
-
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
@@ -65,7 +58,7 @@
                                 class="rounded-circle mb-2" style="width: 50px; height: 50px;">
                             <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
                             <small class="text-muted">{{ usuario.email }}</small>
-                        </li>   <!-- o cabeçalho fecha aqui -->
+                        </li>
 
                         <li>
                             <hr class="dropdown-divider">
@@ -75,11 +68,10 @@
                         <li>
                             <a class="dropdown-item" href="{{ url_for('meu_historico') }}">Meu histórico</a>
                         </li>
-                        {% endif %}
-
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                        {% endif %}
 
                         <li>
                             <a class="dropdown-item text-danger" href="/logout">
@@ -90,7 +82,6 @@
                     </ul>
 
                 </div>
-
                 {% endif %}
 
             </div>
@@ -100,13 +91,12 @@
     <!-- MENU DA COORDENAÇÃO -->
     {% include 'menu_coordenacao.html' %}
 
-
     <!-- CONTEÚDO PRINCIPAL -->
     <main>
 
-       <div class="container-fluido px-4 my-2">
+        <div class="container-fluido px-4 my-2">
 
-            <a href="/visualizar-itens" class="btn-abrir mb-3 text-decoration-none d-inline-block" style="margin-left: 10px;">
+            <a href="{{ url_for('visualizar_itens') }}" class="btn-abrir mb-3 text-decoration-none d-inline-block" style="margin-left: 10px;">
                 ← Voltar
             </a>
 
@@ -125,57 +115,57 @@
 
                 <li style="list-style: none;">
 
-                  <article class="card"
-                    style="width: 20rem;"
-                    data-categoria="{{ item.id_categoria }}"
-                    data-item="{{ item.item }}"
-                    data-descricao="{{ item.descricao if item.descricao else '' }}"
-                    data-local="{{ item.local if item.local else '' }}"
-                    data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
-                    data-status="{{ item.status }}"
-                    data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
-                    data-coordenacao="{{ 'true' if item.cpf_coordenador else 'false' }}"
-                    onclick="abrirCard(this)">
+                    <article class="card"
+                        style="width: 20rem;"
+                        data-categoria="{{ item.id_categoria }}"
+                        data-item="{{ item.item }}"
+                        data-descricao="{{ item.descricao if item.descricao else '' }}"
+                        data-local="{{ item.local if item.local else '' }}"
+                        data-data="{{ item.data_encontrado | data_br if item.data_encontrado else '' }}"
+                        data-status="{{ item.status }}"
+                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                        data-coordenacao="{{ 'true' if item.cpf_coordenador else 'false' }}"
+                        onclick="abrirCard(this)">
 
-                    <div class="card-corpo">
-                        <h3 class="card-titulo">
-                            {{ item.item }}
-                        </h3>
+                        <div class="card-corpo">
+                            <h3 class="card-titulo">
+                                {{ item.item }}
+                            </h3>
 
-                        <p class="card-text">
-                            {{ item.descricao }}
-                        </p>
-                    </div>
+                            <p class="card-text">
+                                {{ item.descricao }}
+                            </p>
+                        </div>
 
-                    {% if session.get('perfil') == 'coordenacao' %}
-                    <div class="card-botoes-acao" onclick="event.stopPropagation()">
+                        {% if session.get('perfil') == 'coordenacao' %}
+                        <div class="card-botoes-acao" onclick="event.stopPropagation()">
 
-                        <!-- FORMULÁRIO PARA DESARQUIVAR -->
-                        <form action="{{ url_for('desarquivar_item', id_item=item.id_item) }}"
-                            method="POST"
-                            class="form-acao form-desarquivar"
-                            onclick="event.stopPropagation()">
+                            <!-- FORMULÁRIO PARA DESARQUIVAR -->
+                            <form action="{{ url_for('desarquivar_item', id_item=item.id_item) }}"
+                                method="POST"
+                                class="form-acao form-desarquivar"
+                                onclick="event.stopPropagation()">
 
-                            <button type="submit" class="btn-editar-card">
-                                Desarquivar
-                            </button>
-                        </form>
+                                <button type="submit" class="btn-editar-card" title="Desarquivar item">
+                                    <i class="fa-solid fa-box-open"></i> DESARQUIVAR
+                                </button>
+                            </form>
 
-                        <!-- FORMULÁRIO PARA EXCLUIR -->
-                        <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
-                            method="POST"
-                            class="form-acao form-excluir"
-                            onclick="event.stopPropagation()">
+                            <!-- FORMULÁRIO PARA EXCLUIR -->
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
+                                method="POST"
+                                class="form-acao form-excluir"
+                                onclick="event.stopPropagation()">
 
-                            <button type="submit" class="btn-excluir-card">
-                                Excluir
-                            </button>
-                        </form>
+                                <button type="submit" class="btn-excluir-card" title="Excluir item">
+                                    <i class="fa-solid fa-trash"></i> EXCLUIR
+                                </button>
+                            </form>
 
-                    </div>
-                    {% endif %}
+                        </div>
+                        {% endif %}
 
-                </article>
+                    </article>
 
                 </li>
 
@@ -197,51 +187,50 @@
 
     </main>
 
-
     <!-- MODAL DE DETALHES -->
     <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCard()">
 
-    <article class="card-destaque" onclick="event.stopPropagation()">
+        <article class="card-destaque" onclick="event.stopPropagation()">
 
-        <button class="fechar-card" type="button" id="btnFecharCard" onclick="fecharCard()" aria-label="Fechar modal">
-            X
-        </button>
+            <button class="fechar-card" type="button" id="btnFecharCard" onclick="fecharCard()" aria-label="Fechar modal">
+                X
+            </button>
 
-        <h2 id="modalTitulo"></h2>
+            <h2 id="modalTitulo"></h2>
 
-        <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none;">
+            <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none;">
 
-        <p id="blocoDescricao">
-            <strong>Descrição:</strong>
-            <span id="modalDescricao"></span>
-        </p>
+            <p id="blocoDescricao">
+                <strong>Descrição:</strong>
+                <span id="modalDescricao"></span>
+            </p>
 
-        <p id="blocoLocal">
-            <strong>Local:</strong>
-            <span id="modalLocal"></span>
-        </p>
+            <p id="blocoLocal">
+                <strong>Local:</strong>
+                <span id="modalLocal"></span>
+            </p>
 
-        <p>
-            <strong>Data:</strong>
-            <span id="modalData"></span>
-        </p>
+            <p>
+                <strong>Data:</strong>
+                <span id="modalData"></span>
+            </p>
 
-        <p id="blocoStatus">
-            <strong>Status:</strong>
-            <span id="modalStatus"></span>
-        </p>
+            <p id="blocoStatus">
+                <strong>Status:</strong>
+                <span id="modalStatus"></span>
+            </p>
 
-    </article>
+        </article>
 
-</div>
-
+    </div>
 
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="/static/js/visualizar_itens.js"></script>
-    <script src="/static/js/confirmaacoes.js"></script>
+    <script src="{{ url_for('static', filename='js/visualizar_itens.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/confirmaacoes.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
 
 </body>
 
