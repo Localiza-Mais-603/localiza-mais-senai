@@ -143,7 +143,12 @@ function abrirModalEdicao(botao, idItem) {
     document.getElementById("editItem").value = card.dataset.item || "";
     document.getElementById("editDescricao").value = card.dataset.descricao || "";
     document.getElementById("editLocal").value = card.dataset.local !== "None" ? card.dataset.local : "";
-    document.getElementById("editData").value = card.dataset.data !== "None" ? card.dataset.data : "";
+
+    let dataValor = card.dataset.data && card.dataset.data !== "None" ? card.dataset.data : "";
+    if (dataValor.includes("/")) {
+        dataValor = dataValor.split("/").reverse().join("-");
+    }
+    document.getElementById("editData").value = dataValor;
 
     document.getElementById("formEdicao").action = `/atualizar-item/${idItem}`;
 

@@ -105,11 +105,6 @@
                             </a>
                         </li>
 
-
-                        {% elif session.get('perfil') == 'coordenacao' %}
-
-                        
-
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -246,7 +241,7 @@
                         data-item="{{ item.item }}"
                         data-descricao="{{ item.descricao if item.descricao else '' }}"
                         data-local="{{ item.local if item.local else '' }}"
-                        data-data="{{ item.data_encontrado if item.data_encontrado else '' }}"
+                        data-data="{{ item.data_encontrado | data_br if item.data_encontrado else '' }}"
                         data-status="{{ item.status }}"
                         data-publicado="{{ item.publicado_nome if item.publicado_nome else '' }}"
                         data-destino="{{ item.destino_objeto if item.destino_objeto else '' }}"
@@ -794,7 +789,6 @@
     </div>
     {% endif %}
 
-
     <!-- MODAL DE FILTROS -->
     <div class="grupo-filtro" id="janelaFiltro" role="dialog" aria-hidden="true">
 
@@ -837,9 +831,6 @@
     <div id="flash-messages" style="display: none;"
         data-messages='{{ get_flashed_messages(with_categories=true) | tojson }}'>
     </div>
-
-
-  
 
 
     <!-- SCRIPTS EXTERNOS -->
