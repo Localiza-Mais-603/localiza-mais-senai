@@ -1,34 +1,43 @@
 {% if session.get('perfil') == 'coordenacao' %}
 
-<nav class="menu-coord" aria-label="Menu da coordenação">
+<!-- Botão Hambúrguer (só aparece no mobile) -->
+<button class="btn-menu-mobile" id="btnMenuMobile" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+</button>
+
+<!-- Fundo escuro ao abrir o menu no mobile -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<nav class="menu-coord" id="menuCoord" aria-label="Menu da coordenação">
 
     <div class="menu-coord__brand">
-        <h1>LOCALIZA<span>+</span></h1>
+        <div class="brand-topo">
+            <h1>LOCALIZA<span>+</span></h1>
+            <button class="btn-fechar-mobile" id="btnFecharMobile" aria-label="Fechar menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
         <p>GESTÃO DE ACHADOS E PERDIDOS</p>
     </div>
 
     <div class="menu-coord__conteudo">
-
         <span class="menu-coord__secao">MENU PRINCIPAL</span>
 
         <ul class="menu-coord__links">
-
             <li>
                 <a href="/visualizar-itens"
                     class="menu-coord__link {% if request.path == '/visualizar-itens' %}ativo{% endif %}">
                     <i class="fa-solid fa-box-open"></i>
-                    <span>Itens</span>
+                    <span>Itens ativos</span>
                 </a>
             </li>
-
             <li>
                 <a href="/relatorios-perda"
                     class="menu-coord__link {% if request.path == '/relatorios-perda' %}ativo{% endif %}">
                     <i class="fa-solid fa-file-lines"></i>
-                    <span>Relatórios</span>
+                    <span>Itens perdidos</span>
                 </a>
             </li>
-
             <li>
                 <a href="/itens_retirados"
                     class="menu-coord__link {% if request.path == '/itens_retirados' %}ativo{% endif %}">
@@ -36,7 +45,6 @@
                     <span>Retirados</span>
                 </a>
             </li>
-
             <li>
                 <a href="/itens-arquivados"
                     class="menu-coord__link {% if request.path == '/itens-arquivados' %}ativo{% endif %}">
@@ -44,25 +52,6 @@
                     <span>Arquivados</span>
                 </a>
             </li>
-
-            <li>
-                <a href="#" 
-                   class="menu-coord__link" 
-                   data-bs-toggle="modal" 
-                   data-bs-target="#modalCategorias">
-                    <i class="fa-solid fa-tags"></i>
-                    <span>Categorias</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="/gerenciar-coordenadores"
-                    class="menu-coord__link {% if request.path == '/gerenciar-coordenadores' %}ativo{% endif %}">
-                    <i class="fa-solid fa-box-archive"></i>
-                    <span>Gerenciar Coordenadores</span>
-                </a>
-            </li>
-
         </ul>
     </div>
 
@@ -73,56 +62,22 @@
 
 </nav>
 
-<div class="modal fade" id="modalCategorias" tabindex="-1" aria-labelledby="tituloCategorias" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnAbrir = document.getElementById("btnMenuMobile");
+        const btnFechar = document.getElementById("btnFecharMobile");
+        const menu = document.getElementById("menuCoord");
+        const overlay = document.getElementById("menuOverlay");
 
-            <div class="modal-header">
-                <h2 class="modal-title fs-5 text-uppercase fw-bold" id="tituloCategorias">
-                    Gerenciar categorias
-                </h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
+        function toggleMenu() {
+            menu.classList.toggle("aberto");
+            overlay.classList.toggle("ativo");
+        }
 
-            <div class="modal-body">
-                <p class="text-muted small mb-3">
-                    Ao excluir uma categoria, os itens dela continuam cadastrados, só ficam sem categoria.
-                </p>
-
-                {% if categorias %}
-                <ul class="list-group">
-                    {% for categoria in categorias %}
-                    {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
-                    {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
-
-                    <li class="list-group-item d-flex align-items-center justify-content-between">
-                        <span>{{ cat_nome }}</span>
-
-                        <form action="{{ url_for('excluir_categoria_rota', id_categoria=cat_id) }}"
-                            method="POST" class="form-excluir-categoria" data-nome="{{ cat_nome }}">
-                            <button type="submit" class="btn btn-sm btn-danger fw-bold">
-                                Excluir
-                            </button>
-                        </form>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p class="text-center text-muted mb-0">Nenhuma categoria cadastrada.</p>
-                {% endif %}
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Fechar
-                </button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<script src="/static/js/visualizar_itens_extra.js"></script>
-
+        if (btnAbrir) btnAbrir.addEventListener("click", toggleMenu);
+        if (btnFechar) btnFechar.addEventListener("click", toggleMenu);
+        if (overlay) overlay.addEventListener("click", toggleMenu);
+    });
+</script>
 
 {% endif %}

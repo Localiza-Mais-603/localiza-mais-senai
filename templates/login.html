@@ -45,7 +45,7 @@
                         <label class="form-check-label" for="switch-dark-mode">
                             <div class="switch-darkmode">
                                 <div class="icons">
-                                    <i class="fa-solid fa-lightbulb"></i>
+                                    <i class="fa-solid fa-sun"></i>
                                     <i class="fa-solid fa-moon"></i>
                                 </div>
                                 <div class="circle"></div>
@@ -58,28 +58,32 @@
             <!-- Navegação por Abas -->
             <nav class="container-botoes" aria-label="Seleção de tipo de perfil">
                 <div class="buttontab">
-                    <button class="tab-buttons active" onclick="ButtonsTap('usuario')" type="button">Usuário</button>
-                    <button class="tab-buttons" onclick="ButtonsTap('apoio')" type="button">Setor de Apoio</button>
+                    <button class="tab-buttons {{ 'active' if tipo != 'apoio' else '' }}" onclick="ButtonsTap('usuario')" type="button">Usuário</button>
+                    <button class="tab-buttons {{ 'active' if tipo == 'apoio' else '' }}" onclick="ButtonsTap('apoio')" type="button">Setor de Apoio</button>
                 </div>
             </nav>
 
             <!-- Conteúdo Principal -->
             <main class="container-login">
 
-                <!-- Form Apoio / Coordenação (Inativo por padrão, só abre se ativado) -->
-                <section id="form-apoio" class="container-form" aria-labelledby="titulo-apoio">
+                <!-- Form Apoio / Coordenação -->
+                <section id="form-apoio" class="container-form {{ 'active' if tipo == 'apoio' else '' }}" aria-labelledby="titulo-apoio">
                     <header class="container-header">
                         <h1>Entrar</h1>
                         <h4 id="titulo-apoio">PERFIL | SETOR DE APOIO</h4>
                     </header>
 
-                    {% if erro and tipo == 'apoio' %}
-                        <p class="erro-mensagem">{{ erro }}</p>
-                    {% endif %}
+                    {% with erros_apoio = get_flashed_messages(category_filter=['erro_apoio']) %}
+                        {% if erros_apoio %}
+                            <p class="erro-mensagem" role="alert">
+                                <i class="fa-solid fa-circle-exclamation"></i> {{ erros_apoio[0] }}
+                            </p>
+                        {% endif %}
+                    {% endwith %}
 
                     <form action="{{ url_for('pag_login_coordenacao') }}" method="post">
                         <label for="cpf">CPF:</label>
-                        <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..." required>
+                        <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..." value="{{ cpf_digitado or '' }}" required>
 
                         <label for="senha-apoio">Senha:</label>
                         <input id="senha-apoio" name="senha" type="password" placeholder="Digite sua senha..." required>
@@ -90,20 +94,30 @@
                     </form>
                 </section>
 
-                <!-- Form Usuário / Aluno (Ativo por padrão) -->
-                <section id="form-usuario" class="container-form active" aria-labelledby="titulo-usuario">
+                <!-- Form Usuário / Aluno -->
+                <section id="form-usuario" class="container-form {{ 'active' if tipo != 'apoio' else '' }}" aria-labelledby="titulo-usuario">
                     <header class="container-header">
                         <h1>Entrar</h1>
                         <h4 id="titulo-usuario">PERFIL | ALUNO</h4>
                     </header>
 
-                    {% if erro and tipo == 'aluno' %}
-                        <p class="erro-mensagem">{{ erro }}</p>
+                    {% with erros_usuario = get_flashed_messages(category_filter=['erro_usuario']) %}
+                        {% if erros_usuario %}
+                            <p class="erro-mensagem" role="alert">
+                                <i class="fa-solid fa-circle-exclamation"></i> {{ erros_usuario[0] }}
+                            </p>
+                        {% endif %}
+                    {% endwith %}
+
+                    {% if sucesso %}
+                        <p class="sucesso-mensagem" role="status">
+                            <i class="fa-solid fa-circle-check"></i> {{ sucesso }}
+                        </p>
                     {% endif %}
 
                     <form action="{{ url_for('pag_login_aluno') }}" method="post">
                         <label for="email">E-mail:</label>
-                        <input id="email" name="email" type="text" placeholder="Digite seu E-mail..." required>
+                        <input id="email" name="email" type="text" placeholder="Digite seu E-mail..." value="{{ email_digitado or '' }}" required>
 
                         <label for="senha-usuario">Senha:</label>
                         <input id="senha-usuario" name="senha" type="password" placeholder="Digite sua senha..." required>
@@ -123,90 +137,21 @@
         </div>
     </div>
 
-    <script src="/static/js/visualizar_itens.js"></script>
-    <!-- SWEETALERT -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            {% if category == 'success' %}
+                <div class="mensagem-flash"
+                     data-categoria="{{ category }}"
+                     data-mensagem="{{ message | e }}"
+                     hidden>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endwith %}
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-
-        <div class="mensagem-flash"
-             data-categoria="{{ category }}"
-             data-mensagem="{{ message | e }}"
-             hidden>
-        </div>
-
-    {% endfor %}
-{% endwith %}
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        const mensagens = document.querySelectorAll(".mensagem-flash");
-
-        mensagens.forEach(function (elemento) {
-
-            const categoria = elemento.dataset.categoria;
-            const mensagem = elemento.dataset.mensagem;
-
-            if (categoria === "success") {
-
-                Swal.fire({
-                    title: "Cadastro realizado!",
-                    text: mensagem,
-                    icon: "success",
-                    confirmButtonText: "Continuar",
-                    confirmButtonColor: "#F28705"
-                });
-
-            }
-
-        });
-
-    });
-</script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% for category, message in messages %}
-
-        <div class="mensagem-flash"
-             data-categoria="{{ category }}"
-             data-mensagem="{{ message | e }}"
-             hidden>
-        </div>
-
-    {% endfor %}
-{% endwith %}
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        const mensagens = document.querySelectorAll(".mensagem-flash");
-
-        mensagens.forEach(function (elemento) {
-
-            const categoria = elemento.dataset.categoria;
-            const mensagem = elemento.dataset.mensagem;
-
-            if (categoria === "success") {
-
-                Swal.fire({
-                    title: "Cadastro realizado!",
-                    text: mensagem,
-                    icon: "success",
-                    confirmButtonText: "Continuar",
-                    confirmButtonColor: "#F28705"
-                });
-
-            }
-
-        });
-
-    });
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', filename='js/visualizar_itens.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 
 </body>
 

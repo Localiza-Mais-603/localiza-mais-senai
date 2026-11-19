@@ -438,100 +438,102 @@ body.escuro .grupo-conteudo .btn-limpar {
     border: 1px solid #444444;
 }
 
+.sucesso-mensagem {
+    color: #1e7e34;
+    background-color: #e6f4ea;
+    border: 1px solid #badbcc;
+    padding: 10px;
+    border-radius: var(--raio-borda, 6px);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+body.escuro .sucesso-mensagem {
+    background-color: rgba(25, 135, 84, 0.16);
+    border-color: rgba(25, 135, 84, 0.45);
+    color: #75b798;
+}
+
 /* Ajuste Responsivo para Dispositivos Móveis */
-@media (max-width: 480px) {
-    .navbar {
-        padding: 12px 15px;
+@media (max-width: 800px) {
+    /* Libera a rolagem natural da página no mobile */
+    body {
+        padding: 0;
+        display: block;
     }
 
-    .container-botoes {
-        margin-top: 50px;
+    .layout-login {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        width: 100%;
     }
 
-    .container-login, 
+    /* Banner superior compacto */
+    .painel-marca {
+        padding: 24px 20px;
+        gap: 6px;
+    }
+
+    .marca-logo {
+        font-size: 2.4rem;
+    }
+
+    .marca-slogan {
+        font-size: 0.9rem;
+    }
+
+    .etiqueta-demo {
+        display: none;
+    }
+
+    /* Área do formulário sem buracos vazios */
+    .lado-form {
+        flex: 1;
+        justify-content: flex-start;
+        padding: 16px 16px 36px;
+        width: 100%;
+    }
+
+    /* Switch de modo escuro alinhado sem empurrar o layout */
+    .lado-form .navbar {
+        position: static;
+        padding: 0 0 12px 0;
+        width: 100%;
+    }
+
+    /* Remove a margem excessiva que criava o espaço em branco */
     .container-botoes {
+        margin-top: 0;
+        margin-bottom: 14px;
         max-width: 100%;
     }
 
-    .acoes-login {
-        flex-direction: column-reverse;
+    .container-login {
+        max-width: 100%;
+        padding: 24px 20px;
     }
-}
 
+    /* Corrige o botão "ENTRAR" para não ficar achatado */
+    .acoes-login {
+        flex-direction: column;
+        margin-top: 10px;
+    }
 
-/* Esconde o checkbox nativo do Bootstrap */
-.switch-group .form-check-input {
-    display: none;
-}
+    .btn-entrar,
+    .btn-voltar {
+        flex: none;
+        width: 100%;
+        height: 44px;
+    }
 
-/* Container principal do botão */
-.switch-darkmode {
-    position: relative;
-    width: 60px;
-    height: 30px;
-    background-color: #e4e4e4;
-    border-radius: 30px;
-    padding: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: background-color 0.3s ease;
-}
-
-/* Container flexível para alinhar os dois ícones lado a lado */
-.switch-darkmode .icons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    padding: 0 6px;
-    z-index: 1;
-}
-
-/* Estilo dos ícones */
-.switch-darkmode .icons i {
-    font-size: 14px;
-    transition: color 0.3s ease;
-}
-
-.switch-darkmode .fa-lightbulb {
-    color: #f39c12; /* Lâmpada amarela */
-}
-
-.switch-darkmode .fa-moon {
-    color: #7f8c8d; /* Lua cinzenta no modo claro */
-}
-
-/* Círculo deslizante */
-.switch-darkmode .circle {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 24px;
-    height: 24px;
-    background-color: #ffffff;
-    border-radius: 50%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
-    z-index: 2;
-}
-
-/* ESTADOS QUANDO O CHECKBOX ESTÁ MARCADO (MODO ESCURO) */
-
-/* Move o círculo para a direita */
-#switch-dark-mode:checked + .form-check-label .circle {
-    transform: translateX(30px);
-    background-color: #2c3e50;
-}
-
-/* Altera o fundo do botão */
-#switch-dark-mode:checked + .form-check-label .switch-darkmode {
-    background-color: #1a252f;
-}
-
-/* Ajusta a cor da lua quando ativo */
-#switch-dark-mode:checked + .form-check-label .fa-moon {
-    color: #f1c40f;
+    /* Evita zoom automático no iOS ao clicar nos inputs */
+    form input[type="text"],
+    form input[type="password"] {
+        font-size: 16px;
+    }
 }
 
 /* ==========================================================================
@@ -820,4 +822,147 @@ body.escuro .lado-form .transparente-header {
 body.escuro .container-header {
     background-color: transparent;
     border-bottom: none;
+}
+
+.switch-group .form-check-input {
+    display: none !important;
+}
+
+.switch-darkmode {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background-color: #e4e4e4;
+    border-radius: 30px;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.switch-darkmode .icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 6px;
+    z-index: 1;
+}
+
+.switch-darkmode .icons i {
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.switch-darkmode .fa-lightbulb {
+    color: #f39c12;
+}
+
+.switch-darkmode .fa-moon {
+    color: #7f8c8d;
+}
+
+.switch-darkmode .circle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 24px;
+    height: 24px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    z-index: 2;
+}
+
+#switch-dark-mode:checked + .form-check-label .circle {
+    transform: translateX(30px);
+    background-color: #2c3e50;
+}
+
+#switch-dark-mode:checked + .form-check-label .switch-darkmode {
+    background-color: #1a252f;
+}
+
+#switch-dark-mode:checked + .form-check-label .fa-moon {
+    color: #f1c40f;
+}
+
+@media (max-width: 800px) {
+    body {
+        padding: 0;
+        display: block;
+    }
+
+    .layout-login {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        width: 100%;
+    }
+
+    .painel-marca {
+        padding: 20px 20px;
+        gap: 4px;
+    }
+
+    .marca-logo {
+        font-size: 2.3rem;
+    }
+
+    .marca-slogan {
+        font-size: 0.88rem;
+    }
+
+    .etiqueta-demo {
+        display: none;
+    }
+
+    .lado-form {
+        flex: 1;
+        justify-content: flex-start;
+        padding: 14px 16px 32px;
+        width: 100%;
+    }
+
+    /* Desativa o position: absolute antigo do switch no mobile */
+    .lado-form .switch-group {
+        position: static;
+    }
+
+    .lado-form .navbar {
+        position: static;
+        padding: 0 0 12px 0;
+        width: 100%;
+    }
+
+    .container-botoes {
+        margin-top: 0;
+        margin-bottom: 12px;
+        max-width: 100%;
+    }
+
+    .container-login {
+        max-width: 100%;
+        padding: 22px 20px;
+    }
+
+    .acoes-login {
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    .btn-entrar,
+    .btn-voltar {
+        flex: none;
+        width: 100%;
+        height: 44px;
+    }
+
+    form input[type="text"],
+    form input[type="password"] {
+        font-size: 16px;
+    }
 }
