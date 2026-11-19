@@ -503,7 +503,8 @@ body {
 
 
 /* MODAL DE DETALHES */
-.modal-card {
+.modal-card,
+.grupo-filtro {
   position: fixed;
   top: 0;
   left: 0;
@@ -513,7 +514,7 @@ body {
   background-color: rgba(0, 0, 0, 0.7);
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1050 !important;
 }
 
 
@@ -1147,39 +1148,139 @@ body.escuro .fechar-filtro {
     outline-offset: 2px;
 }
 
-/* MODO ESCURO - BOTÃO DE PERFIL */
-body.escuro .btn-perfil-pill {
-  background-color: #1e1e1e;
-  border-color: #3f3f46;
-  color: #f1f5f9;
-}
+@media (max-width: 767px) {
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip !important;
+    margin: 0;
+  }
 
-body.escuro .btn-perfil-pill:hover,
-body.escuro .btn-perfil-pill:focus {
-  border-color: #60a5fa;
-  background-color: #27272a;
-}
+  body {
+    padding: 10px;
+  }
 
-body.escuro .perfil-avatar {
-  background-color: #2d333b;
-  color: #94a3b8;
-}
+  /* Barra superior da COORDENAÇÃO */
+  .pagina-coordenacao .navbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 6px 0 12px 40px;
+    margin-bottom: 16px;
+    min-height: 44px;
+    width: 100%;
+  }
 
-body.escuro .dropdown-menu {
-  background-color: #1e1e1e;
-  border-color: #333333;
-  color: #f1f5f9;
-}
+  /* Barra superior do ALUNO (LOCALIZA+ à esquerda + botões à direita na mesma linha) */
+  body:not(.pagina-coordenacao) .navbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 0 12px 0;
+    margin-bottom: 16px;
+    min-height: 44px;
+    width: 100%;
+  }
 
-body.escuro .dropdown-item {
-  color: #e2e8f0;
-}
+  body:not(.pagina-coordenacao) .navbar .container-fluido {
+    flex-shrink: 0;
+  }
 
-body.escuro .dropdown-item:hover {
-  background-color: #27272a;
-  color: #ffffff;
-}
+  body:not(.pagina-coordenacao) .navbar h1 {
+    font-size: 1.25rem;
+    white-space: nowrap;
+  }
 
-body.escuro .dropdown-divider {
-  border-color: #333333;
+  /* Mantém os itens da direita lado a lado sem quebrar linha */
+  .itens-central {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    width: auto; /* Não ocupa 100% para caber ao lado do LOCALIZA+ */
+    min-width: 0;
+  }
+
+  /* Switch de tema compacto */
+  .switch-darkmode {
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .switch-darkmode .icons {
+    padding: 0 4px;
+  }
+
+  .switch-darkmode .icons i {
+    font-size: 11px;
+  }
+
+  .switch-darkmode .circle {
+    width: 18px;
+    height: 18px;
+    top: 3px;
+    left: 3px;
+  }
+
+  #switch-dark-mode:checked + .form-check-label .circle {
+    transform: translateX(20px);
+  }
+
+  /* Botão Cadastrar Item (Coordenação) */
+  #btnAbrirCadastrar {
+    padding: 0 8px;
+    height: 32px;
+    font-size: 0.65rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Botão do perfil (Coordenação e Aluno) com reticências elegantes */
+  .itens-central .dropdown {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+
+  .itens-central .dropdown-toggle {
+    display: inline-block; /* Permite que o text-overflow: ellipsis funcione */
+    padding: 0 8px;
+    height: 32px;
+    line-height: 32px; /* Centraliza o texto verticalmente */
+    font-size: 0.68rem;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  /* Filtro de data */
+  .item-data {
+    padding: 6px 0;
+    gap: 8px;
+    font-size: 0.88rem;
+  }
+
+  .item-data input[type="date"] {
+    padding: 6px 8px;
+    font-size: 0.82rem;
+  }
+
+  .item-data .btn-abrir {
+    padding: 7px 12px;
+    font-size: 0.78rem;
+  }
+
+  .prazo-centralizado {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+  }
 }
