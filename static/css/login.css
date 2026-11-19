@@ -438,6 +438,23 @@ body.escuro .grupo-conteudo .btn-limpar {
     border: 1px solid #444444;
 }
 
+.sucesso-mensagem {
+    color: #1e7e34;
+    background-color: #e6f4ea;
+    border: 1px solid #badbcc;
+    padding: 10px;
+    border-radius: var(--raio-borda, 6px);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+body.escuro .sucesso-mensagem {
+    background-color: rgba(25, 135, 84, 0.16);
+    border-color: rgba(25, 135, 84, 0.45);
+    color: #75b798;
+}
+
 /* Ajuste Responsivo para Dispositivos Móveis */
 @media (max-width: 800px) {
     /* Libera a rolagem natural da página no mobile */

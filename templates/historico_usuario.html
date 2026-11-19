@@ -8,8 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/visualizar_itens.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/historico_usuario.css') }}">
+    <link rel="stylesheet" href="/static/css/visualizar_itens.css?v=2">
+    <link rel="stylesheet" href="/static/css/historico_usuario.css">
 </head>
 
 <body>
@@ -23,7 +23,6 @@
 
             <div class="itens-central">
 
-                <!-- Botão de tema claro/escuro (usa AlterarTema() do visualizar_itens.js) -->
                 <div class="form-check form-check-inline switch-group">
                     <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
                     <label class="form-check-label" for="switch-dark-mode">
@@ -73,13 +72,21 @@
     <main>
 
         <section class="cabecalho-historico">
-            <a href="{{ url_for('visualizar_itens') }}" class="link-voltar">← VOLTAR</a>
-            <h2 class="titulo-secao-itens">ITENS PERDIDOS RELATADOS</h2>
+            <div>
+                <h2 class="titulo-secao-itens">MEUS ITENS PERDIDOS RELATADOS</h2>
+                <p class="text-muted small mb-0 subtitulo-secao">
+                    Acompanhe aqui as solicitações de objetos perdidos que você registrou.
+                </p>
+            </div>
+
+            <a href="{{ url_for('visualizar_itens') }}" class="link-voltar">
+                 Voltar para itens encontrados
+            </a>
         </section>
 
+        {% if itens %}
         <section class="lista-historico" aria-label="Itens que você relatou">
 
-            {% if itens %}
             {% for item in itens %}
             <article class="card-historico"
                      style="cursor: pointer;"
@@ -97,13 +104,13 @@
                     <p class="card-historico-descricao">{{ item.descricao }}</p>
 
                     <p class="card-historico-info">
-                        <strong>Local:</strong>
+                        <strong>Local da perda:</strong>
                         {{ item.local if item.local else 'Não informado' }}
                     </p>
 
                     <p class="card-historico-info">
-                        <strong>Data:</strong>
-                        {{ item.data_encontrado | data_br if item.data_encontrado else 'Não informada' }}
+                        <strong>Data da perda:</strong>
+                        {{ item.data_encontrado if item.data_encontrado else 'Não informada' }}
                     </p>
 
                     <!-- Status acima do botão -->
@@ -117,27 +124,35 @@
                             method="POST"
                             class="w-100"
                             onsubmit="confirmarExclusao(event, this)">
-                            <button type="submit" class="btn-excluir-relato w-100 justify-content-center text-uppercase" title="Excluir relato">
-                                <i class="fa-solid fa-trash"></i> EXCLUIR
+                            <button type="submit" class="btn-excluir-relato" title="Excluir solicitação">
+                                <i class="fa-solid fa-trash"></i> Excluir solicitação
                             </button>
                         </form>
                     </div>
                 </div>
             </article>
             {% endfor %}
-            {% else %}
-            <p class="historico-vazio">Você ainda não relatou nenhum item.</p>
-            {% endif %}
 
         </section>
+        {% else %}
+        <div class="container-estado-vazio">
+            <div class="text-center py-5 px-3 w-100 empty-state-card">
+                <i class="fa-solid fa-magnifying-glass fa-2x mb-2"></i>
+                <h3 class="h5 fw-bold mb-1">Você ainda não relatou nenhum item perdido</h3>
+                <p class="text-muted small mb-0">
+                    Caso tenha perdido algum objeto, volte à tela inicial e clique em <strong>"Perdi algo"</strong> para registrar sua solicitação.
+                </p>
+            </div>
+        </div>
+        {% endif %}
 
     </main>
 
-    <div class="modal-card" id="modalCard" role="dialog" aria-hidden="true" onclick="fecharCard()">
+    <div class="modal-card" id="modalCard" role="dialog" aria-labelledby="modalTitulo" aria-hidden="true" onclick="fecharCard()">
         <article class="card-destaque" onclick="event.stopPropagation()">
 
-            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar modal">
-                X
+            <button class="fechar-card" type="button" onclick="fecharCard()" aria-label="Fechar detalhes">
+                &times;
             </button>
 
             <h2 id="modalTitulo"></h2>
@@ -145,10 +160,10 @@
             <img id="modalFoto" src="" alt="Foto do item selecionado"
                 class="modal-foto" style="display: none;">
 
-            <p id="blocoDescricao"><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
-            <p id="blocoLocal"><strong>Local:</strong> <span id="modalLocal"></span></p>
-            <p><strong>Data:</strong> <span id="modalData"></span></p>
-            <p id="blocoStatus"><strong>Status:</strong> <span id="modalStatus"></span></p>
+            <p><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
+            <p><strong>Local da perda:</strong> <span id="modalLocal"></span></p>
+            <p><strong>Data da perda:</strong> <span id="modalData"></span></p>
+            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
 
         </article>
     </div>

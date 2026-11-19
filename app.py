@@ -198,63 +198,70 @@ def logout():
 @app.route("/login/usuario", methods=["GET", "POST"])
 def pag_login_aluno():
 
-    erro = None
     sucesso = request.args.get("sucesso")
 
     if request.method == "POST":
 
-        email = request.form["email"]
-        senha = request.form["senha"]
+        email_digitado = request.form.get("email", "").strip()
+        senha = request.form.get("senha", "")
 
-        usuario = verificar_login_usuario(email, senha)
+        usuario = verificar_login_usuario(email_digitado, senha)
 
         if usuario:
             session["usuario"] = usuario
             session["perfil"] = "aluno"
+            session.pop("email_digitado", None)
 
             return redirect(url_for("visualizar_itens"))
 
         else:
-            erro = "E-mail ou senha incorretos!"
+            session["email_digitado"] = email_digitado
+            flash("E-mail ou senha incorretos!", "erro_usuario")
+            return redirect(url_for("pag_login_aluno"))
+
+    email_digitado = session.pop("email_digitado", "")
 
     return render_template(
         "login.html",
-        erro=erro,
         tipo='usuario',
-        sucesso=sucesso
+        sucesso=sucesso,
+        email_digitado=email_digitado
     )
 
 
 @app.route("/login/setor/de/apoio", methods=["GET", "POST"])
 def pag_login_coordenacao():
 
-    erro = None
     ja_tem_coor = existe_coordenador()
 
     if request.method == "POST":
 
-        cpf = somente_numeros(request.form["cpf"])
-        senha = request.form["senha"]
+        cpf_digitado = request.form.get("cpf", "").strip()
+        cpf_limpo = somente_numeros(cpf_digitado)
+        senha = request.form.get("senha", "")
 
-        coordenador = verificar_login_coor(cpf, senha)
+        coordenador = verificar_login_coor(cpf_limpo, senha)
 
         if coordenador:
             session["usuario"] = coordenador
             session["perfil"] = "coordenacao"
+            session.pop("cpf_digitado", None)
 
             return redirect(url_for("visualizar_itens"))
 
         else:
-            erro = "CPF ou senha incorretos!"
+            session["cpf_digitado"] = cpf_digitado
+            flash("CPF ou senha incorretos!", "erro_apoio")
+            return redirect(url_for("pag_login_coordenacao"))
+
+    cpf_digitado = session.pop("cpf_digitado", "")
 
     return render_template(
         "login.html",
-        erro=erro,
         tipo='apoio',
-        ja_tem_coor=ja_tem_coor
+        ja_tem_coor=ja_tem_coor,
+        cpf_digitado=cpf_digitado
     )
-
-
 @app.route("/cadastro/usuario")
 def pag_cadastro():
     return render_template("cadastrar_usuario.html")

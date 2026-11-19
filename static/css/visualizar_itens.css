@@ -1257,21 +1257,47 @@ body.escuro .form-modal-custom .entrada-area-texto {
     margin: 0;
 }
 
-.itens-card .card-botoes-acao .btn-acao-card {
-    width: 100%;
-    min-width: 0;
-    min-height: 58px;
-    padding: 8px 2px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase !important;
-    letter-spacing: 0.2px;
-    line-height: 1.1;
-    text-align: center;
-    white-space: nowrap;
+.btn-item-meu:focus-visible {
+    outline: 3px solid rgba(2, 72, 115, 0.35);
+    outline-offset: 2px;
+}
+
+.empty-state-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.empty-state-card i,
+.empty-state-card h3 {
+    color: #024873;
+}
+
+.empty-state-card {
+    background-color: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.empty-state-card i,
+.empty-state-card h3 {
+    color: #024873 !important;
+}
+
+/* Cartão de Estado Vazio e Subtítulos (Modo Escuro) */
+body.escuro .empty-state-card {
+    background-color: #161b22 !important;
+    border-color: #30363d !important;
+}
+
+body.escuro .empty-state-card i,
+body.escuro .empty-state-card h3 {
+    color: #58a6ff !important;
+}
+
+body.escuro .empty-state-card p,
+body.escuro .subtitulo-secao {
+    color: #adb5bd !important;
 }
