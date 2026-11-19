@@ -1,17 +1,21 @@
 function AlterarTema() {
-    document.body.classList.toggle("escuro");
+    const switchDark = document.getElementById("switch-dark-mode");
+    const modoEscuroAtivo = switchDark
+        ? switchDark.checked
+        : !document.body.classList.contains("escuro");
 
-    const modoEscuroAtivo = document.body.classList.contains("escuro");
+    document.body.classList.toggle("escuro", modoEscuroAtivo);
     localStorage.setItem("tema", modoEscuroAtivo ? "escuro" : "claro");
 }
 
 (function carregarTemaSalvo() {
     const temaSalvo = localStorage.getItem("tema");
+    const switchDark = document.getElementById("switch-dark-mode");
+    const ativarEscuro = temaSalvo === "escuro";
 
-    if (temaSalvo === "escuro") {
-        document.body.classList.add("escuro");
-    } else if (temaSalvo === "claro") {
-        document.body.classList.remove("escuro");
+    document.body.classList.toggle("escuro", ativarEscuro);
+    if (switchDark) {
+        switchDark.checked = ativarEscuro;
     }
 })();
 

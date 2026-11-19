@@ -10,8 +10,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/visualizar_itens.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/prazos.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pesquisa.css') }}">
+    <script src="{{ url_for('static', filename='js/pesquisa_itens.js') }}"></script>
     <link rel="stylesheet" href="/static/css/menu-coordenacao.css">
-
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,6 +30,11 @@
                 <h1>LOCALIZA+</h1>
             </div>
             {% endif %}
+
+            {% if session.get('perfil') == 'coordenacao' %}
+            <button type="button" id="btnAbrirCadastrar" class="btn-abrir">Cadastrar item</button>
+            {% endif %}
+
             <div class="itens-central">
                 <div class="form-check form-check-inline switch-group">
                     <input class="form-check-input" type="checkbox" id="switch-dark-mode" onchange="AlterarTema()">
@@ -43,21 +49,27 @@
                     </label>
                 </div>
 
-                {% if session.get('perfil') == 'coordenacao' %}
-                <button type="button" id="btnAbrirCadastrar" class="btn-abrir">Cadastrar item</button>
-                {% endif %}
-
                 {% if usuario %}
                 <div class="dropdown">
-                    <button class="botao-formulario dropdown-toggle" type="button" id="dropdownMenuPerfil"
+                    <button class="btn-perfil-pill dropdown-toggle" type="button" id="dropdownMenuPerfil"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ usuario.nome }}
+                        <span class="perfil-avatar" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="12" cy="9.5" r="4.2" />
+                                <path d="M3.5 21.5C3.5 17.2 7.2 15.2 12 15.2s8.5 2 8.5 6.3V24h-17v-2.5z" />
+                            </svg>
+                        </span>
+                        <span class="perfil-nome">{{ usuario.nome }}</span>
                     </button>
 
                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownMenuPerfil">
                         <li class="dropdown-header text-center">
-                            <img src="https://placehold.co/60" alt="Foto de perfil de {{ usuario.nome }}"
-                                class="rounded-circle mb-2" style="width: 50px; height: 50px;">
+                            <div class="perfil-avatar perfil-avatar-grande mx-auto mb-2" aria-hidden="true">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="8.5" r="4.2" />
+                                    <path d="M4.5 21c0-4.2 3.4-7.2 7.5-7.2s7.5 3 7.5 7.2" />
+                                </svg>
+                            </div>
                             <p class="mb-0 fw-bold">{{ usuario.nome }}</p>
 
                             {% if session.get('perfil') == 'aluno' %}
@@ -93,8 +105,7 @@
                             </span>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                data-bs-target="#modalCategorias">
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalCategorias">
                                 Gerenciar categorias
                             </a>
                         </li>
@@ -128,9 +139,8 @@
 
         {% if session.get('perfil') == 'aluno' %}
 
-        
         <section class="lp-hero-actions" aria-label="Relatar item perdido ou encontrado">
-            
+
             <p class="lp-hero-subtitle">
                 Registre itens perdidos ou devolva algo que você encontrou de forma rápida e segura.
             </p>
@@ -140,7 +150,8 @@
                 <div class="lp-action-card lp-card-lost">
                     <div class="lp-card-left">
                         <div class="lp-icon-box lp-icon-lost" aria-hidden="true">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                             </svg>
@@ -155,9 +166,10 @@
                         </div>
                     </div>
 
-                    <button type="button" class="lp-btn lp-btn-lost"
-                        data-bs-toggle="modal" data-bs-target="#modalPerdi">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <button type="button" class="lp-btn lp-btn-lost" data-bs-toggle="modal"
+                        data-bs-target="#modalPerdi">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
@@ -169,7 +181,8 @@
                 <div class="lp-action-card lp-card-found">
                     <div class="lp-card-left">
                         <div class="lp-icon-box lp-icon-found" aria-hidden="true">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                             </svg>
@@ -184,9 +197,10 @@
                         </div>
                     </div>
 
-                    <button type="button" class="lp-btn lp-btn-found"
-                        data-bs-toggle="modal" data-bs-target="#modalEncontrei">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    <button type="button" class="lp-btn lp-btn-found" data-bs-toggle="modal"
+                        data-bs-target="#modalEncontrei">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                         Relatar Achado
@@ -198,8 +212,25 @@
 
         <!-- PAINEL DA COORDENAÇÃO -->
         {% if session.get('perfil') == 'coordenacao' %}
-        
+
         {% endif %}
+
+        <!-- BARRA DE PESQUISA -->
+        <section class="pesq-secao" aria-label="Pesquisar itens">
+            <form class="pesq-form" id="pesqForm" role="search" autocomplete="off">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+
+                <input type="search" id="pesqCampo" class="pesq-campo"
+                    placeholder="Pesquisar por item, local, categoria ou descrição" aria-label="Pesquisar itens">
+
+                <button type="button" id="pesqLimpar" class="pesq-limpar" aria-label="Limpar pesquisa" hidden>
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+
+                <kbd class="pesq-atalho" aria-hidden="true">/</kbd>
+            </form>
+        </section>
+        <p class="pesq-contador" id="pesqContador" aria-live="polite" hidden></p>
 
         <!-- FILTRO DE DATA -->
         <section class="item-data" aria-label="Filtro de datas">
@@ -211,22 +242,19 @@
         <!-- PÍLULA DE PRAZO -->
         <div class="prazo-centralizado">
             <button type="button" id="btnPrazoRetirada" class="chip-prazo"
-                data-prazo-dias="{{ prazo_dias | default(180) }}"
-            data-prazo-meses="{{ prazo_meses | default(6) }}"
-            data-prazo-marmita="{{ prazo_marmita_dias | default('') }}"
-            data-prazo-reduzido="{{ prazo_reduzido_dias or '' }}"
-            aria-label="Ver como funciona o prazo de retirada dos itens">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                viewBox="0 0 16 16" aria-hidden="true">
-                <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
-                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
-            </svg>
-            <span>Prazo de retirada: <strong>{{ prazo_meses | default(6) }} meses</strong></span>
-            <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                data-prazo-dias="{{ prazo_dias | default(180) }}" data-prazo-meses="{{ prazo_meses | default(6) }}"
+                data-prazo-marmita="{{ prazo_marmita_dias | default('') }}"
+                data-prazo-reduzido="{{ prazo_reduzido_dias or '' }}"
+                aria-label="Ver como funciona o prazo de retirada dos itens">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"
+                    aria-hidden="true">
+                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                </svg>
+                <span>Prazo de retirada: <strong>{{ prazo_meses | default(6) }} meses</strong></span>
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
             </button>
         </div>
-            
-    
 
         <!-- LISTA DE ITENS -->
         <section aria-label="Itens registados">
@@ -236,10 +264,8 @@
                 {% if item.status|lower not in ['perdido', 'retirado', 'arquivado'] %}
                 <li style="list-style: none;">
 
-                    <article class="card" style="width: 20rem;"
-                        data-categoria="{{ item.id_categoria }}"
-                        data-item="{{ item.item }}"
-                        data-descricao="{{ item.descricao if item.descricao else '' }}"
+                    <article class="card" style="width: 20rem;" data-categoria="{{ item.id_categoria }}"
+                        data-item="{{ item.item }}" data-descricao="{{ item.descricao if item.descricao else '' }}"
                         data-local="{{ item.local if item.local else '' }}"
                         data-data="{{ item.data_encontrado | data_br if item.data_encontrado else '' }}"
                         data-status="{{ item.status }}"
@@ -247,8 +273,7 @@
                         data-destino="{{ item.destino_objeto if item.destino_objeto else '' }}"
                         data-prazo="{{ item.prazo_resumo if item.prazo_resumo else '' }}"
                         data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
-                        data-coordenacao="{{ 'true' if item.cpf_coordenador else 'false' }}"
-                        onclick="abrirCard(this)">
+                        data-coordenacao="{{ 'true' if item.cpf_coordenador else 'false' }}" onclick="abrirCard(this)">
 
                         <div class="card-corpo">
                             <h3 class="card-titulo">{{ item.item }}</h3>
@@ -258,7 +283,8 @@
                             <span class="badge-prazo {{ item.prazo_classe }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
                                     viewBox="0 0 16 16" aria-hidden="true">
-                                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                                    <path
+                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
                                     <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
                                 </svg>
                                 {{ item.prazo_texto }}
@@ -267,31 +293,30 @@
                         </div>
 
                         {% if session.get('perfil') == 'aluno' and usuario and item.email != usuario.email %}
-                            <form action="{{ url_for('reivindicar_item', id_item=item.id_item) }}"
-                                method="POST" class="form-reivindicar"
-                                onclick="event.stopPropagation()">
-                                <input type="hidden" name="nome_item" value="{{ item.item }}">
-                                <button type="submit" class="btn-item-meu">
-                                    <i class="fa-solid fa-hand-pointer"></i>
-                                    <span>Esse item é meu</span>
-                                </button>
-                            </form>
+                        <form action="{{ url_for('reivindicar_item', id_item=item.id_item) }}" method="POST"
+                            class="form-reivindicar" onclick="event.stopPropagation()">
+                            <input type="hidden" name="nome_item" value="{{ item.item }}">
+                            <button type="submit" class="btn-item-meu">
+                                <i class="fa-solid fa-hand-pointer"></i>
+                                <span>Esse item é meu</span>
+                            </button>
+                        </form>
                         {% endif %}
 
                         {% if session.get('perfil') == 'coordenacao' %}
                         <div class="card-botoes-acao" onclick="event.stopPropagation()">
 
-                            <button type="button" class="btn-acao-card btn-retirar-card"
-                                data-id="{{ item.id_item }}"
+                            <button type="button" class="btn-acao-card btn-retirar-card" data-id="{{ item.id_item }}"
                                 data-nome="{{ item.item }}"
                                 onclick="abrirModalRetirar(this.dataset.id, this.dataset.nome)">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M11 11V7a2 2 0 0 1 2-2h5"/>
-                                    <polyline points="15 2 18 5 15 8"/>
-                                    <path d="M3 14h3v6H3z"/>
-                                    <path d="M6 15h4.5a1.5 1.5 0 0 1 1.5 1.5v0a1.5 1.5 0 0 1-1.5 1.5H9"/>
-                                    <path d="M6 19h7.5l4.2-2.5a1.4 1.4 0 0 0-1.4-2.4L12 16.5"/>
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-hidden="true">
+                                    <path d="M11 11V7a2 2 0 0 1 2-2h5" />
+                                    <polyline points="15 2 18 5 15 8" />
+                                    <path d="M3 14h3v6H3z" />
+                                    <path d="M6 15h4.5a1.5 1.5 0 0 1 1.5 1.5v0a1.5 1.5 0 0 1-1.5 1.5H9" />
+                                    <path d="M6 19h7.5l4.2-2.5a1.4 1.4 0 0 0-1.4-2.4L12 16.5" />
                                 </svg>
                                 <span>Retirar</span>
                             </button>
@@ -299,38 +324,39 @@
                             <button type="button" class="btn-acao-card btn-editar-card"
                                 onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                                    <path d="m15 5 4 4"/>
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-hidden="true">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                    <path d="m15 5 4 4" />
                                 </svg>
                                 <span>Editar</span>
                             </button>
 
-                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}"
-                                method="POST" class="form-acao form-arquivar"
-                                onclick="event.stopPropagation()">
+                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}" method="POST"
+                                class="form-acao form-arquivar" onclick="event.stopPropagation()">
                                 <button type="submit" class="btn-acao-card btn-arquivar-card">
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <rect width="20" height="5" x="2" y="3" rx="1"/>
-                                        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
-                                        <path d="M10 12h4"/>
+                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                        aria-hidden="true">
+                                        <rect width="20" height="5" x="2" y="3" rx="1" />
+                                        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8" />
+                                        <path d="M10 12h4" />
                                     </svg>
                                     <span>Arquivar</span>
                                 </button>
                             </form>
 
-                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}"
-                                method="POST" class="form-acao form-excluir"
-                                onclick="event.stopPropagation()">
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST"
+                                class="form-acao form-excluir" onclick="event.stopPropagation()">
                                 <button type="submit" class="btn-acao-card btn-excluir-card">
                                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <path d="M3 6h18"/>
-                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                                        <line x1="10" x2="10" y1="11" y2="17"/>
-                                        <line x1="14" x2="14" y1="11" y2="17"/>
+                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                        aria-hidden="true">
+                                        <path d="M3 6h18" />
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                        <line x1="10" x2="10" y1="11" y2="17" />
+                                        <line x1="14" x2="14" y1="11" y2="17" />
                                     </svg>
                                     <span>Excluir</span>
                                 </button>
@@ -364,7 +390,8 @@
 
                 <div class="campo-grupo">
                     <label for="nomeRetirante" class="rotulo">Nome de quem retirou *</label>
-                    <input type="text" id="nomeRetirante" name="nome_retirante" class="entrada-texto" required placeholder="Ex: João da Silva">
+                    <input type="text" id="nomeRetirante" name="nome_retirante" class="entrada-texto" required
+                        placeholder="Ex: João da Silva">
                 </div>
 
                 <div class="campo-grupo">
@@ -386,11 +413,13 @@
     <div class="grupo-filtro" id="modalCadastrarItem" role="dialog" aria-hidden="true">
         <div class="grupo-conteudo modal-cadastro-container">
 
-            <button type="button" class="fechar-filtro" id="btnFecharCadastrar" aria-label="Fechar modal">&times;</button>
+            <button type="button" class="fechar-filtro" id="btnFecharCadastrar"
+                aria-label="Fechar modal">&times;</button>
 
             <h2 class="subtitulo-modal">Cadastrar Novo Item</h2>
 
-            <form id="formCadastrarItem" action="/cadastrar/item/salvar" method="POST" enctype="multipart/form-data" class="form-modal-custom">
+            <form id="formCadastrarItem" action="/cadastrar/item/salvar" method="POST" enctype="multipart/form-data"
+                class="form-modal-custom">
 
                 <div class="campo-grupo">
                     <label for="cadItem" class="rotulo">Item *</label>
@@ -403,15 +432,14 @@
                         <select id="cadCategoria" name="id_categoria" class="entrada-texto select-categoria" required>
                             <option value="" disabled selected>Selecione uma categoria...</option>
                             {% for cat in categorias %}
-                                {% set cat_id = cat.id_categoria if cat.id_categoria is defined else (cat.id if cat.id is defined else cat[0]) %}
-                                {% set cat_nome = cat.nome if cat.nome is defined else cat[1] %}
-                                <option value="{{ cat_id }}">{{ cat_nome }}</option>
+                            {% set cat_id = cat.id_categoria if cat.id_categoria is defined else (cat.id if cat.id is
+                            defined else cat[0]) %}
+                            {% set cat_nome = cat.nome if cat.nome is defined else cat[1] %}
+                            <option value="{{ cat_id }}">{{ cat_nome }}</option>
                             {% endfor %}
                         </select>
-                        <button type="button" class="btn-add-cat-inline"
-                            data-select-id="cadCategoria"
-                            data-modal-id="modalCadastrarItem"
-                            title="Cadastrar nova categoria">
+                        <button type="button" class="btn-add-cat-inline" data-select-id="cadCategoria"
+                            data-modal-id="modalCadastrarItem" title="Cadastrar nova categoria">
                             Adicionar Categoria
                         </button>
                     </div>
@@ -424,7 +452,8 @@
 
                 <div class="campo-grupo">
                     <label for="cadFoto" class="rotulo">Foto (opcional)</label>
-                    <input type="file" id="cadFoto" name="foto" class="entrada-texto" accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp">
+                    <input type="file" id="cadFoto" name="foto" class="entrada-texto"
+                        accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp">
                 </div>
 
                 <div class="grupo-botoes-modal">
@@ -447,8 +476,7 @@
 
             <h2 id="modalTitulo"></h2>
 
-            <img id="modalFoto" src="" alt="Foto do item selecionado"
-                class="modal-foto" style="display: none;">
+            <img id="modalFoto" src="" alt="Foto do item selecionado" class="modal-foto" style="display: none;">
 
             <p id="blocoDescricao"><strong>Descrição:</strong> <span id="modalDescricao"></span></p>
             <p id="blocoLocal"><strong>Local:</strong> <span id="modalLocal"></span></p>
@@ -491,8 +519,8 @@
 
                 <div class="mb-3">
                     <label for="editDescricao">Descrição</label>
-                    <textarea id="editDescricao" name="descricao" class="form-control"
-                        maxlength="255" required></textarea>
+                    <textarea id="editDescricao" name="descricao" class="form-control" maxlength="255"
+                        required></textarea>
                 </div>
 
                 <div class="mb-3">
@@ -512,15 +540,11 @@
     </div>
 
     <!-- MODAL: PERDI ALGO -->
-    <div class="modal fade" id="modalPerdi" tabindex="-1"
-        aria-labelledby="tituloPerdi" aria-hidden="true">
+    <div class="modal fade" id="modalPerdi" tabindex="-1" aria-labelledby="tituloPerdi" aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 
-            <form class="modal-content"
-                id="formPerdi"
-                action="{{ url_for('registrar_itens') }}"
-                method="POST"
+            <form class="modal-content" id="formPerdi" action="{{ url_for('registrar_itens') }}" method="POST"
                 enctype="multipart/form-data">
 
                 <div class="modal-header">
@@ -528,8 +552,7 @@
                         Perdi algo
                     </h2>
 
-                    <button type="button" class="btn-close"
-                        data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
 
                 <div class="modal-body">
@@ -565,13 +588,13 @@
                     <div class="mb-3">
                         <label for="perdCategoria" class="form-label">Categoria *</label>
 
-                        <select id="perdCategoria" name="categoria_id"
-                            class="form-select select-categoria" required>
+                        <select id="perdCategoria" name="categoria_id" class="form-select select-categoria" required>
 
                             <option value="">Selecione uma categoria</option>
 
                             {% for categoria in categorias %}
-                            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
+                            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else
+                            (categoria.id if categoria.id is defined else categoria[0]) %}
                             {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
 
                             <option value="{{ cat_id }}">{{ cat_nome }}</option>
@@ -579,9 +602,9 @@
 
                         </select>
 
-                        <button type="button" class="btn btn-sm mt-2 text-white fw-bold text-uppercase btn-add-cat-inline"
-                            style="background-color: #024873;"
-                            data-select-id="perdCategoria"
+                        <button type="button"
+                            class="btn btn-sm mt-2 text-white fw-bold text-uppercase btn-add-cat-inline"
+                            style="background-color: #024873;" data-select-id="perdCategoria"
                             data-modal-id="modalPerdi">
                             Adicionar categoria
                         </button>
@@ -592,10 +615,7 @@
                     <div class="mb-3">
                         <label for="perdFoto" class="form-label">Foto de referência <span class="text-muted fw-normal">(opcional)</span></label>
 
-                        <input type="file"
-                            id="perdFoto"
-                            name="foto"
-                            class="form-control"
+                        <input type="file" id="perdFoto" name="foto" class="form-control"
                             accept=".png,.jpg,.jpeg,.gif,.webp,image/png,image/jpeg,image/gif,image/webp">
 
                         <small class="text-muted">
@@ -624,22 +644,18 @@
     </div>
 
     <!-- MODAL: ENCONTREI ALGO -->
-    <div class="modal fade" id="modalEncontrei" tabindex="-1"
-        aria-labelledby="tituloEncontrei" aria-hidden="true">
+    <div class="modal fade" id="modalEncontrei" tabindex="-1" aria-labelledby="tituloEncontrei" aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 
-            <form class="modal-content"
-                action="{{ url_for('registrar_item_encontrado') }}"
-                method="POST">
+            <form class="modal-content" action="{{ url_for('registrar_item_encontrado') }}" method="POST">
 
                 <div class="modal-header">
                     <h2 class="modal-title fs-5 text-uppercase fw-bold" id="tituloEncontrei">
                         Encontrei algo
                     </h2>
 
-                    <button type="button" class="btn-close"
-                        data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
 
                 <div class="modal-body">
@@ -674,13 +690,13 @@
                     <div class="mb-3">
                         <label for="encCategoria" class="form-label">Categoria *</label>
 
-                        <select id="encCategoria" name="id_categoria"
-                            class="form-select select-categoria" required>
+                        <select id="encCategoria" name="id_categoria" class="form-select select-categoria" required>
 
                             <option value="">Selecione uma categoria</option>
 
                             {% for categoria in categorias %}
-                            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
+                            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else
+                            (categoria.id if categoria.id is defined else categoria[0]) %}
                             {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
 
                             <option value="{{ cat_id }}">{{ cat_nome }}</option>
@@ -688,9 +704,9 @@
 
                         </select>
 
-                        <button type="button" class="btn btn-sm mt-2 text-white fw-bold text-uppercase btn-add-cat-inline"
-                            style="background-color: #024873;"
-                            data-select-id="encCategoria"
+                        <button type="button"
+                            class="btn btn-sm mt-2 text-white fw-bold text-uppercase btn-add-cat-inline"
+                            style="background-color: #024873;" data-select-id="encCategoria"
                             data-modal-id="modalEncontrei">
                             Adicionar categoria
                         </button>
@@ -718,48 +734,37 @@
 
     <!-- MODAL: GERENCIAR CATEGORIAS (COORDENAÇÃO) -->
     {% if session.get('perfil') == 'coordenacao' %}
-    <div class="modal fade" id="modalCategorias" tabindex="-1"
-        aria-labelledby="tituloCategorias" aria-hidden="true">
-
+    <div class="modal fade" id="modalCategorias" tabindex="-1" aria-labelledby="tituloCategorias" aria-hidden="true">
 
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-
 
                 <div class="modal-header">
                     <h2 class="modal-title fs-5 text-uppercase fw-bold" id="tituloCategorias">
                         Gerenciar categorias
                     </h2>
 
-
-                    <button type="button" class="btn-close"
-                        data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
 
-
                 <div class="modal-body">
-
 
                     <p class="text-muted small mb-3">
                         Ao excluir uma categoria, os itens dela continuam cadastrados, só ficam sem categoria.
                     </p>
 
-
                     {% if categorias %}
                     <ul class="list-group">
                         {% for categoria in categorias %}
-                        {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
+                        {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id
+                        if categoria.id is defined else categoria[0]) %}
                         {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
-
 
                         <li class="list-group-item d-flex align-items-center justify-content-between">
                             <span>{{ cat_nome }}</span>
 
-
-                            <form action="{{ url_for('excluir_categoria_rota', id_categoria=cat_id) }}"
-                                method="POST" class="form-excluir-categoria"
-                                data-nome="{{ cat_nome }}">
-
+                            <form action="{{ url_for('excluir_categoria_rota', id_categoria=cat_id) }}" method="POST"
+                                class="form-excluir-categoria" data-nome="{{ cat_nome }}">
 
                                 <button type="submit" class="btn btn-sm btn-danger fw-bold">
                                     Excluir
@@ -772,17 +777,13 @@
                     <p class="text-center text-muted mb-0">Nenhuma categoria cadastrada.</p>
                     {% endif %}
 
-
                 </div>
 
-
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         Fechar
                     </button>
                 </div>
-
 
             </div>
         </div>
@@ -792,40 +793,32 @@
     <!-- MODAL DE FILTROS -->
     <div class="grupo-filtro" id="janelaFiltro" role="dialog" aria-hidden="true">
 
-
         <form action="{{ url_for('visualizar_itens') }}" method="GET" class="grupo-conteudo">
-
 
             <button type="button" class="fechar-filtro" id="btnFecharFiltro" aria-label="Fechar filtro">&times;</button>
 
-
             <h3>Categorias</h3>
 
-
             {% for categoria in categorias %}
-            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if categoria.id is defined else categoria[0]) %}
+            {% set cat_id = categoria.id_categoria if categoria.id_categoria is defined else (categoria.id if
+            categoria.id is defined else categoria[0]) %}
             {% set cat_nome = categoria.nome if categoria.nome is defined else categoria[1] %}
 
-
             <label>
-                <input type="checkbox" name="categoria" value="{{ cat_id }}"
-                    {% if cat_id|string in request.args.getlist('categoria') %}checked{% endif %}>
+                <input type="checkbox" name="categoria" value="{{ cat_id }}" {% if cat_id|string in
+                    request.args.getlist('categoria') %}checked{% endif %}>
                 {{ cat_nome }}
             </label>
             {% endfor %}
 
-
             <button type="submit">Aplicar Filtro</button>
-
 
             <a href="{{ url_for('visualizar_itens') }}" class="btn-limpar">
                 Limpar Filtros
             </a>
 
-
         </form>
     </div>
-
 
     <!-- MENSAGENS FLASH DO FLASK -->
     <div id="flash-messages" style="display: none;"
@@ -837,7 +830,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
     <script src="{{ url_for('static', filename='js/visualizar_itens.js') }}"></script>
     <script src="{{ url_for('static', filename='js/excluir_Itens.js') }}"></script>
     <script src="{{ url_for('static', filename='js/confirmaacoes.js') }}"></script>
@@ -845,6 +837,6 @@
     <script src="{{ url_for('static', filename='js/visualizar_itens_extra.js') }}"></script>
     <script src="{{ url_for('static', filename='js/reivindicar_item.js') }}"></script>
 
-
 </body>
+
 </html>
