@@ -373,7 +373,7 @@
                 </div>
 
                 <div class="campo-grupo">
-                    <label for="emailRetirante" class="rotulo">E-mail do retirante *</label>
+                    <label for="emailRetirante" class="rotulo">E-mail: *</label>
                     <input type="email" id="emailRetirante" name="email_retirante" class="entrada-texto" placeholder="Ex: joao@email.com">
                 </div>
 
@@ -398,7 +398,7 @@
             <form id="formCadastrarItem" action="/cadastrar/item/salvar" method="POST" enctype="multipart/form-data" class="form-modal-custom">
 
                 <div class="campo-grupo">
-                    <label for="cadItem" class="rotulo">Nome do item *</label>
+                    <label for="cadItem" class="rotulo">Item *</label>
                     <input type="text" id="cadItem" name="item" class="entrada-texto" maxlength="50" required placeholder="Ex: Chaveiro, Carteira...">
                 </div>
 
@@ -423,7 +423,7 @@
                 </div>
 
                 <div class="campo-grupo">
-                    <label for="cadData" class="rotulo">Data em que o item chegou *</label>
+                    <label for="cadData" class="rotulo">Data de entrada *</label>
                     <input type="date" id="cadData" name="data" class="entrada-texto" required>
                 </div>
 
@@ -433,8 +433,8 @@
                 </div>
 
                 <div class="grupo-botoes-modal">
-                    <button type="button" class="btn-modal-cancelar" id="btnCancelarCadastrar">Cancelar</button>
-                    <button type="submit" class="btn-modal-submit">Salvar Item</button>
+                    <button type="button" class="btn-modal-cancelar" id="btnCancelarCadastrar">CANCELAR</button>
+                    <button type="submit" class="btn-modal-submit">CADASTRAR</button>
                 </div>
 
             </form>
@@ -540,7 +540,7 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="perdItem" class="form-label">Item perdido *</label>
+                        <label for="perdItem" class="form-label">Item *</label>
                         <input type="text" id="perdItem" name="item"
                             class="form-control" maxlength="50"
                             placeholder="Ex: Garrafa azul" required>
@@ -554,7 +554,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="perdOnde" class="form-label">Provável local onde perdeu</label>
+                        <label for="perdOnde" class="form-label">Local </label>
                         <input type="text" id="perdOnde" name="local"
                             class="form-control" maxlength="50"
                             placeholder="Ex: Bloco B, Cantina">
@@ -562,13 +562,13 @@
 
                     <div class="mb-3">
                         <label for="perdQuando" class="form-label">
-                            Data aproximada da perda <span class="text-muted fw-normal">(opcional)</span>
+                            Data  <span class="text-muted fw-normal">(opcional)</span>
                         </label>
                         <input type="date" id="perdQuando" name="data" class="form-control">
                     </div>
 
                     <div class="mb-3">
-                        <label for="perdCategoria" class="form-label">Categoria do item *</label>
+                        <label for="perdCategoria" class="form-label">Categoria *</label>
 
                         <select id="perdCategoria" name="categoria_id"
                             class="form-select select-categoria" required>
@@ -614,12 +614,12 @@
 
                     <button type="button" class="btn btn-outline-secondary"
                         data-bs-dismiss="modal">
-                        Cancelar
+                        CANCELAR
                     </button>
 
                     <button type="submit" class="btn text-white text-uppercase fw-bold"
                         style="background-color:  #17704A;">
-                        Relatar item
+                        CADASTRAR
                     </button>
 
                 </div>
@@ -650,7 +650,7 @@
                 <div class="modal-body">
 
                     <div class="mb-3">
-                        <label for="encItemNome" class="form-label">Item encontrado *</label>
+                        <label for="encItemNome" class="form-label">Item *</label>
                         <input type="text" id="encItemNome" name="item"
                             class="form-control" maxlength="50"
                             placeholder="Ex: Chave azul, Garrafa preta" required>
@@ -664,20 +664,20 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="encOnde" class="form-label">Local onde foi encontrado *</label>
+                        <label for="encOnde" class="form-label">Local *</label>
                         <input type="text" id="encOnde" name="local"
                             class="form-control" maxlength="50"
                             placeholder="Ex: Bloco B, Sala 204, Cantina" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encQuando" class="form-label">Data em que foi encontrado *</label>
+                        <label for="encQuando" class="form-label">Data *</label>
                         <input type="date" id="encQuando" name="data"
                             class="form-control" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="encCategoria" class="form-label">Categoria do item *</label>
+                        <label for="encCategoria" class="form-label">Categoria *</label>
 
                         <select id="encCategoria" name="id_categoria"
                             class="form-select select-categoria" required>
@@ -701,49 +701,18 @@
                         </button>
                     </div>
 
-                    <fieldset>
-                        <legend class="form-label fs-6">Onde o item está guardado agora? *</legend>
-
-                        {% for destino in destinos %}
-                        {% set dest_id = destino.id_destino if destino.id_destino is defined else (destino.id if destino.id is defined else destino[0]) %}
-                        {% set dest_txt = destino.descricao if destino.descricao is defined else destino[1] %}
-
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio"
-                                name="destino" id="dest{{ dest_id }}"
-                                value="{{ dest_txt }}" required>
-
-                            <label class="form-check-label" for="dest{{ dest_id }}">
-                                {{ dest_txt }}
-                            </label>
-                        </div>
-                        {% endfor %}
-
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio"
-                                name="destino" id="destOutro" value="outro" required>
-
-                            <label class="form-check-label" for="destOutro">Outro</label>
-                        </div>
-
-                        <input type="text" id="encOutro" name="destino_outro"
-                            class="form-control d-none" maxlength="140"
-                            placeholder="Escreva o que você fez com o objeto"
-                            aria-label="O que você fez com o objeto">
-                    </fieldset>
-
                 </div>
 
                 <div class="modal-footer">
 
                     <button type="button" class="btn btn-outline-secondary"
                         data-bs-dismiss="modal">
-                        Cancelar
+                        CANCELAR
                     </button>
 
                     <button type="submit" class="btn text-white text-uppercase fw-bold"
                         style="background-color:  #17704A;">
-                        Publicar achado
+                        PUBLICAR
                     </button>
 
                 </div>
