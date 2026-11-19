@@ -604,20 +604,6 @@ div.prazo-centralizado {
 
 
 /* JANELA DE FILTROS */
-.grupo-filtro {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  background-color: rgba(0, 0, 0, 0.7);
-  justify-content: center;
-  align-items: center;
-  z-index: 1200;
-}
-
-
 .grupo-filtro.aberto {
   display: flex;
 }
@@ -1026,43 +1012,49 @@ body.escuro .btn-perfil-pill {
   color: #f1f5f9;
 }
 
-  body {
-    padding: 10px;
-  }
+body.escuro .btn-perfil-pill:hover,
+body.escuro .btn-perfil-pill:focus {
+  border-color: #60a5fa;
+  background-color: #27272a;
+}
 
-  /* Barra superior da COORDENAÇÃO */
-  .pagina-coordenacao .navbar {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 6px 0 12px 40px;
-    margin-bottom: 16px;
-    min-height: 44px;
-    width: 100%;
-  }
+body.escuro .perfil-avatar {
+  background-color: #2d333b;
+  color: #94a3b8;
+}
 
-  /* Barra superior do ALUNO (LOCALIZA+ à esquerda + botões à direita na mesma linha) */
-  body:not(.pagina-coordenacao) .navbar {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    padding: 6px 0 12px 0;
-    margin-bottom: 16px;
-    min-height: 44px;
-    width: 100%;
-  }
+body.escuro .dropdown-menu {
+  --bs-dropdown-bg: #1e1e1e;
+  --bs-dropdown-color: #f1f5f9;
+  --bs-dropdown-border-color: #333333;
+  --bs-dropdown-divider-bg: #333333;
+  --bs-dropdown-header-color: #f1f5f9;
+  --bs-dropdown-link-color: #e2e8f0;
+  --bs-dropdown-link-hover-color: #ffffff;
+  --bs-dropdown-link-hover-bg: #27272a;
+  background-color: #1e1e1e;
+  border-color: #333333;
+  color: #f1f5f9;
+}
 
-  body:not(.pagina-coordenacao) .navbar .container-fluido {
-    flex-shrink: 0;
-  }
+body.escuro .dropdown-header p {
+  color: #f1f5f9;
+}
 
-  body:not(.pagina-coordenacao) .navbar h1 {
-    font-size: 1.25rem;
-    white-space: nowrap;
-  }
+body.escuro .dropdown-header .text-muted {
+  --bs-secondary-color: #94a3b8;
+  color: #94a3b8 !important;
+}
+
+body.escuro .dropdown-item {
+  color: #e2e8f0;
+}
+
+body.escuro .dropdown-item:hover,
+body.escuro .dropdown-item:focus {
+  background-color: #27272a;
+  color: #ffffff;
+}
 
 body.escuro .dropdown-divider {
   border-color: #333333;
