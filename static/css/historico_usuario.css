@@ -49,30 +49,36 @@ body.escuro {
 /* ---------- Cabeçalho da seção ---------- */
  
 .cabecalho-historico {
-    max-width: 1140px;
-    margin: 24px auto 0;
+    width: 100%;
+    margin: 24px 0 0;
     padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
     font-family: 'Chakra Petch', sans-serif;
 }
- 
+
 .cabecalho-historico .link-voltar {
-    display: inline-block;
-    margin-bottom: 14px;
-    padding: 8px 16px;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
     background-color: #024873;
     color: #ffffff;
     border-radius: 6px;
     font-size: 0.85rem;
     font-weight: 700;
     text-decoration: none;
+    white-space: nowrap;
 }
- 
+
 .cabecalho-historico .link-voltar:hover {
     background-color: #013a5c;
 }
- 
+
 .cabecalho-historico .titulo-secao-itens {
-    margin: 0;
+    margin: 0 0 4px;
     color: var(--hist-azul);
     font-size: 1.5rem;
     font-weight: 700;
@@ -159,38 +165,46 @@ body.escuro {
 }
  
  
-/* ---------- Estado vazio ---------- */
- 
-.historico-vazio {
-    grid-column: 1 / -1;
-    margin: 0;
-    padding: 32px 0;
-    text-align: center;
-    color: var(--hist-texto-suave);
-    font-size: 1rem;
-}
- 
 
-.card-historico-status,
-.btn-excluir-relato {
+ 
+/* ---------- Estado vazio ---------- */
+
+.container-estado-vazio {
+    width: 100%;
+    margin: 24px 0 48px;
+    padding: 0 24px;
+}
+
+.card-historico-status {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 150px;
+    min-width: 130px;
     height: 38px;
+    padding: 0 12px;
     border-radius: 6px;
     font-family: 'Chakra Petch', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
     box-sizing: border-box;
     margin: 0;
 }
 
 .btn-excluir-relato {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     gap: 6px;
+    height: 38px;
+    padding: 0 14px;
     background-color: #dc3545;
     color: #ffffff;
     border: none;
+    border-radius: 6px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.15s ease;
 }
@@ -203,7 +217,6 @@ body.escuro {
 .btn-excluir-relato:active {
     transform: translateY(0);
 }
- 
 /* ---------- Acessibilidade ---------- */
  
 .cabecalho-historico .link-voltar:focus-visible,
