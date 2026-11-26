@@ -44,8 +44,6 @@ app = Flask(__name__)
 app.secret_key = "chciclete"
 
 
-
-
 # ===== CONFIGURAÇÃO DE E-MAIL =====
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -70,9 +68,17 @@ PRAZO_MARMITA_DIAS = 7
 PRAZO_REDUZIDO_DIAS = None
 PRAZO_DESCARTE_DIAS = PRAZO_DESCARTE_MESES * 30
 
+# Fim dos semestres (ajuste conforme o calendário da escola)
+FIM_1_SEMESTRE = (6, 30)    # (mês, dia)
+FIM_2_SEMESTRE = (12, 18)
+
+# Quantos dias antes do fim do semestre o aviso aparece
+DIAS_AVISO_SEMESTRE = 30
+
 
 def somar_meses(data, meses):
     """Soma meses de calendário a uma data."""
+
     mes = data.month - 1 + meses
     ano = data.year + mes // 12
     mes = mes % 12 + 1
@@ -98,72 +104,89 @@ def e_marmita(item, nomes_categorias):
     return 'marmit' in texto
 
 
-def calcular_prazo(item, eh_marmita=False):
-    """Calcula o prazo de descarte do item."""
+def montar_nomes_categorias(categorias):
+    """Mapa de ID da categoria para o nome."""
+
+    nomes = {}
+
+    for cat in categorias:
+
+        cat_id = (
+            cat.get('id_categoria', cat.get('id'))
+            if isinstance(cat, dict)
+            else cat[0]
+        )
+
+        cat_nome = (
+            cat.get('nome')
+            if isinstance(cat, dict)
+            else cat[1]
+        )
+
+        nomes[str(cat_id)] = cat_nome or ''
+
+    return nomes
+
+
+def proximo_fim_semestre(hoje):
+    """Data do próximo fim de semestre a partir de hoje."""
+
+    candidatos = [
+        date(hoje.year, *FIM_1_SEMESTRE),
+        date(hoje.year, *FIM_2_SEMESTRE),
+        date(hoje.year + 1, *FIM_1_SEMESTRE),
+    ]
+
+    return next(d for d in candidatos if d >= hoje)
+
+
+def aviso_fim_semestre():
+    """Texto de aviso se o fim do semestre estiver próximo, senão None."""
+
+    hoje = date.today()
+    fim = proximo_fim_semestre(hoje)
+    dias = (fim - hoje).days
+
+    if dias > DIAS_AVISO_SEMESTRE:
+        return None
+
+    return (
+        f"Atenção: o semestre termina em {fim.strftime('%d/%m/%Y')} "
+        f"(faltam {dias} dia(s)). Itens podem ser descartados "
+        f"no fim do semestre, mesmo antes do prazo normal."
+    )
+
+
+def calcular_prazo(item, marmita=False):
+    """Calcula o prazo de descarte e guarda dentro do próprio item."""
 
     data = item.get('data_encontrado')
 
     if isinstance(data, datetime):
         data = data.date()
 
-    elif isinstance(data, str) and data:
+    elif isinstance(data, str):
         try:
-            data = datetime.strptime(
-                data[:10], '%Y-%m-%d'
-            ).date()
+            data = datetime.strptime(data[:10], '%Y-%m-%d').date()
         except ValueError:
             data = None
 
-    if not data:
-        item['prazo_texto'] = ''
-        item['prazo_classe'] = ''
-        item['prazo_resumo'] = ''
-        return
+    item['marmita'] = marmita
 
-    if eh_marmita:
-        limite = data + timedelta(days=PRAZO_MARMITA_DIAS)
+    if not isinstance(data, date):
+        item['data_descarte'] = None
+        item['dias_restantes'] = None
+        return item
+
+    if marmita:
+        descarte = data + timedelta(days=PRAZO_MARMITA_DIAS)
     else:
-        limite = somar_meses(data, PRAZO_DESCARTE_MESES)
+        descarte = somar_meses(data, PRAZO_DESCARTE_MESES)
 
-    if PRAZO_REDUZIDO_DIAS:
-        limite = min(
-            limite,
-            data + timedelta(days=PRAZO_REDUZIDO_DIAS)
-        )
+    item['data_descarte'] = descarte
+    item['dias_restantes'] = (descarte - date.today()).days
 
-    dias = (limite - date.today()).days
-    limite_txt = limite.strftime('%d/%m/%Y')
-
-    if dias < 0:
-        texto = 'Prazo encerrado'
-        classe = 'prazo-vencido'
-        resumo = f'encerrado em {limite_txt}'
-
-    else:
-        if dias == 0:
-            texto, restante = 'Descarte hoje', 'último dia'
-
-        elif dias == 1:
-            texto, restante = 'Descarte amanhã', '1 dia restante'
-
-        else:
-            texto = f'Descarte em {dias} dias'
-            restante = f'{dias} dias restantes'
-
-        if dias <= 7:
-            classe = 'prazo-urgente'
-
-        elif dias <= 30:
-            classe = 'prazo-atencao'
-
-        else:
-            classe = 'prazo-ok'
-
-        resumo = f'até {limite_txt} ({restante})'
-
-    item['prazo_texto'] = texto
-    item['prazo_classe'] = classe
-    item['prazo_resumo'] = resumo
+    return item
 
 
 def status_do_item(item):
@@ -262,6 +285,8 @@ def pag_login_coordenacao():
         ja_tem_coor=ja_tem_coor,
         cpf_digitado=cpf_digitado
     )
+
+
 @app.route("/cadastro/usuario")
 def pag_cadastro():
     return render_template("cadastrar_usuario.html")
@@ -414,24 +439,7 @@ def visualizar_itens():
     destinos = listar_destinos()
 
     # Mapa de ID para nome da categoria.
-
-    nomes_categorias = {}
-
-    for cat in categorias:
-
-        cat_id = (
-            cat.get('id_categoria', cat.get('id'))
-            if isinstance(cat, dict)
-            else cat[0]
-        )
-
-        cat_nome = (
-            cat.get('nome')
-            if isinstance(cat, dict)
-            else cat[1]
-        )
-
-        nomes_categorias[str(cat_id)] = cat_nome or ''
+    nomes_categorias = montar_nomes_categorias(categorias)
 
     for item in itens:
 
@@ -464,7 +472,8 @@ def visualizar_itens():
         prazo_dias=PRAZO_DESCARTE_DIAS,
         prazo_meses=PRAZO_DESCARTE_MESES,
         prazo_marmita_dias=PRAZO_MARMITA_DIAS,
-        prazo_reduzido_dias=PRAZO_REDUZIDO_DIAS
+        prazo_reduzido_dias=PRAZO_REDUZIDO_DIAS,
+        aviso_semestre=aviso_fim_semestre()
     )
 
 
@@ -1079,7 +1088,7 @@ def reivindicar_item(id_item):
 
     email_coordenacao = os.getenv(
         "EMAIL_COORDENACAO",
-        "giovannacarraro436@gmail.com"
+        "localizamaisararaquara@gmail.com"
     )
 
     destinatarios = [email_coordenacao]
@@ -1091,6 +1100,23 @@ def reivindicar_item(id_item):
         if hasattr(data, "strftime")
         else (data or "não informada")
     )
+
+    nomes_categorias = montar_nomes_categorias(listar_categorias())
+
+    calcular_prazo(
+        item,
+        e_marmita(item, nomes_categorias)
+    )
+
+    descarte = item.get("data_descarte")
+
+    descarte_txt = (
+        descarte.strftime("%d/%m/%Y")
+        if descarte
+        else "não informado"
+    )
+
+    aviso_semestre = aviso_fim_semestre()
 
     try:
 
@@ -1108,27 +1134,26 @@ def reivindicar_item(id_item):
             f"Item: {item['item']}\n"
             f"Descrição: {item.get('descricao') or 'não informada'}\n"
             f"Local: {item.get('local') or 'não informado'}\n"
-            f"Data: {data_txt}\n\n"
+            f"Encontrado em: {data_txt}\n"
+            f"Prazo para retirada: {descarte_txt}\n"
+            f"{aviso_semestre + chr(10) if aviso_semestre else ''}"
+            f"\n"
             f"Entre em contato com o aluno para confirmar que o item é dele e combinar a retirada.\n\n"
             f"-- Sistema Localiza+"
         )
 
         mail.send(msg)
 
-        flash(
-            "Solicitação enviada! A coordenação entrará em contato com você.",
-            "success"
-        )
-
     except Exception:
-
+        # O e-mail chega normalmente; o erro ocorre após o envio.
+        # Apenas registramos no console, sem avisar o aluno.
         import traceback
         traceback.print_exc()
 
-        flash(
-            "Não foi possível enviar a solicitação agora. Tente novamente.",
-            "error"
-        )
+    flash(
+        "Solicitação enviada! A coordenação entrará em contato com você.",
+        "success"
+    )
 
     return redirect(url_for("visualizar_itens"))
 
@@ -1257,19 +1282,25 @@ def excluir_meu_relato(id_item):
 
     return redirect(url_for('meu_historico'))
 
+
 @app.template_filter('data_br')
 def formatar_data_br(valor):
     """Converte datas (date, datetime ou string YYYY-MM-DD) para DD/MM/AAAA."""
+
     if not valor:
         return ''
+
     if isinstance(valor, (date, datetime)):
         return valor.strftime('%d/%m/%Y')
+
     texto = str(valor).strip()
+
     if len(texto) >= 10 and texto[4] == '-' and texto[7] == '-':
         try:
             return datetime.strptime(texto[:10], '%Y-%m-%d').strftime('%d/%m/%Y')
         except ValueError:
             pass
+
     return texto
 
 

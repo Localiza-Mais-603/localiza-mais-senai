@@ -100,3 +100,49 @@
 .prazo-vencido {
     background-color: #6c757d;
 }
+
+.aviso-semestre {
+    max-width: 780px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.badge-prazo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    width: fit-content;
+}
+
+/* Verde: mais de 30 dias restantes */
+.badge-prazo.prazo-normal {
+    background-color: #e6f4ea;
+    color: #137333;
+    border: 1px solid #ceead6;
+}
+
+/* Amarelo: entre 8 e 30 dias restantes */
+.badge-prazo.prazo-urgente {
+    background-color: #fef7e0;
+    color: #b06000;
+    border: 1px solid #fde293;
+}
+
+/* Vermelho claro: 7 dias ou menos (inclui marmitas e reta final) */
+.badge-prazo.prazo-critico {
+    background-color: #fce8e6;
+    color: #c5221f;
+    border: 1px solid #fad2cf;
+}
+
+/* Vermelho forte: prazo já vencido */
+.badge-prazo.prazo-vencido {
+    background-color: #c5221f;
+    color: #ffffff;
+    border: 1px solid #a50e0e;
+}
