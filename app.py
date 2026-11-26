@@ -320,6 +320,25 @@ def cadastro_coor():
 
 # ===== GERENCIAR COORDENADORES =====
 
+# ===== GERENCIAR COORDENADORES =====
+
+def obter_cpf_sessao():
+    """Extrai o CPF limpo do coordenador logado na sessão."""
+    usuario_sessao = session.get("usuario")
+    if not usuario_sessao:
+        return ""
+    if isinstance(usuario_sessao, dict):
+        cpf = (
+            usuario_sessao.get("cpf")
+            or usuario_sessao.get("CPF")
+            or usuario_sessao.get("cpf_coordenador")
+            or ""
+        )
+    else:
+        cpf = usuario_sessao[0] if len(usuario_sessao) > 0 else ""
+    return somente_numeros(str(cpf))
+
+
 @app.route("/gerenciar-coordenadores")
 def gerenciar_coordenadores():
     if session.get("perfil") != "coordenacao":
@@ -340,13 +359,22 @@ def gerenciar_coordenadores():
         cursor.close()
         conexao.close()
 
+    # Garante o CPF limpo mesmo se o e-mail tiver sido alterado
+    cpf_logado = (
+        somente_numeros(str(usuario_atualizado.get("cpf") or usuario_atualizado.get("CPF") or ""))
+        if usuario_atualizado
+        else obter_cpf_sessao()
+    )
+
     coordenadores = listar_todos_coordenadores()
     categorias = listar_categorias()
+
     return render_template(
         "gerenciamento_coor.html",
         coordenadores=coordenadores,
         categorias=categorias,
-        usuario=usuario_atualizado
+        usuario=usuario_atualizado,
+        cpf_logado=cpf_logado
     )
 
 
@@ -368,6 +396,15 @@ def editar_coor(cpf):
 
         try:
             atualizar_coor(cpf, nome, email, senha if senha else None)
+
+            # Se o coordenador editou o próprio perfil, atualiza o e-mail na sessão
+            if somente_numeros(cpf) == obter_cpf_sessao():
+                usuario_sessao = session.get("usuario")
+                if isinstance(usuario_sessao, dict):
+                    usuario_sessao["email"] = email
+                    usuario_sessao["nome"] = nome
+                    session["usuario"] = usuario_sessao
+
             flash("Coordenador atualizado com sucesso!", "success")
             return redirect(url_for("gerenciar_coordenadores"))
         except IntegrityError:
@@ -384,6 +421,11 @@ def editar_coor(cpf):
 def remover_coor(cpf):
     if session.get("perfil") != "coordenacao":
         return redirect(url_for("pag_login_coordenacao"))
+
+    # TRAVA DE SEGURANÇA: Impede apagar o próprio perfil
+    if somente_numeros(cpf) == obter_cpf_sessao():
+        flash("Você não pode excluir o seu próprio perfil enquanto estiver logado.", "danger")
+        return redirect(url_for("gerenciar_coordenadores"))
 
     try:
         deletar_coor(cpf)
