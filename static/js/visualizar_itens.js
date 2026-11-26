@@ -343,3 +343,43 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const secaoEditar = document.getElementById("secao-editar-coor");
+      const formEditar = document.getElementById("formEditarCoor");
+      const inputCpf = document.getElementById("editCoorCpf");
+      const inputNome = document.getElementById("editCoorNome");
+      const inputEmail = document.getElementById("editCoorEmail");
+      const inputSenha = document.getElementById("editCoorSenha");
+      const btnCancelar = document.getElementById("btnCancelarEdicaoCoor");
+      const btnFechar = document.getElementById("btnFecharEdicaoCoor");
+
+      function abrirEdicao(btn) {
+        if (!secaoEditar || !formEditar) return;
+
+        formEditar.action = btn.dataset.action;
+        inputCpf.value = btn.dataset.cpf || "";
+        inputNome.value = btn.dataset.nome || "";
+        inputEmail.value = btn.dataset.email || "";
+        inputSenha.value = "";
+
+        secaoEditar.classList.remove("d-none");
+        secaoEditar.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        inputNome.focus();
+      }
+
+      function fecharEdicao() {
+        if (!secaoEditar || !formEditar) return;
+        secaoEditar.classList.add("d-none");
+        formEditar.action = "";
+        inputSenha.value = "";
+      }
+
+      document.querySelectorAll(".btn-editar-coor").forEach((btn) => {
+        btn.addEventListener("click", () => abrirEdicao(btn));
+      });
+
+      if (btnCancelar) btnCancelar.addEventListener("click", fecharEdicao);
+      if (btnFechar) btnFechar.addEventListener("click", fecharEdicao);
+    });
+  
