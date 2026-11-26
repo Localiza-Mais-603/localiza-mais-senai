@@ -227,12 +227,16 @@
             <button type="button" class="btn-abrir" id="btnAbrir">Filtrar categoria</button>
         </section>
 
-        <!-- 4. PÍLULA DE PRAZO DE RETIRADA (LOGO ACIMA DOS ITENS) -->
+    
+     <!-- 4. AVISO DE FIM DE SEMESTRE + PÍLULA DE PRAZO DE RETIRADA -->
+        <!-- 4. PÍLULA DE PRAZO DE RETIRADA + AVISO DO SEMESTRE -->
         <div class="prazo-centralizado">
             <button type="button" id="btnPrazoRetirada" class="chip-prazo"
-                data-prazo-dias="{{ prazo_dias | default(180) }}" data-prazo-meses="{{ prazo_meses | default(6) }}"
-                data-prazo-marmita="{{ prazo_marmita_dias | default('') }}"
+                data-prazo-dias="{{ prazo_dias | default(180) }}"
+                data-prazo-meses="{{ prazo_meses | default(6) }}"
+                data-prazo-marmita="{{ prazo_marmita_dias | default(7) }}"
                 data-prazo-reduzido="{{ prazo_reduzido_dias or '' }}"
+                data-aviso-semestre="{{ aviso_semestre or '' }}"
                 aria-label="Ver como funciona o prazo de retirada dos itens">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"
                     aria-hidden="true">
@@ -244,7 +248,168 @@
             </button>
         </div>
 
+        {% if aviso_semestre %}
+        <div class="aviso-semestre alert alert-warning d-flex align-items-center gap-2 mx-auto my-2" role="alert">
+            <i class="fa-solid fa-triangle-exclamation flex-shrink-0" aria-hidden="true"></i>
+            <span>{{ aviso_semestre }}</span>
+        </div>
+        {% endif %}
+
         <!-- 5. LISTA DE ITENS -->
+        <!-- 5. LISTA DE ITENS -->
+        <section class="secao-lista-itens" aria-label="Itens registados">
+            <ul class="itens-card">
+
+                {% for item in itens %}
+                {% if item.status|lower not in ['perdido', 'retirado', 'arquivado'] %}
+
+                {% set dias = item.dias_restantes %}
+                {% set data_cad_br = item.data_encontrado | data_br if item.data_encontrado else '' %}
+                {% set data_desc_br = item.data_descarte.strftime('%d/%m/%Y') if item.data_descarte else '' %}
+
+                {% set classe_prazo = 'prazo-normal' %}
+                {% set texto_prazo = '' %}
+
+                {% if dias is not none %}
+                    {% if dias < 0 %}
+                        {% set classe_prazo = 'prazo-vencido' %}
+                        {% set texto_prazo = 'Vencido há ' ~ (dias | abs) ~ (' dia' if (dias | abs) == 1 else ' dias') %}
+                    {% elif dias == 0 %}
+                        {% set classe_prazo = 'prazo-critico' %}
+                        {% set texto_prazo = 'Descarta hoje' %}
+                    {% elif dias == 1 %}
+                        {% set classe_prazo = 'prazo-critico' %}
+                        {% set texto_prazo = 'Falta 1 dia' %}
+                    {% elif dias <= 7 %}
+                        {% set classe_prazo = 'prazo-critico' %}
+                        {% set texto_prazo = 'Faltam ' ~ dias ~ ' dias' %}
+                    {% elif dias <= 30 %}
+                        {% set classe_prazo = 'prazo-urgente' %}
+                        {% set texto_prazo = 'Faltam ' ~ dias ~ ' dias' %}
+                    {% else %}
+                        {% set classe_prazo = 'prazo-normal' %}
+                        {% set texto_prazo = 'Faltam ' ~ dias ~ ' dias' %}
+                    {% endif %}
+                {% endif %}
+
+                <li style="list-style: none;">
+
+                    <article class="card" style="width: 20rem;" data-categoria="{{ item.id_categoria }}"
+                        data-item="{{ item.item }}" data-descricao="{{ item.descricao if item.descricao else '' }}"
+                        data-local="{{ item.local if item.local else '' }}"
+                        data-data="{{ data_cad_br }}"
+                        data-status="{{ item.status }}"
+                        data-publicado="{{ item.publicado_nome if item.publicado_nome else '' }}"
+                        data-destino="{{ item.destino_objeto if item.destino_objeto else '' }}"
+                        data-prazo="{{ texto_prazo ~ (' (' ~ data_desc_br ~ ')' if data_desc_br else '') }}"
+                        data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
+                        data-coordenacao="{{ 'true' if item.cpf_coordenador else 'false' }}" onclick="abrirCard(this)">
+
+                        <div class="card-corpo">
+                            <h3 class="card-titulo">{{ item.item }}</h3>
+                            <p class="card-text">{{ item.descricao }}</p>
+
+                            {% if data_cad_br %}
+                            <p class="card-data-cadastro text-muted small mb-2">
+                                <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                                Cadastrado em {{ data_cad_br }}
+                            </p>
+                            {% endif %}
+
+                            {% if dias is not none %}
+                            <span class="badge-prazo {{ classe_prazo }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor"
+                                    viewBox="0 0 16 16" aria-hidden="true">
+                                    <path
+                                        d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+                                </svg>
+                                {{ texto_prazo }}{% if item.marmita %} • Marmita{% endif %}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        {% if session.get('perfil') == 'aluno' and usuario and item.email != usuario.email %}
+                        <form action="{{ url_for('reivindicar_item', id_item=item.id_item) }}" method="POST"
+                            class="form-reivindicar" onclick="event.stopPropagation()">
+                            <input type="hidden" name="nome_item" value="{{ item.item }}">
+                            <button type="submit" class="btn-item-meu">
+                                <i class="fa-solid fa-hand-pointer"></i>
+                                <span>Esse item é meu</span>
+                            </button>
+                        </form>
+                        {% endif %}
+
+                        {% if session.get('perfil') == 'coordenacao' %}
+                        <div class="card-botoes-acao" onclick="event.stopPropagation()">
+
+                            <button type="button" class="btn-acao-card btn-retirar-card" data-id="{{ item.id_item }}"
+                                data-nome="{{ item.item }}"
+                                onclick="abrirModalRetirar(this.dataset.id, this.dataset.nome)">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-hidden="true">
+                                    <path d="M11 11V7a2 2 0 0 1 2-2h5" />
+                                    <polyline points="15 2 18 5 15 8" />
+                                    <path d="M3 14h3v6H3z" />
+                                    <path d="M6 15h4.5a1.5 1.5 0 0 1 1.5 1.5v0a1.5 1.5 0 0 1-1.5 1.5H9" />
+                                    <path d="M6 19h7.5l4.2-2.5a1.4 1.4 0 0 0-1.4-2.4L12 16.5" />
+                                </svg>
+                                <span>Retirar</span>
+                            </button>
+
+                            <button type="button" class="btn-acao-card btn-editar-card"
+                                onclick="abrirModalEdicao(this, '{{ item.id_item }}')">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-hidden="true">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                                    <path d="m15 5 4 4" />
+                                </svg>
+                                <span>Editar</span>
+                            </button>
+
+                            <form action="{{ url_for('arquivar_item', id_item=item.id_item) }}" method="POST"
+                                class="form-acao form-arquivar" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-acao-card btn-arquivar-card">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                        aria-hidden="true">
+                                        <rect width="20" height="5" x="2" y="3" rx="1" />
+                                        <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8" />
+                                        <path d="M10 12h4" />
+                                    </svg>
+                                    <span>Arquivar</span>
+                                </button>
+                            </form>
+
+                            <form action="{{ url_for('excluir_item', id_item=item.id_item) }}" method="POST"
+                                class="form-acao form-excluir" onclick="event.stopPropagation()">
+                                <button type="submit" class="btn-acao-card btn-excluir-card">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                        aria-hidden="true">
+                                        <path d="M3 6h18" />
+                                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                        <line x1="10" x2="10" y1="11" y2="17" />
+                                        <line x1="14" x2="14" y1="11" y2="17" />
+                                    </svg>
+                                    <span>Excluir</span>
+                                </button>
+                            </form>
+
+                        </div>
+                        {% endif %}
+
+                    </article>
+                </li>
+                {% endif %}
+                {% endfor %}
+
+            </ul>
+
+        <!-- 5. LISTA DE ITENS
         <section class="secao-lista-itens" aria-label="Itens registados">
             <ul class="itens-card">
 
@@ -382,7 +547,7 @@
             {% endif %}
         </section>
 
-    </main>
+    </main> -->
 
     <!-- MODAL: REGISTRAR RETIRADA DO ITEM -->
     <div class="grupo-filtro" id="modalRetirarItem" role="dialog" aria-hidden="true">
