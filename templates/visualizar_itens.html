@@ -21,8 +21,7 @@
 </head>
 
 <body class="{% if session.get('perfil') == 'coordenacao' %}pagina-coordenacao{% endif %}">
-
-    <!-- CABEÇALHO -->
+<!-- CABEÇALHO -->
     <header>
         <nav class="navbar transparente-header">
             {% if session.get('perfil') == 'aluno' %}
@@ -99,9 +98,13 @@
 
                         {% if session.get('perfil') == 'coordenacao' %}
                         <li>
-                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modalCategorias">
+                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCategorias">
                                 Gerenciar categorias
-                            </a>
+                            </button>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
                         </li>
 
                         <li>

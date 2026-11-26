@@ -57,7 +57,7 @@ i.fa-brands,
 }
 
 /* SOMENTE BOTÕES (E TEXTOS DENTRO DELES) EM MAIÚSCULO */
-button:not(.chip-prazo):not(.fechar-card):not(.fechar-filtro):not(.btn-close),
+button:not(.chip-prazo):not(.fechar-card):not(.fechar-filtro):not(.btn-close):not(.dropdown-item),
 button:not(.chip-prazo) span,
 .btn,
 .btn span,
@@ -1290,4 +1290,27 @@ body.escuro .empty-state-card p {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+
+/* perfil usuario front end dos botões */
+
+/* Destaque ao passar o mouse nos botões do menu dropdown */
+.dropdown-menu .dropdown-item {
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+  background-color: #e2e8f0;
+  color: #024873;
+}
+
+/* Mantém o texto vermelho no "Sair", mas com o fundo cinza claro no hover */
+.dropdown-menu .dropdown-item.text-danger:hover,
+.dropdown-menu .dropdown-item.text-danger:focus {
+  background-color: #e2e8f0;
+  color: #dc2626 !important;
 }

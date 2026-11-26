@@ -109,12 +109,15 @@
                 return;
             }
 
-            if (buscando && combinam === 0) {
+            if (n > 0 || !buscando) {
+                vazio.hidden = true;
+                return;
+            }
+
+            if (combinam === 0) {
                 vazio.innerHTML = avisoNaoCadastrado(termo);
-            } else if (buscando) {
-                vazio.innerHTML = avisoForaDoFiltro(termo);
             } else {
-                vazio.innerHTML = '<p class="pesq-vazio-sub">Nenhum item disponível no momento.</p>';
+                vazio.innerHTML = avisoForaDoFiltro(termo);
             }
 
             vazio.hidden = false;
