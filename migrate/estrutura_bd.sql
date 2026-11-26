@@ -1,4 +1,3 @@
-CREATE DATABASE IF NOT EXISTS db_localiza;
 USE db_localiza;
 
 -- TABELA DE CATEGORIAS
