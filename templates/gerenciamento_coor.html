@@ -1,0 +1,692 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gerenciar Coordenadores - Localiza+</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+    <!-- CSS da sidebar -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu-coordenacao.css') }}">
+
+    <!-- CSS desta página -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gerenciar.css') }}">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    {% include 'menu_coordenacao.html' %}
+
+    <header class="barra-superior">
+
+        <div class="itens-central">
+
+            <div class="form-check form-check-inline switch-group">
+
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="switch-dark-mode"
+                    onchange="AlterarTema()"
+                >
+
+                <label class="form-check-label" for="switch-dark-mode">
+
+                    <div class="switch-darkmode">
+
+                        <div class="icons">
+                            <i class="fa-solid fa-sun"></i>
+                            <i class="fa-solid fa-moon"></i>
+                        </div>
+
+                        <div class="circle"></div>
+
+                    </div>
+
+                </label>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="conteudo-coord">
+        <div class="conteudo-interno">
+
+            <!-- MENSAGENS -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+
+                        {% set alert_type = 'danger' if category in ['danger', 'error'] else 'success' %}
+
+                        <div class="alert alert-{{ alert_type }} alert-dismissible fade show" role="alert">
+                            <i class="fa-solid {% if alert_type == 'success' %}fa-circle-check{% else %}fa-circle-exclamation{% endif %} me-2"></i>
+
+                            {{ message }}
+
+                            <button type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Fechar">
+                            </button>
+                        </div>
+
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+
+            <!-- CABEÇALHO -->
+            <div class="page-header">
+
+                <div>
+                    <span class="subtitulo-pagina">
+                        <i class="fa-solid fa-shield-halved me-1"></i>
+                        ÁREA ADMINISTRATIVA
+                    </span>
+
+                    <h1>Gerenciar Coordenadores</h1>
+
+                    <p>
+                        Cadastre, edite e gerencie os coordenadores do sistema.
+                    </p>
+                </div>
+
+                <!-- BOTÃO NOVO COORDENADOR -->
+                <button type="button"
+                        class="btn-novo-coord"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalCadastrarCoor">
+
+                    <i class="fa-solid fa-plus"></i>
+                    Novo Coordenador
+
+                </button>
+
+            </div>
+
+
+            <!-- LISTA DE COORDENADORES -->
+            <section class="secao-coordenadores">
+
+                <div class="secao-titulo">
+
+                    <div>
+                        <h2>Coordenadores cadastrados</h2>
+                        <p>Visualize e gerencie os perfis registrados.</p>
+                    </div>
+
+                    <span class="contador-coord">
+                        <i class="fa-solid fa-users me-1"></i>
+                        {{ coordenadores|length }} cadastrados
+                    </span>
+
+                </div>
+
+
+                <!-- TABELA -->
+                <div class="table-card">
+
+                    <div class="table-responsive">
+
+                        <table class="table align-middle mb-0">
+
+                            <thead>
+                                <tr>
+                                    <th>Coordenador</th>
+                                    <th>CPF</th>
+                                    <th class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for coord in coordenadores %}
+
+                                    {% set cpf_item = coord.cpf|string|replace('.', '')|replace('-', '')|trim %}
+                                    {% set cpf_sessao = (cpf_logado or '')|string|replace('.', '')|replace('-', '')|trim %}
+                                    {% set eh_proprio = cpf_item == cpf_sessao %}
+
+                                    <tr class="linha-coord">
+
+                                        <!-- INFORMAÇÕES -->
+                                        <td>
+
+                                            <div class="info-coord">
+
+                                                <div class="avatar-coord">
+                                                    <i class="fa-solid fa-user"></i>
+                                                </div>
+
+                                                <div>
+
+                                                    <strong class="coord-name">
+
+                                                        {{ coord.nome }}
+
+                                                        {% if eh_proprio %}
+                                                            <span class="badge-proprio">Você</span>
+                                                        {% endif %}
+
+                                                    </strong>
+
+                                                    <span class="coord-email">
+                                                        {{ coord.email }}
+                                                    </span>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <!-- CPF -->
+                                        <td class="coord-cpf">
+                                            {{ coord.cpf }}
+                                        </td>
+
+
+                                        <!-- AÇÕES -->
+                                        <td class="actions-cell">
+
+                                            <div class="botoes-acoes">
+
+                                                <!-- EDITAR -->
+                                                <button
+                                                    type="button"
+                                                    class="btn-editar-coor"
+                                                    data-cpf="{{ coord.cpf }}"
+                                                    data-nome="{{ coord.nome }}"
+                                                    data-email="{{ coord.email }}"
+                                                    data-action="{{ url_for('editar_coor', cpf=coord.cpf) }}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#modalEditarCoor">
+
+                                                    <i class="fa-solid fa-pen"></i>
+                                                    Editar
+
+                                                </button>
+
+
+                                                <!-- EXCLUIR -->
+                                                {% if eh_proprio %}
+
+                                                    <button
+                                                        type="button"
+                                                        class="btn-proprio"
+                                                        disabled
+                                                        title="Você não pode excluir seu próprio perfil">
+
+                                                        <i class="fa-solid fa-lock"></i>
+                                                        Perfil atual
+
+                                                    </button>
+
+                                                {% else %}
+
+                                                    <form
+                                                        action="{{ url_for('remover_coor', cpf=coord.cpf) }}"
+                                                        method="POST"
+                                                        class="form-remover"
+                                                        data-nome="{{ coord.nome }}">
+
+                                                        <button type="submit" class="btn-remover-coor">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                            Excluir
+                                                        </button>
+
+                                                    </form>
+
+                                                {% endif %}
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% else %}
+
+                                    <tr>
+                                        <td colspan="3">
+
+                                            <div class="estado-vazio">
+
+                                                <i class="fa-solid fa-users"></i>
+
+                                                <h3>Nenhum coordenador cadastrado</h3>
+
+                                                <p>Cadastre um novo coordenador para começar.</p>
+
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+
+    <!-- ================================================== -->
+    <!-- MODAL: CADASTRAR COORDENADOR                       -->
+    <!-- ================================================== -->
+
+    <div class="modal fade" id="modalCadastrarCoor" tabindex="-1" aria-labelledby="tituloCadastrarCoor" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div>
+                        <h2 class="modal-title" id="tituloCadastrarCoor">
+                            <i class="fa-solid fa-user-plus me-2"></i>
+                            Novo Coordenador
+                        </h2>
+
+                        <p class="modal-subtitulo mb-0">
+                            Preencha os dados para cadastrar um novo coordenador.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Fechar">
+                    </button>
+
+                </div>
+
+
+                <form action="/cadastro-coor" method="POST" id="formCadastrarCoor">
+
+                    <div class="modal-body">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label for="cadCoorNome">Nome completo *</label>
+
+                                <input
+                                    type="text"
+                                    id="cadCoorNome"
+                                    name="nome_completo"
+                                    class="form-control"
+                                    maxlength="120"
+                                    required>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label for="cadCoorCpf">CPF *</label>
+
+                                <input
+                                    type="text"
+                                    id="cadCoorCpf"
+                                    name="cpf"
+                                    class="form-control"
+                                    maxlength="14"
+                                    placeholder="000.000.000-00"
+                                    required>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label for="cadCoorEmail">E-mail *</label>
+
+                                <input
+                                    type="email"
+                                    id="cadCoorEmail"
+                                    name="email"
+                                    class="form-control"
+                                    maxlength="120"
+                                    required>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label for="cadCoorSenha">Senha *</label>
+
+                                <input
+                                    type="password"
+                                    id="cadCoorSenha"
+                                    name="senha"
+                                    class="form-control"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+
+                        <button type="button"
+                                class="btn-cancelar"
+                                data-bs-dismiss="modal">
+
+                            Cancelar
+
+                        </button>
+
+                        <button type="submit" class="btn-salvar">
+
+                            <i class="fa-solid fa-user-plus me-1"></i>
+                            Cadastrar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================================== -->
+    <!-- MODAL: EDITAR COORDENADOR                          -->
+    <!-- ================================================== -->
+
+    <div class="modal fade" id="modalEditarCoor" tabindex="-1" aria-labelledby="tituloEditarCoor" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <div>
+                        <h2 class="modal-title" id="tituloEditarCoor">
+                            <i class="fa-solid fa-user-pen me-2"></i>
+                            Editar Coordenador
+                        </h2>
+
+                        <p class="modal-subtitulo mb-0">
+                            Atualize as informações do coordenador selecionado.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Fechar">
+                    </button>
+
+                </div>
+
+
+                <form id="formEditarCoor" action="" method="POST">
+
+                    <div class="modal-body">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-4">
+
+                                <label for="editCoorCpf">CPF</label>
+
+                                <input
+                                    type="text"
+                                    id="editCoorCpf"
+                                    class="form-control"
+                                    disabled
+                                    readonly>
+
+                            </div>
+
+
+                            <div class="col-md-4">
+
+                                <label for="editCoorNome">Nome completo *</label>
+
+                                <input
+                                    type="text"
+                                    id="editCoorNome"
+                                    name="nome"
+                                    class="form-control"
+                                    maxlength="120"
+                                    required>
+
+                            </div>
+
+
+                            <div class="col-md-4">
+
+                                <label for="editCoorEmail">E-mail *</label>
+
+                                <input
+                                    type="email"
+                                    id="editCoorEmail"
+                                    name="email"
+                                    class="form-control"
+                                    maxlength="120"
+                                    required>
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label for="editCoorSenha">Nova senha (opcional)</label>
+
+                                <input
+                                    type="password"
+                                    id="editCoorSenha"
+                                    name="senha"
+                                    class="form-control"
+                                    placeholder="Deixe em branco para manter a senha atual">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+
+                        <button type="button"
+                                class="btn-cancelar"
+                                data-bs-dismiss="modal">
+
+                            Cancelar
+
+                        </button>
+
+                        <button type="submit" class="btn-salvar">
+
+                            <i class="fa-solid fa-floppy-disk me-1"></i>
+                            Salvar alterações
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- BOOTSTRAP -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+
+
+      function AlterarTema() {
+    const switchDark = document.getElementById("switch-dark-mode");
+    const modoEscuroAtivo = switchDark
+        ? switchDark.checked
+        : !document.body.classList.contains("escuro");
+
+    document.body.classList.toggle("escuro", modoEscuroAtivo);
+    localStorage.setItem("tema", modoEscuroAtivo ? "escuro" : "claro");
+}
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // ==========================================
+            // ELEMENTOS DO MODAL DE EDIÇÃO
+            // ==========================================
+
+            const modalEditarElemento = document.getElementById("modalEditarCoor");
+
+            const formEditar = document.getElementById("formEditarCoor");
+
+            const inputCpf = document.getElementById("editCoorCpf");
+            const inputNome = document.getElementById("editCoorNome");
+            const inputEmail = document.getElementById("editCoorEmail");
+            const inputSenha = document.getElementById("editCoorSenha");
+
+            const modalEditar = new bootstrap.Modal(modalEditarElemento);
+
+
+            // ==========================================
+            // ABRIR MODAL DE EDIÇÃO
+            // ==========================================
+
+            document.querySelectorAll(".btn-editar-coor").forEach(botao => {
+
+                botao.addEventListener("click", function () {
+
+                    inputCpf.value = this.dataset.cpf;
+                    inputNome.value = this.dataset.nome;
+                    inputEmail.value = this.dataset.email;
+
+                    inputSenha.value = "";
+
+                    formEditar.action = this.dataset.action;
+
+                });
+
+            });
+
+
+            // ==========================================
+            // FOCO NO CAMPO NOME AO ABRIR
+            // ==========================================
+
+            modalEditarElemento.addEventListener("shown.bs.modal", function () {
+
+                inputNome.focus();
+
+            });
+
+
+            // ==========================================
+            // LIMPAR MODAL DE EDIÇÃO AO FECHAR
+            // ==========================================
+
+            modalEditarElemento.addEventListener("hidden.bs.modal", function () {
+
+                formEditar.reset();
+                formEditar.action = "";
+
+            });
+
+
+            // ==========================================
+            // MODAL DE CADASTRO
+            // ==========================================
+
+            const modalCadastrarElemento = document.getElementById("modalCadastrarCoor");
+
+            const formCadastrar = document.getElementById("formCadastrarCoor");
+
+            const modalCadastrar = new bootstrap.Modal(modalCadastrarElemento);
+
+
+            modalCadastrarElemento.addEventListener("shown.bs.modal", function () {
+
+                document.getElementById("cadCoorNome").focus();
+
+            });
+
+
+            modalCadastrarElemento.addEventListener("hidden.bs.modal", function () {
+
+                formCadastrar.reset();
+
+            });
+
+
+            // ==========================================
+            // CONFIRMAR EXCLUSÃO
+            // ==========================================
+
+            document.querySelectorAll(".form-remover").forEach(form => {
+
+                form.addEventListener("submit", function (event) {
+
+                    const nome = this.dataset.nome;
+
+                    const confirmar = confirm(
+                        `Tem certeza que deseja excluir o coordenador "${nome}"?`
+                    );
+
+                    if (!confirmar) {
+                        event.preventDefault();
+                    }
+
+                });
+
+            });
+
+        });
+
+    </script>
+
+
+    <!-- VALIDAÇÃO E MÁSCARA DE CPF -->
+    <script src="/static/js/validar_cpf.js"></script>
+
+</body>
+</html>
