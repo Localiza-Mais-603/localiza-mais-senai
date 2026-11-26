@@ -915,6 +915,15 @@ div.prazo-centralizado {
   cursor: pointer;
 }
 
+/* Esconder barra de rolagem */
+html {
+    scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+    display: none; /* Chrome, Edge e Safari */
+}
+
 .switch-group .form-check-input {
   display: none;
 }
