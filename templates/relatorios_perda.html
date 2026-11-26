@@ -89,7 +89,7 @@
                     data-foto="{{ url_for('static', filename='img_upload/' ~ item.foto) if item.foto else '' }}"
                     data-email="{{ item.email if item.email else 'Não informado' }}"
                     data-nome="{{ item.nome_usuario if item.nome_usuario else 'Desconhecido' }}"
-                    onclick="abrirCard(this)">
+                    onclick="abrirCardRelatorio(this)">
 
                     <div class="card-corpo">
                         <h3 class="card-titulo fw-bold mb-2"
