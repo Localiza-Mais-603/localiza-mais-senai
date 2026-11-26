@@ -15,37 +15,6 @@ body.escuro {
     --hist-texto-suave: #a9b8c2;
 }
  
- 
-/* ---------- Menu de perfil simples (substitui o dropdown) ---------- */
- 
-.perfil-usuario {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    font-family: 'Chakra Petch', sans-serif;
-}
- 
-.perfil-nome {
-    padding: 8px 16px;
-    background-color: #024873;
-    color: #ffffff;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
- 
-.perfil-sair {
-    color: #c0392b;
-    font-weight: 600;
-    text-decoration: none;
-}
- 
-.perfil-sair:hover {
-    text-decoration: underline;
-}
- 
- 
 /* ---------- Cabeçalho da seção ---------- */
  
 .cabecalho-historico {
@@ -83,7 +52,6 @@ body.escuro {
     font-size: 1.5rem;
     font-weight: 700;
 }
- 
  
 /* ---------- Lista de cards ---------- */
  
@@ -147,27 +115,8 @@ body.escuro {
 .card-historico-info strong {
     color: var(--hist-texto);
 }
- 
-.card-historico-status {
-    align-self: flex-start;
-    margin-top: auto;
-    padding: 6px 12px;
-    background-color: var(--hist-laranja);
-    color: #ffffff;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 700;
-}
- 
-/* Espaço entre as informações e o status */
-.card-historico-info + .card-historico-status {
-    margin-top: 14px;
-}
- 
- 
 
- 
-/* ---------- Estado vazio ---------- */
+/* ---------- Estado vazio e badges ---------- */
 
 .container-estado-vazio {
     width: 100%;
@@ -182,6 +131,8 @@ body.escuro {
     min-width: 130px;
     height: 38px;
     padding: 0 12px;
+    background-color: var(--hist-laranja);
+    color: #ffffff;
     border-radius: 6px;
     font-family: 'Chakra Petch', sans-serif;
     font-size: 0.85rem;
@@ -217,14 +168,13 @@ body.escuro {
 .btn-excluir-relato:active {
     transform: translateY(0);
 }
+
 /* ---------- Acessibilidade ---------- */
  
-.cabecalho-historico .link-voltar:focus-visible,
-.perfil-sair:focus-visible {
+.cabecalho-historico .link-voltar:focus-visible {
     outline: 3px solid var(--hist-laranja);
     outline-offset: 2px;
 }
- 
  
 /* ---------- Telas pequenas ---------- */
  
@@ -236,11 +186,5 @@ body.escuro {
  
     .cabecalho-historico .titulo-secao-itens {
         font-size: 1.25rem;
-    }
- 
-    .perfil-usuario {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
     }
 }
