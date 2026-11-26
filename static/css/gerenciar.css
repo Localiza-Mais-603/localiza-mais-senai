@@ -849,6 +849,15 @@ body {
 
 }
 
+/* Esconder barra de rolagem */
+html {
+    scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+    display: none; /* Chrome, Edge e Safari */
+}
+
 /* BARRA SUPERIOR */
 
 .barra-superior {
