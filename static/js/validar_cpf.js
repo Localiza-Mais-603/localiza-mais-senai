@@ -15,6 +15,7 @@ function aplicarMascaraCPF(input) {
     
     input.value = valor;
 }
+
 function validarCPF(cpf) {
     cpf = cpf.replace(/[^\d]+/g, '');
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
@@ -41,9 +42,11 @@ function validarCPF(cpf) {
     
     return true;
 }
+
 document.addEventListener("DOMContentLoaded", function() {
     const formCadastro = document.querySelector("form");
     const inputCpf = document.querySelector("input[name='CPF']") || document.querySelector("input[name='cpf']");
+    const inputSenha = document.getElementById("senha");
 
     if (inputCpf) {
         inputCpf.addEventListener("input", function() {
@@ -51,11 +54,9 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    if (formCadastro && inputCpf) {
+    if (formCadastro) {
         formCadastro.addEventListener("submit", function(event) {
-            let cpfLimpo = inputCpf.value;
-            
-            if (!validarCPF(cpfLimpo)) {
+            if (inputCpf && !validarCPF(inputCpf.value)) {
                 event.preventDefault();
                 
                 Swal.fire({
@@ -64,34 +65,34 @@ document.addEventListener("DOMContentLoaded", function() {
                     text: 'Por favor, insira um CPF real e válido para continuar.',
                     confirmButtonColor: '#3085d6'
                 });
+                return;
+            }
+
+            if (inputSenha) {
+                const senhaDigitada = inputSenha.value.toLowerCase();
+                if (senhaDigitada.includes("senha") || senhaDigitada.includes("123")) {
+                    event.preventDefault();
+                    
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Senha muito óbvia',
+                        text: 'Não utilize a palavra "senha", sequências como "123" ou o exemplo sugerido.',
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
             }
         });
     }
 });
 
-function aplicarMascaraCPF(input) {
-            let valor = input.value.replace(/\D/g, "");
-            
-            if (valor.length > 11) {
-                valor = valor.substring(0, 11);
-            }
+document.addEventListener("DOMContentLoaded", function() {
+    const campoNome = document.getElementById("nome");
 
-            if (valor.length > 9) {
-                valor = valor.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*$/, "$1.$2.$3-$4");
-            } else if (valor.length > 6) {
-                valor = valor.replace(/^(\d{3})(\d{3})(\d{3}).*$/, "$1.$2.$3");
-            } else if (valor.length > 3) {
-                valor = valor.replace(/^(\d{3})(\d{3})/, "$1.$2");
-            }
-            
-            input.value = valor;
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const inputCpf = document.getElementById("cpf");
-            if (inputCpf) {
-                inputCpf.addEventListener("input", function() {
-                    aplicarMascaraCPF(this);
-                });
-            }
+    if (campoNome) {
+        campoNome.addEventListener("input", function() {
+            this.value = this.value.replace(/(?:^|\s)\S/g, function(letra) {
+                return letra.toUpperCase();
+            });
         });
+    }
+});

@@ -85,8 +85,11 @@
                         <label for="cpf">CPF:</label>
                         <input id="cpf" name="cpf" type="text" placeholder="Digite seu CPF..." value="{{ cpf_digitado or '' }}" required>
 
-                        <label for="senha-apoio">Senha:</label>
-                        <input id="senha-apoio" name="senha" type="password" placeholder="Digite sua senha..." required>
+                       <label for="senha-apoio">Senha:</label>
+                        <div class="campo-senha">
+                            <input id="senha-apoio" name="senha" type="password" placeholder="Digite sua senha..." required>
+                            <i class="fa-solid fa-eye toggle-senha"></i>
+                        </div>
 
                         <div class="acoes-login">
                             <button type="submit" class="btn-entrar">Entrar</button>
@@ -120,7 +123,10 @@
                         <input id="email" name="email" type="text" placeholder="Digite seu E-mail..." value="{{ email_digitado or '' }}" required>
 
                         <label for="senha-usuario">Senha:</label>
-                        <input id="senha-usuario" name="senha" type="password" placeholder="Digite sua senha..." required>
+                        <div class="campo-senha">
+                            <input id="senha-usuario" name="senha" type="password" placeholder="Digite sua senha..." required>
+                            <i class="fa-solid fa-eye toggle-senha"></i>
+                        </div>
 
                         <div class="acoes-login">
                             <button type="submit" class="btn-entrar">Entrar</button>

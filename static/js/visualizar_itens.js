@@ -382,4 +382,24 @@ document.addEventListener('DOMContentLoaded', function () {
       if (btnCancelar) btnCancelar.addEventListener("click", fecharEdicao);
       if (btnFechar) btnFechar.addEventListener("click", fecharEdicao);
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+    const botoesOlho = document.querySelectorAll(".toggle-senha");
+
+    botoesOlho.forEach(function(icone) {
+        icone.addEventListener("click", function() {
+            const inputSenha = this.previousElementSibling;
+
+            if (inputSenha.type === "password") {
+                inputSenha.type = "text";
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else {
+                inputSenha.type = "password";
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
+            }
+        });
+    });
+});
   
