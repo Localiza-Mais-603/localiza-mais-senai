@@ -20,6 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     por serem perecíveis.</li>`;
             }
 
+            excecoes += `
+                <li><strong>Fim de semestre:</strong> todos os itens são descartados no encerramento
+                do semestre letivo (<strong>30/06</strong> e <strong>18/12</strong>), mesmo que ainda não tenham
+                completado os ${PRAZO_MESES} meses.</li>`;
+
             if (PRAZO_REDUZIDO) {
                 excecoes += `
                     <li><strong>Falta de espaço:</strong> no momento, o prazo foi reduzido para

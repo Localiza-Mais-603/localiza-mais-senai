@@ -261,19 +261,19 @@
                         {% set texto_prazo = 'Vencido há ' ~ (dias | abs) ~ (' dia' if (dias | abs) == 1 else ' dias') %}
                     {% elif dias == 0 %}
                         {% set classe_prazo = 'prazo-critico' %}
-                        {% set texto_prazo = 'Descarta hoje' %}
+                        {% set texto_prazo = 'Descarte hoje' %}
                     {% elif dias == 1 %}
                         {% set classe_prazo = 'prazo-critico' %}
-                        {% set texto_prazo = 'Falta 1 dia' %}
+                        {% set texto_prazo = 'Descarte em 1 dia' %}
                     {% elif dias <= 7 %}
                         {% set classe_prazo = 'prazo-critico' %}
-                        {% set texto_prazo = 'Faltam ' ~ dias ~ ' dias' %}
+                        {% set texto_prazo = 'Descarte em ' ~ dias ~ ' dias' %}
                     {% elif dias <= 30 %}
                         {% set classe_prazo = 'prazo-urgente' %}
-                        {% set texto_prazo = 'Faltam ' ~ dias ~ ' dias' %}
+                        {% set texto_prazo = 'Descarte em ' ~ dias ~ ' dias' %}
                     {% else %}
                         {% set classe_prazo = 'prazo-normal' %}
-                        {% set texto_prazo = 'Faltam ' ~ dias ~ ' dias' %}
+                        {% set texto_prazo = 'Descarte em ' ~ dias ~ ' dias' %}
                     {% endif %}
                 {% endif %}
 
