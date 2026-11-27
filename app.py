@@ -350,12 +350,10 @@ def cadastro_coor():
             return redirect(url_for('gerenciar_coordenadores'))
 
     return render_template(
-        'cadastro_coordenacao.html',
+        'gerenciamento_coor.html',
         primeiro_cadastro=not ja_tem_coor
     )
 
-
-# ===== GERENCIAR COORDENADORES =====
 
 # ===== GERENCIAR COORDENADORES =====
 

@@ -917,11 +917,11 @@ div.prazo-centralizado {
 
 /* Esconder barra de rolagem */
 html {
-    scrollbar-width: none; /* Firefox */
+  scrollbar-width: none; /* Firefox */
 }
 
 html::-webkit-scrollbar {
-    display: none; /* Chrome, Edge e Safari */
+  display: none; /* Chrome, Edge e Safari */
 }
 
 .switch-group .form-check-input {

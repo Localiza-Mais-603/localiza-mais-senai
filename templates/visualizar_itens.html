@@ -36,7 +36,9 @@
                             <circle cx="12" cy="10" r="3" />
                         </svg>
                     </span>
+                    {% if session.get('perfil') == 'aluno' %}
                     <h1 class="brand-logo-text">Localiza<span class="brand-logo-plus">+</span></h1>
+                    {% endif %}
                 </a>
             </div>
             {% endif %}

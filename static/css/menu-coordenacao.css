@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     background: #024873;
-    font-family: "Chakra Petch", sans-serif;
+    font-family: "Chakra Petch", sans-serif !important;
     box-shadow: 3px 0 12px rgba(0,0,0,0.12);
     z-index: 1000; /* Fica atrás de todos os modais (1050+) */
     transition: transform 0.3s ease;
