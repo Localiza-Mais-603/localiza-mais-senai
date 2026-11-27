@@ -124,8 +124,8 @@ html::-webkit-scrollbar {
 /* Layout Principal */
 .content-container {
   max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 160px;
+  margin: 40px 0;       
+  padding: 0 40px;      
 }
 
 /* Botão Voltar */
@@ -153,6 +153,7 @@ html::-webkit-scrollbar {
   color: #000000;
   letter-spacing: 0.5px;
   margin-bottom: 40px;
+  text-align: left;
 }
 
 /* Mensagem de estado vazio */
