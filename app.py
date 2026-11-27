@@ -130,16 +130,23 @@ def montar_nomes_categorias(categorias):
     return nomes
 
 
+def fim_semestre_da_data(data_ref):
+    """Retorna a data de encerramento do semestre correspondente à data informada."""
+    fim_1 = date(data_ref.year, *FIM_1_SEMESTRE)
+    fim_2 = date(data_ref.year, *FIM_2_SEMESTRE)
+
+    if data_ref <= fim_1:
+        return fim_1
+    elif data_ref <= fim_2:
+        return fim_2
+    else:
+        # Caso o item seja cadastrado entre 19/12 e 31/12, já pertence ao 1º semestre do ano seguinte
+        return date(data_ref.year + 1, *FIM_1_SEMESTRE)
+
+
 def proximo_fim_semestre(hoje):
     """Data do próximo fim de semestre a partir de hoje."""
-
-    candidatos = [
-        date(hoje.year, *FIM_1_SEMESTRE),
-        date(hoje.year, *FIM_2_SEMESTRE),
-        date(hoje.year + 1, *FIM_1_SEMESTRE),
-    ]
-
-    return next(d for d in candidatos if d >= hoje)
+    return fim_semestre_da_data(hoje)
 
 
 def aviso_fim_semestre():
@@ -160,13 +167,12 @@ def aviso_fim_semestre():
 
 
 def calcular_prazo(item, marmita=False):
-    """Calcula o prazo de descarte e guarda dentro do próprio item."""
+    """Calcula o prazo de descarte considerando a regra do fim do semestre."""
 
     data = item.get('data_encontrado')
 
     if isinstance(data, datetime):
         data = data.date()
-
     elif isinstance(data, str):
         try:
             data = datetime.strptime(data[:10], '%Y-%m-%d').date()
@@ -180,16 +186,22 @@ def calcular_prazo(item, marmita=False):
         item['dias_restantes'] = None
         return item
 
+    # 1. Calcula o prazo padrão (7 dias para marmita, 6 meses para os demais)
     if marmita:
-        descarte = data + timedelta(days=PRAZO_MARMITA_DIAS)
+        prazo_padrao = data + timedelta(days=PRAZO_MARMITA_DIAS)
     else:
-        descarte = somar_meses(data, PRAZO_DESCARTE_MESES)
+        prazo_padrao = somar_meses(data, PRAZO_DESCARTE_MESES)
+
+    # 2. Pega o teto do semestre em que o item foi encontrado/cadastrado
+    teto_semestre = fim_semestre_da_data(data)
+
+    # 3. O descarte ocorre na data que vier primeiro
+    descarte = min(prazo_padrao, teto_semestre)
 
     item['data_descarte'] = descarte
     item['dias_restantes'] = (descarte - date.today()).days
 
     return item
-
 
 def status_do_item(item):
     """Retorna o status em letras minúsculas."""
