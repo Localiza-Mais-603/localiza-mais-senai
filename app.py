@@ -293,7 +293,6 @@ def pag_login_coordenacao():
 def pag_cadastro():
     return render_template("cadastrar_usuario.html")
 
-
 @app.route("/cadastro", methods=["POST"])
 def cadastro():
     cpf = somente_numeros(request.form["CPF"])
@@ -306,7 +305,7 @@ def cadastro():
         cadastrar_usuario(cpf, nome, curso, email, senha)
     except IntegrityError:
         flash("CPF ou e-mail já cadastrado.", "danger")
-        return redirect("/cadastro")
+        return redirect(url_for("pag_cadastro"))
 
     return redirect("/login/usuario")
 
@@ -342,8 +341,6 @@ def cadastro_coor():
         primeiro_cadastro=not ja_tem_coor
     )
 
-
-# ===== GERENCIAR COORDENADORES =====
 
 # ===== GERENCIAR COORDENADORES =====
 

@@ -42,8 +42,15 @@
         <label for="curso">Curso (opcional):</label>
         <input type="text" id="curso" name="curso">
 
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required>
+      <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" 
+               placeholder="Ex: Senha@123"
+               pattern="(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}" 
+               title="A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, um número e um símbolo." 
+               required>
+        <small style="display: block; color: #666; font-size: 12px; margin-top: -10px; margin-bottom: 15px;">
+            Mínimo de 8 caracteres, contendo pelo menos 1 letra maiúscula, 1 número e 1 símbolo (ex: @, #, !).
+        </small>
 
         <button type="submit">Cadastrar</button>
 
